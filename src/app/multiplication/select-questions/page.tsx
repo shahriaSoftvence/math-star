@@ -7,15 +7,15 @@ import { useSearchParams } from 'next/navigation';
 const questionCounts = [10, 20, 30, 40, 50];
 
 const practiceTips = [
-  'Division is the reverse of multiplication.',
-  'Think "how many times does the smaller number fit into the bigger one?".',
-  'The help chart shows related multiplications.',
-  'Don\'t worry about remainders for now!',
+  'Start with tables you know well.',
+  'Try to memorize the answers.',
+  'Use the help chart if you get stuck.',
+  'Practice a little bit every day!',
 ];
 
-const QuestionCountCard = ({ count, divisor }: { count: number, divisor: string | null }) => (
-  <Link href={`/division/practice?count=${count}&divisor=${divisor || '2'}`}>
-    <div className="w-38 self-stretch p-8 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-purple-200 hover:to-purple-300 transition-all transform hover:scale-105">
+const QuestionCountCard = ({ count, table }: { count: number, table: string | null }) => (
+  <Link href={`/multiplication/practice?count=${count}&table=${table || '1'}`}>
+    <div className="w-38 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105">
       <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
       <div className="text-center text-gray-600 text-sm">Questions</div>
     </div>
@@ -24,15 +24,15 @@ const QuestionCountCard = ({ count, divisor }: { count: number, divisor: string 
 
 export default function SelectQuestionsPage() {
   const searchParams = useSearchParams();
-  const divisor = searchParams?.get('range');
+  const table = searchParams?.get('range');
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
-        <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions for dividing by {divisor}</h2>
+        <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions for x{table} Table</h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} divisor={divisor ?? null} />
+            <QuestionCountCard key={count} count={count} table={table ?? null} />
           ))}
         </div>
         <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">

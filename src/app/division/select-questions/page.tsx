@@ -24,7 +24,7 @@ const QuestionCountCard = ({ count, divisor }: { count: number, divisor: string 
 
 export default function SelectQuestionsPage() {
   const searchParams = useSearchParams();
-  const divisor = searchParams?.get('range');
+  const divisor = searchParams?.get('range') ?? null;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -32,7 +32,7 @@ export default function SelectQuestionsPage() {
         <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions for dividing by {divisor}</h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} divisor={divisor ?? null} />
+            <QuestionCountCard key={count} count={count} divisor={divisor} />
           ))}
         </div>
         <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">

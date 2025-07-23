@@ -151,7 +151,7 @@ export default function PracticePage() {
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           {progress.map((status, index) => {
             const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
-            return <div key={index} className={`h-full transition-colors duration-500 ${color}`} style={{ width: `${100 / questionCount}%` }} />;
+            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
           })}
         </div>
       </div>

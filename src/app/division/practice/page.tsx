@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Type Definitions ---
 type Question = {
-  num1: number;
-  num2: number;
+  num1: number; // Dividend
+  num2: number; // Divisor
   answer: number;
 };
 
@@ -22,14 +22,14 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num:
     <div className="p-6 bg-white rounded-lg shadow-md">
       <div className="grid grid-cols-3 gap-4">
         {buttons.map((btn) => (
-          <button key={btn} onClick={() => onNumberClick(btn)} className="h-16 text-xl font-bold text-blue-800 bg-blue-100 rounded-lg transition-colors hover:bg-blue-200">
+          <button key={btn} onClick={() => onNumberClick(btn)} className="h-16 text-xl font-bold text-purple-800 bg-purple-100 rounded-lg transition-colors hover:bg-purple-200">
             {btn}
           </button>
         ))}
         <button onClick={onBackspace} className="flex items-center justify-center h-16 text-lg font-bold text-red-800 bg-red-100 rounded-lg transition-colors hover:bg-red-200">
           <Delete size={24} />
         </button>
-        <button onClick={() => onNumberClick('0')} className="h-16 text-xl font-bold text-blue-800 bg-blue-100 rounded-lg transition-colors hover:bg-blue-200">
+        <button onClick={() => onNumberClick('0')} className="h-16 text-xl font-bold text-purple-800 bg-purple-100 rounded-lg transition-colors hover:bg-purple-200">
           0
         </button>
         <button onClick={onSubmit} className="flex items-center justify-center h-16 text-xl font-bold text-green-800 bg-green-100 rounded-lg transition-colors hover:bg-green-200">
@@ -40,7 +40,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num:
   );
 };
 
-const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
+const HelpChart = ({ divisor }: { divisor: number; }) => (
     <motion.div 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -48,16 +48,15 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
         transition={{ duration: 0.3 }}
         className="w-full p-6 bg-white rounded-lg shadow-md"
     >
-        <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
-        <div className="flex flex-wrap gap-2 mb-4">
-            {Array.from({ length: num1 }).map((_, i) => (
-                <div key={`n1-${i}`} className="w-6 h-6 bg-blue-400 border-2 border-blue-500 rounded-full" />
-            ))}
-            {Array.from({ length: num2 }).map((_, i) => (
-                <div key={`n2-${i}`} className="w-6 h-6 bg-red-400 border-2 border-red-500 rounded-full" />
+        <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">Help chart (x{divisor} Table)</h3>
+        <div className="space-y-1">
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                 <div key={num} className="flex justify-start text-sm mx-auto max-w-[80px]">
+                    <span className="text-gray-600">{num} ÷ {divisor} =</span>
+                    <span className="font-bold text-gray-800">{num / divisor}</span>
+                </div>
             ))}
         </div>
-        <p className="mt-4 text-sm text-gray-600">(all time visible)</p>
     </motion.div>
 );
 
@@ -75,20 +74,26 @@ export default function PracticePage() {
   const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
   const [showHelp, setShowHelp] = useState(false);
 
-  // Memoize parameters from URL to prevent re-renders
+  const [divisor, setDivisor] = useState<number | null>(null);
   const questionCount = useMemo(() => parseInt(searchParams?.get('count') || '10', 10), [searchParams]);
-  const numberRange = useMemo(() => parseInt(searchParams?.get('range') || '10', 10), [searchParams]);
 
-  // Generate questions on component mount
+  // Generate questions
   useEffect(() => {
+    const divisorParam = searchParams?.get('divisor');
+    const divisorValue = divisorParam ? parseInt(divisorParam, 10) : null;
+    setDivisor(divisorValue);
+
+    if (!divisorValue) return;
+
     const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      const num1 = Math.floor(Math.random() * (numberRange + 1));
-      const num2 = Math.floor(Math.random() * (numberRange + 1));
-      return { num1, num2, answer: num1 + num2 };
+      const answer = Math.floor(Math.random() * 10) + 1; // Random answer from 1 to 10
+      const num1 = divisorValue * answer; // This is the dividend
+      const num2 = divisorValue; // This is the divisor
+      return { num1, num2, answer };
     });
     setQuestions(newQuestions);
     setProgress(Array(questionCount).fill('pending'));
-  }, [questionCount, numberRange]);
+  }, [searchParams, questionCount]);
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
@@ -100,7 +105,7 @@ export default function PracticePage() {
   const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
   
   const handleSubmit = () => {
-    if (!userAnswer) return;
+    if (!userAnswer || !currentQuestion) return;
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
     const newProgress = [...progress];
@@ -118,7 +123,7 @@ export default function PracticePage() {
           setFeedback({ type: null, message: '' });
         } else {
           alert('Congratulations! You have completed the practice.');
-          router.push('/addition');
+          router.push('/division');
         }
       }, 1500);
     } else {
@@ -138,7 +143,7 @@ export default function PracticePage() {
         <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
           <ArrowLeft className="text-gray-600" />
         </button>
-        <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Addition</h1>
+        <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Division</h1>
       </div>
 
       {/* Progress Bar */}
@@ -150,7 +155,7 @@ export default function PracticePage() {
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           {progress.map((status, index) => {
             const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
-            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
+            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
           })}
         </div>
       </div>
@@ -159,14 +164,14 @@ export default function PracticePage() {
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-4">
             <AnimatePresence>
-                {showHelp && <HelpChart num1={currentQuestion.num1} num2={currentQuestion.num2} />}
+                {showHelp && divisor && <HelpChart divisor={divisor} />}
             </AnimatePresence>
         </div>
         
         <div className="grid grid-cols-1 col-span-1 gap-6 md:grid-cols-2 lg:col-span-8">
             <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
                 <div className="mb-4 text-4xl font-bold text-gray-800">
-                    {currentQuestion.num1} + {currentQuestion.num2} =
+                    {currentQuestion.num1} ÷ {currentQuestion.num2} =
                 </div>
                 <div className="w-full p-4 text-3xl font-bold text-center text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-lg">
                     {userAnswer || '?'}
