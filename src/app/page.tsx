@@ -4,13 +4,14 @@ import { Plus, Minus, X, Divide, Star } from 'lucide-react';
 import { IoStarSharp } from "react-icons/io5";
 import BadgeBronze from '../../public/assets/Bronje.png';
 import Image from 'next/image';
+import Link from 'next/link';
 
 
 const practiceItems = [
-  { icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
-  { icon: <Minus />, title: "Practice Subtraction", description: "Sharpen your subtraction skills", bgColor: "bg-gradient-to-br from-pink-300 to-pink-400", textColor: "text-pink-800", iconColor: "text-pink-500" },
-  { icon: <X />, title: "Practice Multiplication", description: "Master your times tables", bgColor: "bg-gradient-to-br from-green-300 to-green-400", textColor: "text-green-800", iconColor: "text-green-500" },
-  { icon: <Divide />, title: "Practice Division", description: "Divide and conquer", bgColor: "bg-gradient-to-br from-purple-300 to-purple-400", textColor: "text-purple-800", iconColor: "text-purple-500" },
+  { link: "/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
+  { link: "/subtraction", icon: <Minus />, title: "Practice Subtraction", description: "Sharpen your subtraction skills", bgColor: "bg-gradient-to-br from-pink-300 to-pink-400", textColor: "text-pink-800", iconColor: "text-pink-500" },
+  { link: "/multiplication", icon: <X />, title: "Practice Multiplication", description: "Master your times tables", bgColor: "bg-gradient-to-br from-green-300 to-green-400", textColor: "text-green-800", iconColor: "text-green-500" },
+  { link: "/division", icon: <Divide />, title: "Practice Division", description: "Divide and conquer", bgColor: "bg-gradient-to-br from-purple-300 to-purple-400", textColor: "text-purple-800", iconColor: "text-purple-500" },
 ];
 
 const activityItems = [
@@ -30,7 +31,9 @@ export default function Home() {
         <h2 className="text-xl font-semibold mb-4 text-gray-800 text-center">Choose Your Practice</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {practiceItems.map((item, index) => (
-            <PracticeCard key={index} {...item} />
+            <Link href={item.link} key={index}>
+                <PracticeCard {...item} />
+            </Link>
           ))}
         </div>
       </div>

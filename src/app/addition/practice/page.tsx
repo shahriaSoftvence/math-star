@@ -1,0 +1,206 @@
+'use client';
+
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { ArrowLeft, Check, X, Delete } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// --- Type Definitions ---
+type Question = {
+  num1: number;
+  num2: number;
+  answer: number;
+};
+
+type ProgressStatus = 'correct' | 'incorrect' | 'pending';
+
+// --- Reusable UI Components ---
+
+const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num: string) => void; onBackspace: () => void; onSubmit: () => void; }) => {
+  const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  return (
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <div className="grid grid-cols-3 gap-4">
+        {buttons.map((btn) => (
+          <button key={btn} onClick={() => onNumberClick(btn)} className="h-16 text-xl font-bold text-blue-800 bg-blue-100 rounded-lg transition-colors hover:bg-blue-200">
+            {btn}
+          </button>
+        ))}
+        <button onClick={onBackspace} className="flex items-center justify-center h-16 text-lg font-bold text-red-800 bg-red-100 rounded-lg transition-colors hover:bg-red-200">
+          <Delete size={24} />
+        </button>
+        <button onClick={() => onNumberClick('0')} className="h-16 text-xl font-bold text-blue-800 bg-blue-100 rounded-lg transition-colors hover:bg-blue-200">
+          0
+        </button>
+        <button onClick={onSubmit} className="flex items-center justify-center h-16 text-xl font-bold text-green-800 bg-green-100 rounded-lg transition-colors hover:bg-green-200">
+          <Check size={24} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
+    <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full p-6 bg-white rounded-lg shadow-md"
+    >
+        <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
+        <div className="flex flex-wrap gap-2 mb-4">
+            {Array.from({ length: num1 }).map((_, i) => (
+                <div key={`n1-${i}`} className="w-6 h-6 bg-blue-400 border-2 border-blue-500 rounded-full" />
+            ))}
+            {Array.from({ length: num2 }).map((_, i) => (
+                <div key={`n2-${i}`} className="w-6 h-6 bg-red-400 border-2 border-red-500 rounded-full" />
+            ))}
+        </div>
+        <p className="mt-4 text-sm text-gray-600">(all time visible)</p>
+    </motion.div>
+);
+
+
+// --- Main Practice Page Component ---
+export default function PracticePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // State management
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [progress, setProgress] = useState<ProgressStatus[]>([]);
+  const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
+  const [showHelp, setShowHelp] = useState(false);
+
+  // Memoize parameters from URL to prevent re-renders
+  const questionCount = useMemo(() => parseInt(searchParams?.get('count') || '10', 10), [searchParams]);
+  const numberRange = useMemo(() => parseInt(searchParams?.get('range') || '10', 10), [searchParams]);
+
+  // Generate questions on component mount
+  useEffect(() => {
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      const num1 = Math.floor(Math.random() * (numberRange + 1));
+      const num2 = Math.floor(Math.random() * (numberRange + 1));
+      return { num1, num2, answer: num1 + num2 };
+    });
+    setQuestions(newQuestions);
+    setProgress(Array(questionCount).fill('pending'));
+  }, [questionCount, numberRange]);
+
+  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
+
+  // --- Event Handlers ---
+  const handleInput = (num: string) => {
+    if (userAnswer.length < 5) setUserAnswer(prev => prev + num);
+  };
+
+  const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
+  
+  const handleSubmit = () => {
+    if (!userAnswer) return;
+
+    const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
+    const newProgress = [...progress];
+    newProgress[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
+    setProgress(newProgress);
+
+    if (isCorrect) {
+      setFeedback({ type: 'correct', message: 'Your answer is absolutely correct!' });
+      setShowHelp(false);
+      
+      setTimeout(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+          setCurrentQuestionIndex(prev => prev + 1);
+          setUserAnswer('');
+          setFeedback({ type: null, message: '' });
+        } else {
+          alert('Congratulations! You have completed the practice.');
+          router.push('/addition');
+        }
+      }, 1500);
+    } else {
+      setFeedback({ type: 'incorrect', message: 'Now enter the correct answer to continue' });
+      setShowHelp(true);
+    }
+  };
+
+  if (!currentQuestion) {
+    return <div className="flex items-center justify-center h-screen">Loading Practice...</div>;
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto p-4 md:p-8">
+      {/* Header */}
+      <div className="flex items-center mb-6">
+        <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
+          <ArrowLeft className="text-gray-600" />
+        </button>
+        <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Addition</h1>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="p-4 mb-8 bg-white rounded-lg shadow-md">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-700">Progress</span>
+          <span className="text-sm font-medium text-gray-700">{currentQuestionIndex + 1} of {questionCount}</span>
+        </div>
+        <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
+          {progress.map((status, index) => {
+            const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
+            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
+          })}
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-4">
+            <AnimatePresence>
+                {showHelp && <HelpChart num1={currentQuestion.num1} num2={currentQuestion.num2} />}
+            </AnimatePresence>
+        </div>
+        
+        <div className="grid grid-cols-1 col-span-1 gap-6 md:grid-cols-2 lg:col-span-8">
+            <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
+                <div className="mb-4 text-4xl font-bold text-gray-800">
+                    {currentQuestion.num1} + {currentQuestion.num2} =
+                </div>
+                <div className="w-full p-4 text-3xl font-bold text-center text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-lg">
+                    {userAnswer || '?'}
+                </div>
+            </div>
+            <Numpad onNumberClick={handleInput} onBackspace={handleBackspace} onSubmit={handleSubmit} />
+        </div>
+      </div>
+
+      {/* Feedback Toast Animation */}
+      <AnimatePresence>
+          {feedback.type && (
+            <motion.div 
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-96 rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
+            >
+              <div className="flex items-start">
+                <div className={`p-1 mr-3 text-xl rounded-full ${feedback.type === 'correct' ? 'bg-emerald-100 text-emerald-500' : 'bg-red-100 text-red-500'}`}>
+                  {feedback.type === 'correct' ? <Check size={20} /> : <X size={20} />}
+                </div>
+                <div>
+                  <p className={`font-semibold ${feedback.type === 'correct' ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {feedback.type === 'correct' ? 'Correct Answer!' : 'Incorrect Answer'}
+                  </p>
+                  <p className={`text-sm ${feedback.type === 'correct' ? 'text-emerald-500' : 'text-red-500'}`}>
+                    {feedback.message}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+      </AnimatePresence>
+    </div>
+  );
+}
