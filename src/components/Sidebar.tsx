@@ -1,12 +1,8 @@
 import React from 'react';
 import { LayoutDashboard, User, Settings, LogOut, Star } from 'lucide-react';
+import Logo from '../../public/assets/Logo.png';
+import Image from 'next/image';
 
-const MathStarLogo = () => (
-  <div className="flex items-center gap-3">
-    <Star size={40} className="text-[#4A80F0]" fill="#4A80F0" />
-    <span className="text-2xl font-bold text-[#171717]">MATH STAR</span>
-  </div>
-);
 
 export default function Sidebar() {
   const menuItems = [
@@ -19,7 +15,7 @@ export default function Sidebar() {
     <aside className="w-64 min-h-screen bg-white rounded-r-[30px] border-r flex flex-col justify-between p-6">
       <div>
         <div className="mb-16">
-          <MathStarLogo />
+        <Image src={Logo} alt='Logo' />
         </div>
         <nav>
           <ul>
