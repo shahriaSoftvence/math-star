@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Check, X, Delete } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import CongratulationsScreen from '@/components/CongratulationsScreen'; // 1. Import the new component
 
 // --- Type Definitions ---
 type Question = {
@@ -73,6 +74,7 @@ export default function PracticePage() {
   const [progress, setProgress] = useState<ProgressStatus[]>([]);
   const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
   const [showHelp, setShowHelp] = useState(false);
+  const [isComplete, setIsComplete] = useState(false); // 2. Add completion state
 
   const [divisor, setDivisor] = useState<number | null>(null);
   const questionCount = useMemo(() => parseInt(searchParams?.get('count') || '10', 10), [searchParams]);
@@ -105,7 +107,7 @@ export default function PracticePage() {
   const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
   
   const handleSubmit = () => {
-    if (!userAnswer || !currentQuestion) return;
+    if (!userAnswer) return;
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
     const newProgress = [...progress];
@@ -122,8 +124,8 @@ export default function PracticePage() {
           setUserAnswer('');
           setFeedback({ type: null, message: '' });
         } else {
-          alert('Congratulations! You have completed the practice.');
-          router.push('/division');
+          // 3. Instead of alert, set completion state to true
+          setIsComplete(true);
         }
       }, 1500);
     } else {
@@ -132,9 +134,15 @@ export default function PracticePage() {
     }
   };
 
+  // 4. Conditionally render the congratulations screen
+  if (isComplete) {
+    return <CongratulationsScreen onContinue={() => router.push('/addition')} />;
+  }
+
   if (!currentQuestion) {
     return <div className="flex items-center justify-center h-screen">Loading Practice...</div>;
   }
+
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
