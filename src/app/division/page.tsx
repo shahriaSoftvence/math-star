@@ -1,49 +1,69 @@
-'use client';
-
 import React from 'react';
+import { FiTarget, FiHelpCircle } from 'react-icons/fi';
+import ChallengeCard from '@/components/ChallengeCard';
+import ExerciseCard from '@/components/ExerciseCard';
+import { PiTimerBold } from "react-icons/pi";
+import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 
-const questionCounts = [10, 20, 30, 40, 50];
-
-const practiceTips = [
-  'Division is the reverse of multiplication.',
-  'Think "how many times does the smaller number fit into the bigger one?".',
-  'The help chart shows related multiplications.',
-  'Don\'t worry about remainders for now!',
+const divisionExercises = [
+  { range: '÷2', percentage: 90, stars: 18 },
+  { range: '÷3', percentage: 85, stars: 17 },
+  { range: '÷4', percentage: 82, stars: 16 },
+  { range: '÷5', percentage: 95, stars: 19 },
+  { range: '÷6', percentage: 78, stars: 15 },
+  { range: '÷7', percentage: 75, stars: 14 },
+  { range: '÷8', percentage: 70, stars: 13 },
+  { range: '÷9', percentage: 68, stars: 12 },
+  { range: '÷10', percentage: 98, stars: 20 },
+  { range: '÷11', percentage: 65, stars: 11 },
+  { range: '÷12', percentage: 62, stars: 10 },
 ];
 
-const QuestionCountCard = ({ count, divisor }: { count: number, divisor: string | null }) => (
-  <Link href={`/division/practice?count=${count}&divisor=${divisor || '2'}`}>
-    <div className="w-38 self-stretch p-8 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-purple-200 hover:to-purple-300 transition-all transform hover:scale-105">
-      <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
-      <div className="text-center text-gray-600 text-sm">Questions</div>
-    </div>
-  </Link>
-);
+const divisionChallenges = [
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/division/challenges/no-mistake' },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/division/challenges/speed-mode' },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/division/challenges/100-questions' },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/division/challenges/whats-missing" },
+];
 
-export default function SelectQuestionsPage() {
-  const searchParams = useSearchParams();
-  const divisor = searchParams?.get('range');
-
+export default function DivisionPage() {
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
-        <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions for dividing by {divisor}</h2>
-        <div className="flex flex-wrap justify-center items-start gap-4">
-          {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} divisor={divisor ?? null} />
-          ))}
+    <div className="max-w-[1152px] mx-auto space-y-8">
+      {/* Division Exercise Section */}
+      <div className="rounded-lg">
+        <div className="p-4 bg-gradient-to-br from-purple-400 to-purple-500 rounded-t-lg">
+          <h2 className="text-xl font-bold text-white">Division exercise.</h2>
         </div>
-        <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
-          <h3 className="text-gray-800 text-lg font-semibold mb-4">Practice Tips:</h3>
-          <ul className="space-y-2">
-            {practiceTips.map((tip, index) => (
-              <li key={index} className="text-gray-600 text-sm list-disc list-inside">
-                {tip}
-              </li>
+        <div className="p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {divisionExercises.map((ex, index) => (
+              <ExerciseCard
+                key={index}
+                operation="division"
+                range={ex.range.replace('÷', '')}
+                percentage={ex.percentage}
+              />
             ))}
-          </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Division Challenges Section */}
+      <div className="bg-white rounded-lg shadow">
+        <div className="p-4 bg-gradient-to-br from-purple-400 to-purple-500 rounded-t-lg">
+          <h2 className="text-xl font-bold text-white">Division challenges.</h2>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {divisionChallenges.map((challenge, index) => (
+              <Link href={challenge.link} key={index} legacyBehavior>
+                <a className="cursor-pointer">
+                    <ChallengeCard iconColor="text-white" {...challenge} />
+                </a>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>
