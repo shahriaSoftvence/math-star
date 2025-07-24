@@ -50,10 +50,10 @@ export default function Sidebar() {
         </nav>
       </div>
       <div>
-        <a href="#" className="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-gray-100 rounded-xl">
+        <Link href="/" className="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-gray-100 rounded-xl">
           <LogOut size={24} />
           <span className="text-base font-medium">Logout</span>
-        </a>
+        </Link>
       </div>
     </aside>
   );
