@@ -1,9 +1,10 @@
 import React from 'react';
-import { FiTarget, FiZap, FiGrid, FiHelpCircle } from 'react-icons/fi';
+import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
 import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
+import Link from 'next/link';
 
 const additionExercises = {
   noCarry: [
@@ -20,10 +21,10 @@ const additionExercises = {
 };
 
 const additionChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400' },
-    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400' },
-    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400' },
-    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400' },
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/addition/challenges/no-mistake' },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/addition/challenges/speed-mode' },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/addition/challenges/100-questions' },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/addition/challenges/whats-missing" },
 ];
 
 export default function AdditionPage() {
@@ -68,7 +69,11 @@ export default function AdditionPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {additionChallenges.map((challenge, index) => (
-              <ChallengeCard key={index} iconColor="text-white" {...challenge} />
+              <Link href={challenge.link} key={index} legacyBehavior>
+                <a className="cursor-pointer">
+                    <ChallengeCard iconColor="text-white" {...challenge} />
+                </a>
+              </Link>
             ))}
           </div>
         </div>

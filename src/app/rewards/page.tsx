@@ -101,7 +101,7 @@ export default function RewardsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {rewardsData.map((reward) => (
           reward.title === 'Infinity Genius' ? (
-            <div key={reward.title} className="w-full max-w-[896px] md:col-span-3 p-6 opacity-75 bg-white rounded-3xl shadow-lg flex flex-col items-center gap-4 mx-auto">
+            <div key={reward.title} className="w-full max-w-[896px] md:col-span-3 p-6 opacity-75 bg-white rounded-3xl shadow-lg flex flex-col items-center gap-4 mx-auto  transition-all hover:shadow-xl hover:scale-105 border-2">
               <div className="text-6xl">{reward.icon}</div>
               <h3 className="text-gray-800 text-xl font-bold text-center">{reward.title}</h3>
               <p className="text-gray-600 text-sm text-center max-w-[185px] mx-auto">
@@ -112,13 +112,13 @@ export default function RewardsPage() {
                   </React.Fragment>
                 ))}
               </p>
-              <div className="flex items-center justify-center gap-2 mt-4">
+              <div className="flex items-center justify-center gap-2 mt-4 ">
                 <div className="w-5 h-5 flex items-center justify-center">
                   <IoStarSharp className="w-4 h-4 text-yellow-500 " />
                 </div>
                 <span className="text-gray-700 text-lg font-bold">{reward.cost.toLocaleString()}</span>
               </div>
-              <button className={`px-6 py-2 ${reward.isUnlocked ? 'bg-green-500' : 'bg-blue-500'} text-white font-bold rounded-full mt-4`}>
+              <button className={`px-6 py-2 ${reward.isUnlocked ? 'bg-green-500' : 'bg-blue-500'} text-white font-bold rounded-full mt-4 hover:bg-blue-600 transition-colors`}>
                 {reward.isUnlocked ? 'Unlocked' : 'Unlock'}
               </button>
             </div>
