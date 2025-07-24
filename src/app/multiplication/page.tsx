@@ -4,6 +4,7 @@ import ChallengeCard from '@/components/ChallengeCard';
 import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
+import Link from 'next/link';
 
 const multiplicationExercises = [
   { range: '1', percentage: 98, stars: 0 },
@@ -21,10 +22,10 @@ const multiplicationExercises = [
 ];
 
 const multiplicationChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400' },
-    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400' },
-    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400' },
-    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400' },
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/multiplication/challenges/no-mistake' },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/multiplication/challenges/speed-mode' },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/multiplication/challenges/100-questions' },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/multiplication/challenges/whats-missing" },
 ];
 
 export default function MultiplicationPage() {
@@ -57,7 +58,11 @@ export default function MultiplicationPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {multiplicationChallenges.map((challenge, index) => (
-              <ChallengeCard key={index} iconColor="text-white" {...challenge} />
+              <Link href={challenge.link} key={index} legacyBehavior>
+                <a className="cursor-pointer">
+                  <ChallengeCard iconColor="text-white" {...challenge} />
+                </a>
+              </Link>
             ))}
           </div>
         </div>
