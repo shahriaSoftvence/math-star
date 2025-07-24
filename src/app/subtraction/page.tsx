@@ -4,6 +4,7 @@ import ChallengeCard from '@/components/ChallengeCard';
 import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
+import Link from 'next/link';
 
 const subtractionExercises = {
   noBorrowing: [
@@ -20,10 +21,10 @@ const subtractionExercises = {
 };
 
 const subtractionChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400' },
-    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400' },
-    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400' },
-    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400' },
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/subtraction/challenges/no-mistake' },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/subtraction/challenges/speed-mode' },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/subtraction/challenges/100-questions' },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/subtraction/challenges/whats-missing" },
 ];
 
 export default function SubtractionPage() {
@@ -68,7 +69,11 @@ export default function SubtractionPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {subtractionChallenges.map((challenge, index) => (
-              <ChallengeCard key={index} iconColor="text-white" {...challenge} />
+              <Link href={challenge.link} key={index} legacyBehavior>
+                <a className="cursor-pointer">
+                    <ChallengeCard iconColor="text-white" {...challenge} />
+                </a>
+              </Link>
             ))}
           </div>
         </div>
