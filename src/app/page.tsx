@@ -32,7 +32,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {practiceItems.map((item, index) => (
             <Link href={item.link} key={index}>
-                <PracticeCard {...item} />
+              <PracticeCard {...item} />
             </Link>
           ))}
         </div>
@@ -51,7 +51,7 @@ export default function Home() {
               <span className="text-gray-500">Stars Earned:</span>
               <div className="font-medium text-yellow-500 flex items-center">
                 <span>25</span>
-                <Star size={16} className="ml-1 fill-[#EAB308] "/>
+                <Star size={16} className="ml-1 fill-[#EAB308] " />
               </div>
             </div>
             <div className="flex justify-between text-sm">
@@ -80,16 +80,18 @@ export default function Home() {
       </div>
 
       {/* Your Star Balance */}
-      <div className="relative bg-gradient-to-r from-yellow-400 to-orange-400 p-6 rounded-2xl text-white flex justify-between items-center shadow-lg">
-        <div>
-          <h3 className="font-semibold text-lg">Your Star Balance</h3>
-          <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp/> 1,247</p>
-          <p className="text-sm opacity-80">Top up to win rewards</p>
+      <Link href="/rewards">
+        <div className="relative bg-gradient-to-r from-yellow-400 to-orange-400 p-6 rounded-2xl text-white flex justify-between items-center shadow-lg">
+          <div>
+            <h3 className="font-semibold text-lg">Your Star Balance</h3>
+            <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> 1,247</p>
+            <p className="text-sm opacity-80">Top up to win rewards</p>
+          </div>
+          <div className="text-7xl absolute top-0 right-0">
+            <Image src={BadgeBronze} alt='Badge' />
+          </div>
         </div>
-        <div className="text-7xl absolute top-0 right-0">
-          <Image src={BadgeBronze} alt='Badge' />
-        </div>
-      </div>
+      </Link>
     </div>
   );
 }
