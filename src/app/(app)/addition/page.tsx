@@ -69,10 +69,12 @@ export default function AdditionPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {additionChallenges.map((challenge, index) => (
-              <Link href={challenge.link} key={index} legacyBehavior>
-                <a className="cursor-pointer">
-                    <ChallengeCard iconColor="text-white" {...challenge} />
-                </a>
+              <Link 
+                href={challenge.link} 
+                key={index}
+                className="cursor-pointer"
+              >
+                <ChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>
