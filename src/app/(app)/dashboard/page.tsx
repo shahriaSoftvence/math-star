@@ -39,8 +39,8 @@ export default function Home() {
       </div>
 
       {/* Progress and Activity */}
-      <div className="flex justify-baseline items-start st gap-6">
-        <div className="w-[50%] self-stretch bg-white p-6 rounded-2xl">
+      <div className="flex flex-wrap justify-baseline items-start st gap-6">
+        <div className="self-stretch bg-white p-6 w-[48%] max-[1000px]:w-[100%] rounded-2xl">
           <h3 className="font-semibold mb-6 text-gray-800">Your Progress Today</h3>
           <div className="space-y-5">
             <div className="flex justify-between text-sm">
@@ -69,7 +69,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="w-[50%] self-stretch bg-white p-6 rounded-2xl">
+        <div className="self-stretch bg-white p-6 w-[48%] max-[1000px]:w-[100%] rounded-2xl">
           <h3 className="font-semibold mb-6 text-gray-800">Recent Activity</h3>
           <div className="space-y-4">
             {activityItems.map((item, index) => (

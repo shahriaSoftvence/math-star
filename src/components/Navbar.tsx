@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Bell } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 import Profile from '../../public/assets/Profile.png';
 import Flag from '../../public/assets/Flag.png';
 import { TiStarFullOutline } from "react-icons/ti";
@@ -14,21 +14,27 @@ type NavbarProps = {
     stars: number;
     starStreak: string;
   };
+  toggleSidebar: () => void;
 };
 
-export default function Navbar({ user }: NavbarProps) {
+export default function Navbar({ user, toggleSidebar }: NavbarProps) {
   return (
     <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
-      <div className="flex flex-col justify-center items-start gap-1.5">
-        <h1 className="text-black text-2xl font-medium">Hi, {user.name}! Ready to become a Math Star today?</h1>
-        <div className="inline-flex justify-start items-start gap-3">
-          <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
-            <TiStarFullOutline  className="text-[#EAB308] text-[20px]" />
-            <span className="text-[#A16207] text-base font-bold">{user.stars} Stars</span>
-          </div>
-          <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
-            <FaCrown className="text-[#EAB308] text-[20px]" />
-            <span className="text-yellow-700 text-base font-bold">{user.starStreak}</span>
+      <div className="flex items-center gap-4">
+        <button onClick={toggleSidebar} className="md:hidden">
+          <Menu className='text-[#000]' size={24} />
+        </button>
+        <div className="flex-col justify-center items-start gap-1.5 hidden md:flex">
+          <h1 className="text-black text-2xl font-medium">Hi, {user.name}! Ready to become a Math Star today?</h1>
+          <div className="inline-flex justify-start items-start gap-3">
+            <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
+              <TiStarFullOutline  className="text-[#EAB308] text-[20px]" />
+              <span className="text-[#A16207] text-base font-bold">{user.stars} Stars</span>
+            </div>
+            <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
+              <FaCrown className="text-[#EAB308] text-[20px]" />
+              <span className="text-yellow-700 text-base font-bold">{user.starStreak}</span>
+            </div>
           </div>
         </div>
       </div>

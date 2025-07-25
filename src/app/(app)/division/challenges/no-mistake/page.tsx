@@ -13,13 +13,13 @@ type GameState = 'ready' | 'playing' | 'gameOver';
 
 const ChallengeStartScreen = ({ title, description, onStart, onCancel }: { title: string, description: string, onStart: () => void, onCancel: () => void }) => (
   <div className="w-full min-h-screen relative bg-gradient-to-b from-purple-50 to-indigo-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[672px] max-h-[332px] p-7 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6">
+    <div className="w-full max-w-[672px] max-h-[332px] p-7 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6 max-[514px]:w-[100%]">
       <div className="w-20 h-20 bg-purple-100 rounded-full flex justify-center items-center">
         <Target className="w-10 h-10 text-purple-600" />
       </div>
       <div>
         <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-loose">{title}</h2>
-        <p className="text-gray-600 mt-2 text-base font-normal font-Poppins leading-relaxed max-w-[608px] mx-auto">{description}</p>
+        <p className="text-gray-600 mt-2 text-base font-normal font-Poppins leading-relaxed max-w-[608px] mx-auto max-[514px]:w-[100%]">{description}</p>
       </div>
       <div className="flex items-center gap-4 mt-4">
         <button onClick={onCancel} className="px-8 py-2 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 text-lg capitalize leading-7 min-w-[206px]">Cancel</button>
