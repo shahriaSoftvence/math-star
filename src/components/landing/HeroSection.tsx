@@ -15,8 +15,8 @@ const HeroSection = () => {
   const closeVideo = () => setIsVideoOpen(false);
 
   return (
-    <div className="w-full h-screen min-h-[800px] bg-gray-50 flex items-center justify-center relative overflow-hidden">
-        <Image src={Lines} className='absolute top-[8%] left-[20%]' alt='line'/>
+    <div className="w-full pt-[200px] pb-[100px] min-h-[800px] bg-gray-50 flex items-center justify-center relative overflow-hidden">
+        <Image src={Lines} className='absolute top-[8%] left-[17%]' alt='line'/>
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 items-center z-10">
         <div className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start">
           <h1 className="text-5xl md:text-6xl font-semibold font-Poppins leading-tight">
