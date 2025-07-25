@@ -1,48 +1,67 @@
-/* eslint-disable react/no-unescaped-entities */
-// src/components/landing/FaqSection.tsx
+// ste_br/src/components/landing/FaqSection.tsx
 'use client';
+/* eslint-disable react/no-unescaped-entities */
 import { ChevronDown } from 'lucide-react';
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion'; // <-- Import motion and AnimatePresence
 
 const faqData = [
-    { question: "Is MathStar suitable for children with different learning abilities?", answer: "Yes! MathStar's adaptive learning adjusts to your child's pace, making it great for all abilities." },
-    { question: "How much time should my child spend on MathStar each day?", answer: "We recommend 15-20 minutes daily for consistent progress without screen fatigue." },
-    { question: "Does MathStar align with school curriculum standards?", answer: "Absolutely. Our content is designed by teachers to align with common elementary school math curricula." },
-    { question: "Can I track my child's progress and see what they're learning?", answer: "Yes, the parent dashboard provides detailed progress reports and insights into your child's learning journey." },
-    { question: "What devices can MathStar be used on?", answer: "MathStar works on any device with a web browser, including desktops, laptops, tablets, and smartphones." },
+  { question: "Is MathStar suitable for children with different learning abilities?", answer: "Yes! MathStar's adaptive learning adjusts to your child's pace, making it great for all abilities." },
+  { question: "How much time should my child spend on MathStar each day?", answer: "We recommend 15-20 minutes daily for consistent progress without screen fatigue." },
+  { question: "Does MathStar align with school curriculum standards?", answer: "Absolutely. Our content is designed by teachers to align with common elementary school math curricula." },
+  { question: "Can I track my child's progress and see what they're learning?", answer: "Yes, the parent dashboard provides detailed progress reports and insights into your child's learning journey." },
+  { question: "What devices can MathStar be used on?", answer: "MathStar works on any device with a web browser, including desktops, laptops, tablets, and smartphones." },
 ];
 
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-        <div className="bg-white rounded-[20px] overflow-hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="w-full px-6 py-4 flex justify-between items-center text-left">
-                <span className="text-gray-800 text-base font-normal font-Open_Sans leading-normal">{question}</span>
-                <ChevronDown className={`transition-transform text-[#6B7280] ${isOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {isOpen && <div className="px-6 pb-4 text-gray-600">{answer}</div>}
-        </div>
-    )
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <motion.div
+      className="bg-white rounded-[20px] overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, amount: 0.5 }}
+    >
+      <button onClick={() => setIsOpen(!isOpen)} className="w-full px-6 py-4 flex justify-between items-center text-left">
+        <span className="text-gray-800 text-base font-normal font-Open_Sans leading-normal">{question}</span>
+        <ChevronDown className={`transition-transform text-[#6B7280] ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-4 text-gray-600">{answer}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
 }
 
 const FaqSection = () => {
   return (
     <section id="faq" className="py-24 px-4 bg-[#fbfbfd] text-black">
-        <div className="max-w-3xl mx-auto flex flex-col items-center gap-4">
-            <div className="text-center">
-                <h2 className="text-gray-800 text-4xl font-bold font-Quicksand leading-10">Frequently Asked Questions</h2>
-                <p className="text-gray-600 text-xl font-normal font-Open_Sans leading-7 mt-4">Find answers to common questions about MathStar.</p>
-            </div>
-            <div className="w-full mt-12 flex flex-col gap-4">
-                {faqData.map(item => <FaqItem key={item.question} {...item} />)}
-            </div>
-            <div className="text-center mt-8">
-                <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">Still have questions? We're here to help!</p>
-                <button className="mt-4 px-6 py-3 bg-blue-500 rounded-lg text-white text-base font-normal font-Open_Sans leading-normal hover:bg-blue-600 transition-colors">
-                    Contact Support
-                </button>
-            </div>
+      <div className="max-w-3xl mx-auto flex flex-col items-center gap-4">
+        <div className="text-center">
+          <h2 className="text-gray-800 text-4xl font-bold font-Quicksand leading-10">Frequently Asked Questions</h2>
+          <p className="text-gray-600 text-xl font-normal font-Open_Sans leading-7 mt-4">Find answers to common questions about MathStar.</p>
         </div>
+        <div className="w-full mt-12 flex flex-col gap-4">
+          {faqData.map(item => <FaqItem key={item.question} {...item} />)}
+        </div>
+        <div className="text-center mt-8">
+          <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">Still have questions? We're here to help!</p>
+          <button className="mt-4 px-6 py-3 bg-blue-500 rounded-lg text-white text-base font-normal font-Open_Sans leading-normal hover:bg-blue-600 transition-colors">
+            Contact Support
+          </button>
+        </div>
+      </div>
     </section>
   );
 };

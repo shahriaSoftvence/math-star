@@ -1,14 +1,16 @@
-// src/components/landing/PricingSection.tsx
+// ste_br/src/components/landing/PricingSection.tsx
+'use client'; // <-- Add this line
 import { Check, Star } from 'lucide-react';
 import React from 'react';
 import { IoStar } from "react-icons/io5";
+import { motion } from 'framer-motion'; // <-- Import motion
 
 const pricingFeatures = [
-    "Access to all basic math exercises",
-    "Progress tracking for 1 child",
-    "Basic reward system",
-    "Access to all challenges",
-    "Monthly cancellation"
+  "Access to all basic math exercises",
+  "Progress tracking for 1 child",
+  "Basic reward system",
+  "Access to all challenges",
+  "Monthly cancellation"
 ];
 
 const PricingSection = () => {
@@ -21,39 +23,45 @@ const PricingSection = () => {
             Money is not our motivation! Therefore, we want to make Math Star accessible to everybody at the lowest price possible.
           </p>
         </div>
-        <div className="w-full max-w-md mt-12">
-            <div className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6">
-                <div className="flex justify-between items-start">
-                    <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose">Your Star Account</h3>
-                    <div className="w-9 h-9  rounded-full flex items-center justify-center">
-                        <IoStar size={38} className="fill-yellow-400" />
-                    </div>
-                </div>
-                <div className="flex items-end gap-1">
-                    <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">$1.99</p>
-                    <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
-                </div>
-                <div className="space-y-4">
-                    {pricingFeatures.map(feature => (
-                        <div key={feature} className="flex items-center gap-2">
-                            <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                                <Check size={12} className="text-white" />
-                            </div>
-                            <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">{feature}</p>
-                        </div>
-                    ))}
-                </div>
-                <button className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
-                    Start 3 Day Free Trial
-                </button>
+        <motion.div
+          className="w-full max-w-md mt-12"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <div className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6">
+            <div className="flex justify-between items-start">
+              <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose">Your Star Account</h3>
+              <div className="w-9 h-9  rounded-full flex items-center justify-center">
+                <IoStar size={38} className="fill-yellow-400" />
+              </div>
             </div>
-             <div className="text-center mt-8">
-                <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">No credit card required to start.</p>
-                <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">
-                    Have questions? <a href="#" className="text-blue-500">Contact our support team</a>
-                </p>
+            <div className="flex items-end gap-1">
+              <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">$1.99</p>
+              <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
             </div>
-        </div>
+            <div className="space-y-4">
+              {pricingFeatures.map(feature => (
+                <div key={feature} className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Check size={12} className="text-white" />
+                  </div>
+                  <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">{feature}</p>
+                </div>
+              ))}
+            </div>
+            <button className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
+              Start 3 Day Free Trial
+            </button>
+          </div>
+          <div className="text-center mt-8">
+            <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">No credit card required to start.</p>
+            <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">
+              Have questions? <a href="#" className="text-blue-500">Contact our support team</a>
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

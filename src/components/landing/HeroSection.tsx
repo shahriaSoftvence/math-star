@@ -1,4 +1,4 @@
-// src/components/landing/HeroSection.tsx
+// ste_br/src/components/landing/HeroSection.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -6,7 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import HeroImage from '../../../public/assets/banner-image.png';
 import { PlayCircle, X } from 'lucide-react';
-import Lines from '../../../public/Lines.png'
+import Lines from '../../../public/Lines.png';
+import { motion } from 'framer-motion'; // <-- Import motion
 
 const HeroSection = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -14,18 +15,47 @@ const HeroSection = () => {
   const openVideo = () => setIsVideoOpen(true);
   const closeVideo = () => setIsVideoOpen(false);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
   return (
     <div className="w-full pt-[200px] pb-[100px] min-h-[800px] bg-gray-50 flex items-center justify-center relative overflow-hidden">
-        <Image src={Lines} className='absolute top-[8%] left-[17%]' alt='line'/>
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 items-center z-10">
-        <div className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start">
+      <Image src={Lines} className="absolute top-[8%] left-[17%]" alt="line" />
+      <motion.div
+        className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 items-center z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start"
+          variants={itemVariants}
+        >
           <h1 className="text-5xl md:text-6xl font-semibold font-Poppins leading-tight">
-            <span className="text-blue-600">Turn Screen Time Into real study time</span>
+            <span className="text-blue-600">
+              Turn Screen Time Into real study time
+            </span>
             <br />
-            <span className="bg-gradient-to-r from-[#0D1216] to-[#008EFF] inline-block text-transparent bg-clip-text text-neutral-900">Elementary school math made fun</span>
+            <span className="bg-gradient-to-r from-[#0D1216] to-[#008EFF] inline-block text-transparent bg-clip-text text-neutral-900">
+              Elementary school math made fun
+            </span>
           </h1>
           <p className="text-black text-xl font-medium font-Quicksand leading-loose max-w-lg">
-            Become a math star! Study with Interactive exercises and master exciting challenges.
+            Become a math star! Study with Interactive exercises and master
+            exciting challenges.
           </p>
           <div className="flex items-center gap-3">
             <Link href="/signup">
@@ -39,8 +69,11 @@ const HeroSection = () => {
               </button>
             </Link>
           </div>
-        </div>
-        <div className="flex justify-center items-center">
+        </motion.div>
+        <motion.div
+          className="flex justify-center items-center"
+          variants={itemVariants}
+        >
           <div className="w-[601px] h-[553px] relative group">
             <Image
               src={HeroImage}
@@ -56,8 +89,8 @@ const HeroSection = () => {
               <PlayCircle size={80} className="text-white" />
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {isVideoOpen && (
         <div className="fixed inset-0 bg-[#00000048] bg-opacity-75 flex items-center justify-center z-50">

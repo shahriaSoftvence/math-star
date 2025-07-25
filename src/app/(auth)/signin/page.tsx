@@ -3,8 +3,9 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Lock, User, Chrome } from 'lucide-react';
+import { Lock, User } from 'lucide-react';
 import SignInImage from '../../../../public/assets/signin.png';
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignInPage() {
   return (
@@ -43,7 +44,7 @@ export default function SignInPage() {
             </div>
 
             <button className="self-stretch h-12 rounded-xl border border-zinc-900/20 flex justify-center items-center gap-2 hover:bg-gray-50 transition-colors">
-              <Chrome size={24} />
+              <FcGoogle size={24} />
               <span className="text-zinc-900 text-xs font-normal font-Quicksand">Login with </span>
               <span className="text-zinc-900 text-xs font-bold font-Quicksand">Google</span>
             </button>

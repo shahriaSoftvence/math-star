@@ -1,8 +1,9 @@
+// ste_br/src/components/landing/FeaturesSection.tsx
+'use client'; // <-- Add this line
 /* eslint-disable react/no-unescaped-entities */
-// src/components/landing/FeaturesSection.tsx
 import React from 'react';
 import { IoStar } from "react-icons/io5";
-
+import { motion } from 'framer-motion'; // <-- Import motion
 
 const featureData = [
   {
@@ -28,9 +29,15 @@ const featureData = [
 ];
 
 const FeatureCard = ({ title, content, footer, list }: (typeof featureData)[0]) => (
-  <div className="flex-1 h-96 relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg p-8 text-white flex flex-col">
-    <div className="absolute -top-6 -right-6  flex items-center justify-center">
-        <IoStar size={62} className="fill-yellow-400" />
+  <motion.div
+    className="flex-1 h-96 relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg p-8 text-white flex flex-col"
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    viewport={{ once: true }}
+  >
+    <div className="absolute -top-6 -right-6 flex items-center justify-center">
+      <IoStar size={62} className="fill-yellow-400" />
     </div>
     <h3 className="text-2xl font-semibold font-Quicksand leading-loose">{title}</h3>
     <p className="text-base font-normal font-sans leading-relaxed mt-4">{content}</p>
@@ -40,7 +47,7 @@ const FeatureCard = ({ title, content, footer, list }: (typeof featureData)[0]) 
       </ul>
     )}
     {footer && <p className="mt-auto text-base font-normal font-sans leading-normal">{footer}</p>}
-  </div>
+  </motion.div>
 );
 
 const FeaturesSection = () => {
