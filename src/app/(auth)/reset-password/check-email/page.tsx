@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import CheckEmailImage from '../../../../public/assets/resetpasswordcheckemail.png';
+import CheckEmailImage from '../../../../../public/assets/resetpasswordcheckemail.png';
 
 export default function CheckEmailPage() {
   return (

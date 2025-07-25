@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Lock, EyeOff } from 'lucide-react';
-import ConfirmPasswordImage from '../../../../public/assets/resetpasswordconfirmpassword.png';
+import ConfirmPasswordImage from '../../../../../public/assets/resetpasswordconfirmpassword.png';
 
 export default function ConfirmPasswordPage() {
   return (
@@ -30,7 +30,7 @@ export default function ConfirmPasswordPage() {
                 <EyeOff size={20} className="text-stone-300" />
               </div>
             </div>
-             <Link href="/reset-password/success" className="w-full">
+             <Link href="/signin" className="w-full">
                 <button className="w-full h-12 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors">
                     Reset
                 </button>

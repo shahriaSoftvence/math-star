@@ -2,7 +2,7 @@ import PracticeCard from '@/components/PracticeCard';
 import ActivityItem from '@/components/ActivityItem';
 import { Plus, Minus, X, Divide, Star } from 'lucide-react';
 import { IoStarSharp } from "react-icons/io5";
-import BadgeBronze from '../../../public/assets/Bronje.png';
+import BadgeBronze from '../../../../public/assets/Bronje.png';
 import Image from 'next/image';
 import Link from 'next/link';
 

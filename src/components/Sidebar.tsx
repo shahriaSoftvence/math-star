@@ -1,18 +1,18 @@
 // src/components/Sidebar.tsx
-'use client'; // <-- Required for using hooks
+'use client'; 
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // <-- Import the hook
+import { usePathname } from 'next/navigation';
 import { LayoutDashboard, User, Settings, LogOut, CreditCard } from 'lucide-react';
 import Logo from '../../public/assets/Logo.png';
 import Image from 'next/image';
 
 export default function Sidebar() {
-  const pathname = usePathname(); // <-- Get the current path
+  const pathname = usePathname();
 
   const menuItems = [
-    { name: "Dashboard", href: "/", icon: <LayoutDashboard size={24} /> },
+    { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={24} /> },
     { name: "Profile", href: "/profile", icon: <User size={24} /> },
     { name: "Setting", href: "/settings", icon: <Settings size={24} /> },
     { name: "Subscription", href: "/subscription", icon: <CreditCard size={24} /> },
@@ -22,14 +22,14 @@ export default function Sidebar() {
     <aside className="w-64 min-h-screen bg-white rounded-r-[30px] border-r flex flex-col justify-between p-6">
       <div>
         <div className="mb-16">
-          <Link href="/">
+          <Link href="/dashboard">
             <Image src={Logo} alt='Logo' />
           </Link>
         </div>
         <nav>
           <ul>
             {menuItems.map((item) => {
-              const isActive = pathname === item.href; // <-- Check if the link is active
+              const isActive = pathname === item.href;
               return (
                 <li key={item.name} className="mb-2">
                   <Link 
@@ -50,7 +50,7 @@ export default function Sidebar() {
         </nav>
       </div>
       <div>
-        <Link href="/" className="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-gray-100 rounded-xl">
+        <Link href="/signin" className="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-gray-100 rounded-xl">
           <LogOut size={24} />
           <span className="text-base font-medium">Logout</span>
         </Link>
