@@ -17,7 +17,7 @@ type GameState = 'ready' | 'playing' | 'gameOver';
 // --- Reusable UI Components ---
 const ChallengeStartScreen = ({ onStart, onCancel }: { onStart: () => void, onCancel: () => void }) => (
   <div className="w-full min-h-screen relative bg-gradient-to-b from-purple-50 to-indigo-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[672px] p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6">
+    <div className="w-full max-w-[450px] min-[516px]:max-w-[600px] p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6">
       <div className="w-20 h-20 bg-purple-100 rounded-full flex justify-center items-center">
         <HelpCircle className="w-10 h-10 text-purple-600" />
       </div>

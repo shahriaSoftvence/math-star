@@ -13,7 +13,7 @@ type GameState = 'ready' | 'playing' | 'gameOver';
 
 const ChallengeStartScreen = ({ title, description, onStart, onCancel }: { title: string, description: string, onStart: () => void, onCancel: () => void }) => (
   <div className="w-full min-h-screen relative bg-gradient-to-b from-green-50 to-purple-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[672px] max-h-[332px] p-7 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6 max-[514px]:w-[100%]">
+    <div className="w-full max-w-[450px] min-[516px]:max-w-[600px] max-h-[332px] p-7 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6 max-[514px]:w-[100%]">
       <div className="w-20 h-20 bg-green-100 rounded-full flex justify-center items-center">
         <Target className="w-10 h-10 text-green-600" />
       </div>
@@ -31,7 +31,7 @@ const ChallengeStartScreen = ({ title, description, onStart, onCancel }: { title
 
 const GameResultScreen = ({ score, questionsAnswered, onRetry, onHome }: { score: number, questionsAnswered: number, onRetry: () => void, onHome: () => void }) => (
     <div className="w-full min-h-screen relative bg-gradient-to-b from-green-50 to-purple-50 flex flex-col justify-center items-center p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] mx-auto">
+        <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] max-[704]:min-w-[400px] mx-auto">
             <div className="w-20 h-20 bg-red-100 rounded-full flex justify-center items-center">
                 <X className="w-10 h-10 text-red-500" />
             </div>
