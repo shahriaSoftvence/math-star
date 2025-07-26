@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Check, X, Delete, ArrowLeft } from 'lucide-react';
+import { Check, Delete, } from 'lucide-react';
 import { PiTimerBold } from "react-icons/pi";
 
 // --- Type Definitions ---

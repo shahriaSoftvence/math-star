@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Check, X, Delete, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { BsGrid3X3 } from "react-icons/bs";
 import CongratulationsScreen from '@/components/CongratulationsScreen';
 

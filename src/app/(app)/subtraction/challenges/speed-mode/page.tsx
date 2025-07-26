@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Check, X, Delete, ArrowLeft } from 'lucide-react';
+import { Check, Delete } from 'lucide-react';
 import { PiTimerBold } from "react-icons/pi";
 import CongratulationsScreen from '@/components/CongratulationsScreen';
 
@@ -33,24 +32,24 @@ const ChallengeStartScreen = ({ onStart, onCancel }: { onStart: () => void, onCa
     </div>
 );
 
-const GameResultScreen = ({ score, onRetry, onHome }: { score: number, onRetry: () => void, onHome: () => void }) => (
-    <div className="w-full min-h-screen relative bg-gradient-to-b from-pink-50 to-purple-50 flex flex-col justify-center items-center p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] max-[704]:min-w-[400px] mx-auto">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex justify-center items-center">
-                <Check className="w-10 h-10 text-green-500" />
-            </div>
-            <h1 className="text-gray-800 text-3xl font-bold font-Nunito leading-9">Time is Up!</h1>
-            <div>
-                <p className="text-xl text-gray-600 leading-7">Final Score: <span className="font-bold text-pink-600">{score}</span></p>
-                <p className="text-base text-gray-600 leading-normal">You answered {score} questions correctly!</p>
-            </div>
-            <div className="w-full mt-4 flex justify-center items-center gap-4">
-                <button onClick={onRetry} className="flex-1 py-2.5 bg-pink-500 text-slate-50 rounded-md font-medium text-sm leading-tight hover:bg-pink-600 transition-colors">Play Again</button>
-                <button onClick={onHome} className="flex-1 py-2.5 bg-slate-50 rounded-md border border-slate-200 text-slate-950 font-medium text-sm leading-tight hover:bg-slate-100 transition-colors">Home</button>
-            </div>
-        </div>
-    </div>
-);
+// const GameResultScreen = ({ score, onRetry, onHome }: { score: number, onRetry: () => void, onHome: () => void }) => (
+//     <div className="w-full min-h-screen relative bg-gradient-to-b from-pink-50 to-purple-50 flex flex-col justify-center items-center p-4">
+//         <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] max-[704]:min-w-[400px] mx-auto">
+//             <div className="w-20 h-20 bg-green-100 rounded-full flex justify-center items-center">
+//                 <Check className="w-10 h-10 text-green-500" />
+//             </div>
+//             <h1 className="text-gray-800 text-3xl font-bold font-Nunito leading-9">Time is Up!</h1>
+//             <div>
+//                 <p className="text-xl text-gray-600 leading-7">Final Score: <span className="font-bold text-pink-600">{score}</span></p>
+//                 <p className="text-base text-gray-600 leading-normal">You answered {score} questions correctly!</p>
+//             </div>
+//             <div className="w-full mt-4 flex justify-center items-center gap-4">
+//                 <button onClick={onRetry} className="flex-1 py-2.5 bg-pink-500 text-slate-50 rounded-md font-medium text-sm leading-tight hover:bg-pink-600 transition-colors">Play Again</button>
+//                 <button onClick={onHome} className="flex-1 py-2.5 bg-slate-50 rounded-md border border-slate-200 text-slate-950 font-medium text-sm leading-tight hover:bg-slate-100 transition-colors">Home</button>
+//             </div>
+//         </div>
+//     </div>
+// );
 
 const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num: string) => void; onBackspace: () => void; onSubmit: () => void; }) => {
     const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];

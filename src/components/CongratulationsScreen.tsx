@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import FallingStars from './FallingStars';
 import { motion } from 'framer-motion';
 
@@ -11,7 +10,6 @@ type Props = {
 };
 
 export default function CongratulationsScreen({ onContinue, rewardName = "Bright Spark" }: Props) {
-  const router = useRouter();
 
   return (
     <div className="w-full h-screen bg-gradient-to-b from-purple-400 via-pink-400 to-yellow-400 flex justify-center items-center overflow-hidden fixed top-0 left-0 z-10">

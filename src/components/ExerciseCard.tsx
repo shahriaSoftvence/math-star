@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link'; 
-import { TiStarFullOutline } from "react-icons/ti";
 import pointStar from '../../public/point-star.png'
 import Image from 'next/image';
 

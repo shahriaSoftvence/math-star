@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -13,7 +13,7 @@ const practiceTips = [
   'Take breaks between practice sessions.',
 ];
 
-const QuestionCountCard = ({ count, range }: { count: number, range: string | null }) => (
+const QuestionCountCard = ({ count, range }: { count: number; range: string | null }) => (
   <Link href={`/subtraction/practice?count=${count}&range=${range || '10'}`}>
     <div className="w-38 self-stretch p-8 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-pink-200 hover:to-pink-300 transition-all transform hover:scale-105">
       <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
@@ -22,7 +22,8 @@ const QuestionCountCard = ({ count, range }: { count: number, range: string | nu
   </Link>
 );
 
-export default function SelectQuestionsPage() {
+// Create a separate component for the content that uses useSearchParams
+function SelectQuestionsContent() {
   const searchParams = useSearchParams();
   const range = searchParams?.get('range') ?? null;
 
@@ -47,5 +48,13 @@ export default function SelectQuestionsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SelectQuestionsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SelectQuestionsContent />
+    </Suspense>
   );
 }

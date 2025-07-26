@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react'; // Import Suspense
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Check, X, Delete } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CongratulationsScreen from '@/components/CongratulationsScreen'; // 1. Import the new component
+import CongratulationsScreen from '@/components/CongratulationsScreen';
 
 // --- Type Definitions ---
 type Question = {
@@ -42,7 +42,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num:
 };
 
 const HelpChart = ({ table }: { table: number; }) => (
-    <motion.div 
+    <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
@@ -61,12 +61,11 @@ const HelpChart = ({ table }: { table: number; }) => (
     </motion.div>
 );
 
-
-// --- Main Practice Page Component ---
-export default function PracticePage() {
+// Create a new component that uses the hook
+function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -74,7 +73,7 @@ export default function PracticePage() {
   const [progress, setProgress] = useState<ProgressStatus[]>([]);
   const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
   const [showHelp, setShowHelp] = useState(false);
-  const [isComplete, setIsComplete] = useState(false); // 2. Add completion state
+  const [isComplete, setIsComplete] = useState(false);
 
 
   const [tableNumber, setTableNumber] = useState<number | null>(null);
@@ -93,7 +92,7 @@ export default function PracticePage() {
       const num2 = table;
       // Randomly swap num1 and num2 for variety
       const shouldSwap = Math.random() > 0.5;
-      return { 
+      return {
         num1: shouldSwap ? num2 : num1,
         num2: shouldSwap ? num1 : num2,
         answer: num1 * num2
@@ -111,7 +110,7 @@ export default function PracticePage() {
   };
 
   const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
-  
+
    const handleSubmit = () => {
     if (!userAnswer) return;
 
@@ -123,14 +122,13 @@ export default function PracticePage() {
     if (isCorrect) {
       setFeedback({ type: 'correct', message: 'Your answer is absolutely correct!' });
       setShowHelp(false);
-      
+
       setTimeout(() => {
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
           setUserAnswer('');
           setFeedback({ type: null, message: '' });
         } else {
-          // 3. Instead of alert, set completion state to true
           setIsComplete(true);
         }
       }, 1500);
@@ -140,16 +138,15 @@ export default function PracticePage() {
     }
   };
 
-  // 4. Conditionally render the congratulations screen
   if (isComplete) {
-    return <CongratulationsScreen onContinue={() => router.push('/addition')} />;
+    return <CongratulationsScreen onContinue={() => router.push('/multiplication')} />;
   }
 
   if (!currentQuestion) {
     return <div className="flex items-center justify-center h-screen">Loading Practice...</div>;
   }
 
-  
+
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
       {/* Header */}
@@ -181,7 +178,7 @@ export default function PracticePage() {
                 {showHelp && tableNumber && <HelpChart table={tableNumber} />}
             </AnimatePresence>
         </div>
-        
+
         <div className="grid grid-cols-1 col-span-1 gap-6 md:grid-cols-2 lg:col-span-8">
             <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
                 <div className="mb-4 text-4xl font-bold text-gray-800">
@@ -202,7 +199,6 @@ export default function PracticePage() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            // FIX: Made the toast responsive
             className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
         >
               <div className="flex items-start">
@@ -222,5 +218,15 @@ export default function PracticePage() {
           )}
       </AnimatePresence>
     </div>
+  );
+}
+
+
+// --- Main Practice Page Component ---
+export default function PracticePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PracticePageContent />
+    </Suspense>
   );
 }

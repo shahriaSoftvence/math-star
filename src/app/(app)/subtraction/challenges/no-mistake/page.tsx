@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Check, X, Delete, Target } from 'lucide-react';
-import CongratulationsScreen from '@/components/CongratulationsScreen';
+import {  Check, X, Delete, Target } from 'lucide-react';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };

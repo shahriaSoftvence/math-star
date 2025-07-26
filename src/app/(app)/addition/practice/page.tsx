@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react'; // Import Suspense
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Check, X, Delete } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CongratulationsScreen from '@/components/CongratulationsScreen'; // 1. Import the new component
+import CongratulationsScreen from '@/components/CongratulationsScreen';
 
 // --- Type Definitions ---
 type Question = {
@@ -42,7 +42,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num:
 };
 
 const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
-    <motion.div 
+    <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
@@ -62,12 +62,11 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
     </motion.div>
 );
 
-
-// --- Main Practice Page Component ---
-export default function PracticePage() {
+// Create a new component that uses the hook
+function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -75,7 +74,7 @@ export default function PracticePage() {
   const [progress, setProgress] = useState<ProgressStatus[]>([]);
   const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
   const [showHelp, setShowHelp] = useState(false);
-  const [isComplete, setIsComplete] = useState(false); // 2. Add completion state
+  const [isComplete, setIsComplete] = useState(false);
 
   // Memoize parameters from URL to prevent re-renders
   const questionCount = useMemo(() => parseInt(searchParams?.get('count') || '10', 10), [searchParams]);
@@ -100,7 +99,7 @@ export default function PracticePage() {
   };
 
   const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
-  
+
 const handleSubmit = () => {
     if (!userAnswer) return;
 
@@ -112,14 +111,13 @@ const handleSubmit = () => {
     if (isCorrect) {
       setFeedback({ type: 'correct', message: 'Your answer is absolutely correct!' });
       setShowHelp(false);
-      
+
       setTimeout(() => {
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
           setUserAnswer('');
           setFeedback({ type: null, message: '' });
         } else {
-          // 3. Instead of alert, set completion state to true
           setIsComplete(true);
         }
       }, 1500);
@@ -129,7 +127,6 @@ const handleSubmit = () => {
     }
   };
 
-  // 4. Conditionally render the congratulations screen
   if (isComplete) {
     return <CongratulationsScreen onContinue={() => router.push('/addition')} />;
   }
@@ -157,7 +154,7 @@ const handleSubmit = () => {
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           {progress.map((status, index) => {
             const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
-            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
+            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
           })}
         </div>
       </div>
@@ -169,7 +166,7 @@ const handleSubmit = () => {
                 {showHelp && <HelpChart num1={currentQuestion.num1} num2={currentQuestion.num2} />}
             </AnimatePresence>
         </div>
-        
+
         <div className="grid grid-cols-1 col-span-1 gap-6 md:grid-cols-2 lg:col-span-8">
             <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
                 <div className="mb-4 text-4xl font-bold text-gray-800">
@@ -190,7 +187,6 @@ const handleSubmit = () => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            // FIX: Made the toast responsive
             className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
         >
               <div className="flex items-start">
@@ -210,5 +206,14 @@ const handleSubmit = () => {
           )}
       </AnimatePresence>
     </div>
+  );
+}
+
+// Wrap the main component in a Suspense boundary
+export default function PracticePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PracticePageContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 // ste_br/src/components/landing/PricingSection.tsx
 'use client'; // <-- Add this line
-import { Check, Star } from 'lucide-react';
+import { Check } from 'lucide-react';
 import React from 'react';
 import { IoStar } from "react-icons/io5";
 import { motion } from 'framer-motion'; // <-- Import motion

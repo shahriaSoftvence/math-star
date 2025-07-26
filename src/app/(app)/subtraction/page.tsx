@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiTarget, FiZap, FiGrid, FiHelpCircle } from 'react-icons/fi';
+import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
 import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";

@@ -1,7 +1,7 @@
 // src/app/profile/page.tsx
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Crown, Calendar, Edit, Award, Star, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Crown, Calendar, Edit, Award, Star } from 'lucide-react';
 
 const achievements = [
   {

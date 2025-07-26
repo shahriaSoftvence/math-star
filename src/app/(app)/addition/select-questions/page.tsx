@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react'; // Import Suspense
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -22,7 +22,8 @@ const QuestionCountCard = ({ count, range }: { count: number, range: string | nu
   </Link>
 );
 
-export default function SelectQuestionsPage() {
+// Create a new component that uses the hook
+function SelectQuestionsContent() {
   const searchParams = useSearchParams();
   const rangeRaw = searchParams?.get('range');
   const range: string | null = typeof rangeRaw === 'undefined' ? null : rangeRaw;
@@ -48,5 +49,14 @@ export default function SelectQuestionsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SelectQuestionsPage() {
+  return (
+    // Wrap the component in a Suspense boundary
+    <Suspense fallback={<div>Loading...</div>}>
+      <SelectQuestionsContent />
+    </Suspense>
   );
 }

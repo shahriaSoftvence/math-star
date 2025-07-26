@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Star } from 'lucide-react';
-import { IoStar } from "react-icons/io5";
 
 
 type ActivityItemProps = {
