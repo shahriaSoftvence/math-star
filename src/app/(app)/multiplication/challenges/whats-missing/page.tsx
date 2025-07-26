@@ -190,11 +190,11 @@ export default function WhatsMissingPage() {
           </div>
 
           {/* Question Display */}
-          <div className="p-8 rounded-3xl border border-black min-w-[480px]">
-            <div className="text-center text-gray-800 text-6xl font-bold font-Nunito leading-tight">
-              {getQuestionString()}
-            </div>
-          </div>
+          <div className="p-8 rounded-3xl border border-black w-full">
+        <div className="text-center text-gray-800 text-4xl sm:text-6xl font-bold font-Nunito leading-tight">
+          {getQuestionString()}
+        </div>
+      </div>
         </div>
 
         {/* Numpad */}

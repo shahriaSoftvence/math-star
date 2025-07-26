@@ -196,14 +196,15 @@ export default function PracticePage() {
       </div>
 
       {/* Feedback Toast Animation */}
-      <AnimatePresence>
-          {feedback.type && (
-            <motion.div 
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-96 rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
-            >
+       <AnimatePresence>
+      {feedback.type && (
+        <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            // FIX: Made the toast responsive
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
+        >
               <div className="flex items-start">
                 <div className={`p-1 mr-3 text-xl rounded-full ${feedback.type === 'correct' ? 'bg-emerald-100 text-emerald-500' : 'bg-red-100 text-red-500'}`}>
                   {feedback.type === 'correct' ? <Check size={20} /> : <X size={20} />}

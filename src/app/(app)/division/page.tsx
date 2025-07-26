@@ -57,11 +57,11 @@ export default function DivisionPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {divisionChallenges.map((challenge, index) => (
-              <Link href={challenge.link} key={index} legacyBehavior>
-                <a className="cursor-pointer">
-                    <ChallengeCard iconColor="text-white" {...challenge} />
-                </a>
-              </Link>
+              <Link href={challenge.link} key={index} passHref legacyBehavior>
+  <a className="cursor-pointer">
+    <ChallengeCard iconColor="text-white" {...challenge} />
+  </a>
+</Link>
             ))}
           </div>
         </div>

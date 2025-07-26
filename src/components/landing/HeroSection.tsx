@@ -74,7 +74,8 @@ const HeroSection = () => {
           className="flex justify-center items-center"
           variants={itemVariants}
         >
-          <div className="w-[601px] h-[553px] relative group">
+          {/* FIX: Replaced fixed width and height with responsive classes */}
+          <div className="w-full max-w-xl aspect-square relative group">
             <Image
               src={HeroImage}
               alt="Children learning on a computer"
