@@ -5,6 +5,7 @@ import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const multiplicationExercises = [
   { range: '1', percentage: 98, stars: 0 },
@@ -31,6 +32,11 @@ const multiplicationChallenges = [
 export default function MultiplicationPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8">
+       <div className="mb-4">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+            <ArrowLeft /> Go Back
+          </Link>
+      </div>
       {/* Multiplication Exercise Section */}
       <div className="rounded-lg">
         <div className="p-4 bg-gradient-to-br from-green-400 to-green-500 rounded-t-lg">

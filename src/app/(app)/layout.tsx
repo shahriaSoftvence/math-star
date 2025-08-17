@@ -4,6 +4,7 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function AppLayout({
   children,
@@ -18,12 +19,14 @@ export default function AppLayout({
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname() || '';
+  const isPracticePage = pathname.includes('/addition') || pathname.includes('/subtraction') || pathname.includes('/multiplication') || pathname.includes('/division') || pathname.includes('/practice');
 
   return (
     <div className="flex">
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex-1 md:ml-64">
-        <Navbar user={user} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      {!isPracticePage && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />}
+      <div className={`flex-1 ${!isPracticePage ? 'md:ml-64' : ''}`}>
+        {!isPracticePage && <Navbar user={user} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />}
         <main className="mt-6">{children}</main>
       </div>
     </div>

@@ -5,6 +5,7 @@ import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const divisionExercises = [
   { range: '÷2', percentage: 90, stars: 18 },
@@ -30,6 +31,11 @@ const divisionChallenges = [
 export default function DivisionPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8">
+       <div className="mb-4">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+            <ArrowLeft /> Go Back
+          </Link>
+      </div>
       {/* Division Exercise Section */}
       <div className="rounded-lg">
         <div className="p-4 bg-gradient-to-br from-purple-400 to-purple-500 rounded-t-lg">

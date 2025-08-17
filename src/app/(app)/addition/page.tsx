@@ -5,6 +5,7 @@ import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const additionExercises = {
   noCarry: [
@@ -30,6 +31,11 @@ const additionChallenges = [
 export default function AdditionPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8">
+      <div className="mb-4">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+            <ArrowLeft /> Go Back
+          </Link>
+      </div>
       {/* Addition Exercise Section */}
       <div className="rounded-lg ">
         <div className="p-4 bg-gradient-to-br from-blue-400 to-blue-500 rounded-t-lg">
@@ -69,8 +75,8 @@ export default function AdditionPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {additionChallenges.map((challenge, index) => (
-              <Link 
-                href={challenge.link} 
+              <Link
+                href={challenge.link}
                 key={index}
                 className="cursor-pointer"
               >

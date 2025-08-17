@@ -3,6 +3,7 @@
 import React, { Suspense } from 'react'; // Import Suspense
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 
 const questionCounts = [10, 20, 30, 40, 50];
 
@@ -29,6 +30,11 @@ function SelectQuestionsContent() {
 
   return (
     <div className="max-w-4xl mx-auto">
+       <div className="w-full flex justify-start">
+          <Link href="/division" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4">
+            <ArrowLeft /> Go Back
+          </Link>
+        </div>
       <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
         <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions for dividing by {divisor}</h2>
         <div className="flex flex-wrap justify-center items-start gap-4">

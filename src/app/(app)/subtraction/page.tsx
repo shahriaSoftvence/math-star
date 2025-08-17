@@ -5,6 +5,7 @@ import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const subtractionExercises = {
   noBorrowing: [
@@ -27,9 +28,15 @@ const subtractionChallenges = [
     { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/subtraction/challenges/whats-missing" },
 ];
 
+
 export default function SubtractionPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8">
+       <div className="mb-4">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+            <ArrowLeft /> Go Back
+          </Link>
+      </div>
       {/* Subtraction Exercise Section */}
       <div className="rounded-lg">
         <div className="p-4 bg-gradient-to-br from-pink-400 to-pink-500 rounded-t-lg">
