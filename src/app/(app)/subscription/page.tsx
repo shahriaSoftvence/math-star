@@ -38,11 +38,12 @@ const ToggleSwitch = () => {
 const paymentMethods = [
   { id: 1, type: 'Visa', last4: '4242', expires: '12/28', isDefault: true },
   { id: 2, type: 'Mastercard', last4: '8888', expires: '06/27', isDefault: false },
+  { id: 3, type: 'Paysafe Card', last4: '1234', expires: 'N/A', isDefault: false },
 ];
 
 const billingHistory = [
-  { id: 1, plan: 'Premium Plan', date: 'Nov 15, 2024', amount: '৳599' },
-  { id: 2, plan: 'Premium Plan', date: 'Oct 15, 2024', amount: '৳599' },
+  { id: 1, plan: 'Monthly Plan', date: 'Nov 15, 2024', amount: '৳599' },
+  { id: 2, plan: 'Monthly Plan', date: 'Oct 15, 2024', amount: '৳599' },
   { id: 3, plan: 'Basic Plan', date: 'Sep 15, 2024', amount: '৳299' },
 ];
 
@@ -68,7 +69,7 @@ export default function SubscriptionPage() {
               <Crown size={32} className="text-yellow-300" />
               <div>
                 <h2 className="text-xl font-bold font-Nunito">Current Subscription</h2>
-                <p className="text-purple-100 font-Nunito">Premium Plan</p>
+                <p className="text-purple-100 font-Nunito">Monthly Plan</p>
               </div>
             </div>
             <div className="flex flex-col items-start sm:items-end gap-2">

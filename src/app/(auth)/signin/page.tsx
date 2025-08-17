@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Lock, User } from 'lucide-react';
 import SignInImage from '../../../../public/assets/signin.png';
-import { FcGoogle } from "react-icons/fc";
 
 export default function SignInPage() {
   return (
@@ -39,16 +38,7 @@ export default function SignInPage() {
               Sign In
             </button>
 
-            <div className="text-center">
-              <span className="text-zinc-900 text-base font-normal font-Quicksand">Sign in with Others</span>
-            </div>
-
-            <button className="self-stretch h-12 rounded-xl border border-zinc-900/20 flex justify-center items-center gap-2 hover:bg-gray-50 transition-colors">
-              <FcGoogle size={24} />
-              <span className="text-zinc-900 text-xs font-normal font-Quicksand">Login with </span>
-              <span className="text-zinc-900 text-xs font-bold font-Quicksand">Google</span>
-            </button>
-             <div className="text-center mt-4">
+            <div className="text-center mt-4">
               <span className="text-zinc-900 text-sm font-Quicksand">Don't have an account? </span>
               <Link href="/signup" className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
                 Sign Up
