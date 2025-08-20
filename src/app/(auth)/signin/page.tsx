@@ -154,6 +154,13 @@ export default function SignInPage() {
                 Sign Up
               </Link>
             </div>
+            
+            <div className="text-center mt-2">
+              <span className="text-zinc-900 text-sm font-Quicksand">Need to resend OTP? </span>
+              <Link href="/resend-otp" className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
+                Resend OTP
+              </Link>
+            </div>
           </div>
         </div>
 

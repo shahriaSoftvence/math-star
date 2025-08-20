@@ -8,6 +8,7 @@ import { TiStarFullOutline } from "react-icons/ti";
 import { FaCrown } from "react-icons/fa";
 import { useAuth, useAuthActions } from '../Redux/hooks';
 import { useGetProfileQuery } from '../Redux/features/auth/authApi';
+import { useRouter } from 'next/navigation';
 
 type Notification = {
   id: number;
@@ -47,21 +48,27 @@ function useOnClickOutside(
 export default function Navbar({ toggleSidebar }: NavbarProps) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-  
+  const router = useRouter();
   // Get current user from Redux
   const { user, isAuthenticated } = useAuth();
-  
+
   // Get logout function from Redux actions
   const { logout } = useAuthActions();
-  
+
   // Fetch user profile data
   const { data: profileData, isLoading: isProfileLoading, error: profileError } = useGetProfileQuery(undefined, {
     skip: !isAuthenticated, // Only fetch when authenticated
     refetchOnMountOrArgChange: false, // Prevent refetching on every mount
     refetchOnFocus: false, // Prevent refetching when window regains focus
   });
+
+  // Prevent hydration mismatch by only rendering after client-side mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Use profile data directly from API instead of updating Redux state
   const displayUser = profileData?.success && profileData?.data ? profileData.data : user;
@@ -75,7 +82,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   useOnClickOutside(notificationRef as React.RefObject<HTMLElement>, () => setIsNotificationsOpen(false));
   useOnClickOutside(profileRef as React.RefObject<HTMLElement>, () => setIsProfileOpen(false));
-  
+
   // Handle logout
   const handleLogout = () => {
     logout();
@@ -85,9 +92,29 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   // Handle profile navigation
   const handleProfileClick = () => {
     // Navigate to profile page - you can replace this with your routing logic
-    window.location.href = '/profile';
+    router.push('/profile');
     setIsProfileOpen(false);
   };
+
+  // Don't render until client-side to prevent hydration mismatch
+  if (!isClient) {
+    return (
+      <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <button onClick={toggleSidebar} className="md:hidden" aria-label="Toggle sidebar">
+            <Menu className='text-[#000]' size={24} />
+          </button>
+          <div className="flex-col justify-center items-start gap-1.5 hidden md:flex">
+            <h1 className="text-black text-2xl font-medium">Loading...</h1>
+          </div>
+        </div>
+        <div className="flex items-center gap-6">
+          <Image src={Flag} alt='Country flag' width={32} height={32} />
+          <Image src={Profile} width={58} height={58} alt="User Avatar" className="rounded-full" />
+        </div>
+      </nav>
+    );
+  }
 
   // If no user is authenticated, show loading or default state
   if (!displayUser || !isAuthenticated) {
@@ -108,7 +135,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       </nav>
     );
   }
-  
+
   return (
     <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
       <div className="flex items-center gap-4">
@@ -159,7 +186,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             </div>
           )}
         </div>
-        
+
         {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>
           <button
@@ -167,11 +194,11 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-150"
             aria-label="Profile menu"
           >
-            <Image 
-              src={displayUser.profile_pic || Profile} 
-              width={58} 
-              height={58} 
-              alt="User Avatar" 
+            <Image
+              src={displayUser.profile_pic || Profile}
+              width={58}
+              height={58}
+              alt="User Avatar"
               className="rounded-full cursor-pointer"
               onError={(e) => {
                 // Fallback to default profile image if profile_pic fails to load
@@ -180,7 +207,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               }}
             />
           </button>
-          
+
           {isProfileOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-20 border">
               <div className="py-2">

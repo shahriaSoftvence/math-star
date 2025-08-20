@@ -35,10 +35,16 @@ function useOnClickOutside(
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // <-- Add state for menu
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const { isAuthenticated, user } = useAuth();
   const { logout } = useAuthActions();
   const router = useRouter();
+
+  // Prevent hydration mismatch by only rendering after client-side mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useOnClickOutside(profileRef as React.RefObject<HTMLElement>, () => setIsProfileOpen(false));
 
@@ -51,6 +57,44 @@ const Header = () => {
     router.push('/dashboard');
     setIsProfileOpen(false);
   };
+
+  // Don't render until client-side to prevent hydration mismatch
+  if (!isClient) {
+    return (
+      <header className="w-full h-24 px-4 sm:px-10 md:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">
+        <div className="max-w-[1250px] mx-auto flex justify-between items-center w-full">
+          <Link href="/">
+            <Image src={Logo} alt="Math Star Logo" className="w-32 md:w-40 h-auto" />
+          </Link>
+          <nav className="md:flex md:items-center md:gap-8 lg:gap-16 hidden">
+            <Link
+              href="#features"
+              className="text-black text-lg font-medium font-Poppins leading-relaxed"
+            >
+              What is Math Star?
+            </Link>
+            <Link
+              href="#pricing"
+              className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="#faq"
+              className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
+            >
+              FAQ
+            </Link>
+          </nav>
+          <div className="flex items-center gap-4">
+            <Image src={Flag} alt="Language Flag" className="w-10 h-auto" />
+            <div className="h-12 w-24 bg-gray-200 rounded-[100px] animate-pulse"></div>
+            <HamburgerMenu isOpen={false} setIsOpen={() => {}} />
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="w-full h-24 px-4 sm:px-10 md:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">

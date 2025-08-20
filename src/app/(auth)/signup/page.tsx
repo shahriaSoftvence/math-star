@@ -28,6 +28,18 @@ export default function SignUpPage() {
   
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/dashboard';
+  
+  // Check for step and email query parameters (for resend OTP redirect)
+  const stepParam = searchParams.get('step');
+  const emailParam = searchParams.get('email');
+  
+  // Set initial step and email if coming from resend OTP
+  React.useEffect(() => {
+    if (stepParam === '2' && emailParam) {
+      setStep(2);
+      setEmail(emailParam);
+    }
+  }, [stepParam, emailParam]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -140,9 +152,12 @@ export default function SignUpPage() {
 
               <div className="text-center mt-4">
                 <span className="text-zinc-900 text-sm font-Quicksand">Didn't receive the code? </span>
-                <button className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
-                  Resend
-                </button>
+                <Link 
+                  href={`/resend-otp?redirect=${encodeURIComponent(redirectTo)}`}
+                  className="text-blue-500 text-sm font-bold font-Quicksand hover:underline"
+                >
+                  Resend OTP
+                </Link>
               </div>
             </div>
           </div>
