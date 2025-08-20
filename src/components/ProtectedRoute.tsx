@@ -1,36 +1,37 @@
-// src/app/(auth)/layout.tsx
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../Redux/hooks';
+import { useAuth } from '../Redux/hooks';
 
-export default function AuthLayout({
-  children,
-}: Readonly<{
+interface ProtectedRouteProps {
   children: React.ReactNode;
-}>) {
+}
+
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
 
-  // Redirect authenticated users to dashboard
   useEffect(() => {
-    if (isAuthenticated && user) {
-      router.push('/dashboard');
+    // Check if user is authenticated
+    if (!isAuthenticated || !user) {
+      // Redirect to signin page if not authenticated
+      router.push('/signin');
     }
   }, [isAuthenticated, user, router]);
 
   // Show loading state while checking authentication
-  if (isAuthenticated && user) {
+  if (!isAuthenticated || !user) {
     return (
       <div className="min-h-screen bg-[#F8F7FA] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Redirecting to dashboard...</p>
+          <p className="text-gray-600">Checking authentication...</p>
         </div>
       </div>
     );
   }
 
+  // Render children if authenticated
   return <>{children}</>;
 }

@@ -46,6 +46,7 @@ const authSlice = createSlice({
                 localStorage.removeItem('user')
                 localStorage.removeItem('auth')
                 localStorage.removeItem('isLoggingOut')
+                localStorage.removeItem('isRefreshing') // Clear the refreshing flag
                 
                 // Clear all cookies with proper domain and path
                 const cookieNames = ['accessToken', 'refreshToken', 'auth', 'user'];
@@ -89,7 +90,11 @@ const authSlice = createSlice({
             state.isAuthenticated = action.payload
         },
         setProfile: (state, action: PayloadAction<User>) => {
-            state.user = { ...state.user, ...action.payload }
+            if (state.user) {
+                state.user = { ...state.user, ...action.payload }
+            } else {
+                state.user = action.payload
+            }
         },
     },
 })

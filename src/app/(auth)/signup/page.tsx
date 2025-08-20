@@ -8,6 +8,7 @@ import SignUpImage from '../../../../public/assets/signup.png';
 import { FcGoogle } from "react-icons/fc";
 import { useRegisterMutation, useVerifyOtpMutation } from '../../../../src/Redux/features/auth/authApi';
 import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
 
 export default function SignUpPage() {
   const [step, setStep] = useState(1);
@@ -24,6 +25,9 @@ export default function SignUpPage() {
 
   const [register, { isLoading: isRegistering }] = useRegisterMutation();
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
+  
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -80,8 +84,8 @@ export default function SignUpPage() {
       
       if (result.success) {
         toast.success('OTP verified successfully! You can now sign in.');
-        // Redirect to signin page
-        window.location.href = '/signin';
+        // Redirect to signin page with redirect parameter
+        window.location.href = `/signin?redirect=${encodeURIComponent(redirectTo)}`;
       }
     } catch (error: any) {
       toast.error(error?.data?.message || 'OTP verification failed');
@@ -244,7 +248,7 @@ export default function SignUpPage() {
             </button>
             <div className="text-center mt-4">
               <span className="text-zinc-900 text-sm font-Quicksand">Already have an account? </span>
-              <Link href="/signin" className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
+              <Link href={`/signin?redirect=${encodeURIComponent(redirectTo)}`} className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
                 Sign In
               </Link>
             </div>

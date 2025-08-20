@@ -53,6 +53,14 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       return result;
     }
     
+    // Check if we're already trying to refresh a token
+    const isRefreshing = localStorage.getItem('isRefreshing') === 'true';
+    
+    if (isRefreshing) {
+      // If we're already refreshing, just return the original result
+      return result;
+    }
+    
     // Check if we have a refreshToken in localStorage (client-side check)
     const hasRefreshToken = localStorage.getItem('refreshToken');
     
@@ -63,6 +71,11 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     }
     
     try {
+      // Set flag to prevent multiple simultaneous refresh attempts
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('isRefreshing', 'true');
+      }
+      
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_API || 'http://127.0.0.1:8000'}/api/auth/refresh-token/`,
         {
@@ -90,6 +103,11 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     } catch (error) {
       console.error('Refresh token error:', error);
       api.dispatch(logout());
+    } finally {
+      // Clear the refreshing flag
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('isRefreshing');
+      }
     }
   }
 

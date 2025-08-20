@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Bell, Menu } from 'lucide-react';
+import { Bell, Menu, LogOut, User } from 'lucide-react';
 import Profile from '../../public/assets/Profile.png';
 import Flag from '../../public/assets/Flag.png';
 import { TiStarFullOutline } from "react-icons/ti";
@@ -46,26 +46,27 @@ function useOnClickOutside(
 
 export default function Navbar({ toggleSidebar }: NavbarProps) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
   
   // Get current user from Redux
   const { user, isAuthenticated } = useAuth();
-  const { setProfile } = useAuthActions();
+  
+  // Get logout function from Redux actions
+  const { logout } = useAuthActions();
   
   // Fetch user profile data
   const { data: profileData, isLoading: isProfileLoading, error: profileError } = useGetProfileQuery(undefined, {
     skip: !isAuthenticated, // Only fetch when authenticated
+    refetchOnMountOrArgChange: false, // Prevent refetching on every mount
+    refetchOnFocus: false, // Prevent refetching when window regains focus
   });
 
-  // Update user profile when data is fetched
-  useEffect(() => {
-    if (profileData?.success && profileData?.data) {
-      setProfile(profileData.data);
-    }
-  }, [profileData, setProfile]);
+  // Use profile data directly from API instead of updating Redux state
+  const displayUser = profileData?.success && profileData?.data ? profileData.data : user;
 
   // Log current user data from Redux
-  
   console.log('Is authenticated:', isAuthenticated);
   console.log('Profile data from API:', profileData);
   console.log('Profile loading:', isProfileLoading);
@@ -73,9 +74,23 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   console.log('Current user from Redux:', user);
 
   useOnClickOutside(notificationRef as React.RefObject<HTMLElement>, () => setIsNotificationsOpen(false));
+  useOnClickOutside(profileRef as React.RefObject<HTMLElement>, () => setIsProfileOpen(false));
   
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    setIsProfileOpen(false);
+  };
+
+  // Handle profile navigation
+  const handleProfileClick = () => {
+    // Navigate to profile page - you can replace this with your routing logic
+    window.location.href = '/profile';
+    setIsProfileOpen(false);
+  };
+
   // If no user is authenticated, show loading or default state
-  if (!user || !isAuthenticated) {
+  if (!displayUser || !isAuthenticated) {
     return (
       <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
         <div className="flex items-center gap-4">
@@ -102,16 +117,16 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </button>
         <div className="flex-col justify-center items-start gap-1.5 hidden md:flex">
           <h1 className="text-black text-2xl font-medium">
-            Hi, {user.name || user.email}! Ready to become a Math Star today?
+            Hi, {displayUser.name || displayUser.email}! Ready to become a Math Star today?
           </h1>
           <div className="inline-flex justify-start items-start gap-3">
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
               <TiStarFullOutline className="text-[#EAB308] text-[20px]" />
-              <span className="text-[#A16207] text-base font-bold">{user.stars || 0} Stars</span>
+              <span className="text-[#A16207] text-base font-bold">{displayUser.stars || 0} Stars</span>
             </div>
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
               <FaCrown className="text-[#EAB308] text-[20px]" />
-              <span className="text-yellow-700 text-base font-bold">{user.starStreak || 'Beginner'}</span>
+              <span className="text-yellow-700 text-base font-bold">{displayUser.starStreak || 'Beginner'}</span>
             </div>
           </div>
         </div>
@@ -145,19 +160,48 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           )}
         </div>
         
-        {/* Use profile picture if available, otherwise fallback to default */}
-        <Image 
-          src={user.profile_pic || Profile} 
-          width={58} 
-          height={58} 
-          alt="User Avatar" 
-          className="rounded-full"
-          onError={(e) => {
-            // Fallback to default profile image if profile_pic fails to load
-            const target = e.target as HTMLImageElement;
-            target.src = Profile.src;
-          }}
-        />
+        {/* Profile Dropdown */}
+        <div className="relative" ref={profileRef}>
+          <button
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-150"
+            aria-label="Profile menu"
+          >
+            <Image 
+              src={displayUser.profile_pic || Profile} 
+              width={58} 
+              height={58} 
+              alt="User Avatar" 
+              className="rounded-full cursor-pointer"
+              onError={(e) => {
+                // Fallback to default profile image if profile_pic fails to load
+                const target = e.target as HTMLImageElement;
+                target.src = Profile.src;
+              }}
+            />
+          </button>
+          
+          {isProfileOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-20 border">
+              <div className="py-2">
+                <button
+                  onClick={handleProfileClick}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors duration-150 text-left"
+                >
+                  <User size={20} />
+                  <span className="text-sm font-medium">Profile</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-150 text-left"
+                >
+                  <LogOut size={20} />
+                  <span className="text-sm font-medium">Logout</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 // src/app/(auth)/signin/page.tsx
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
@@ -10,7 +10,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useLoginMutation } from '../../../../src/Redux/features/auth/authApi';
 import { useAuthActions } from '../../../../src/Redux/hooks';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function SignInPage() {
   const [formData, setFormData] = useState({
@@ -19,9 +19,13 @@ export default function SignInPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   
-  const { setUser } = useAuthActions();
+  const { setUser, setAuthenticated } = useAuthActions();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+
+  // Get redirect URL from search params (set by middleware)
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,17 +52,29 @@ export default function SignInPage() {
       if (result.success) {
         // Set user data in Redux store
         setUser({
-          user: {
+          user: result.data.user || {
             email: formData.email,
+            name: result.data.user?.name || formData.email,
             // Add any other user data that might be returned
           },
           token: result.data.tokens.access
         });
 
+        // Set authentication status
+        setAuthenticated(true);
+
+        // Store tokens in localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('accessToken', result.data.tokens.access);
+          if (result.data.tokens.refresh) {
+            localStorage.setItem('refreshToken', result.data.tokens.refresh);
+          }
+        }
+
         toast.success('Login successful!');
         
-        // Redirect to dashboard
-        router.push('/dashboard');
+        // Redirect to the intended page or dashboard
+        router.push(redirectTo);
       }
     } catch (error: any) {
       toast.error(error?.data?.message || 'Login failed');
