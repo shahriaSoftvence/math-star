@@ -21,7 +21,7 @@ const baseQuery = fetchBaseQuery({
     }
     
     if (token) {
-      headers.set("authorization", `${token}`);
+      headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
   },
@@ -64,7 +64,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API || 'http://127.0.0.1:8000'}/auth/refresh-token`,
+        `${process.env.NEXT_PUBLIC_BASE_API || 'http://127.0.0.1:8000'}/api/auth/refresh-token/`,
         {
           method: "POST",
           credentials: "include",
@@ -73,13 +73,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
       const data = await res.json();
 
-      if (data?.data?.accessToken) {
-        // Store the new token in localStorage
+      if (data?.data?.tokens?.access) {
+        // Store the new token in localStorage - updated for new API structure
         if (typeof window !== 'undefined') {
-          localStorage.setItem('accessToken', data.data.accessToken);
+          localStorage.setItem('accessToken', data.data.tokens.access);
           // Also update refreshToken if it's returned
-          if (data.data.refreshToken) {
-            localStorage.setItem('refreshToken', data.data.refreshToken);
+          if (data.data.tokens.refresh) {
+            localStorage.setItem('refreshToken', data.data.tokens.refresh);
           }
         }
 

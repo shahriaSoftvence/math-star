@@ -1,13 +1,70 @@
 /* eslint-disable react/no-unescaped-entities */
 // src/app/(auth)/signin/page.tsx
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Lock, User } from 'lucide-react';
+import { Lock, User, Eye, EyeOff } from 'lucide-react';
 import SignInImage from '../../../../public/assets/signin.png';
 import { FcGoogle } from "react-icons/fc";
+import { useLoginMutation } from '../../../../src/Redux/features/auth/authApi';
+import { useAuthActions } from '../../../../src/Redux/hooks';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const { setUser } = useAuthActions();
+  const router = useRouter();
+  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.email || !formData.password) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    try {
+      const result = await login({
+        email: formData.email,
+        password: formData.password
+      }).unwrap();
+
+      if (result.success) {
+        // Set user data in Redux store
+        setUser({
+          user: {
+            email: formData.email,
+            // Add any other user data that might be returned
+          },
+          token: result.data.tokens.access
+        });
+
+        toast.success('Login successful!');
+        
+        // Redirect to dashboard
+        router.push('/dashboard');
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || 'Login failed');
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-white flex justify-center items-center p-4">
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -19,25 +76,52 @@ export default function SignInPage() {
               <p className="text-zinc-900 text-sm font-normal font-Quicksand mt-2">We are glad to see you back with us</p>
             </div>
 
-            <div className="w-full flex flex-col gap-4">
+            <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
               <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
                 <User size={20} className="text-zinc-600" />
-                <input type="text" placeholder="Username" className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
+                />
               </div>
               <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
                 <Lock size={20} className="text-zinc-600" />
-                <input type="password" placeholder="Password" className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-zinc-600 hover:text-zinc-800 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
               <div className="self-stretch text-right">
                 <Link href="/reset-password" className="text-zinc-900 text-xs font-normal font-Quicksand hover:underline">
                   Forgot Password?
                 </Link>
               </div>
-            </div>
 
-            <button className="self-stretch h-12 px-4 py-3 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors">
-              Sign In
-            </button>
+              <button
+                type="submit"
+                disabled={isLoggingIn}
+                className="self-stretch h-12 px-4 py-3 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                {isLoggingIn ? 'Signing In...' : 'Sign In'}
+              </button>
+            </form>
 
             <div className="text-center">
               <span className="text-zinc-900 text-base font-normal font-Quicksand">Sign in with Others</span>

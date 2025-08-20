@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { User, Mail, Lock, Calendar, ArrowLeft } from 'lucide-react';
+import { User, Mail, Lock, Calendar, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import SignUpImage from '../../../../public/assets/signup.png';
 import { FcGoogle } from "react-icons/fc";
 import { useRegisterMutation, useVerifyOtpMutation } from '../../../../src/Redux/features/auth/authApi';
@@ -14,12 +14,13 @@ export default function SignUpPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    age: '',
     password: '',
     confirm_password: ''
   });
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [register, { isLoading: isRegistering }] = useRegisterMutation();
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
@@ -187,23 +188,9 @@ export default function SignUpPage() {
                 />
               </div>
               <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
-                <Calendar size={20} className="text-zinc-600" />
-                <input
-                  type="number"
-                  name="age"
-                  placeholder="Age"
-                  value={formData.age}
-                  onChange={handleInputChange}
-                  required
-                  min="1"
-                  max="120"
-                  className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
-                />
-              </div>
-              <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
                 <Lock size={20} className="text-zinc-600" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Password"
                   value={formData.password}
@@ -212,11 +199,18 @@ export default function SignUpPage() {
                   minLength={6}
                   className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-zinc-600 hover:text-zinc-800 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
               <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
                 <Lock size={20} className="text-zinc-600" />
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirm_password"
                   placeholder="Confirm Password"
                   value={formData.confirm_password}
@@ -225,6 +219,13 @@ export default function SignUpPage() {
                   minLength={6}
                   className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="text-zinc-600 hover:text-zinc-800 transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
 
               <button

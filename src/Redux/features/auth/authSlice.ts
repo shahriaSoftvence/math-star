@@ -1,28 +1,43 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PURGE } from "redux-persist"
 
+interface User {
+    id?: string;
+    email: string;
+    name?: string;
+    profile_pic?: string | null;
+    stars?: number;
+    starStreak?: string;
+    avatarUrl?: string;
+    // Add other user properties as needed
+}
+
 interface AuthState {
-    user: any | null
+    user: User | null
     token: string | null
+    isAuthenticated: boolean
 }
 
 const initialState: AuthState = {
     user: null,
     token: null,
+    isAuthenticated: false,
 }
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<{ user: any; token: string }>) => {
+        setUser: (state, action: PayloadAction<{ user: User; token: string }>) => {
            const { user, token } = action.payload
            state.user = user
            state.token = token
+           state.isAuthenticated = true
         },
         logout: (state) => {
             state.user = null
             state.token = null
+            state.isAuthenticated = false
             // Clear localStorage
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('accessToken')
@@ -56,13 +71,28 @@ const authSlice = createSlice({
                 localStorage.removeItem('persist:auth')
             }
         },
-        updateUser: (state, action: PayloadAction<Partial<any>>) => {
+        updateUser: (state, action: PayloadAction<Partial<User>>) => {
             if (state.user) {
                 state.user = { ...state.user, ...action.payload }
             }
         },
+        setToken: (state, action: PayloadAction<string>) => {
+            state.token = action.payload
+            state.isAuthenticated = true
+        },
+        clearAuth: (state) => {
+            state.user = null
+            state.token = null
+            state.isAuthenticated = false
+        },
+        setAuthenticated: (state, action: PayloadAction<boolean>) => {
+            state.isAuthenticated = action.payload
+        },
+        setProfile: (state, action: PayloadAction<User>) => {
+            state.user = { ...state.user, ...action.payload }
+        },
     },
 })
 
-export const { setUser, logout, updateUser } = authSlice.actions
+export const { setUser, logout, updateUser, setToken, clearAuth, setAuthenticated, setProfile } = authSlice.actions
 export default authSlice.reducer

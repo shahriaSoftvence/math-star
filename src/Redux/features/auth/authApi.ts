@@ -5,7 +5,7 @@ const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (userInfo) => ({
-                url: '/auth/login',
+                url: '/login/',
                 method: 'POST',
                 body: userInfo,
             }),
@@ -13,13 +13,13 @@ const authApi = baseApi.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     if (data?.success) {
-                        // Store tokens in localStorage
+                        // Store tokens in localStorage - updated to match new API structure
                         if (typeof window !== 'undefined') {
-                            localStorage.setItem('accessToken', data?.data?.accessToken);
-                            localStorage.setItem('refreshToken', data?.data?.refreshToken);
+                            localStorage.setItem('accessToken', data?.data?.tokens?.access);
+                            localStorage.setItem('refreshToken', data?.data?.tokens?.refresh);
                             // Also store in cookies for middleware
-                            document.cookie = `accessToken=${data?.data?.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
-                            document.cookie = `refreshToken=${data?.data?.refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+                            document.cookie = `accessToken=${data?.data?.tokens?.access}; path=/; max-age=${60 * 60 * 24 * 7}`;
+                            document.cookie = `refreshToken=${data?.data?.tokens?.refresh}; path=/; max-age=${60 * 60 * 24 * 7}`;
                         }
                     }
                 } catch (error) {
@@ -31,7 +31,7 @@ const authApi = baseApi.injectEndpoints({
         
         refreshToken: builder.mutation({
             query: () => ({
-                url: '/auth/refresh-token',
+                url: '/api/auth/refresh-token/',
                 method: 'POST',
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
@@ -39,11 +39,11 @@ const authApi = baseApi.injectEndpoints({
                     const { data } = await queryFulfilled;
                     if (data?.success) {
                         if (typeof window !== 'undefined') {
-                            localStorage.setItem('accessToken', data?.data?.accessToken);
-                            localStorage.setItem('refreshToken', data?.data?.refreshToken);
+                            localStorage.setItem('accessToken', data?.data?.tokens?.access);
+                            localStorage.setItem('refreshToken', data?.data?.tokens?.refresh);
                             // Also store in cookies for middleware
-                            document.cookie = `accessToken=${data?.data?.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
-                            document.cookie = `refreshToken=${data?.data?.refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+                            document.cookie = `accessToken=${data?.data?.tokens?.access}; path=/; max-age=${60 * 60 * 24 * 7}`;
+                            document.cookie = `refreshToken=${data?.data?.tokens?.refresh}; path=/; max-age=${60 * 60 * 24 * 7}`;
                         }
                     }
                 } catch (error) {
@@ -54,7 +54,7 @@ const authApi = baseApi.injectEndpoints({
 
         logout: builder.mutation<{ success: boolean; message: string }, void>({
             query: () => ({
-                url: '/auth/logout',
+                url: '/api/auth/logout/',
                 method: 'POST',
             }),
         }),
@@ -78,6 +78,15 @@ const authApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['users'],
         }),
+
+        // Get user profile
+        getProfile: builder.query({
+            query: () => ({
+                url: '/profile/',
+                method: 'GET',
+            }),
+            providesTags: ['auth'],
+        }),
        
     }),
 })
@@ -87,5 +96,6 @@ export const {
     useRefreshTokenMutation,
     useLogoutMutation,
     useRegisterMutation,
-    useVerifyOtpMutation
+    useVerifyOtpMutation,
+    useGetProfileQuery
 } = authApi;
