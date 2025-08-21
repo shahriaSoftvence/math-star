@@ -8,7 +8,6 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // Custom auth hooks
 export const useAuth = () => {
-  const dispatch = useAppDispatch();
   const { user, token, isAuthenticated } = useAppSelector((state) => state.auth);
   
   return {
@@ -23,17 +22,17 @@ export const useAuthActions = () => {
   const dispatch = useAppDispatch();
   
   return {
-    setUser: (userData: { user: any; token: string }) => 
+    setUser: (userData: { user: { id?: string; email: string; name?: string; profile_pic?: string | null; stars?: number; starStreak?: string; avatarUrl?: string }; token: string }) => 
       dispatch({ type: 'auth/setUser', payload: userData }),
     logout: () => dispatch({ type: 'auth/logout' }),
-    updateUser: (userData: Partial<any>) => 
+    updateUser: (userData: Partial<{ id?: string; email: string; name?: string; profile_pic?: string | null; stars?: number; starStreak?: string; avatarUrl?: string }>) => 
       dispatch({ type: 'auth/updateUser', payload: userData }),
     setToken: (token: string) => 
       dispatch({ type: 'auth/setToken', payload: token }),
     clearAuth: () => dispatch({ type: 'auth/clearAuth' }),
     setAuthenticated: (isAuth: boolean) => 
       dispatch({ type: 'auth/setAuthenticated', payload: isAuth }),
-    setProfile: (profileData: any) => 
+    setProfile: (profileData: { id?: string; email: string; name?: string; profile_pic?: string | null; stars?: number; starStreak?: string; avatarUrl?: string }) => 
       dispatch({ type: 'auth/setProfile', payload: profileData }),
   };
 };

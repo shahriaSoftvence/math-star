@@ -1,9 +1,6 @@
 import {
-  BaseQueryApi,
   BaseQueryFn,
   createApi,
-  DefinitionType,
-  FetchArgs,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 
@@ -28,20 +25,15 @@ const baseQuery = fetchBaseQuery({
 });
 
 // token expired hola new refresh token generate code
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const baseQueryWithRefreshToken: BaseQueryFn<
-  FetchArgs,
-  BaseQueryApi,
-  DefinitionType
-> = async (args, api, extraOptions): Promise<any> => { // eslint-disable-line @typescript-eslint/no-explicit-any
+const baseQueryWithRefreshToken: BaseQueryFn = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
   if (result?.error?.status === 404) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    toast.error((result?.error?.data as any)?.message);
+    const errorData = result.error.data as { message?: string };
+    toast.error(errorData?.message || 'Not found');
   }
   if (result?.error?.status === 403) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    toast.error((result?.error?.data as any)?.message);
+    const errorData = result.error.data as { message?: string };
+    toast.error(errorData?.message || 'Forbidden');
   }
   if (result?.error?.status === 401) {
     // Check if we're in the middle of a logout process

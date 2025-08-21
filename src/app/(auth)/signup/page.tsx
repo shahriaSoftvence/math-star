@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { User, Mail, Lock, Calendar, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import SignUpImage from '../../../../public/assets/signup.png';
 import { FcGoogle } from "react-icons/fc";
 import { useRegisterMutation, useVerifyOtpMutation } from '../../../../src/Redux/features/auth/authApi';
@@ -65,8 +65,11 @@ export default function SignUpPage() {
         setStep(2);
         toast.success('Registration successful! Please check your email for OTP.');
       }
-    } catch (error: any) {
-      toast.error(error?.data?.message || 'Registration failed');
+    } catch (error: unknown) {
+      const errorMessage = error && typeof error === 'object' && 'data' in error && 
+        typeof error.data === 'object' && error.data && 'message' in error.data && 
+        typeof error.data.message === 'string' ? error.data.message : 'Registration failed';
+      toast.error(errorMessage);
     }
   };
 
@@ -89,8 +92,11 @@ export default function SignUpPage() {
         // Redirect to signin page with redirect parameter
         window.location.href = `/signin?redirect=${encodeURIComponent(redirectTo)}`;
       }
-    } catch (error: any) {
-      toast.error(error?.data?.message || 'OTP verification failed');
+    } catch (error: unknown) {
+      const errorMessage = error && typeof error === 'object' && 'data' in error && 
+        typeof error.data === 'object' && error.data && 'message' in error.data && 
+        typeof error.data.message === 'string' ? error.data.message : 'OTP verification failed';
+      toast.error(errorMessage);
     }
   };
 
@@ -116,7 +122,7 @@ export default function SignUpPage() {
 
               <div className="text-center lg:text-left">
                 <h1 className="text-zinc-900 text-4xl font-bold font-Quicksand">Verify OTP</h1>
-                <p className="text-zinc-600 mt-2">We've sent a 6-digit code to {email}</p>
+                <p className="text-zinc-600 mt-2">We&apos;ve sent a 6-digit code to {email}</p>
               </div>
 
               <form onSubmit={handleOtpVerification} className="w-full flex flex-col gap-4">

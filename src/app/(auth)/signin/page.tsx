@@ -1,7 +1,6 @@
-/* eslint-disable react/no-unescaped-entities */
 // src/app/(auth)/signin/page.tsx
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
@@ -76,8 +75,11 @@ export default function SignInPage() {
         // Redirect to the intended page or dashboard
         router.push(redirectTo);
       }
-    } catch (error: any) {
-      toast.error(error?.data?.message || 'Login failed');
+    } catch (error: unknown) {
+      const errorMessage = error && typeof error === 'object' && 'data' in error && 
+        typeof error.data === 'object' && error.data && 'message' in error.data && 
+        typeof error.data.message === 'string' ? error.data.message : 'Login failed';
+      toast.error(errorMessage);
     }
   };
 
@@ -149,7 +151,7 @@ export default function SignInPage() {
               <span className="text-zinc-900 text-xs font-bold font-Quicksand">Google</span>
             </button>
              <div className="text-center mt-4">
-              <span className="text-zinc-900 text-sm font-Quicksand">Don't have an account? </span>
+              <span className="text-zinc-900 text-sm font-Quicksand">Don&apos;t have an account? </span>
               <Link href="/signup" className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
                 Sign Up
               </Link>

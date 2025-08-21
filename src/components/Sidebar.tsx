@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, Settings, LogOut, CreditCard, X } from 'lucide-react';
+import { LayoutDashboard, User, Settings, CreditCard, X } from 'lucide-react';
 import Logo from '../../public/assets/Logo.png';
 import Image from 'next/image';
 interface SidebarProps {
