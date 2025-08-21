@@ -79,14 +79,7 @@ const authApi = baseApi.injectEndpoints({
             invalidatesTags: ['users'],
         }),
 
-        // Resend OTP for registration
-        resendOtp: builder.mutation({
-            query: (emailData) => ({
-                url: '/resend-otp/',
-                method: 'POST',
-                body: emailData,
-            }),
-        }),
+
 
         // Get user profile
         getProfile: builder.query({
@@ -116,7 +109,6 @@ export const {
     useLogoutMutation,
     useRegisterMutation,
     useVerifyOtpMutation,
-    useResendOtpMutation,
     useGetProfileQuery,
     useChangePasswordMutation
 } = authApi;

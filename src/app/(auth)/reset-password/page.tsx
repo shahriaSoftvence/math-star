@@ -13,7 +13,7 @@ export default function ResetPasswordPage() {
         <div className="flex flex-col justify-center items-center lg:items-start">
           <div className="w-full max-w-md flex flex-col gap-6">
             <div className="text-center lg:text-left">
-              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">Reset Password</h1>
+              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">Forgot Password</h1>
             </div>
             <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
               <Mail size={20} className="text-zinc-600" />
