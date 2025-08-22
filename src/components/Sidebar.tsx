@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, Settings, LogOut, CreditCard, X } from 'lucide-react';
+import { LayoutDashboard, User, Settings, CreditCard, X } from 'lucide-react';
 import Logo from '../../public/assets/Logo.png';
 import Image from 'next/image';
 interface SidebarProps {
@@ -26,7 +26,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
     <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white rounded-r-[30px] border-r flex-col justify-between p-6 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex transition-transform duration-300 ease-in-out`}>
       <div>
         <div className="mb-16 flex justify-between items-center">
-          <Link href="/dashboard">
+          <Link href="/">
             <Image src={Logo} alt='Logo' />
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden">
@@ -55,12 +55,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             })}
           </ul>
         </nav>
-      </div>
-      <div>
-        <Link href="/signin" className="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-gray-100 rounded-xl">
-          <LogOut size={24} />
-          <span className="text-base font-medium">Logout</span>
-        </Link>
       </div>
     </aside>
   );
