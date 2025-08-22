@@ -99,33 +99,6 @@ const authApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['auth'],
         }),
-
-        // Request password reset
-        requestPasswordReset: builder.mutation({
-            query: (data: { email: string }) => ({
-                url: '/password-reset/request/',
-                method: 'POST',
-                body: data,
-            }),
-        }),
-
-        // Verify OTP for password reset
-        verifyOtpForReset: builder.mutation({
-            query: (data: { email: string; otp: string }) => ({
-                url: '/password-reset/verify-otp/',
-                method: 'POST',
-                body: data,
-            }),
-        }),
-
-        // Change password with reset token
-        changePasswordWithResetToken: builder.mutation({
-            query: (data: { reset_token: string; email: string; new_password: string; confirm_password: string }) => ({
-                url: '/password-reset/change-password/',
-                method: 'POST',
-                body: data,
-            }),
-        }),
        
     }),
 })
@@ -137,8 +110,5 @@ export const {
     useRegisterMutation,
     useVerifyOtpMutation,
     useGetProfileQuery,
-    useChangePasswordMutation,
-    useRequestPasswordResetMutation,
-    useVerifyOtpForResetMutation,
-    useChangePasswordWithResetTokenMutation
+    useChangePasswordMutation
 } = authApi;
