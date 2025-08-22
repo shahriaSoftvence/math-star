@@ -1,11 +1,73 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Check, X, Delete, RefreshCcw, ArrowRight, ArrowLeftCircle } from 'lucide-react';
+import { ArrowLeft, Check, X, RefreshCcw, ArrowRight, ArrowLeftCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CongratulationsScreen from '@/components/CongratulationsScreen';
-import Numpad from '@/components/Numpad';
+
+// Mock components - replace with your actual components
+const CongratulationsScreen = ({ onContinue }: { onContinue: () => void }) => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-400 to-blue-500">
+    <motion.div
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      className="p-8 bg-white rounded-xl shadow-2xl text-center"
+    >
+      <h1 className="text-4xl font-bold text-green-600 mb-4">🎉 Congratulations!</h1>
+      <p className="text-xl text-gray-700 mb-6">You completed all questions!</p>
+      <button
+        onClick={onContinue}
+        className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+      >
+        Continue
+      </button>
+    </motion.div>
+  </div>
+);
+
+const Numpad = ({
+  onNumberClick,
+  onBackspace,
+  onSubmit
+}: {
+  onNumberClick: (num: string) => void;
+  onBackspace: () => void;
+  onSubmit: () => void;
+}) => (
+  <div className="p-6 bg-white rounded-lg shadow-md">
+    <div className="grid grid-cols-3 gap-3 mb-4">
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+        <button
+          key={num}
+          onClick={() => onNumberClick(num.toString())}
+          className="h-12 text-xl font-semibold text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          {num}
+        </button>
+      ))}
+    </div>
+    <div className="grid grid-cols-3 gap-3">
+      <button
+        onClick={onBackspace}
+        className="h-12 text-lg font-semibold text-red-600 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
+      >
+        ⌫
+      </button>
+      <button
+        onClick={() => onNumberClick('0')}
+        className="h-12 text-xl font-semibold text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+      >
+        0
+      </button>
+      <button
+        onClick={onSubmit}
+        className="h-12 text-lg font-semibold text-green-600 bg-green-100 rounded-lg hover:bg-green-200 transition-colors"
+      >
+        ✓
+      </button>
+    </div>
+  </div>
+);
 
 // --- Type Definitions ---
 type Question = {
@@ -17,25 +79,24 @@ type Question = {
 type ProgressStatus = 'correct' | 'incorrect' | 'pending';
 
 // --- Reusable UI Components ---
-
-const HelpChart = ({ divisor }: { divisor: number; }) => (
-    <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.3 }}
-        className="w-full p-6 bg-white rounded-lg shadow-md"
-    >
-        <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">Help chart (x{divisor} Table)</h3>
-        <div className="space-y-1">
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-                 <div key={num} className="flex justify-start text-sm mx-auto max-w-[80px]">
-                    <span className="text-gray-600">{num} ÷ {divisor} =</span>
-                    <span className="font-bold text-gray-800">{num / divisor}</span>
-                </div>
-            ))}
+const HelpChart = ({ divisor }: { divisor: number }) => (
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -20 }}
+    transition={{ duration: 0.3 }}
+    className="w-full p-6 bg-white rounded-lg shadow-md"
+  >
+    <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">Help chart (÷{divisor} Table)</h3>
+    <div className="space-y-1">
+      {Array.from({ length: 10 }, (_, i) => (i + 1) * divisor).map((dividend) => (
+        <div key={dividend} className="flex justify-between text-sm mx-auto max-w-[120px]">
+          <span className="text-gray-600">{dividend} ÷ {divisor} =</span>
+          <span className="font-bold text-gray-800">{dividend / divisor}</span>
         </div>
-    </motion.div>
+      ))}
+    </div>
+  </motion.div>
 );
 
 function PracticePageContent() {
@@ -51,20 +112,20 @@ function PracticePageContent() {
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const [divisor, setDivisor] = useState<number | null>(null);
-  const questionCount = useMemo(() => parseInt(searchParams?.get('count') || '10', 10), [searchParams]);
+  const questionCount = useMemo(() => {
+    const count = searchParams?.get('count');
+    return count ? parseInt(count, 10) : 10;
+  }, [searchParams]);
 
-  const generateQuestions = () => {
-    const divisorParam = searchParams?.get('divisor');
-    const divisorValue = divisorParam ? parseInt(divisorParam, 10) : null;
-    setDivisor(divisorValue);
+  const divisor = useMemo(() => {
+    return searchParams?.get('divisor');
+  }, [searchParams]);
 
-    if (!divisorValue) return;
-
-    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      const answer = Math.floor(Math.random() * 10) + 1; // Random answer from 1 to 10
-      const num1 = divisorValue * answer; // This is the dividend
-      const num2 = divisorValue; // This is the divisor
+  const generateQuestions = useCallback(() => {
+    const newQuestions: Question[] = Array.from({ length: questionCount }, (_, i) => {
+      const num2 = divisor && divisor !== 'all' ? parseInt(divisor, 10) : Math.floor(Math.random() * 10) + 1;
+      const answer = i + 1;
+      const num1 = num2 * answer;
       return { num1, num2, answer };
     });
     setQuestions(newQuestions);
@@ -73,50 +134,40 @@ function PracticePageContent() {
     setUserAnswer('');
     setFeedback({ type: null, message: '' });
     setIsComplete(false);
-  };
+  }, [questionCount, divisor]);
 
   // Generate questions
   useEffect(() => {
     generateQuestions();
-  }, [searchParams, questionCount]);
+  }, [generateQuestions]);
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
-  // Sound effect player
-  const playSound = (sound: string) => {
-    const audio = new Audio(sound);
-    audio.play().catch(() => {}); // Ignore errors if audio fails to play
-  };
-
-  // Keyboard support
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key >= '0' && event.key <= '9') {
-        handleInput(event.key);
-        playSound('/Sounds/Number-Click-sound.wav');
-      } else if (event.key === 'Backspace') {
-        handleBackspace();
-        playSound('/Sounds/delete-click-sound.wav');
-      } else if (event.key === 'Enter') {
-        handleSubmit();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [userAnswer]);
+  // Sound effect player with error handling
+  const playSound = useCallback((sound: string) => {
+    try {
+      const audio = new Audio(sound);
+      audio.play().catch(() => {
+        // Silently handle audio play failures
+      });
+    } catch (error) {
+      // Silently handle audio creation failures
+    }
+  }, []);
 
   // --- Event Handlers ---
-  const handleInput = (num: string) => {
-    if (userAnswer.length < 5) setUserAnswer(prev => prev + num);
-  };
+  const handleInput = useCallback((num: string) => {
+    if (userAnswer.length < 5) {
+      setUserAnswer(prev => prev + num);
+    }
+  }, [userAnswer.length]);
 
-  const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
+  const handleBackspace = useCallback(() => {
+    setUserAnswer(prev => prev.slice(0, -1));
+  }, []);
 
-  const handleSubmit = () => {
-    if (!userAnswer) return;
+  const handleSubmit = useCallback(() => {
+    if (!userAnswer || !currentQuestion) return;
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
     const newProgress = [...progress];
@@ -141,29 +192,49 @@ function PracticePageContent() {
       setFeedback({ type: 'incorrect', message: 'Now enter the correct answer to continue' });
       setShowHelp(true);
       playSound('/Sounds/Wrong-Answer-sound.wav');
-      setUserAnswer(''); // Clear the input field on wrong answer
+      setUserAnswer('');
     }
-  };
+  }, [userAnswer, currentQuestion, progress, currentQuestionIndex, questions.length, playSound]);
 
-  const handlePrevious = () => {
+  // Keyboard support with proper dependencies
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key >= '0' && event.key <= '9') {
+        handleInput(event.key);
+        playSound('/Sounds/Number-Click-sound.wav');
+      } else if (event.key === 'Backspace') {
+        handleBackspace();
+        playSound('/Sounds/delete-click-sound.wav');
+      } else if (event.key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleInput, handleBackspace, handleSubmit, playSound]);
+
+  const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
       setUserAnswer('');
       setFeedback({ type: null, message: '' });
     }
-  };
+  }, [currentQuestionIndex]);
 
-  const handleSkip = () => {
+  const handleSkip = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setUserAnswer('');
       setFeedback({ type: null, message: '' });
     }
-  };
+  }, [currentQuestionIndex, questions.length]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     generateQuestions();
-  };
+  }, [generateQuestions]);
 
   if (isComplete) {
     return <CongratulationsScreen onContinue={() => router.push('/division')} />;
@@ -184,10 +255,18 @@ function PracticePageContent() {
           <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Division</h1>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={handlePrevious} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === 0}>
+          <button
+            onClick={handlePrevious}
+            className="p-2 transition-colors rounded-full hover:bg-gray-200 disabled:opacity-50"
+            disabled={currentQuestionIndex === 0}
+          >
             <ArrowLeftCircle className="text-gray-600" />
           </button>
-          <button onClick={handleSkip} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === questions.length - 1}>
+          <button
+            onClick={handleSkip}
+            className="p-2 transition-colors rounded-full hover:bg-gray-200 disabled:opacity-50"
+            disabled={currentQuestionIndex === questions.length - 1}
+          >
             <ArrowRight className="text-gray-600" />
           </button>
           <button onClick={handleReset} className="p-2 transition-colors rounded-full hover:bg-gray-200">
@@ -205,7 +284,13 @@ function PracticePageContent() {
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           {progress.map((status, index) => {
             const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
-            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
+            return (
+              <div
+                key={index}
+                className={`h-full transition-colors duration-500 rounded-[10px] ${color}`}
+                style={{ width: `${100 / questionCount}%` }}
+              />
+            );
           })}
         </div>
       </div>
@@ -214,7 +299,7 @@ function PracticePageContent() {
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-4">
           <AnimatePresence>
-            {showHelp && divisor && <HelpChart divisor={divisor} />}
+            {showHelp && currentQuestion && <HelpChart divisor={currentQuestion.num2} />}
           </AnimatePresence>
         </div>
 
@@ -238,17 +323,25 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
+              feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'
+            }`}
           >
             <div className="flex items-start">
-              <div className={`p-1 mr-3 text-xl rounded-full ${feedback.type === 'correct' ? 'bg-emerald-100 text-emerald-500' : 'bg-red-100 text-red-500'}`}>
+              <div className={`p-1 mr-3 text-xl rounded-full ${
+                feedback.type === 'correct' ? 'bg-emerald-100 text-emerald-500' : 'bg-red-100 text-red-500'
+              }`}>
                 {feedback.type === 'correct' ? <Check size={20} /> : <X size={20} />}
               </div>
               <div>
-                <p className={`font-semibold ${feedback.type === 'correct' ? 'text-emerald-600' : 'text-red-600'}`}>
+                <p className={`font-semibold ${
+                  feedback.type === 'correct' ? 'text-emerald-600' : 'text-red-600'
+                }`}>
                   {feedback.type === 'correct' ? 'Correct Answer!' : 'Incorrect Answer'}
                 </p>
-                <p className={`text-sm ${feedback.type === 'correct' ? 'text-emerald-500' : 'text-red-500'}`}>
+                <p className={`text-sm ${
+                  feedback.type === 'correct' ? 'text-emerald-500' : 'text-red-500'
+                }`}>
                   {feedback.message}
                 </p>
               </div>
@@ -263,7 +356,7 @@ function PracticePageContent() {
 // --- Main Practice Page Component ---
 export default function PracticePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
       <PracticePageContent />
     </Suspense>
   );

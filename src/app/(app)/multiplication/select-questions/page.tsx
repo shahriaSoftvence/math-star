@@ -15,7 +15,7 @@ const practiceTips = [
 ];
 
 const QuestionCountCard = ({ count, table }: { count: number, table: string | null }) => (
-  <Link href={`/multiplication/practice?count=${count}&table=${table || '1'}`}>
+  <Link href={`/multiplication/practice?count=${count}&table=${table || 'all'}`}>
     <div className="w-38 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105">
       <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
       <div className="text-center text-gray-600 text-sm">Questions</div>

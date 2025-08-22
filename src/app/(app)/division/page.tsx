@@ -17,8 +17,7 @@ const divisionExercises = [
   { range: '÷8', percentage: 70, stars: 13 },
   { range: '÷9', percentage: 68, stars: 12 },
   { range: '÷10', percentage: 98, stars: 20 },
-  { range: '÷11', percentage: 65, stars: 11 },
-  { range: '÷12', percentage: 62, stars: 10 },
+  { range: 'All', percentage: 65, stars: 11 },
 ];
 
 const divisionChallenges = [

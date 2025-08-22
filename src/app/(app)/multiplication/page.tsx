@@ -8,18 +8,17 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 const multiplicationExercises = [
-  { range: '1', percentage: 98, stars: 0 },
-  { range: '2', percentage: 95, stars: 19 },
-  { range: '3', percentage: 92, stars: 18 },
-  { range: '4', percentage: 89, stars: 17 },
-  { range: '5', percentage: 94, stars: 19 },
-  { range: '6', percentage: 87, stars: 16 },
-  { range: '7', percentage: 85, stars: 15 },
-  { range: '8', percentage: 80, stars: 14 },
-  { range: '9', percentage: 75, stars: 13 },
-  { range: '10', percentage: 99, stars: 20 },
-  { range: '11', percentage: 70, stars: 12 },
-  { range: '12', percentage: 68, stars: 11 },
+  { range: 'X1', percentage: 98, stars: 0 },
+  { range: 'X2', percentage: 95, stars: 19 },
+  { range: 'X3', percentage: 92, stars: 18 },
+  { range: 'X4', percentage: 89, stars: 17 },
+  { range: 'X5', percentage: 94, stars: 19 },
+  { range: 'X6', percentage: 87, stars: 16 },
+  { range: 'X7', percentage: 85, stars: 15 },
+  { range: 'X8', percentage: 80, stars: 14 },
+  { range: 'X9', percentage: 75, stars: 13 },
+  { range: 'X10', percentage: 99, stars: 20 },
+  { range: 'All', percentage: 70, stars: 12 },
 ];
 
 const multiplicationChallenges = [
@@ -48,7 +47,7 @@ export default function MultiplicationPage() {
               <ExerciseCard
                 key={index}
                 operation="multiplication"
-                range={`x${ex.range}`}
+                range={`${ex.range}`}
                 percentage={ex.percentage}
               />
             ))}
