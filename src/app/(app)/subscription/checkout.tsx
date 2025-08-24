@@ -20,7 +20,7 @@ export default function CheckoutButton(card: Card) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       productName: "Test Product",
-      amount: 50,
+      amount: 2,
       email: userData?.data?.email || "", 
     }),
   });
