@@ -24,10 +24,16 @@ export async function POST(req: Request) {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/success`,
+      // Attach user email to metadata
+      metadata: {
+        email: body.email || "", // pass user email from frontend
+      },
+
+      
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/cancel`,
     });
-
+console.log(session)
     return NextResponse.json({ id: session.id, url: session.url });
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : String(err);

@@ -1,27 +1,31 @@
+// Payment record from backend
 export interface Payment {
   id: string;
-  amount: number;
-  currency: string;
+  amount: number;           // in cents
+  currency: string;         // e.g., 'usd'
   status: "pending" | "succeeded" | "failed";
-  userId?: string;
-  createdAt: string;
+  createdAt: string;        // ISO string, not a number
+  email?: string;           // optional user email for grouping
 }
 
+// Card details
 export interface Card {
-  id: number;
-  type: string;
-  last4: string;
-  expires: string;
-  isDefault: boolean;
-};
+  id?: number;
+  type?: string;            // e.g., 'Visa'
+  last4?: string;           // last 4 digits
+  expires?: string;         // 'MM/YY'
+  isDefault?: boolean;
+  createdAt?: string;       // ISO timestamp
+}
 
-
+// Flattened payment response for UI
 export interface PaymentResponse {
   id: string;
-  amount: number;
+  amount: number;           // in cents
   currency: string;
-  status: string;
-  cardType: string;
-  last4: string;
-  date: string;
-};
+  status: "pending" | "succeeded" | "failed";
+  cardType?: string;        // e.g., 'Visa'
+  last4?: string;           // last 4 digits
+  date: string;             // formatted for display
+  email?: string;           // optional, for showing user email
+}

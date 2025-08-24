@@ -84,6 +84,7 @@ export default function SettingsPage() {
       await updateProfile({
         name: userInfo.name,
         email: userInfo.email,
+        // profile_pic: 
       }).unwrap();
 
       toast.success("Profile updated successfully!");

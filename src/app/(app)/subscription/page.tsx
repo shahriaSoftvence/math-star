@@ -1,19 +1,19 @@
 // src/app/subscription/page.tsx
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { 
-  ArrowLeft, 
-  Crown, 
-  Calendar, 
-  RefreshCw, 
-  XCircle, 
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Crown,
+  Calendar,
+  RefreshCw,
+  XCircle,
   Plus,
-  ReceiptText
-} from 'lucide-react';
-import CheckoutButton from './checkout';
-
+  ReceiptText,
+} from "lucide-react";
+import CheckoutButton from "./checkout";
+import GetPaymentData from "./_components/getPaymentData";
 
 // Reusable Toggle Switch Component
 const ToggleSwitch = () => {
@@ -39,12 +39,12 @@ const ToggleSwitch = () => {
     <button
       onClick={() => setIsEnabled(!isEnabled)}
       className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors ${
-        isEnabled ? 'bg-blue-500' : 'bg-gray-300'
+        isEnabled ? "bg-blue-500" : "bg-gray-300"
       }`}
     >
       <span
         className={`inline-block w-5 h-5 transform bg-white rounded-full transition-transform ${
-          isEnabled ? 'translate-x-5' : 'translate-x-0.5'
+          isEnabled ? "translate-x-5" : "translate-x-0.5"
         }`}
       />
     </button>
@@ -53,15 +53,27 @@ const ToggleSwitch = () => {
 
 // Data for Payment Methods and Billing History
 const paymentMethods = [
-  { id: 1, type: 'Visa', last4: '4242', expires: '12/28', isDefault: true },
-  { id: 2, type: 'Mastercard', last4: '8888', expires: '06/27', isDefault: false },
-  { id: 3, type: 'Paysafe Card', last4: '1234', expires: 'N/A', isDefault: false },
+  { id: 1, type: "Visa", last4: "4242", expires: "12/28", isDefault: true },
+  {
+    id: 2,
+    type: "Mastercard",
+    last4: "8888",
+    expires: "06/27",
+    isDefault: false,
+  },
+  {
+    id: 3,
+    type: "Paysafe Card",
+    last4: "1234",
+    expires: "N/A",
+    isDefault: false,
+  },
 ];
 
 const billingHistory = [
-  { id: 1, plan: 'Monthly Plan', date: 'Nov 15, 2024', amount: '৳599' },
-  { id: 2, plan: 'Monthly Plan', date: 'Oct 15, 2024', amount: '৳599' },
-  { id: 3, plan: 'Basic Plan', date: 'Sep 15, 2024', amount: '৳299' },
+  { id: 1, plan: "Monthly Plan", date: "Nov 15, 2024", amount: "৳599" },
+  { id: 2, plan: "Monthly Plan", date: "Oct 15, 2024", amount: "৳599" },
+  { id: 3, plan: "Basic Plan", date: "Sep 15, 2024", amount: "৳299" },
 ];
 
 export default function SubscriptionPage() {
@@ -70,12 +82,19 @@ export default function SubscriptionPage() {
       <div className="w-full max-w-4xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <Link href="/profile" className="p-2 rounded-full hover:bg-gray-200 transition-colors">
+          <Link
+            href="/profile"
+            className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+          >
             <ArrowLeft className="text-gray-600" />
           </Link>
           <div>
-            <h1 className="text-gray-800 text-3xl font-bold font-Nunito">Subscription</h1>
-            <p className="text-gray-600 font-Nunito">Manage your plan and payments</p>
+            <h1 className="text-gray-800 text-3xl font-bold font-Nunito">
+              Subscription
+            </h1>
+            <p className="text-gray-600 font-Nunito">
+              Manage your plan and payments
+            </p>
           </div>
         </div>
 
@@ -85,7 +104,9 @@ export default function SubscriptionPage() {
             <div className="flex items-center gap-4">
               <Crown size={32} className="text-yellow-300" />
               <div>
-                <h2 className="text-xl font-bold font-Nunito">Current Subscription</h2>
+                <h2 className="text-xl font-bold font-Nunito">
+                  Current Subscription
+                </h2>
                 <p className="text-purple-100 font-Nunito">Monthly Plan</p>
               </div>
             </div>
@@ -104,25 +125,37 @@ export default function SubscriptionPage() {
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 bg-white rounded-3xl shadow-lg">
-            <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4">Auto Renewal</h3>
+            <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4">
+              Auto Renewal
+            </h3>
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-gray-600 font-Nunito">Automatically renew subscription</p>
-                <p className="text-gray-500 text-sm font-Nunito">Next charge on Dec 15</p>
+                <p className="text-gray-600 font-Nunito">
+                  Automatically renew subscription
+                </p>
+                <p className="text-gray-500 text-sm font-Nunito">
+                  Next charge on Dec 15
+                </p>
               </div>
               <ToggleSwitch />
             </div>
           </div>
           <div className="p-6 bg-white rounded-3xl shadow-lg">
-            <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4">Quick Actions</h3>
+            <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4">
+              Quick Actions
+            </h3>
             <div className="flex flex-col gap-3">
               <button className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100">
                 <RefreshCw size={16} className="text-slate-950" />
-                <span className="text-slate-950 text-sm font-medium font-Nunito">Renew Now</span>
+                <span className="text-slate-950 text-sm font-medium font-Nunito">
+                  Renew Now
+                </span>
               </button>
               <button className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-red-200 rounded-md hover:bg-red-50">
                 <XCircle size={16} className="text-red-600" />
-                <span className="text-red-600 text-sm font-medium font-Nunito">Cancel Subscription</span>
+                <span className="text-red-600 text-sm font-medium font-Nunito">
+                  Cancel Subscription
+                </span>
               </button>
             </div>
           </div>
@@ -131,14 +164,16 @@ export default function SubscriptionPage() {
         {/* Payment Methods */}
         <div className="p-6 bg-white rounded-3xl shadow-lg">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-gray-800 text-xl font-bold font-Nunito">Payment Methods</h3>
+            <h3 className="text-gray-800 text-xl font-bold font-Nunito">
+              Payment Methods
+            </h3>
             <button className="flex items-center gap-2 px-3 py-2 bg-slate-50 border text-[#000] border-slate-200 rounded-md text-sm font-medium hover:bg-slate-100">
               <Plus size={16} />
               Add Card
             </button>
           </div>
           <div className="space-y-4">
-            {paymentMethods.map(card => (
+            {paymentMethods.map((card) => (
               <CheckoutButton
                 key={card.id}
                 id={card.id}
@@ -150,9 +185,11 @@ export default function SubscriptionPage() {
             ))}
           </div>
         </div>
-
+        <div>
+          <GetPaymentData />
+        </div>
         {/* Billing History */}
-        <div className="p-6 bg-white rounded-3xl shadow-lg">
+        {/* <div className="p-6 bg-white rounded-3xl shadow-lg">
           <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-6">Billing History</h3>
           <div className="space-y-4">
             {billingHistory.map(item => (
@@ -173,7 +210,7 @@ export default function SubscriptionPage() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

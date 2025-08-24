@@ -1,4 +1,6 @@
 "use client";
+import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
+import { em } from "framer-motion/client";
 import { CreditCard, Trash2 } from "lucide-react";
 
 
@@ -11,6 +13,7 @@ type Card = {
 };
 
 export default function CheckoutButton(card: Card) {
+   const { data: userData } = useGetProfileQuery();
    const handleCheckout = async () => {
   const res = await fetch("/api/payments/checkout-session", {
     method: "POST",
@@ -18,6 +21,7 @@ export default function CheckoutButton(card: Card) {
     body: JSON.stringify({
       productName: "Test Product",
       amount: 50,
+      email: userData?.data?.email || "", 
     }),
   });
 
@@ -34,7 +38,7 @@ export default function CheckoutButton(card: Card) {
     <div
       onClick={handleCheckout}
       key={card.id}
-      className="p-4 bg-gray-50 rounded-2xl flex justify-between items-center"
+      className="p-4 cursor-pointer bg-gray-50 rounded-2xl flex justify-between items-center"
     >
       <div className="flex items-center gap-4">
         <div className="w-12 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex justify-center items-center">

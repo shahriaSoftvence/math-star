@@ -1,11 +1,20 @@
-// src/app/profile/page.tsx
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Crown, Calendar, Edit, Award, Star } from "lucide-react";
+import Image from "next/image"; 
+import {
+  ArrowLeft,
+  Crown,
+  Calendar,
+  Edit,
+  Award,
+  Star,
+  Camera,
+} from "lucide-react";
 import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 const achievements = [
   {
@@ -36,6 +45,30 @@ const achievements = [
 
 export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click(); 
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+      toast.success("Image selected successfully!");
+    };
+    reader.readAsDataURL(file);
+
+    // Optional: catch file read error
+    reader.onerror = () => {
+      console.error("File reading error");
+      toast.error("Failed to read the selected file.");
+    };
+  };
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
@@ -78,25 +111,58 @@ export default function ProfilePage() {
         </div>
 
         {/* User Info Card */}
-        <div className="p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center">
-          <div className="w-24 h-24 mb-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-            {profileData?.data?.profile_pic ? (
-              <Avatar className="w-20 h-20">
-                <AvatarImage src={profileData?.data?.profile_pic} alt="User Avatar" />
-                <AvatarFallback>
-                  {profileData?.data?.name
-                    ? profileData.data.name.charAt(0).toUpperCase()
-                    : "U"}
-                </AvatarFallback>
+        <div className="p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center relative">
+          <div className="relative w-24 h-24 mb-4">
+            {/* Avatar Circle */}
+            <div
+              className="w-24 h-24 rounded-full flex items-center justify-center cursor-pointer overflow-hidden"
+              onClick={handleAvatarClick}
+            >
+              <Avatar className="w-24 h-24">
+                {preview ? (
+                  <Image
+                    src={preview}
+                    alt="Preview Avatar"
+                    width={96}
+                    height={96}
+                    className="rounded-full object-cover"
+                  />
+                ) : profileData?.data?.profile_pic ? (
+                  <Image
+                    src={profileData.data.profile_pic}
+                    alt="User Avatar"
+                    width={96}
+                    height={96}
+                    className="rounded-full object-cover"
+                  />
+                ) : (
+                  <AvatarFallback className="bg-gradient-to-br from-blue-400 text-4xl font-semibold to-purple-500 text-white">
+                    {profileData?.data?.name
+                      ? profileData.data.name.charAt(0).toUpperCase()
+                      : "U"}
+                  </AvatarFallback>
+                )}
               </Avatar>
-            ) : (
-              <span className="text-4xl font-bold text-white font-Nunito">
-                {profileData?.data?.name
-                  ? profileData.data.name.charAt(0).toUpperCase()
-                  : "U"}
-              </span>
-            )}
+            </div>
+
+            {/* Camera Icon Overlay */}
+            <div
+              className="absolute bottom-0 right-0 w-8 h-8 bg-white/50 hover:bg-white rounded-full flex justify-center items-center shadow-md cursor-pointer"
+              onClick={handleAvatarClick} 
+            >
+              <Camera size={16} />
+            </div>
+
+            {/* Hidden file input */}
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange} 
+              className="hidden"
+            />
           </div>
+
           <h2 className="text-gray-800 text-2xl font-bold font-Nunito">
             {profileData?.data?.name}
           </h2>
