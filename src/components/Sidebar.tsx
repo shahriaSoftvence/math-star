@@ -18,7 +18,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const menuItems = [
     { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={24} /> },
     { name: "Profile", href: "/profile", icon: <User size={24} /> },
-    { name: "Setting", href: "/settings", icon: <Settings size={24} /> },
+    { name: "Settings", href: "/settings", icon: <Settings size={24} /> },
     { name: "Subscription", href: "/subscription", icon: <CreditCard size={24} /> },
   ];
 

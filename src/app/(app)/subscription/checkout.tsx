@@ -1,6 +1,5 @@
 "use client";
 import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
-import { em } from "framer-motion/client";
 import { CreditCard, Trash2 } from "lucide-react";
 
 
