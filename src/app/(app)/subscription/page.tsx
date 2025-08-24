@@ -1,7 +1,7 @@
 // src/app/subscription/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -9,15 +9,32 @@ import {
   Calendar, 
   RefreshCw, 
   XCircle, 
-  Plus, 
-  Trash2, 
-  CreditCard,
+  Plus,
   ReceiptText
 } from 'lucide-react';
+import CheckoutButton from './checkout';
+
 
 // Reusable Toggle Switch Component
 const ToggleSwitch = () => {
   const [isEnabled, setIsEnabled] = useState(true);
+
+  const [payments, setPayments] = useState<PaymentResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  console.log(payments);
+
+  useEffect(() => {
+    fetch("/api/payments/history")
+      .then((res) => res.json())
+      .then((data) => {
+        setPayments(data.payments);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Loading payment history...</p>;
+
   return (
     <button
       onClick={() => setIsEnabled(!isEnabled)}
@@ -121,23 +138,14 @@ export default function SubscriptionPage() {
           </div>
           <div className="space-y-4">
             {paymentMethods.map(card => (
-              <div key={card.id} className="p-4 bg-gray-50 rounded-2xl flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex justify-center items-center">
-                    <CreditCard size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800 font-Nunito">{card.type} ending in {card.last4}</p>
-                    <p className="text-sm text-gray-600 font-Nunito">Expires {card.expires}</p>
-                  </div>
-                  {card.isDefault && (
-                    <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full font-Nunito">Default</span>
-                  )}
-                </div>
-                <button className="p-2 text-gray-400 hover:text-red-500 rounded-md hover:bg-red-100">
-                  <Trash2 size={20} />
-                </button>
-              </div>
+              <CheckoutButton
+                key={card.id}
+                id={card.id}
+                type={card.type}
+                last4={card.last4}
+                expires={card.expires}
+                isDefault={card.isDefault}
+              />
             ))}
           </div>
         </div>
