@@ -91,7 +91,7 @@ const HelpChart = ({ num1 }: { num1: number }) => (
     <div className="grid grid-cols-2 gap-2">
       {Array.from({ length: 10 }).map((_, i) => (
         <div key={i} className="text-sm text-gray-600">
-          {num1} x {i + 1} = {num1 * (i + 1)}
+          {num1} x {i + 1} = {num1 / (i + 1)}
         </div>
       ))}
     </div>
