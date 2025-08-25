@@ -17,5 +17,6 @@ export default function ChallengeCard({ icon, title, description, bgColor, iconC
         <h3 className="font-medium text-xl">{title}</h3>
         <p className="text-sm opacity-90 mt-1">{description}</p>
     </div>
+    
   );
 }
