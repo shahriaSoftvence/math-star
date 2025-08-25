@@ -60,7 +60,7 @@ function PracticePageContent() {
   const generateQuestions = () => {
     const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
       const num1 = Math.floor(Math.random() * (numberRange + 1));
-      const num2 = Math.floor(Math.random() * Math.min(num1 + 1, 10)); // num2 is a single digit and not greater than num1
+      const num2 = Math.floor(Math.random() * Math.min(num1 + 1, 10)); 
       return { num1, num2, answer: num1 - num2 };
     });
     setQuestions(newQuestions);

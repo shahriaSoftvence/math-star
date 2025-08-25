@@ -121,10 +121,16 @@ function PracticePageContent() {
     return searchParams?.get('table');
   }, [searchParams]);
 
+  const fixedNum2 = useMemo(() => {
+  const raw = searchParams?.get('table') || '';
+  const m = raw.trim().match(/^x(\d+)$/i); 
+  return m ? parseInt(m[1], 10) : null;
+}, [searchParams]);
+
   const generateQuestions = useCallback(() => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, (_, i) => {
-      const num1 = table && table !== 'all' && !isNaN(parseInt(table)) ? parseInt(table) : Math.floor(Math.random() * 10) + 1;
-      const num2 = i + 1;
+    const newQuestions: Question[] = Array.from({ length: questionCount }, (_) => {
+      const num1 = table && table !== 'all' && !isNaN(parseInt(table)) ? parseInt(table) : Math.floor(Math.random() * questionCount) + 1;
+      const num2 = fixedNum2 ?? (Math.floor(Math.random() * questionCount) + 1);
       return { num1, num2, answer: num1 * num2 };
     });
     setQuestions(newQuestions);
@@ -133,7 +139,7 @@ function PracticePageContent() {
     setUserAnswer('');
     setFeedback({ type: null, message: '' });
     setIsComplete(false);
-  }, [questionCount, table]);
+  }, [questionCount, table, fixedNum2]);
 
   // Generate questions on component mount
   useEffect(() => {
@@ -215,21 +221,21 @@ function PracticePageContent() {
     };
   }, [handleInput, handleBackspace, handleSubmit, playSound]);
 
-  const handlePrevious = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-      setUserAnswer('');
-      setFeedback({ type: null, message: '' });
-    }
-  }, [currentQuestionIndex]);
+  // const handlePrevious = useCallback(() => {
+  //   if (currentQuestionIndex > 0) {
+  //     setCurrentQuestionIndex(prev => prev - 1);
+  //     setUserAnswer('');
+  //     setFeedback({ type: null, message: '' });
+  //   }
+  // }, [currentQuestionIndex]);
 
-  const handleSkip = useCallback(() => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setUserAnswer('');
-      setFeedback({ type: null, message: '' });
-    }
-  }, [currentQuestionIndex, questions.length]);
+  // const handleSkip = useCallback(() => {
+  //   if (currentQuestionIndex < questions.length - 1) {
+  //     setCurrentQuestionIndex(prev => prev + 1);
+  //     setUserAnswer('');
+  //     setFeedback({ type: null, message: '' });
+  //   }
+  // }, [currentQuestionIndex, questions.length]);
 
   const handleReset = useCallback(() => {
     generateQuestions();
@@ -254,7 +260,7 @@ function PracticePageContent() {
           <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Multiplication</h1>
         </div>
         <div className="flex items-center gap-2">
-          <button 
+          {/* <button 
             onClick={handlePrevious} 
             className="p-2 transition-colors rounded-full hover:bg-gray-200 disabled:opacity-50" 
             disabled={currentQuestionIndex === 0}
@@ -267,7 +273,7 @@ function PracticePageContent() {
             disabled={currentQuestionIndex === questions.length - 1}
           >
             <ArrowRight className="text-gray-600" />
-          </button>
+          </button> */}
           <button onClick={handleReset} className="p-2 transition-colors rounded-full hover:bg-gray-200">
             <RefreshCcw className="text-gray-600" />
           </button>

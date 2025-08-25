@@ -142,21 +142,21 @@ function PracticePageContent() {
     }
   };
 
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-      setUserAnswer('');
-      setFeedback({ type: null, message: '' });
-    }
-  };
+  // const handlePrevious = () => {
+  //   if (currentQuestionIndex > 0) {
+  //     setCurrentQuestionIndex(prev => prev - 1);
+  //     setUserAnswer('');
+  //     setFeedback({ type: null, message: '' });
+  //   }
+  // };
 
-  const handleSkip = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setUserAnswer('');
-      setFeedback({ type: null, message: '' });
-    }
-  };
+  // const handleSkip = () => {
+  //   if (currentQuestionIndex < questions.length - 1) {
+  //     setCurrentQuestionIndex(prev => prev + 1);
+  //     setUserAnswer('');
+  //     setFeedback({ type: null, message: '' });
+  //   }
+  // };
 
   const handleReset = () => {
     generateQuestions();
@@ -181,12 +181,12 @@ function PracticePageContent() {
           <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Addition</h1>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={handlePrevious} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === 0}>
+          {/* <button onClick={handlePrevious} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === 0}>
             <ArrowLeftCircle className="text-gray-600" />
           </button>
           <button onClick={handleSkip} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === questions.length - 1}>
             <ArrowRight className="text-gray-600" />
-          </button>
+          </button> */}
           <button onClick={handleReset} className="p-2 transition-colors rounded-full hover:bg-gray-200">
             <RefreshCcw className="text-gray-600" />
           </button>

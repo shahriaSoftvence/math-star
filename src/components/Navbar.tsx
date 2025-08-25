@@ -149,17 +149,17 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           <div className="inline-flex justify-start items-start gap-3">
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
               <TiStarFullOutline className="text-[#EAB308] text-[20px]" />
-              <span className="text-[#A16207] text-base font-bold">{displayUser.stars || 0} Stars</span>
+              <span className="text-[#A16207] text-base font-bold">{displayUser?.stars || 0} Stars</span>
             </div>
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
               <FaCrown className="text-[#EAB308] text-[20px]" />
-              <span className="text-yellow-700 text-base font-bold">{displayUser.starStreak || 'Beginner'}</span>
+              <span className="text-yellow-700 text-base font-bold">{displayUser?.starStreak || 'Beginner'}</span>
             </div>
           </div>
         </div>
       </div>
       <div className="flex items-center gap-6">
-        <Image src={Flag} alt='Country flag' width={32} height={32} />
+        {/* <Image src={Flag} alt='Country flag' width={32} height={32} />
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
@@ -185,7 +185,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>

@@ -1,9 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Check, X, RefreshCcw, ArrowRight, ArrowLeftCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  Suspense,
+  useCallback,
+} from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import {
+  ArrowLeft,
+  Check,
+  X,
+  RefreshCcw,
+  // ArrowRight,
+  // ArrowLeftCircle,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Mock components - replace with your actual components
 const CongratulationsScreen = ({ onContinue }: { onContinue: () => void }) => (
@@ -13,7 +26,9 @@ const CongratulationsScreen = ({ onContinue }: { onContinue: () => void }) => (
       animate={{ scale: 1 }}
       className="p-8 bg-white rounded-xl shadow-2xl text-center"
     >
-      <h1 className="text-4xl font-bold text-green-600 mb-4">🎉 Congratulations!</h1>
+      <h1 className="text-4xl font-bold text-green-600 mb-4">
+        🎉 Congratulations!
+      </h1>
       <p className="text-xl text-gray-700 mb-6">You completed all questions!</p>
       <button
         onClick={onContinue}
@@ -28,7 +43,7 @@ const CongratulationsScreen = ({ onContinue }: { onContinue: () => void }) => (
 const Numpad = ({
   onNumberClick,
   onBackspace,
-  onSubmit
+  onSubmit,
 }: {
   onNumberClick: (num: string) => void;
   onBackspace: () => void;
@@ -54,7 +69,7 @@ const Numpad = ({
         ⌫
       </button>
       <button
-        onClick={() => onNumberClick('0')}
+        onClick={() => onNumberClick("0")}
         className="h-12 text-xl font-semibold text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
       >
         0
@@ -76,7 +91,7 @@ type Question = {
   answer: number;
 };
 
-type ProgressStatus = 'correct' | 'incorrect' | 'pending';
+type ProgressStatus = "correct" | "incorrect" | "pending";
 
 // --- Reusable UI Components ---
 const HelpChart = ({ divisor }: { divisor: number }) => (
@@ -87,14 +102,25 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
     transition={{ duration: 0.3 }}
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
-    <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">Help chart (÷{divisor} Table)</h3>
+    <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">
+      Help chart (÷{divisor} Table)
+    </h3>
     <div className="space-y-1">
-      {Array.from({ length: 10 }, (_, i) => (i + 1) * divisor).map((dividend) => (
-        <div key={dividend} className="flex justify-between text-sm mx-auto max-w-[120px]">
-          <span className="text-gray-600">{dividend} ÷ {divisor} =</span>
-          <span className="font-bold text-gray-800">{dividend / divisor}</span>
-        </div>
-      ))}
+      {Array.from({ length: 10 }, (_, i) => (i + 1) * divisor).map(
+        (dividend) => (
+          <div
+            key={dividend}
+            className="flex justify-between text-sm mx-auto max-w-[120px]"
+          >
+            <span className="text-gray-600">
+              {dividend} ÷ {divisor} =
+            </span>
+            <span className="font-bold text-gray-800">
+              {dividend / divisor}
+            </span>
+          </div>
+        )
+      )}
     </div>
   </motion.div>
 );
@@ -106,64 +132,80 @@ function PracticePageContent() {
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
+  const [userAnswer, setUserAnswer] = useState("");
   const [progress, setProgress] = useState<ProgressStatus[]>([]);
-  const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
+  const [feedback, setFeedback] = useState<{
+    type: "correct" | "incorrect" | null;
+    message: string;
+  }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  
 
-  const questionCount = useMemo(() => {
-    const count = searchParams?.get('count');
-    return count ? parseInt(count, 10) : 10;
-  }, [searchParams]);
+  // Get question count from URL
+ const questionCount = useMemo(() => {
+  const count = searchParams?.get("count");
+  return count ? parseInt(count, 10) : 10;
+}, [searchParams]);
 
-  const divisor = useMemo(() => {
-    return searchParams?.get('divisor');
-  }, [searchParams]);
+const divisor = useMemo(() => {
+  const divParam = searchParams?.get("divisor");
+  return divParam && !isNaN(parseInt(divParam, 10))
+    ? parseInt(divParam, 10)
+    : null;
+}, [searchParams]);
 
-  const generateQuestions = useCallback(() => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, (_, i) => {
-      const num2 = divisor && divisor !== 'all' ? parseInt(divisor, 10) : Math.floor(Math.random() * 10) + 1;
-      const answer = i + 1;
-      const num1 = num2 * answer;
-      return { num1, num2, answer };
-    });
-    setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill('pending'));
-    setCurrentQuestionIndex(0);
-    setUserAnswer('');
-    setFeedback({ type: null, message: '' });
-    setIsComplete(false);
-  }, [questionCount, divisor]);
+// Generate questions
+const generateQuestions = useCallback(() => {
+  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+    // num2: use fixed divisor or random per question
+    const num2 = divisor ?? Math.floor(Math.random() * questionCount) + 1;
+    const multiplier = Math.floor(Math.random() * questionCount) + 1;
+    const num1 = num2 * multiplier;
+    const answer = multiplier;
+    return { num1, num2, answer };
+  });
 
-  // Generate questions
-  useEffect(() => {
-    generateQuestions();
-  }, [generateQuestions]);
+  setQuestions(newQuestions);
+  setProgress(Array(questionCount).fill("pending"));
+  setCurrentQuestionIndex(0);
+  setUserAnswer("");
+  setFeedback({ type: null, message: "" });
+  setIsComplete(false);
+}, [questionCount, divisor]);
 
-  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
+useEffect(() => {
+  generateQuestions();
+}, [generateQuestions]);
 
-  // Sound effect player with error handling
+const currentQuestion = useMemo(
+  () => questions[currentQuestionIndex],
+  [questions, currentQuestionIndex]
+);
+
+
+  // Sound effect helper
   const playSound = useCallback((sound: string) => {
     try {
       const audio = new Audio(sound);
-      audio.play().catch(() => {
-        // Silently handle audio play failures
-      });
+      audio.play().catch(() => {});
     } catch (error) {
-      // Silently handle audio creation failures
+      // ignore
     }
   }, []);
 
   // --- Event Handlers ---
-  const handleInput = useCallback((num: string) => {
-    if (userAnswer.length < 5) {
-      setUserAnswer(prev => prev + num);
-    }
-  }, [userAnswer.length]);
+  const handleInput = useCallback(
+    (num: string) => {
+      if (userAnswer.length < 5) {
+        setUserAnswer((prev) => prev + num);
+      }
+    },
+    [userAnswer.length]
+  );
 
   const handleBackspace = useCallback(() => {
-    setUserAnswer(prev => prev.slice(0, -1));
+    setUserAnswer((prev) => prev.slice(0, -1));
   }, []);
 
   const handleSubmit = useCallback(() => {
@@ -171,77 +213,96 @@ function PracticePageContent() {
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
     const newProgress = [...progress];
-    newProgress[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
+    newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
     setProgress(newProgress);
 
     if (isCorrect) {
-      setFeedback({ type: 'correct', message: 'Your answer is absolutely correct!' });
+      setFeedback({
+        type: "correct",
+        message: "Your answer is absolutely correct!",
+      });
       setShowHelp(false);
-      playSound('/Sounds/Check-Click-sound.wav');
+      playSound("/Sounds/Check-Click-sound.wav");
 
       setTimeout(() => {
         if (currentQuestionIndex < questions.length - 1) {
-          setCurrentQuestionIndex(prev => prev + 1);
-          setUserAnswer('');
-          setFeedback({ type: null, message: '' });
+          setCurrentQuestionIndex((prev) => prev + 1);
+          setUserAnswer("");
+          setFeedback({ type: null, message: "" });
         } else {
           setIsComplete(true);
         }
       }, 1500);
     } else {
-      setFeedback({ type: 'incorrect', message: 'Now enter the correct answer to continue' });
+      setFeedback({
+        type: "incorrect",
+        message: "Now enter the correct answer to continue",
+      });
       setShowHelp(true);
-      playSound('/Sounds/Wrong-Answer-sound.wav');
-      setUserAnswer('');
+      playSound("/Sounds/Wrong-Answer-sound.wav");
+      setUserAnswer("");
     }
-  }, [userAnswer, currentQuestion, progress, currentQuestionIndex, questions.length, playSound]);
+  }, [
+    userAnswer,
+    currentQuestion,
+    progress,
+    currentQuestionIndex,
+    questions.length,
+    playSound,
+  ]);
 
   // Keyboard support with proper dependencies
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key >= '0' && event.key <= '9') {
+      if (event.key >= "0" && event.key <= "9") {
         handleInput(event.key);
-        playSound('/Sounds/Number-Click-sound.wav');
-      } else if (event.key === 'Backspace') {
+        playSound("/Sounds/Number-Click-sound.wav");
+      } else if (event.key === "Backspace") {
         handleBackspace();
-        playSound('/Sounds/delete-click-sound.wav');
-      } else if (event.key === 'Enter') {
+        playSound("/Sounds/delete-click-sound.wav");
+      } else if (event.key === "Enter") {
         handleSubmit();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleInput, handleBackspace, handleSubmit, playSound]);
 
-  const handlePrevious = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-      setUserAnswer('');
-      setFeedback({ type: null, message: '' });
-    }
-  }, [currentQuestionIndex]);
+  // const handlePrevious = useCallback(() => {
+  //   if (currentQuestionIndex > 0) {
+  //     setCurrentQuestionIndex((prev) => prev - 1);
+  //     setUserAnswer("");
+  //     setFeedback({ type: null, message: "" });
+  //   }
+  // }, [currentQuestionIndex]);
 
-  const handleSkip = useCallback(() => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setUserAnswer('');
-      setFeedback({ type: null, message: '' });
-    }
-  }, [currentQuestionIndex, questions.length]);
+  // const handleSkip = useCallback(() => {
+  //   if (currentQuestionIndex < questions.length - 1) {
+  //     setCurrentQuestionIndex((prev) => prev + 1);
+  //     setUserAnswer("");
+  //     setFeedback({ type: null, message: "" });
+  //   }
+  // }, [currentQuestionIndex, questions.length]);
 
   const handleReset = useCallback(() => {
     generateQuestions();
   }, [generateQuestions]);
 
   if (isComplete) {
-    return <CongratulationsScreen onContinue={() => router.push('/division')} />;
+    return (
+      <CongratulationsScreen onContinue={() => router.push("/division")} />
+    );
   }
 
   if (!currentQuestion) {
-    return <div className="flex items-center justify-center h-screen">Loading Practice...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading Practice...
+      </div>
+    );
   }
 
   return (
@@ -249,13 +310,18 @@ function PracticePageContent() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
+          <button
+            onClick={() => router.back()}
+            className="p-2 transition-colors rounded-full hover:bg-gray-200"
+          >
             <ArrowLeft className="text-gray-600" />
           </button>
-          <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Division</h1>
+          <h1 className="ml-4 text-3xl font-bold text-gray-800">
+            Practice Division
+          </h1>
         </div>
         <div className="flex items-center gap-2">
-          <button
+          {/* <button
             onClick={handlePrevious}
             className="p-2 transition-colors rounded-full hover:bg-gray-200 disabled:opacity-50"
             disabled={currentQuestionIndex === 0}
@@ -268,8 +334,11 @@ function PracticePageContent() {
             disabled={currentQuestionIndex === questions.length - 1}
           >
             <ArrowRight className="text-gray-600" />
-          </button>
-          <button onClick={handleReset} className="p-2 transition-colors rounded-full hover:bg-gray-200">
+          </button> */}
+          <button
+            onClick={handleReset}
+            className="p-2 transition-colors rounded-full hover:bg-gray-200"
+          >
             <RefreshCcw className="text-gray-600" />
           </button>
         </div>
@@ -279,11 +348,18 @@ function PracticePageContent() {
       <div className="p-4 mb-8 bg-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-700">Progress</span>
-          <span className="text-sm font-medium text-gray-700">{currentQuestionIndex + 1} of {questionCount}</span>
+          <span className="text-sm font-medium text-gray-700">
+            {currentQuestionIndex + 1} of {questionCount}
+          </span>
         </div>
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           {progress.map((status, index) => {
-            const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
+            const color =
+              status === "correct"
+                ? "bg-green-500"
+                : status === "incorrect"
+                ? "bg-red-500"
+                : "bg-gray-200";
             return (
               <div
                 key={index}
@@ -299,7 +375,9 @@ function PracticePageContent() {
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-4">
           <AnimatePresence>
-            {showHelp && currentQuestion && <HelpChart divisor={currentQuestion.num2} />}
+            {showHelp && currentQuestion && (
+              <HelpChart divisor={currentQuestion.num2} />
+            )}
           </AnimatePresence>
         </div>
 
@@ -309,10 +387,14 @@ function PracticePageContent() {
               {currentQuestion.num1} ÷ {currentQuestion.num2} =
             </div>
             <div className="w-full p-4 text-3xl font-bold text-center text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-lg">
-              {userAnswer || '?'}
+              {userAnswer || "?"}
             </div>
           </div>
-          <Numpad onNumberClick={handleInput} onBackspace={handleBackspace} onSubmit={handleSubmit} />
+          <Numpad
+            onNumberClick={handleInput}
+            onBackspace={handleBackspace}
+            onSubmit={handleSubmit}
+          />
         </div>
       </div>
 
@@ -324,24 +406,44 @@ function PracticePageContent() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
-              feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'
+              feedback.type === "correct"
+                ? "border-emerald-500"
+                : "border-red-500"
             }`}
           >
             <div className="flex items-start">
-              <div className={`p-1 mr-3 text-xl rounded-full ${
-                feedback.type === 'correct' ? 'bg-emerald-100 text-emerald-500' : 'bg-red-100 text-red-500'
-              }`}>
-                {feedback.type === 'correct' ? <Check size={20} /> : <X size={20} />}
+              <div
+                className={`p-1 mr-3 text-xl rounded-full ${
+                  feedback.type === "correct"
+                    ? "bg-emerald-100 text-emerald-500"
+                    : "bg-red-100 text-red-500"
+                }`}
+              >
+                {feedback.type === "correct" ? (
+                  <Check size={20} />
+                ) : (
+                  <X size={20} />
+                )}
               </div>
               <div>
-                <p className={`font-semibold ${
-                  feedback.type === 'correct' ? 'text-emerald-600' : 'text-red-600'
-                }`}>
-                  {feedback.type === 'correct' ? 'Correct Answer!' : 'Incorrect Answer'}
+                <p
+                  className={`font-semibold ${
+                    feedback.type === "correct"
+                      ? "text-emerald-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {feedback.type === "correct"
+                    ? "Correct Answer!"
+                    : "Incorrect Answer"}
                 </p>
-                <p className={`text-sm ${
-                  feedback.type === 'correct' ? 'text-emerald-500' : 'text-red-500'
-                }`}>
+                <p
+                  className={`text-sm ${
+                    feedback.type === "correct"
+                      ? "text-emerald-500"
+                      : "text-red-500"
+                  }`}
+                >
                   {feedback.message}
                 </p>
               </div>
@@ -356,7 +458,13 @@ function PracticePageContent() {
 // --- Main Practice Page Component ---
 export default function PracticePage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          Loading...
+        </div>
+      }
+    >
       <PracticePageContent />
     </Suspense>
   );
