@@ -57,7 +57,7 @@ export default function GetPaymentData() {
               </div>
               <div>
                 <p className="font-semibold text-gray-800">Monthly</p>
-                <p className="text-sm text-gray-600">{moment(item.createdAt).format('DD MMM YYYY, h:mm:ss a')}</p>
+                <p className="text-sm text-gray-600">{moment(item.createdAt).format('DD MMM YYYY, h:mm a')}</p>
               </div>
             </div>
             <div className="text-right">
