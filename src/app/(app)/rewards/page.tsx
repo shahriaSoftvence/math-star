@@ -84,7 +84,7 @@ export default function RewardsPage() {
   return (
     <div className="max-w-4xl mx-auto p-4">
       <div className="mb-8 flex items-center gap-4">
-        <Link href="/" className="p-2 rounded-full hover:bg-gray-200 transition-colors">
+        <Link href="/dashboard" className="p-2 rounded-full hover:bg-gray-200 transition-colors">
           <ArrowLeft className="text-gray-700" />
         </Link>
         <h1 className="text-3xl font-bold text-gray-800">Star Rewards</h1>
