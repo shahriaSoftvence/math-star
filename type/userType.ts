@@ -1,7 +1,7 @@
 export interface UserData {
   name: string;
   email: string;
-  profile_pic: string | null;
+  profile_pic: File | null;
 }
 
 export interface UserResponse {

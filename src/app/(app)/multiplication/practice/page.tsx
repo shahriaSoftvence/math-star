@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Check, X, RefreshCcw, ArrowRight, ArrowLeftCircle } from 'lucide-react';
+import { ArrowLeft, Check, X, RefreshCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Mock components - replace with your actual components

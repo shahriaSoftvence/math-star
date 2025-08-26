@@ -50,32 +50,27 @@ export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
   const [updateProfile] = useUpdateProfileMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  console.log("form my test", profileData);
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      try {
-        updateProfile({ profile_pic: reader.result as string }).unwrap();
-        toast.success("Image selected successfully!");
-      } catch (error) {
-        console.error("Profile update error:", error);
-        toast.error("Failed to update profile picture.");
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      const formData = new FormData();
+      formData.append("profile_pic", file);
 
-    // Optional: catch file read error
-    reader.onerror = () => {
-      console.error("File reading error");
-      toast.error("Failed to read the selected file.");
-    };
+      await updateProfile(formData).unwrap();
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Profile update error:", error);
+      toast.error("Failed to update profile picture.");
+    }
   };
 
   return (
@@ -127,9 +122,9 @@ export default function ProfilePage() {
               onClick={handleAvatarClick}
             >
               <Avatar className="w-24 h-24">
-                {profileData?.data?.profile_pic ? (
+                {profileData?.data?.profile_pic? (
                   <Image
-                    src={profileData.data.profile_pic}
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}${profileData?.data?.profile_pic}`}
                     alt="User Avatar"
                     width={96}
                     height={96}

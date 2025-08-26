@@ -95,14 +95,23 @@ const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["auth"],
     }),
-    updateProfile: builder.mutation<UserResponse, Partial<UserData>>({
-      query: (body) => ({
-        url: "/profile/",
-        method: "PUT",
-        body,
-      }),
-      invalidatesTags: ["auth"], // ensures cache is refreshed after update
-    }),
+
+    updateProfile: builder.mutation<UserResponse, Partial<UserData> | FormData>(
+      {
+        query: (body) => {
+          const isFormData = body instanceof FormData;
+          return {
+            url: "/profile/",
+            method: "PUT",
+            body,
+            headers: !isFormData
+              ? { "Content-Type": "application/json" }
+              : undefined,
+          };
+        },
+        invalidatesTags: ["auth"],
+      }
+    ),
 
     // Change password
     changePassword: builder.mutation({
@@ -163,5 +172,5 @@ export const {
   useRequestPasswordResetMutation,
   useVerifyOtpForResetMutation,
   useChangePasswordWithResetTokenMutation,
-    useUpdateProfileMutation,
+  useUpdateProfileMutation,
 } = authApi;
