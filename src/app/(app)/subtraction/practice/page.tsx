@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Check, X, RefreshCcw, ArrowRight, ArrowLeftCircle } from 'lucide-react';
+import { ArrowLeft, Check, X, RefreshCcw, ArrowRight, ArrowLeftCircle, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CongratulationsScreen from '@/components/CongratulationsScreen';
 import Numpad from '@/components/Numpad';
@@ -216,7 +216,7 @@ function PracticePageContent() {
 
         <div className="grid grid-cols-1 col-span-1 gap-6 md:grid-cols-2 lg:col-span-8">
           <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
-            <div className="mb-4 text-4xl font-bold text-gray-800">
+            <div className="mb-4 text-4xl font-bold text-gray-800 flex items-center">
               {currentQuestion.num1} - {currentQuestion.num2} =
             </div>
             <div className="w-full p-4 text-3xl font-bold text-center text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-lg">
