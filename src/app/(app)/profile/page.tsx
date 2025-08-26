@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image"; 
+import Image from "next/image";
 import {
   ArrowLeft,
   Crown,
@@ -12,7 +12,10 @@ import {
   Star,
   Camera,
 } from "lucide-react";
-import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
+import {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "@/Redux/features/auth/authApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 
@@ -45,11 +48,11 @@ const achievements = [
 
 export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
+  const [updateProfile] = useUpdateProfileMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(null);
 
   const handleAvatarClick = () => {
-    fileInputRef.current?.click(); 
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,8 +61,13 @@ export default function ProfilePage() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreview(reader.result as string);
-      toast.success("Image selected successfully!");
+      try {
+        updateProfile({ profile_pic: reader.result as string }).unwrap();
+        toast.success("Image selected successfully!");
+      } catch (error) {
+        console.error("Profile update error:", error);
+        toast.error("Failed to update profile picture.");
+      }
     };
     reader.readAsDataURL(file);
 
@@ -119,15 +127,7 @@ export default function ProfilePage() {
               onClick={handleAvatarClick}
             >
               <Avatar className="w-24 h-24">
-                {preview ? (
-                  <Image
-                    src={preview}
-                    alt="Preview Avatar"
-                    width={96}
-                    height={96}
-                    className="rounded-full object-cover"
-                  />
-                ) : profileData?.data?.profile_pic ? (
+                {profileData?.data?.profile_pic ? (
                   <Image
                     src={profileData.data.profile_pic}
                     alt="User Avatar"
@@ -148,7 +148,7 @@ export default function ProfilePage() {
             {/* Camera Icon Overlay */}
             <div
               className="absolute bottom-0 right-0 w-8 h-8 bg-white/50 hover:bg-white rounded-full flex justify-center items-center shadow-md cursor-pointer"
-              onClick={handleAvatarClick} 
+              onClick={handleAvatarClick}
             >
               <Camera size={16} />
             </div>
@@ -158,7 +158,7 @@ export default function ProfilePage() {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              onChange={handleFileChange} 
+              onChange={handleFileChange}
               className="hidden"
             />
           </div>
