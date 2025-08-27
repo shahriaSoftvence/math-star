@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client"; // Required for using hooks like useGetDailySummaryQuery
+
 import PracticeCard from '@/components/PracticeCard';
 import ActivityItem from '@/components/ActivityItem';
 import { Plus, Minus, X, Divide, Star } from 'lucide-react';
@@ -5,7 +8,8 @@ import { IoStarSharp } from "react-icons/io5";
 import BadgeBronze from '../../../../public/assets/Bronje.png';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { useGetDailySummaryQuery } from '@/Redux/reward/rewardApi'; // Import the new hook
+import { Key } from 'react';
 
 const practiceItems = [
   { link: "/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
@@ -14,15 +18,26 @@ const practiceItems = [
   { link: "/division", icon: <Divide />, title: "Practice Division", description: "Divide and conquer", bgColor: "bg-gradient-to-br from-purple-300 to-purple-400", textColor: "text-purple-800", iconColor: "text-purple-500" },
 ];
 
-const activityItems = [
-  { title: "Addition - Speed Mode - 60s", score: "12 correct", stars: 1 },
-  { title: "Division - No Mistake", score: "Ended after 5th question", stars: 1 },
-  { title: "Multiplication - 100 Questions", score: "85/100 completed", stars: 3 },
-  { title: "Subtraction - What's Missing", score: "8/10 correct", stars: 2 },
-];
-
 export default function Home() {
-  const dailyGoalProgress = 83;
+  // Fetch data from the backend
+  const { data: summary, isLoading, isError } = useGetDailySummaryQuery({});
+
+  // Handle loading and error states
+  if (isLoading) {
+    return <div>Loading your progress...</div>;
+  }
+
+  if (isError || !summary) {
+    return <div>Could not load your progress. Please try again later.</div>;
+  }
+  
+  const { 
+    goal_progress: dailyGoalProgress = 0,
+    practice_time: practiceTime = 0,
+    stars_earned_today: starsEarnedToday = 0,
+    recent_sessions: activityItems = [],
+    lifetime_stars: starBalance = 0,
+   } = summary;
 
   return (
     <div className="space-y-8 max-w-[1104px] mx-auto">
@@ -45,12 +60,12 @@ export default function Home() {
           <div className="space-y-5">
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Practice Time:</span>
-              <span className="font-medium text-[#2563EB]">25 Minutes</span>
+              <span className="font-medium text-[#2563EB]">{practiceTime} Minutes</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Stars Earned:</span>
               <div className="font-medium text-yellow-500 flex items-center">
-                <span>25</span>
+                <span>{starsEarnedToday}</span>
                 <Star size={16} className="ml-1 fill-[#EAB308] " />
               </div>
             </div>
@@ -72,9 +87,13 @@ export default function Home() {
         <div className="bg-white p-6 rounded-2xl">
           <h3 className="font-semibold mb-6 text-gray-800">Recent Activity</h3>
           <div className="space-y-4">
-            {activityItems.map((item, index) => (
-              <ActivityItem key={index} {...item} />
-            ))}
+            {activityItems.length > 0 ? (
+              activityItems.map((item: { category_name: any; mode: any; correct: any; total: any; stars_earned: number; }, index: Key | null | undefined) => (
+                <ActivityItem key={index} title={`${item.category_name} - ${item.mode}`} score={`${item.correct}/${item.total} correct`} stars={item.stars_earned} />
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No recent activity to show.</p>
+            )}
           </div>
         </div>
       </div>
@@ -84,7 +103,7 @@ export default function Home() {
         <div className="relative bg-gradient-to-r from-yellow-400 to-orange-400 p-6 rounded-2xl text-white flex justify-between items-center shadow-lg">
           <div>
             <h3 className="font-semibold text-lg">Your Star Balance</h3>
-            <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> 1,247</p>
+            <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {starBalance.toLocaleString()}</p>
             <p className="text-sm opacity-80">Top up to win rewards</p>
           </div>
           <div className="text-7xl absolute top-0 right-0">

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { logout } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_BASE_API || "http://127.0.0.1:8000",
+  baseUrl: process.env.NEXT_PUBLIC_BASE_API || "http://172.16.100.58:1111",
   credentials: "include",
   prepareHeaders: (headers) => {
     // Get token from localStorage for client-side requests
@@ -69,7 +69,7 @@ const baseQueryWithRefreshToken: BaseQueryFn = async (args, api, extraOptions) =
       }
       
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API || 'http://127.0.0.1:8000'}/api/auth/refresh-token/`,
+        `${process.env.NEXT_PUBLIC_BASE_API || 'http://172.16.100.58:1111'}/api/auth/refresh-token/`,
         {
           method: "POST",
           credentials: "include",
@@ -109,6 +109,6 @@ const baseQueryWithRefreshToken: BaseQueryFn = async (args, api, extraOptions) =
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["users", "jobs", "jobApplications", "auth", "rewards"],
+  tagTypes: ["users", "jobs", "jobApplications", "auth", "rewards", "Subscription", "Exercise"],
   endpoints: () => ({}),
 });

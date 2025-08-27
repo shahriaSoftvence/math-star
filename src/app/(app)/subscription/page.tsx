@@ -12,6 +12,13 @@ import {
   Plus,
 } from "lucide-react";
 import GetPaymentData from "./_components/getPaymentData";
+import {
+  useGetUserActivePlanQuery,
+  useCancelSubscriptionMutation,
+  useGetPaymentMethodsQuery,
+  useAddPaymentMethodMutation,
+} from "@/Redux/features/subscription/subscriptionApi";
+import { toast } from "sonner";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
@@ -34,16 +41,21 @@ const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: (
 export default function SubscriptionPage() {
   const [loading, setLoading] = useState(false);
   
-  // State for subscription details (you would fetch this from your backend)
-  const [subscription, setSubscription] = useState({
-    isActive: true,
-    planName: "Monthly Plan",
-    renewsOn: "February 15, 2024",
-    nextCharge: "Dec 15",
-    autoRenew: true,
-    // IMPORTANT: You must fetch the real Stripe Customer ID for the logged-in user
-    stripeCustomerId: "cus_...", // Replace with actual customer ID from your user data
-  });
+  // Fetch subscription data using Redux APIs
+  const { data: activePlan, isLoading: planLoading } = useGetUserActivePlanQuery();
+  const { data: paymentMethods } = useGetPaymentMethodsQuery();
+  const [cancelSubscription] = useCancelSubscriptionMutation();
+  const [addPaymentMethod] = useAddPaymentMethodMutation();
+  
+  // Derive subscription state from API data
+  const subscription = {
+    isActive: activePlan?.is_active || false,
+    planName: activePlan?.plan?.name || "No Active Plan",
+    renewsOn: activePlan?.end_date ? new Date(activePlan.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "",
+    nextCharge: activePlan?.end_date ? new Date(activePlan.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "",
+    autoRenew: activePlan?.is_recurring || false,
+    stripeCustomerId: "cus_...", // This should come from user profile data
+  };
 
   const handleManageSubscription = async () => {
     setLoading(true);
@@ -69,6 +81,36 @@ export default function SubscriptionPage() {
       setLoading(false);
     }
   };
+
+  const handleCancelSubscription = async () => {
+    try {
+      await cancelSubscription({}).unwrap();
+      toast.success("Subscription cancelled successfully");
+    } catch (error) {
+      console.error("Error cancelling subscription:", error);
+      toast.error("Failed to cancel subscription");
+    }
+  };
+
+  const handleAddPaymentMethod = async () => {
+    try {
+      await addPaymentMethod({}).unwrap();
+      toast.success("Payment method added successfully");
+    } catch (error) {
+      console.error("Error adding payment method:", error);
+      toast.error("Failed to add payment method");
+    }
+  };
+
+  if (planLoading) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center items-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!subscription.isActive) {
     // Render a view for users without an active subscription
@@ -123,8 +165,8 @@ export default function SubscriptionPage() {
                 <Calendar size={16} />
                 <span>Renews on {subscription.renewsOn}</span>
               </div>
-              <button 
-                onClick={handleManageSubscription}
+              <button
+                onClick={handleCancelSubscription}
                 disabled={loading}
                 className="px-3 py-2 bg-white text-red-500 text-sm font-medium font-Nunito rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50">
                 {loading ? "Loading..." : "Cancel Subscription"}
@@ -185,18 +227,32 @@ export default function SubscriptionPage() {
               Payment Methods
             </h3>
             <button
-              onClick={handleManageSubscription}
-              disabled={loading} 
+              onClick={handleAddPaymentMethod}
+              disabled={loading}
               className="flex items-center gap-2 px-3 py-2 bg-slate-50 border text-[#000] border-slate-200 rounded-md text-sm font-medium hover:bg-slate-100 disabled:opacity-50">
               <Plus size={16} />
               Add Card
             </button>
           </div>
           <div className="space-y-4">
-            {/* Payment methods are now managed in the Stripe Portal */}
-            <p className="text-gray-600 text-center font-Nunito">
-              Manage your payment methods, view invoices, and update your details in the secure customer portal.
-            </p>
+            {/* Display payment methods if available */}
+            {paymentMethods && paymentMethods.length > 0 ? (
+              paymentMethods.map((method) => (
+                <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">{method.brand} •••• {method.last4}</p>
+                    <p className="text-sm text-gray-500">Expires {method.exp_month}/{method.exp_year}</p>
+                  </div>
+                  {method.is_default && (
+                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Default</span>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-600 text-center font-Nunito">
+                No payment methods on file. Add a card to continue your subscription.
+              </p>
+            )}
              <button
                 onClick={handleManageSubscription}
                 disabled={loading}

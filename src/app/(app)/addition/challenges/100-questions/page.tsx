@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { BsGrid3X3 } from "react-icons/bs";
 import CongratulationsScreen from '@/components/CongratulationsScreen';
+import { useAddPracticeSessionMutation } from '@/Redux/features/exercise/exerciseApi';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };
@@ -33,24 +34,38 @@ const ChallengeStartScreen = ({ onStart, onCancel }: { onStart: () => void, onCa
     </div>
 );
 
-const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { 
-    onNumberClick: (num: string) => void; 
-    onBackspace: () => void; 
-    onSubmit: () => void; 
+const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
+    onNumberClick: (num: string) => void;
+    onBackspace: () => void;
+    onSubmit: () => void;
 }) => {
+    const playSound = (sound: string) => {
+        try {
+            const audio = new Audio(sound);
+            audio.play().catch(() => {
+                // Silently handle audio play failures
+            });
+        } catch (error) {
+            // Silently handle audio creation failures
+        }
+    };
+
     const handleNumberClick = (num: string) => (e: React.MouseEvent) => {
         e.preventDefault();
         onNumberClick(num);
+        playSound('/Sounds/Number-Click-sound.wav');
     };
 
     const handleBackspace = (e: React.MouseEvent) => {
         e.preventDefault();
         onBackspace();
+        playSound('/Sounds/delete-click-sound.wav');
     };
 
     const handleSubmit = (e: React.MouseEvent) => {
         e.preventDefault();
         onSubmit();
+        playSound('/Sounds/Check-Click-sound.wav');
     };
 
     return (
@@ -118,6 +133,7 @@ const QuestionsGrid = ({ questions, questionStatuses }: { questions: Question[],
 // --- Main Challenge Page Component ---
 export default function HundredQuestionsPage() {
     const router = useRouter();
+    const [addPracticeSession] = useAddPracticeSessionMutation();
     const [gameState, setGameState] = useState<GameState>('ready');
     const [questions, setQuestions] = useState<Question[]>([]);
     const [questionStatuses, setQuestionStatuses] = useState<ProgressStatus[]>([]);
@@ -126,6 +142,7 @@ export default function HundredQuestionsPage() {
     const [timeLeft, setTimeLeft] = useState(300);
     const [isComplete, setIsComplete] = useState(false);
     const [score, setScore] = useState(0);
+    const [startTime, setStartTime] = useState<number>(0);
 
     const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
@@ -145,17 +162,44 @@ export default function HundredQuestionsPage() {
         generateQuestions();
     }, [generateQuestions]);
 
+    const handleSaveSession = useCallback(async () => {
+        try {
+            const correct = questionStatuses.filter(status => status === 'correct').length;
+            const total = questionStatuses.filter(status => status === 'correct' || status === 'incorrect').length;
+            const durationSeconds = startTime ? Math.floor((Date.now() - startTime) / 1000) : 300;
+            
+            await addPracticeSession({
+                category: 1, // Addition category
+                mode: '100_questions',
+                correct: correct,
+                total: total,
+                duration_seconds: durationSeconds
+            }).unwrap();
+            
+            console.log('Challenge session saved successfully');
+        } catch (error) {
+            console.error('Failed to save challenge session:', error);
+        }
+    }, [questionStatuses, startTime, addPracticeSession]);
+
     useEffect(() => {
         let timer: NodeJS.Timeout;
         if (gameState === 'playing' && timeLeft > 0) {
             timer = setInterval(() => {
                 setTimeLeft(prev => prev - 1);
             }, 1000);
-        } else if (timeLeft === 0) {
+        } else if (timeLeft === 0 && gameState === 'playing') {
             setGameState('gameOver');
         }
         return () => clearInterval(timer);
     }, [gameState, timeLeft]);
+
+    // Save session when game is over
+    useEffect(() => {
+        if (gameState === 'gameOver') {
+            handleSaveSession();
+        }
+    }, [gameState, handleSaveSession]);
 
     const handleStart = () => {
         setCurrentQuestionIndex(0);
@@ -164,6 +208,7 @@ export default function HundredQuestionsPage() {
         setScore(0);
         setIsComplete(false);
         setUserAnswer('');
+        setStartTime(Date.now());
         setGameState('playing');
     };
 
@@ -195,6 +240,26 @@ export default function HundredQuestionsPage() {
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     }
+
+    // Keyboard support
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (gameState !== 'playing') return;
+            
+            if (event.key >= '0' && event.key <= '9') {
+                setUserAnswer(prev => prev.length < 3 ? prev + event.key : prev);
+            } else if (event.key === 'Backspace') {
+                setUserAnswer(prev => prev.slice(0, -1));
+            } else if (event.key === 'Enter') {
+                handleSubmit();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [gameState, setUserAnswer, handleSubmit]);
 
     if (gameState === 'gameOver' && !isComplete) {
          return <CongratulationsScreen onContinue={() => router.push('/addition')} rewardName={`You scored ${score}!`} />;

@@ -33,14 +33,28 @@ const ChallengeStartScreen = ({ onStart, onCancel }: { onStart: () => void, onCa
     </div>
 );
 
-const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { 
-    onNumberClick: (num: string) => void; 
-    onBackspace: () => void; 
-    onSubmit: () => void; 
+const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
+    onNumberClick: (num: string) => void;
+    onBackspace: () => void;
+    onSubmit: () => void;
 }) => {
-    const handleClick = (e: React.MouseEvent, action: () => void) => {
+    const playSound = (sound: string) => {
+        try {
+            const audio = new Audio(sound);
+            audio.play().catch(() => {
+                // Silently handle audio play failures
+            });
+        } catch (error) {
+            // Silently handle audio creation failures
+        }
+    };
+
+    const handleClick = (e: React.MouseEvent, action: () => void, sound?: string) => {
         e.preventDefault();
         action();
+        if (sound) {
+            playSound(sound);
+        }
     };
 
     return (
@@ -48,26 +62,26 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
             {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
                 <button
                     key={num}
-                    onClick={(e) => handleClick(e, () => onNumberClick(num))}
+                    onClick={(e) => handleClick(e, () => onNumberClick(num), '/Sounds/Number-Click-sound.wav')}
                     className="h-14 bg-pink-100 rounded flex items-center justify-center text-pink-800 text-lg font-bold font-Nunito hover:bg-pink-200 transition-colors"
                 >
                     {num}
                 </button>
             ))}
             <button
-                onClick={(e) => handleClick(e, onBackspace)}
+                onClick={(e) => handleClick(e, onBackspace, '/Sounds/delete-click-sound.wav')}
                 className="h-14 bg-red-100 rounded flex items-center justify-center text-red-800 text-lg font-bold font-Nunito hover:bg-red-200 transition-colors"
             >
                 ⌫
             </button>
             <button
-                onClick={(e) => handleClick(e, () => onNumberClick('0'))}
+                onClick={(e) => handleClick(e, () => onNumberClick('0'), '/Sounds/Number-Click-sound.wav')}
                 className="h-14 bg-pink-100 rounded flex items-center justify-center text-pink-800 text-lg font-bold font-Nunito hover:bg-pink-200 transition-colors"
             >
                 0
             </button>
             <button
-                onClick={(e) => handleClick(e, onSubmit)}
+                onClick={(e) => handleClick(e, onSubmit, '/Sounds/Check-Click-sound.wav')}
                 className="h-14 bg-green-100 rounded flex items-center justify-center text-green-800 text-lg font-bold font-Nunito hover:bg-green-200 transition-colors"
             >
                 ✓
@@ -185,6 +199,26 @@ export default function HundredQuestionsPage() {
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     }
+
+    // Keyboard support
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (gameState !== 'playing') return;
+            
+            if (event.key >= '0' && event.key <= '9') {
+                setUserAnswer(prev => prev.length < 3 ? prev + event.key : prev);
+            } else if (event.key === 'Backspace') {
+                setUserAnswer(prev => prev.slice(0, -1));
+            } else if (event.key === 'Enter') {
+                handleSubmit();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [gameState, setUserAnswer, handleSubmit]);
 
     if (gameState === 'gameOver' && !isComplete) {
          return <CongratulationsScreen onContinue={() => router.push('/subtraction')} rewardName={`You scored ${score}!`} />;

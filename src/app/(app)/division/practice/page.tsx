@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from '@/components/CongratulationsScreen';
 import Numpad from '@/components/Numpad';
+import { useAddPracticeSessionMutation } from '@/Redux/features/exercise/exerciseApi';
 
 // --- Type Definitions ---
 type Question = {
@@ -62,6 +63,9 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  // Add mutation for saving practice session
+  const [addPracticeSession] = useAddPracticeSessionMutation();
 
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -209,7 +213,39 @@ const currentQuestion = useMemo(
     generateQuestions();
   }, [generateQuestions]);
 
+  // Save practice session when complete
+  const handleSaveSession = useCallback(async () => {
+    try {
+      // Count correct and incorrect answers
+      const correct = progress.filter(status => status === 'correct').length;
+      const incorrect = progress.filter(status => status === 'incorrect').length;
+      
+      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
+      const starsEarned = Math.max(0, correct - incorrect);
+      
+      // Calculate duration in seconds
+      // For simplicity, we'll use a fixed time per question (5 seconds)
+      const durationSeconds = questions.length * 5;
+      
+      // Save to backend
+      await addPracticeSession({
+        category: 4, // Division category ID
+        mode: 'practice',
+        correct: correct,
+        total: questions.length,
+        stars_earned: starsEarned,
+        duration_seconds: durationSeconds
+      }).unwrap();
+      
+      console.log('Practice session saved successfully');
+    } catch (error) {
+      console.error('Failed to save practice session:', error);
+    }
+  }, [progress, questions.length, addPracticeSession]);
+
   if (isComplete) {
+    // Save session when complete
+    handleSaveSession();
     return (
       <CongratulationsScreen onContinue={() => router.push("/division")} />
     );
