@@ -1,7 +1,11 @@
 export interface UserData {
-  name: string;
+  name: string | null;
   email: string;
   profile_pic: File | null;
+  grade: string | null;
+  star: number;
+  level: number;
+  is_premium: boolean;
 }
 
 export interface UserResponse {
@@ -10,5 +14,3 @@ export interface UserResponse {
   status: number;
   data: UserData;
 }
-
-

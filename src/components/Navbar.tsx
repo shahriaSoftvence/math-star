@@ -1,7 +1,8 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Bell, Menu, LogOut, User } from "lucide-react";
+import { Menu, LogOut, User } from "lucide-react";
 import Profile from "../../public/assets/Profile.png";
 import Flag from "../../public/assets/Flag.png";
 import { TiStarFullOutline } from "react-icons/ti";
@@ -11,20 +12,20 @@ import { useGetProfileQuery } from "../Redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
-type Notification = {
-  id: number;
-  message: string;
-};
+// type Notification = {
+//   id: number;
+//   message: string;
+// };
 
 type NavbarProps = {
   toggleSidebar: () => void;
 };
 
-const notifications: Notification[] = [
-  { id: 1, message: "You have a new message from your teacher." },
-  { id: 2, message: "You earned a new badge! Keep it up." },
-  { id: 3, message: "Your weekly progress report is ready." },
-];
+// const notifications: Notification[] = [
+//   { id: 1, message: "You have a new message from your teacher." },
+//   { id: 2, message: "You earned a new badge! Keep it up." },
+//   { id: 3, message: "Your weekly progress report is ready." },
+// ];
 
 function useOnClickOutside(
   ref: React.RefObject<HTMLElement>,
@@ -47,10 +48,10 @@ function useOnClickOutside(
 }
 
 export default function Navbar({ toggleSidebar }: NavbarProps) {
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  // const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const notificationRef = useRef<HTMLDivElement>(null);
+  // const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   // Get current user from Redux
@@ -86,9 +87,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   console.log("Profile error:", profileError);
   console.log("Current user from Redux:", user);
 
-  useOnClickOutside(notificationRef as React.RefObject<HTMLElement>, () =>
-    setIsNotificationsOpen(false)
-  );
+  // useOnClickOutside(notificationRef as React.RefObject<HTMLElement>, () =>
+  //   setIsNotificationsOpen(false)
+  // );
   useOnClickOutside(profileRef as React.RefObject<HTMLElement>, () =>
     setIsProfileOpen(false)
   );
