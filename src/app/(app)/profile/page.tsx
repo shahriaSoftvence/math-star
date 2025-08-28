@@ -122,7 +122,7 @@ export default function ProfilePage() {
               onClick={handleAvatarClick}
             >
               <Avatar className="w-24 h-24">
-                {profileData?.data?.profile_pic? (
+                {profileData?.data?.profile_pic ? (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_BASE_URL}${profileData?.data?.profile_pic}`}
                     alt="User Avatar"
@@ -164,11 +164,12 @@ export default function ProfilePage() {
           <div className="flex items-center gap-2 mt-1">
             <Star size={20} className="text-yellow-500 fill-yellow-500" />
             <span className="text-gray-700 text-lg font-semibold font-Nunito">
-              Math Star Level 3
+              Math Star Level {profileData?.data?.level}
             </span>
           </div>
           <p className="text-gray-600 mt-2 font-Nunito">
-            Keep practicing to reach Level 4!
+            Keep practicing to reach Level{" "}
+            {`${(profileData?.data?.level ?? 0) + 1}`}!
           </p>
           <Link href="/settings">
             <button className="flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-800 font-Nunito">

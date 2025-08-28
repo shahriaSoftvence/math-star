@@ -21,23 +21,23 @@ import {
 import { toast } from "sonner";
 
 // A simple toggle switch component
-const ToggleSwitch = () => {
-  const [isEnabled, setIsEnabled] = useState(true);
-  return (
-    <button
-      onClick={() => setIsEnabled(!isEnabled)}
-      className={`w-12 h-6 rounded-full p-0.5 transition-colors duration-300 ease-in-out ${
-        isEnabled ? "bg-blue-500" : "bg-gray-300"
-      }`}
-    >
-      <span
-        className={`block w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
-          isEnabled ? "translate-x-6" : "translate-x-0"
-        }`}
-      />
-    </button>
-  );
-};
+// const ToggleSwitch = () => {
+//   const [isEnabled, setIsEnabled] = useState(true);
+//   return (
+//     <button
+//       onClick={() => setIsEnabled(!isEnabled)}
+//       className={`w-12 h-6 rounded-full p-0.5 transition-colors duration-300 ease-in-out ${
+//         isEnabled ? "bg-blue-500" : "bg-gray-300"
+//       }`}
+//     >
+//       <span
+//         className={`block w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+//           isEnabled ? "translate-x-6" : "translate-x-0"
+//         }`}
+//       />
+//     </button>
+//   );
+// };
 
 export default function SettingsPage() {
   const { data: profileData } = useGetProfileQuery();
@@ -48,16 +48,16 @@ export default function SettingsPage() {
   const [userInfo, setUserInfo] = useState({
     name: profileData?.data?.name || "",
     email: profileData?.data?.name || "",
-    grade: "5th Grade",
+    grade: profileData?.data?.grade || "",
   });
 
   // Update state whenever profileData changes
   React.useEffect(() => {
     if (profileData) {
       setUserInfo({
-        name: profileData?.data?.name,
-        email: profileData?.data?.email,
-        grade: "5th Grade",
+        name: profileData?.data?.name ?? "",
+        email: profileData?.data?.email ?? "",
+        grade: profileData?.data?.grade ?? "",
       });
     }
   }, [profileData]);
@@ -84,6 +84,7 @@ export default function SettingsPage() {
       await updateProfile({
         name: userInfo.name,
         email: userInfo.email,
+        grade: userInfo.grade,
       }).unwrap();
 
       toast.success("Profile updated successfully!");
@@ -166,6 +167,18 @@ export default function SettingsPage() {
               </button>
             </div>
             <div className="space-y-4">
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 font-Nunito mb-1">
+                  Email
+                </label>
+                <input
+                  type="text"
+                  value={userInfo.email}
+                  disabled
+                  className="w-full h-10 px-3 py-2.5 bg-gray-50 text-slate-950 rounded-md border border-slate-200 cursor-not-allowed font-Nunito"
+                />
+              </div>
               {/* Name Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 font-Nunito mb-1">
@@ -183,29 +196,6 @@ export default function SettingsPage() {
                   <input
                     type="text"
                     value={userInfo.name}
-                    disabled
-                    className="w-full h-10 px-3 py-2.5 bg-gray-50 text-slate-950 rounded-md border border-slate-200 cursor-not-allowed font-Nunito"
-                  />
-                )}
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 font-Nunito mb-1">
-                  Email
-                </label>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    name="email"
-                    value={userInfo.email}
-                    onChange={handleInputChange}
-                    className="w-full h-10 px-3 py-2.5 bg-white text-slate-950 rounded-md border border-slate-200 font-Nunito"
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    value={userInfo.email}
                     disabled
                     className="w-full h-10 px-3 py-2.5 bg-gray-50 text-slate-950 rounded-md border border-slate-200 cursor-not-allowed font-Nunito"
                   />
@@ -238,7 +228,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Push Notifications */}
-          <div className="p-6 bg-white rounded-3xl shadow-lg flex justify-between items-center">
+          {/* <div className="p-6 bg-white rounded-3xl shadow-lg flex justify-between items-center">
             <div className="flex items-center gap-4">
               <Bell className="text-blue-500" size={24} />
               <div>
@@ -251,7 +241,7 @@ export default function SettingsPage() {
               </div>
             </div>
             <ToggleSwitch />
-          </div>
+          </div> */}
 
           {/* Change Password */}
           <div className="p-6 bg-white rounded-3xl shadow-lg">

@@ -186,13 +186,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
               <TiStarFullOutline className="text-[#EAB308] text-[20px]" />
               <span className="text-[#A16207] text-base font-bold">
-                {displayUser?.stars || 0} Stars
+                {profileData?.data?.star} Stars
               </span>
             </div>
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
               <FaCrown className="text-[#EAB308] text-[20px]" />
               <span className="text-yellow-700 text-base font-bold">
-                {displayUser?.starStreak || "Beginner"}
+                { "Beginner"}
               </span>
             </div>
           </div>
