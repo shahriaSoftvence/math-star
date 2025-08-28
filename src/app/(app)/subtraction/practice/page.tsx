@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Check, X, RefreshCcw, ArrowRight, ArrowLeftCircle, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CongratulationsScreen from '@/components/CongratulationsScreen';
 import Numpad from '@/components/Numpad';
+import { useAddPracticeSessionMutation } from '@/Redux/features/exercise/exerciseApi';
 
 // --- Type Definitions ---
 type Question = {
@@ -43,6 +44,9 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  // Add mutation for saving practice session
+  const [addPracticeSession] = useAddPracticeSessionMutation();
 
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -78,40 +82,32 @@ function PracticePageContent() {
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
-  // Sound effect player
-  const playSound = (sound: string) => {
-    const audio = new Audio(sound);
-    audio.play().catch(() => {}); // Ignore errors if audio fails to play
-  };
-
-  // Keyboard support
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key >= '0' && event.key <= '9') {
-        handleInput(event.key);
-        playSound('/Sounds/Number-Click-sound.wav');
-      } else if (event.key === 'Backspace') {
-        handleBackspace();
-        playSound('/Sounds/delete-click-sound.wav');
-      } else if (event.key === 'Enter') {
-        handleSubmit();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [userAnswer]);
+  // Sound effect player with error handling
+  const playSound = useCallback((sound: string) => {
+    try {
+      const audio = new Audio(sound);
+      audio.play().catch(() => {
+        // Silently handle audio play failures
+      });
+    } catch (error) {
+      // Silently handle audio creation failures
+    }
+  }, []);
 
   // --- Event Handlers ---
-  const handleInput = (num: string) => {
-    if (userAnswer.length < 5) setUserAnswer(prev => prev + num);
-  };
+  const handleInput = useCallback((num: string) => {
+    if (userAnswer.length < 5) {
+      setUserAnswer(prev => prev + num);
+      playSound('/Sounds/Number-Click-sound.wav');
+    }
+  }, [userAnswer.length, playSound]);
 
-  const handleBackspace = () => setUserAnswer(prev => prev.slice(0, -1));
+  const handleBackspace = useCallback(() => {
+    setUserAnswer(prev => prev.slice(0, -1));
+    playSound('/Sounds/delete-click-sound.wav');
+  }, [playSound]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
@@ -139,7 +135,25 @@ function PracticePageContent() {
       playSound('/Sounds/Wrong-Answer-sound.wav');
       setUserAnswer(''); // Clear the input field on wrong answer
     }
-  };
+  }, [userAnswer, currentQuestion, progress, currentQuestionIndex, questions.length, playSound]);
+
+  // Keyboard support with proper dependencies
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key >= '0' && event.key <= '9') {
+        handleInput(event.key);
+      } else if (event.key === 'Backspace') {
+        handleBackspace();
+      } else if (event.key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleInput, handleBackspace, handleSubmit]);
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
@@ -161,7 +175,39 @@ function PracticePageContent() {
     generateQuestions();
   };
 
+  // Save practice session when complete
+  const handleSaveSession = async () => {
+    try {
+      // Count correct and incorrect answers
+      const correct = progress.filter(status => status === 'correct').length;
+      const incorrect = progress.filter(status => status === 'incorrect').length;
+      
+      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
+      const starsEarned = Math.max(0, correct - incorrect);
+      
+      // Calculate duration in seconds
+      // For simplicity, we'll use a fixed time per question (5 seconds)
+      const durationSeconds = questions.length * 5;
+      
+      // Save to backend
+      await addPracticeSession({
+        category: 2, // Subtraction category ID
+        mode: 'practice',
+        correct: correct,
+        total: questions.length,
+        stars_earned: starsEarned,
+        duration_seconds: durationSeconds
+      }).unwrap();
+      
+      console.log('Practice session saved successfully');
+    } catch (error) {
+      console.error('Failed to save practice session:', error);
+    }
+  };
+
   if (isComplete) {
+    // Save session when complete
+    handleSaveSession();
     return <CongratulationsScreen onContinue={() => router.push('/subtraction')} />;
   }
 

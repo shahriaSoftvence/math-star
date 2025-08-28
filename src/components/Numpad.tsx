@@ -12,8 +12,14 @@ type NumpadProps = {
 const Numpad = ({ onNumberClick, onBackspace, onSubmit }: NumpadProps) => {
   const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const playSound = (sound: string) => {
-    const audio = new Audio(sound);
-    audio.play();
+    try {
+      const audio = new Audio(sound);
+      audio.play().catch(() => {
+        // Silently handle audio play failures
+      });
+    } catch (error) {
+      // Silently handle audio creation failures
+    }
   };
 
   return (

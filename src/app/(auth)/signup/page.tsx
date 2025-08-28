@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { User, Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import SignUpImage from '../../../../public/assets/signup.png';
 import { FcGoogle } from "react-icons/fc";
-import { useRegisterMutation, useVerifyOtpMutation } from '../../../../src/Redux/features/auth/authApi';
+import { useRegisterMutation, useVerifyOtpMutation, useResendOtpMutation } from '../../../../src/Redux/features/auth/authApi';
 import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';
 
@@ -25,9 +25,10 @@ export default function SignUpPage() {
 
   const [register, { isLoading: isRegistering }] = useRegisterMutation();
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
   
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const redirectTo = searchParams?.get('redirect') || '/dashboard';
   
 
 
@@ -105,6 +106,20 @@ export default function SignUpPage() {
     setOtp('');
   };
 
+  const handleResendOtp = async () => {
+    try {
+      const result = await resendOtp({ email }).unwrap();
+      if (result.success) {
+        toast.success('OTP resent successfully! Please check your email.');
+      }
+    } catch (error: unknown) {
+      const errorMessage = error && typeof error === 'object' && 'data' in error &&
+        typeof error.data === 'object' && error.data && 'message' in error.data &&
+        typeof error.data.message === 'string' ? error.data.message : 'Failed to resend OTP';
+      toast.error(errorMessage);
+    }
+  };
+
   if (step === 2) {
     return (
       <div className="w-full min-h-screen bg-white flex justify-center items-center p-4">
@@ -146,6 +161,16 @@ export default function SignUpPage() {
                 </button>
               </form>
 
+              <div className="text-center">
+                <span className="text-zinc-600 text-sm">Didn&apos;t receive the code? </span>
+                <button
+                  onClick={handleResendOtp}
+                  disabled={isResending}
+                  className="text-blue-500 text-sm font-bold hover:underline disabled:opacity-50"
+                >
+                  {isResending ? 'Resending...' : 'Resend OTP'}
+                </button>
+              </div>
 
             </div>
           </div>

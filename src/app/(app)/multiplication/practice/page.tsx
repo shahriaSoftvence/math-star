@@ -4,71 +4,10 @@ import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'reac
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Check, X, RefreshCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-// Mock components - replace with your actual components
-const CongratulationsScreen = ({ onContinue }: { onContinue: () => void }) => (
-  <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-400 to-blue-500">
-    <motion.div
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      className="p-8 bg-white rounded-xl shadow-2xl text-center"
-    >
-      <h1 className="text-4xl font-bold text-green-600 mb-4">🎉 Congratulations!</h1>
-      <p className="text-xl text-gray-700 mb-6">You completed all questions!</p>
-      <button
-        onClick={onContinue}
-        className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-      >
-        Continue
-      </button>
-    </motion.div>
-  </div>
-);
-
-const Numpad = ({ 
-  onNumberClick, 
-  onBackspace, 
-  onSubmit 
-}: { 
-  onNumberClick: (num: string) => void;
-  onBackspace: () => void;
-  onSubmit: () => void;
-}) => (
-  <div className="p-6 bg-white rounded-lg shadow-md">
-    <div className="grid grid-cols-3 gap-3 mb-4">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-        <button
-          key={num}
-          onClick={() => onNumberClick(num.toString())}
-          className="h-12 text-xl font-semibold text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-        >
-          {num}
-        </button>
-      ))}
-    </div>
-    <div className="grid grid-cols-3 gap-3">
-      <button
-        onClick={onBackspace}
-        className="h-12 text-lg font-semibold text-red-600 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
-      >
-        ⌫
-      </button>
-      <button
-        onClick={() => onNumberClick('0')}
-        className="h-12 text-xl font-semibold text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-      >
-        0
-      </button>
-      <button
-        onClick={onSubmit}
-        className="h-12 text-lg font-semibold text-green-600 bg-green-100 rounded-lg hover:bg-green-200 transition-colors"
-      >
-        ✓
-      </button>
-    </div>
-  </div>
-);
-
+import CongratulationsScreen from '@/components/CongratulationsScreen';
+import Numpad from '@/components/Numpad';
+import { useAddPracticeSessionMutation } from '@/Redux/features/exercise/exerciseApi';
+ 
 // --- Type Definitions ---
 type Question = {
   num1: number;
@@ -91,7 +30,7 @@ const HelpChart = ({ num1 }: { num1: number }) => (
     <div className="grid grid-cols-2 gap-2">
       {Array.from({ length: 10 }).map((_, i) => (
         <div key={i} className="text-sm text-gray-600">
-          {num1} x {i + 1} = {num1 / (i + 1)}
+          {num1} x {i + 1} = {num1 * (i + 1)}
         </div>
       ))}
     </div>
@@ -101,6 +40,9 @@ const HelpChart = ({ num1 }: { num1: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  // Add mutation for saving practice session
+  const [addPracticeSession] = useAddPracticeSessionMutation();
 
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -122,10 +64,10 @@ function PracticePageContent() {
   }, [searchParams]);
 
   const fixedNum2 = useMemo(() => {
-  const raw = searchParams?.get('table') || '';
-  const m = raw.trim().match(/^x(\d+)$/i); 
-  return m ? parseInt(m[1], 10) : null;
-}, [searchParams]);
+    const raw = searchParams?.get('table') || '';
+    const m = raw.trim().match(/^x(\d+)$/i);
+    return m ? parseInt(m[1], 10) : null;
+  }, [searchParams]);
 
   const generateQuestions = useCallback(() => {
     const newQuestions: Question[] = Array.from({ length: questionCount }, (_) => {
@@ -164,12 +106,14 @@ function PracticePageContent() {
   const handleInput = useCallback((num: string) => {
     if (userAnswer.length < 5) {
       setUserAnswer(prev => prev + num);
+      playSound('/Sounds/Number-Click-sound.wav');
     }
-  }, [userAnswer.length]);
+  }, [userAnswer.length, playSound]);
 
   const handleBackspace = useCallback(() => {
     setUserAnswer(prev => prev.slice(0, -1));
-  }, []);
+    playSound('/Sounds/delete-click-sound.wav');
+  }, [playSound]);
 
   const handleSubmit = useCallback(() => {
     if (!userAnswer || !currentQuestion) return;
@@ -206,10 +150,8 @@ function PracticePageContent() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key >= '0' && event.key <= '9') {
         handleInput(event.key);
-        playSound('/Sounds/Number-Click-sound.wav');
       } else if (event.key === 'Backspace') {
         handleBackspace();
-        playSound('/Sounds/delete-click-sound.wav');
       } else if (event.key === 'Enter') {
         handleSubmit();
       }
@@ -219,29 +161,45 @@ function PracticePageContent() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleInput, handleBackspace, handleSubmit, playSound]);
-
-  // const handlePrevious = useCallback(() => {
-  //   if (currentQuestionIndex > 0) {
-  //     setCurrentQuestionIndex(prev => prev - 1);
-  //     setUserAnswer('');
-  //     setFeedback({ type: null, message: '' });
-  //   }
-  // }, [currentQuestionIndex]);
-
-  // const handleSkip = useCallback(() => {
-  //   if (currentQuestionIndex < questions.length - 1) {
-  //     setCurrentQuestionIndex(prev => prev + 1);
-  //     setUserAnswer('');
-  //     setFeedback({ type: null, message: '' });
-  //   }
-  // }, [currentQuestionIndex, questions.length]);
+  }, [handleInput, handleBackspace, handleSubmit]);
 
   const handleReset = useCallback(() => {
     generateQuestions();
   }, [generateQuestions]);
 
+  // Save practice session when complete
+  const handleSaveSession = useCallback(async () => {
+    try {
+      // Count correct and incorrect answers
+      const correct = progress.filter(status => status === 'correct').length;
+      const incorrect = progress.filter(status => status === 'incorrect').length;
+      
+      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
+      const starsEarned = Math.max(0, correct - incorrect);
+      
+      // Calculate duration in seconds
+      // For simplicity, we'll use a fixed time per question (5 seconds)
+      const durationSeconds = questions.length * 5;
+      
+      // Save to backend
+      await addPracticeSession({
+        category: 3, // Multiplication category ID
+        mode: 'practice',
+        correct: correct,
+        total: questions.length,
+        stars_earned: starsEarned,
+        duration_seconds: durationSeconds
+      }).unwrap();
+      
+      console.log('Practice session saved successfully');
+    } catch (error) {
+      console.error('Failed to save practice session:', error);
+    }
+  }, [progress, questions.length, addPracticeSession]);
+
   if (isComplete) {
+    // Save session when complete
+    handleSaveSession();
     return <CongratulationsScreen onContinue={() => router.push('/multiplication')} />;
   }
 
@@ -260,20 +218,6 @@ function PracticePageContent() {
           <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Multiplication</h1>
         </div>
         <div className="flex items-center gap-2">
-          {/* <button 
-            onClick={handlePrevious} 
-            className="p-2 transition-colors rounded-full hover:bg-gray-200 disabled:opacity-50" 
-            disabled={currentQuestionIndex === 0}
-          >
-            <ArrowLeftCircle className="text-gray-600" />
-          </button>
-          <button 
-            onClick={handleSkip} 
-            className="p-2 transition-colors rounded-full hover:bg-gray-200 disabled:opacity-50" 
-            disabled={currentQuestionIndex === questions.length - 1}
-          >
-            <ArrowRight className="text-gray-600" />
-          </button> */}
           <button onClick={handleReset} className="p-2 transition-colors rounded-full hover:bg-gray-200">
             <RefreshCcw className="text-gray-600" />
           </button>
@@ -290,10 +234,10 @@ function PracticePageContent() {
           {progress.map((status, index) => {
             const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
             return (
-              <div 
-                key={index} 
-                className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} 
-                style={{ width: `${100 / questionCount}%` }} 
+              <div
+                key={index}
+                className={`h-full transition-colors duration-500 rounded-[10px] ${color}`}
+                style={{ width: `${100 / questionCount}%` }}
               />
             );
           })}

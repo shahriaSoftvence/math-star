@@ -87,6 +87,23 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
+    // Resend OTP
+    resendOtp: builder.mutation({
+      query: (emailData: { email: string }) => ({
+        url: "/resend-otp/",
+        method: "POST",
+        body: emailData,
+      }),
+    }),
+
+    // Signup celery check
+    signupCeleryCheck: builder.query({
+      query: () => ({
+        url: "/signup-celery-check/",
+        method: "GET",
+      }),
+    }),
+
     // Get user profile
     getProfile: builder.query<UserResponse, void>({
       query: () => ({
@@ -167,6 +184,8 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useVerifyOtpMutation,
+  useResendOtpMutation,
+  useSignupCeleryCheckQuery,
   useGetProfileQuery,
   useChangePasswordMutation,
   useRequestPasswordResetMutation,
