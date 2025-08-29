@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import {  HelpCircle } from 'lucide-react';
-import CongratulationsScreen from '@/components/CongratulationsScreen';
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { HelpCircle } from "lucide-react";
+import CongratulationsScreen from "@/components/CongratulationsScreen";
+import { useAddDivisionWhatsMissingMutation } from "@/Redux/features/division/divisionApi";
 
 // --- Type Definitions ---
 type Question = {
@@ -12,30 +13,52 @@ type Question = {
   answer: number;
   missingIndex: number;
 };
-type GameState = 'ready' | 'playing' | 'gameOver';
+type GameState = "ready" | "playing" | "gameOver";
 
 // --- Reusable UI Components ---
-const ChallengeStartScreen = ({ onStart, onCancel }: { onStart: () => void, onCancel: () => void }) => (
+const ChallengeStartScreen = ({
+  onStart,
+  onCancel,
+}: {
+  onStart: () => void;
+  onCancel: () => void;
+}) => (
   <div className="w-full min-h-screen relative bg-gradient-to-b from-purple-50 to-indigo-50 flex flex-col justify-center items-center p-4">
     <div className="w-full max-w-[450px] min-[516px]:max-w-[600px] p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6">
       <div className="w-20 h-20 bg-purple-100 rounded-full flex justify-center items-center">
         <HelpCircle className="w-10 h-10 text-purple-600" />
       </div>
       <div>
-        <h2 className="text-gray-800 text-2xl font-medium font-Poppins leading-loose">Ready to Start?</h2>
+        <h2 className="text-gray-800 text-2xl font-medium font-Poppins leading-loose">
+          Ready to Start?
+        </h2>
         <p className="text-gray-600 mt-2 text-base font-normal font-Poppins leading-relaxed">
           Fill in the missing numbers in 5 minutes!
         </p>
       </div>
       <div className="flex items-center gap-4 mt-4">
-        <button onClick={onCancel} className="px-8 py-2 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 text-lg capitalize leading-7 min-w-[206px]">Cancel</button>
-        <button onClick={onStart} className="px-8 py-2 bg-purple-500 text-white rounded-full font-semibold hover:bg-purple-600 text-lg capitalize leading-7 min-w-[206px]">Start Challenge</button>
+        <button
+          onClick={onCancel}
+          className="px-8 py-2 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 text-lg capitalize leading-7 min-w-[206px]"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={onStart}
+          className="px-8 py-2 bg-purple-500 text-white rounded-full font-semibold hover:bg-purple-600 text-lg capitalize leading-7 min-w-[206px]"
+        >
+          Start Challenge
+        </button>
       </div>
     </div>
   </div>
 );
 
-const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
+const Numpad = ({
+  onNumberClick,
+  onBackspace,
+  onSubmit,
+}: {
   onNumberClick: (num: string) => void;
   onBackspace: () => void;
   onSubmit: () => void;
@@ -47,7 +70,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
 
   return (
     <div className="grid grid-cols-3 gap-4 w-72">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
         <button
           key={num}
           onClick={(e) => handleClick(e, () => onNumberClick(num.toString()))}
@@ -63,7 +86,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
         ⌫
       </button>
       <button
-        onClick={(e) => handleClick(e, () => onNumberClick('0'))}
+        onClick={(e) => handleClick(e, () => onNumberClick("0"))}
         className="h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-800 text-3xl font-bold hover:bg-purple-200 transition-colors"
       >
         0
@@ -81,11 +104,19 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
 // --- Main Challenge Page Component ---
 export default function WhatsMissingPage() {
   const router = useRouter();
-  const [gameState, setGameState] = useState<GameState>('ready');
-  const [question, setQuestion] = useState<Question>({ num1: 0, num2: 0, answer: 0, missingIndex: 0 });
-  const [userAnswer, setUserAnswer] = useState('');
+  const [gameState, setGameState] = useState<GameState>("ready");
+  const [question, setQuestion] = useState<Question>({
+    num1: 0,
+    num2: 0,
+    answer: 0,
+    missingIndex: 0,
+  });
+  const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(30); // 5 minutes
+  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const [addDivisionWhatsMissing, {data}] = useAddDivisionWhatsMissingMutation();
+  console.log(data, "form here")
 
   const generateQuestion = useCallback(() => {
     const num2 = Math.floor(Math.random() * 9) + 2;
@@ -93,30 +124,43 @@ export default function WhatsMissingPage() {
     const num1 = num2 * answer;
     const missingIndex = Math.floor(Math.random() * 3); // 0 for num1, 1 for num2, 2 for answer
     setQuestion({ num1, num2, answer, missingIndex });
-    setUserAnswer('');
+    setUserAnswer("");
   }, []);
 
   useEffect(() => {
-    if (gameState === 'playing' && timeLeft > 0) {
+    if (gameState === "playing" && timeLeft > 0) {
       const timer = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
+        setTimeLeft((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(timer);
     } else if (timeLeft === 0) {
-      setGameState('gameOver');
+      setGameState("gameOver");
     }
   }, [gameState, timeLeft]);
 
   const handleStart = () => {
     setScore(0);
-    setTimeLeft(300);
+    setTimeLeft(30);
     generateQuestion();
-    setGameState('playing');
+    setGameState("playing");
+  };
+
+  const handleContinue = async () => {
+    try {
+      await addDivisionWhatsMissing({
+        questions_answered: totalSubmissions,
+        final_score: score,
+      }).unwrap();
+
+      router.push("/division");
+    } catch (error) {
+      console.error("Failed to save Whats Missing results:", error);
+    }
   };
 
   const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
-
+    setTotalSubmissions((prev) => prev + 1);
     let correctAnswer;
     if (question.missingIndex === 0) {
       correctAnswer = question.num1;
@@ -127,32 +171,44 @@ export default function WhatsMissingPage() {
     }
 
     if (parseInt(userAnswer, 10) === correctAnswer) {
-      setScore(prev => prev + 1);
+      setScore((prev) => prev + 1);
     }
     generateQuestion();
   }, [userAnswer, question, generateQuestion]);
 
   const getQuestionString = () => {
     const { num1, num2, answer, missingIndex } = question;
-    const missingPlaceholder = userAnswer || '__';
+    const missingPlaceholder = userAnswer || "__";
 
-    if (missingIndex === 0) return `${missingPlaceholder} ÷ ${num2} = ${answer}`;
-    if (missingIndex === 1) return `${num1} ÷ ${missingPlaceholder} = ${answer}`;
+    if (missingIndex === 0)
+      return `${missingPlaceholder} ÷ ${num2} = ${answer}`;
+    if (missingIndex === 1)
+      return `${num1} ÷ ${missingPlaceholder} = ${answer}`;
     return `${num1} ÷ ${num2} = ${missingPlaceholder}`;
   };
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  if (gameState === 'ready') {
-    return <ChallengeStartScreen onStart={handleStart} onCancel={() => router.back()} />;
+  if (gameState === "ready") {
+    return (
+      <ChallengeStartScreen
+        onStart={handleStart}
+        onCancel={() => router.back()}
+      />
+    );
   }
 
-  if (gameState === 'gameOver') {
-    return <CongratulationsScreen onContinue={() => router.push('/division')} rewardName={`You scored ${score}!`} />;
+  if (gameState === "gameOver") {
+    return (
+      <CongratulationsScreen
+        onContinue={handleContinue}
+        rewardName={`You scored ${score}!`}
+      />
+    );
   }
 
   return (
@@ -162,7 +218,9 @@ export default function WhatsMissingPage() {
           <HelpCircle className="w-14 h-14 text-purple-600" />
         </div>
         <div className="max-w-2xl flex flex-col gap-5">
-          <h1 className="text-black text-6xl font-bold font-Nunito leading-tight">What is missing?</h1>
+          <h1 className="text-black text-6xl font-bold font-Nunito leading-tight">
+            What is missing?
+          </h1>
           <p className="text-black text-2xl font-bold font-Nunito leading-snug">
             You have 5 minutes to find as many missing numbers as possible.
           </p>
@@ -172,35 +230,49 @@ export default function WhatsMissingPage() {
       <div className="flex flex-col  justify-around items-center lg:flex-row lg:items-end gap-8">
         {/* Timer Circle */}
         <div className="w-72 h-72 bg-gradient-to-br from-purple-400 to-purple-500 rounded-full flex flex-col justify-center items-center">
-          <div className="text-white text-6xl font-bold font-Nunito leading-tight">{formatTime(timeLeft)}</div>
-          <div className="text-white text-4xl font-normal font-Nunito leading-tight">Remaining</div>
+          <div className="text-white text-6xl font-bold font-Nunito leading-tight">
+            {formatTime(timeLeft)}
+          </div>
+          <div className="text-white text-4xl font-normal font-Nunito leading-tight">
+            Remaining
+          </div>
         </div>
 
         {/* Question and Score */}
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">Question</span>
-              <span className="text-purple-600 text-4xl font-bold font-Nunito leading-tight">{score + 1}</span>
+              <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
+                Question
+              </span>
+              <span className="text-purple-600 text-4xl font-bold font-Nunito leading-tight">
+                {score + 1}
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">Score</span>
-              <span className="text-green-600 text-4xl font-bold font-Nunito leading-tight">{score}</span>
+              <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
+                Score
+              </span>
+              <span className="text-green-600 text-4xl font-bold font-Nunito leading-tight">
+                {score}
+              </span>
             </div>
           </div>
 
           {/* Question Display */}
           <div className="p-8 rounded-3xl border border-black w-full">
-        <div className="text-center text-gray-800 text-4xl sm:text-6xl font-bold font-Nunito leading-tight">
-          {getQuestionString()}
-        </div>
-      </div>
+            <div className="text-center text-gray-800 text-4xl sm:text-6xl font-bold font-Nunito leading-tight">
+              {getQuestionString()}
+            </div>
+          </div>
         </div>
 
         {/* Numpad */}
         <Numpad
-          onNumberClick={(num) => setUserAnswer(prev => prev.length < 3 ? prev + num : prev)}
-          onBackspace={() => setUserAnswer(prev => prev.slice(0, -1))}
+          onNumberClick={(num) =>
+            setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
+          }
+          onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
           onSubmit={handleSubmit}
         />
       </div>

@@ -8,16 +8,12 @@ import React, {
   useCallback,
 } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  Check,
-  X,
-  RefreshCcw,
-} from "lucide-react";
+import { ArrowLeft, Check, X, RefreshCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import CongratulationsScreen from '@/components/CongratulationsScreen';
-import Numpad from '@/components/Numpad';
-import { useAddPracticeSessionMutation } from '@/Redux/features/exercise/exerciseApi';
+import CongratulationsScreen from "@/components/CongratulationsScreen";
+import Numpad from "@/components/Numpad";
+import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
+import { useAddDivisionPracticeMutation } from "@/Redux/features/division/divisionApi";
 
 // --- Type Definitions ---
 type Question = {
@@ -63,7 +59,7 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Add mutation for saving practice session
   const [addPracticeSession] = useAddPracticeSessionMutation();
 
@@ -78,49 +74,53 @@ function PracticePageContent() {
   }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-
+  const [addDivisionPractice, {data}] = useAddDivisionPracticeMutation();
+  const [totalClicks, setTotalClicks] = useState(0);
+  console.log(data, "form live")
 
   // Get question count from URL
- const questionCount = useMemo(() => {
-  const count = searchParams?.get("count");
-  return count ? parseInt(count, 10) : 10;
-}, [searchParams]);
+  const questionCount = useMemo(() => {
+    const count = searchParams?.get("count");
+    return count ? parseInt(count, 10) : 10;
+  }, [searchParams]);
 
-const divisor = useMemo(() => {
-  const divParam = searchParams?.get("divisor");
-  return divParam && !isNaN(parseInt(divParam, 10))
-    ? parseInt(divParam, 10)
-    : null;
-}, [searchParams]);
+  const divisor = useMemo(() => {
+    const divParam = searchParams?.get("divisor");
+    return divParam && !isNaN(parseInt(divParam, 10))
+      ? parseInt(divParam, 10)
+      : null;
+  }, [searchParams]);
 
-// Generate questions
-const generateQuestions = useCallback(() => {
-  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-    // num2: use fixed divisor or random per question
-    const num2 = divisor ?? Math.floor(Math.random() * questionCount) + 1;
-    const multiplier = Math.floor(Math.random() * questionCount) + 1;
-    const num1 = num2 * multiplier;
-    const answer = multiplier;
-    return { num1, num2, answer };
-  });
+  // Generate questions
+  const generateQuestions = useCallback(() => {
+    const newQuestions: Question[] = Array.from(
+      { length: questionCount },
+      () => {
+        // num2: use fixed divisor or random per question
+        const num2 = divisor ?? Math.floor(Math.random() * questionCount) + 1;
+        const multiplier = Math.floor(Math.random() * questionCount) + 1;
+        const num1 = num2 * multiplier;
+        const answer = multiplier;
+        return { num1, num2, answer };
+      }
+    );
 
-  setQuestions(newQuestions);
-  setProgress(Array(questionCount).fill("pending"));
-  setCurrentQuestionIndex(0);
-  setUserAnswer("");
-  setFeedback({ type: null, message: "" });
-  setIsComplete(false);
-}, [questionCount, divisor]);
+    setQuestions(newQuestions);
+    setProgress(Array(questionCount).fill("pending"));
+    setCurrentQuestionIndex(0);
+    setUserAnswer("");
+    setFeedback({ type: null, message: "" });
+    setIsComplete(false);
+  }, [questionCount, divisor]);
 
-useEffect(() => {
-  generateQuestions();
-}, [generateQuestions]);
+  useEffect(() => {
+    generateQuestions();
+  }, [generateQuestions]);
 
-const currentQuestion = useMemo(
-  () => questions[currentQuestionIndex],
-  [questions, currentQuestionIndex]
-);
-
+  const currentQuestion = useMemo(
+    () => questions[currentQuestionIndex],
+    [questions, currentQuestionIndex]
+  );
 
   // Sound effect helper
   const playSound = useCallback((sound: string) => {
@@ -150,6 +150,7 @@ const currentQuestion = useMemo(
 
   const handleSubmit = useCallback(() => {
     if (!userAnswer || !currentQuestion) return;
+    setTotalClicks((prev) => prev + 1);
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
     const newProgress = [...progress];
@@ -217,38 +218,77 @@ const currentQuestion = useMemo(
   const handleSaveSession = useCallback(async () => {
     try {
       // Count correct and incorrect answers
-      const correct = progress.filter(status => status === 'correct').length;
-      const incorrect = progress.filter(status => status === 'incorrect').length;
-      
+      const correct = progress.filter((status) => status === "correct").length;
+      const incorrect = progress.filter(
+        (status) => status === "incorrect"
+      ).length;
+
       // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
       const starsEarned = Math.max(0, correct - incorrect);
-      
+
       // Calculate duration in seconds
       // For simplicity, we'll use a fixed time per question (5 seconds)
       const durationSeconds = questions.length * 5;
-      
+
       // Save to backend
       await addPracticeSession({
         category: 4, // Division category ID
-        mode: 'practice',
+        mode: "practice",
         correct: correct,
         total: questions.length,
         stars_earned: starsEarned,
-        duration_seconds: durationSeconds
+        duration_seconds: durationSeconds,
       }).unwrap();
-      
+
       // console.log('Practice session saved successfully');
     } catch (error) {
-      console.error('Failed to save practice session:', error);
+      console.error("Failed to save practice session:", error);
     }
   }, [progress, questions.length, addPracticeSession]);
 
+  const handleContinue = async () => {
+    try {
+      // Get the raw string value of divisor from URL
+      const divisorParam = searchParams?.get("divisor");
+
+      let range_value: number;
+      if (divisorParam === "All") {
+        range_value = 100;
+      } else {
+        range_value = divisorParam ? parseInt(divisorParam, 10) : 1;
+      }
+
+      const question_number = questionCount;
+
+      // Derived with your formulas
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
+
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
+
+      await addDivisionPractice(payload).unwrap();
+
+      console.log("Practice data saved:", payload);
+      router.push("/division");
+    } catch (err) {
+      console.error("Failed to save practice:", err);
+      router.push("/division");
+    }
+  };
+
+  useEffect(() => {
+    if (isComplete) {
+      handleSaveSession();
+    }
+  }, [isComplete, handleSaveSession]);
+
   if (isComplete) {
-    // Save session when complete
-    handleSaveSession();
-    return (
-      <CongratulationsScreen onContinue={() => router.push("/division")} />
-    );
+    return <CongratulationsScreen onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {

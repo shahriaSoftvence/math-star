@@ -115,8 +115,7 @@ export default function WhatsMissingPage() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30); // 5 minutes
   const [totalSubmissions, setTotalSubmissions] = useState(0);
-  const [addMultiplicationWhatsMissing] =
-    useAddMultiplicationWhatsMissingMutation();
+  const [addMultiplicationWhatsMissing] = useAddMultiplicationWhatsMissingMutation();
 
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;

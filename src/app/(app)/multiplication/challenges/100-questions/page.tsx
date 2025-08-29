@@ -131,8 +131,7 @@ export default function HundredQuestionsPage() {
     const [timeLeft, setTimeLeft] = useState(300);
     const [isComplete, setIsComplete] = useState(false);
     const [score, setScore] = useState(0);
-    const [addMultiplication100Question, {data}] = useAddMultiplication100QuestionMutation();
-    console.log("data from here", data);
+    const [addMultiplication100Question] = useAddMultiplication100QuestionMutation();
 
     const [totalClicks, setTotalClicks] = useState(0);
 

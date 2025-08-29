@@ -64,10 +64,8 @@ function PracticePageContent() {
   }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [addMultiplicationPractice, { data }] =
+  const [addMultiplicationPractice] =
     useAddMultiplicationPracticeMutation();
-
-  console.log(data, "data");
 
   const [totalClicks, setTotalClicks] = useState(0);
 
