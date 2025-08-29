@@ -10,14 +10,11 @@ import { ArrowLeft } from 'lucide-react';
 const additionExercises = {
   noCarry: [
     { range: '0 to 10', percentage: 78 },
-    { range: '0 to 20', percentage: 78 },
-    { range: '0 to 50', percentage: 78 },
-    { range: '0 to 100', percentage: 78 },
   ],
   carry: [
     { range: '0 to 20', percentage: 78 },
-    { range: '0 to 50', percentage: 78 },
-    { range: '0 to 100', percentage: 78 },
+    {  range: '0 to 50', percentage: 78 },
+    {  range: '0 to 100', percentage: 78 },
   ],
 };
 
@@ -29,6 +26,7 @@ const additionChallenges = [
 ];
 
 export default function AdditionPage() {
+
   return (
     <div className="max-w-[1152px] mx-auto space-y-8">
       <div className="mb-4">
@@ -49,7 +47,7 @@ export default function AdditionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {additionExercises.noCarry.map((ex, index) => (
-                  <ExerciseCard key={index} operation="addition" {...ex} />
+                  <ExerciseCard key={index} operation="addition" {...ex}/>
                 ))}
               </div>
             </div>

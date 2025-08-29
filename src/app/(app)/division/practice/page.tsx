@@ -237,7 +237,7 @@ const currentQuestion = useMemo(
         duration_seconds: durationSeconds
       }).unwrap();
       
-      console.log('Practice session saved successfully');
+      // console.log('Practice session saved successfully');
     } catch (error) {
       console.error('Failed to save practice session:', error);
     }

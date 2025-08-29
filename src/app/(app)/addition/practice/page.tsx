@@ -1,12 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Check, X, Delete, RefreshCcw, ArrowRight, ArrowLeftCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import CongratulationsScreen from '@/components/CongratulationsScreen';
-import Numpad from '@/components/Numpad';
-import { useAddPracticeSessionMutation } from '@/Redux/features/exercise/exerciseApi';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  Suspense,
+  useCallback,
+} from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { ArrowLeft, Check, X, RefreshCcw } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import CongratulationsScreen from "@/components/CongratulationsScreen";
+import Numpad from "@/components/Numpad";
+import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
+import {
+  useAddCarryPracticeMutation,
+  useAddNoCarryPracticeMutation,
+} from "@/Redux/features/addition/additionApi";
 
 // --- Type Definitions ---
 type Question = {
@@ -15,64 +25,89 @@ type Question = {
   answer: number;
 };
 
-type ProgressStatus = 'correct' | 'incorrect' | 'pending';
+type ProgressStatus = "correct" | "incorrect" | "pending";
 
 // --- Reusable UI Components ---
 
 const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
-    <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.3 }}
-        className="w-full p-6 bg-white rounded-lg shadow-md"
-    >
-        <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
-        <div className="flex flex-wrap gap-2 mb-4">
-            {Array.from({ length: num1 }).map((_, i) => (
-                <div key={`n1-${i}`} className="w-6 h-6 bg-blue-400 border-2 border-blue-500 rounded-full" />
-            ))}
-            {Array.from({ length: num2 }).map((_, i) => (
-                <div key={`n2-${i}`} className="w-6 h-6 bg-red-400 border-2 border-red-500 rounded-full" />
-            ))}
-        </div>
-        <p className="mt-4 text-sm text-gray-600">(all time visible)</p>
-    </motion.div>
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -20 }}
+    transition={{ duration: 0.3 }}
+    className="w-full p-6 bg-white rounded-lg shadow-md"
+  >
+    <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
+    <div className="flex flex-wrap gap-2 mb-4">
+      {Array.from({ length: num1 }).map((_, i) => (
+        <div
+          key={`n1-${i}`}
+          className="w-6 h-6 bg-blue-400 border-2 border-blue-500 rounded-full"
+        />
+      ))}
+      {Array.from({ length: num2 }).map((_, i) => (
+        <div
+          key={`n2-${i}`}
+          className="w-6 h-6 bg-red-400 border-2 border-red-500 rounded-full"
+        />
+      ))}
+    </div>
+    <p className="mt-4 text-sm text-gray-600">(all time visible)</p>
+  </motion.div>
 );
 
 // Create a new component that uses the hook
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Add mutation for saving practice session
   const [addPracticeSession] = useAddPracticeSessionMutation();
 
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
+  const [userAnswer, setUserAnswer] = useState("");
   const [progress, setProgress] = useState<ProgressStatus[]>([]);
-  const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
+  const [totalClicks, setTotalClicks] = useState(0);
+
+  const [feedback, setFeedback] = useState<{
+    type: "correct" | "incorrect" | null;
+    message: string;
+  }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
+  const [addNoCarryPractice, {data: no}] = useAddNoCarryPracticeMutation();
+  const [addCarryPractice, {data}] = useAddCarryPracticeMutation();
+
+  console.log("No Carry Data:", no);
+  console.log("Carry Data:", data);
   // Memoize parameters from URL to prevent re-renders
-  const questionCount = useMemo(() => parseInt(searchParams?.get('count') || '10', 10), [searchParams]);
-  const numberRange = useMemo(() => parseInt(searchParams?.get('range') || '10', 10), [searchParams]);
+  const questionCount = useMemo(
+    () => parseInt(searchParams?.get("count") || "10", 10),
+    [searchParams]
+  );
+  const numberRange = useMemo(
+    () => parseInt(searchParams?.get("range") || "10", 10),
+    [searchParams]
+  );
 
   const generateQuestions = () => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      const num1 = Math.floor(Math.random() * (numberRange + 1));
-      const maxNum2 = Math.min(9, numberRange - num1);
-      const num2 = Math.floor(Math.random() * (maxNum2 + 1));
-      return { num1, num2, answer: num1 + num2 };
-    });
+    const newQuestions: Question[] = Array.from(
+      { length: questionCount },
+      () => {
+        const num1 = Math.floor(Math.random() * (numberRange + 1));
+        const maxNum2 = Math.min(9, numberRange - num1);
+        const num2 = Math.floor(Math.random() * (maxNum2 + 1));
+        return { num1, num2, answer: num1 + num2 };
+      }
+    );
     setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill('pending'));
+    setProgress(Array(questionCount).fill("pending"));
     setCurrentQuestionIndex(0);
-    setUserAnswer('');
-    setFeedback({ type: null, message: '' });
+    setUserAnswer("");
+    setFeedback({ type: null, message: "" });
     setIsComplete(false);
   };
 
@@ -81,7 +116,10 @@ function PracticePageContent() {
     generateQuestions();
   }, [questionCount, numberRange]);
 
-  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
+  const currentQuestion = useMemo(
+    () => questions[currentQuestionIndex],
+    [questions, currentQuestionIndex]
+  );
 
   // Sound effect player with error handling
   const playSound = useCallback((sound: string) => {
@@ -96,63 +134,126 @@ function PracticePageContent() {
   }, []);
 
   // --- Event Handlers ---
-  const handleInput = useCallback((num: string) => {
-    if (userAnswer.length < 5) {
-      setUserAnswer(prev => prev + num);
-      playSound('/Sounds/Number-Click-sound.wav');
-    }
-  }, [userAnswer.length, playSound]);
+  const handleInput = useCallback(
+    (num: string) => {
+      if (userAnswer.length < 5) {
+        setUserAnswer((prev) => prev + num);
+        playSound("/Sounds/Number-Click-sound.wav");
+      }
+    },
+    [userAnswer.length, playSound]
+  );
 
   const handleBackspace = useCallback(() => {
-    setUserAnswer(prev => prev.slice(0, -1));
-    playSound('/Sounds/delete-click-sound.wav');
+    setUserAnswer((prev) => prev.slice(0, -1));
+    playSound("/Sounds/delete-click-sound.wav");
   }, [playSound]);
 
-  const handleSubmit = useCallback(() => {
-    if (!userAnswer) return;
+  // const handleSubmit = useCallback(() => {
+  //   if (!userAnswer) return;
 
-    const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
-    const newProgress = [...progress];
-    newProgress[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
-    setProgress(newProgress);
+  //   const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
+  //   const newProgress = [...progress];
+  //   newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
+  //   setProgress(newProgress);
 
-    if (isCorrect) {
-      setFeedback({ type: 'correct', message: 'Your answer is absolutely correct!' });
-      setShowHelp(false);
-      playSound('/Sounds/Check-Click-sound.wav');
+  //   if (isCorrect) {
+  //     setFeedback({
+  //       type: "correct",
+  //       message: "Your answer is absolutely correct!",
+  //     });
+  //     setShowHelp(false);
+  //     playSound("/Sounds/Check-Click-sound.wav");
 
-      setTimeout(() => {
-        if (currentQuestionIndex < questions.length - 1) {
-          setCurrentQuestionIndex(prev => prev + 1);
-          setUserAnswer('');
-          setFeedback({ type: null, message: '' });
-        } else {
-          setIsComplete(true);
-        }
-      }, 1500);
-    } else {
-      setFeedback({ type: 'incorrect', message: 'Now enter the correct answer to continue' });
-      setShowHelp(true);
-      playSound('/Sounds/Wrong-Answer-sound.wav');
-      setUserAnswer(''); // Clear the input field on wrong answer
-    }
-  }, [userAnswer, currentQuestion, progress, currentQuestionIndex, questions.length, playSound]);
+  //     setTimeout(() => {
+  //       if (currentQuestionIndex < questions.length - 1) {
+  //         setCurrentQuestionIndex((prev) => prev + 1);
+  //         setUserAnswer("");
+  //         setFeedback({ type: null, message: "" });
+  //       } else {
+  //         setIsComplete(true);
+  //       }
+  //     }, 1500);
+  //   } else {
+  //     setFeedback({
+  //       type: "incorrect",
+  //       message: "Now enter the correct answer to continue",
+  //     });
+  //     setShowHelp(true);
+  //     playSound("/Sounds/Wrong-Answer-sound.wav");
+  //     setUserAnswer(""); // Clear the input field on wrong answer
+  //   }
+  // }, [
+  //   userAnswer,
+  //   currentQuestion,
+  //   progress,
+  //   currentQuestionIndex,
+  //   questions.length,
+  //   playSound,
+  // ]);
 
   // Keyboard support with proper dependencies
+  
+  const handleSubmit = useCallback(() => {
+  if (!userAnswer) return;
+
+  setTotalClicks((prev) => prev + 1); // ✅ count every submit
+
+  const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
+  const newProgress = [...progress];
+  newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
+  setProgress(newProgress);
+
+  if (isCorrect) {
+    setFeedback({
+      type: "correct",
+      message: "Your answer is absolutely correct!",
+    });
+    setShowHelp(false);
+    playSound("/Sounds/Check-Click-sound.wav");
+
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setUserAnswer("");
+        setFeedback({ type: null, message: "" });
+      } else {
+        setIsComplete(true);
+      }
+    }, 1500);
+  } else {
+    setFeedback({
+      type: "incorrect",
+      message: "Now enter the correct answer to continue",
+    });
+    setShowHelp(true);
+    playSound("/Sounds/Wrong-Answer-sound.wav");
+    setUserAnswer(""); // Clear the input field on wrong answer
+  }
+}, [
+  userAnswer,
+  currentQuestion,
+  progress,
+  currentQuestionIndex,
+  questions.length,
+  playSound,
+]);
+
+  
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key >= '0' && event.key <= '9') {
+      if (event.key >= "0" && event.key <= "9") {
         handleInput(event.key);
-      } else if (event.key === 'Backspace') {
+      } else if (event.key === "Backspace") {
         handleBackspace();
-      } else if (event.key === 'Enter') {
+      } else if (event.key === "Enter") {
         handleSubmit();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleInput, handleBackspace, handleSubmit]);
 
@@ -160,46 +261,64 @@ function PracticePageContent() {
   const handleSaveSession = useCallback(async () => {
     try {
       // Count correct and incorrect answers
-      const correct = progress.filter(status => status === 'correct').length;
-      const incorrect = progress.filter(status => status === 'incorrect').length;
-      
+      const correct = progress.filter((status) => status === "correct").length;
+      const incorrect = progress.filter(
+        (status) => status === "incorrect"
+      ).length;
+
       // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
       const starsEarned = Math.max(0, correct - incorrect);
-      
+
       // Calculate duration in seconds
       // For simplicity, we'll use a fixed time per question (5 seconds)
       const durationSeconds = questions.length * 5;
-      
+
       // Save to backend
       await addPracticeSession({
         category: 1, // Addition category ID
-        mode: 'practice',
+        mode: "practice",
         correct: correct,
         total: questions.length,
-        duration_seconds: durationSeconds
+        duration_seconds: durationSeconds,
       }).unwrap();
-      
-      console.log('Practice session saved successfully');
+
+      // console.log("Practice session saved successfully");
     } catch (error) {
-      console.error('Failed to save practice session:', error);
+      console.error("Failed to save practice session:", error);
     }
   }, [progress, questions.length, addPracticeSession]);
 
-  // const handlePrevious = () => {
-  //   if (currentQuestionIndex > 0) {
-  //     setCurrentQuestionIndex(prev => prev - 1);
-  //     setUserAnswer('');
-  //     setFeedback({ type: null, message: '' });
-  //   }
-  // };
+  
+  const handleContinue = async () => {
+  try {
+    const range_value = numberRange; 
+    const question_number = questionCount; 
 
-  // const handleSkip = () => {
-  //   if (currentQuestionIndex < questions.length - 1) {
-  //     setCurrentQuestionIndex(prev => prev + 1);
-  //     setUserAnswer('');
-  //     setFeedback({ type: null, message: '' });
-  //   }
-  // };
+    // Derived with your formulas
+    const total_wrong = totalClicks - question_number;
+    const total_correct = question_number - total_wrong;
+
+    const payload = {
+      range_value,
+      question_number,
+      total_correct,
+      total_wrong,
+    };
+
+    if (range_value === 10) {
+      await addNoCarryPractice(payload).unwrap();
+    } else {
+      await addCarryPractice(payload).unwrap();
+    }
+
+    console.log("Practice data saved:", payload);
+    router.push("/addition");
+  } catch (err) {
+    console.error("Failed to save practice:", err);
+    router.push("/addition");
+  }
+};
+
 
   const handleReset = () => {
     generateQuestions();
@@ -213,11 +332,15 @@ function PracticePageContent() {
   }, [isComplete, handleSaveSession]);
 
   if (isComplete) {
-    return <CongratulationsScreen onContinue={() => router.push('/addition')} />;
+    return <CongratulationsScreen onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {
-    return <div className="flex items-center justify-center h-screen">Loading Practice...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading Practice...
+      </div>
+    );
   }
 
   return (
@@ -225,10 +348,15 @@ function PracticePageContent() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
+          <button
+            onClick={() => router.back()}
+            className="p-2 transition-colors rounded-full hover:bg-gray-200"
+          >
             <ArrowLeft className="text-gray-600" />
           </button>
-          <h1 className="ml-4 text-3xl font-bold text-gray-800">Practice Addition</h1>
+          <h1 className="ml-4 text-3xl font-bold text-gray-800">
+            Practice Addition
+          </h1>
         </div>
         <div className="flex items-center gap-2">
           {/* <button onClick={handlePrevious} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === 0}>
@@ -237,7 +365,10 @@ function PracticePageContent() {
           <button onClick={handleSkip} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === questions.length - 1}>
             <ArrowRight className="text-gray-600" />
           </button> */}
-          <button onClick={handleReset} className="p-2 transition-colors rounded-full hover:bg-gray-200">
+          <button
+            onClick={handleReset}
+            className="p-2 transition-colors rounded-full hover:bg-gray-200"
+          >
             <RefreshCcw className="text-gray-600" />
           </button>
         </div>
@@ -247,12 +378,25 @@ function PracticePageContent() {
       <div className="p-4 mb-8 bg-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-700">Progress</span>
-          <span className="text-sm font-medium text-gray-700">{currentQuestionIndex + 1} of {questionCount}</span>
+          <span className="text-sm font-medium text-gray-700">
+            {currentQuestionIndex + 1} of {questionCount}
+          </span>
         </div>
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
           {progress.map((status, index) => {
-            const color = status === 'correct' ? 'bg-green-500' : status === 'incorrect' ? 'bg-red-500' : 'bg-gray-200';
-            return <div key={index} className={`h-full transition-colors duration-500 rounded-[10px] ${color}`} style={{ width: `${100 / questionCount}%` }} />;
+            const color =
+              status === "correct"
+                ? "bg-green-500"
+                : status === "incorrect"
+                ? "bg-red-500"
+                : "bg-gray-200";
+            return (
+              <div
+                key={index}
+                className={`h-full transition-colors duration-500 rounded-[10px] ${color}`}
+                style={{ width: `${100 / questionCount}%` }}
+              />
+            );
           })}
         </div>
       </div>
@@ -261,7 +405,12 @@ function PracticePageContent() {
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-4">
           <AnimatePresence>
-            {showHelp && <HelpChart num1={currentQuestion.num1} num2={currentQuestion.num2} />}
+            {showHelp && (
+              <HelpChart
+                num1={currentQuestion.num1}
+                num2={currentQuestion.num2}
+              />
+            )}
           </AnimatePresence>
         </div>
 
@@ -271,10 +420,14 @@ function PracticePageContent() {
               {currentQuestion.num1} + {currentQuestion.num2} =
             </div>
             <div className="w-full p-4 text-3xl font-bold text-center text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-lg">
-              {userAnswer || '?'}
+              {userAnswer || "?"}
             </div>
           </div>
-          <Numpad onNumberClick={handleInput} onBackspace={handleBackspace} onSubmit={handleSubmit} />
+          <Numpad
+            onNumberClick={handleInput}
+            onBackspace={handleBackspace}
+            onSubmit={handleSubmit}
+          />
         </div>
       </div>
 
@@ -285,17 +438,45 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === 'correct' ? 'border-emerald-500' : 'border-red-500'}`}
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
+              feedback.type === "correct"
+                ? "border-emerald-500"
+                : "border-red-500"
+            }`}
           >
             <div className="flex items-start">
-              <div className={`p-1 mr-3 text-xl rounded-full ${feedback.type === 'correct' ? 'bg-emerald-100 text-emerald-500' : 'bg-red-100 text-red-500'}`}>
-                {feedback.type === 'correct' ? <Check size={20} /> : <X size={20} />}
+              <div
+                className={`p-1 mr-3 text-xl rounded-full ${
+                  feedback.type === "correct"
+                    ? "bg-emerald-100 text-emerald-500"
+                    : "bg-red-100 text-red-500"
+                }`}
+              >
+                {feedback.type === "correct" ? (
+                  <Check size={20} />
+                ) : (
+                  <X size={20} />
+                )}
               </div>
               <div>
-                <p className={`font-semibold ${feedback.type === 'correct' ? 'text-emerald-600' : 'text-red-600'}`}>
-                  {feedback.type === 'correct' ? 'Correct Answer!' : 'Incorrect Answer'}
+                <p
+                  className={`font-semibold ${
+                    feedback.type === "correct"
+                      ? "text-emerald-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {feedback.type === "correct"
+                    ? "Correct Answer!"
+                    : "Incorrect Answer"}
                 </p>
-                <p className={`text-sm ${feedback.type === 'correct' ? 'text-emerald-500' : 'text-red-500'}`}>
+                <p
+                  className={`text-sm ${
+                    feedback.type === "correct"
+                      ? "text-emerald-500"
+                      : "text-red-500"
+                  }`}
+                >
                   {feedback.message}
                 </p>
               </div>

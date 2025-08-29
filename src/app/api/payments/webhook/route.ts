@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         const customerId = session.customer;
         const userId = session.metadata?.userId;
 
-        console.log(`Subscription created for user ${userId}. Sub ID: ${subscriptionId}`);
+        // console.log(`Subscription created for user ${userId}. Sub ID: ${subscriptionId}`);
         // TODO: Save the customerId and subscriptionId to your user's record in your database.
         // For example: await db.user.update({ where: { id: userId }, data: { stripeCustomerId: customerId, stripeSubscriptionId: subscriptionId, subscriptionStatus: 'active' } });
       }
