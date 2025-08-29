@@ -3,11 +3,10 @@ import { AdditionExercisePayload } from "../../../../type/practise";
 
 const additionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    addAdditionSettings: builder.mutation({
-      query: (body) => ({
-        url: "/practice/addition/no-carry/",
+    setAddition: builder.mutation<void, void>({
+      query: () => ({
+        url: "/practice/addition/",
         method: "POST",
-        body,
       }),
       invalidatesTags: ["Additions"],
     }),
@@ -87,7 +86,7 @@ const additionApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useAddAdditionSettingsMutation,
+  useSetAdditionMutation,
   useAddAdditionNoMistakeMutation,
   useAddNoCarryExerciseMutation,
   useAddCarryExerciseMutation,
@@ -95,5 +94,5 @@ export const {
   useAddCarryPracticeMutation,
   useAddAdditionSpeedModeMutation,
   useAddAddition100questionsMutation,
-    useAddAdditionWhatsMissingMutation,
+  useAddAdditionWhatsMissingMutation,
 } = additionApi;

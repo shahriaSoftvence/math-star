@@ -1,12 +1,18 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import pointStar from "../../../../../public/point-star.png";
 import Image from "next/image";
+import {
+  useAddBorrowExerciseMutation,
+  useAddNoBorrowExerciseMutation,
+} from "@/Redux/features/subtraction/subtractionApi";
 
 type ExerciseCardProps = {
   range: string;
   percentage: number;
-  operation: "addition" | "subtraction" | "multiplication" | "division";
+  operation: "borrowing" | "noBorrowing";
 };
 
 export default function SubtractionCard({
@@ -14,16 +20,26 @@ export default function SubtractionCard({
   percentage,
   operation,
 }: ExerciseCardProps) {
-  let rangeParam = range;
-  if (operation === "addition" || operation === "subtraction") {
-    rangeParam = range.split(" to ")[1];
-  } else if (operation === "multiplication") {
-    rangeParam = range.replace("x", "");
-  }
-  // For division, range is already the number string, so no change needed.
+  const [addBorrowExercise, { data }] = useAddBorrowExerciseMutation();
+  const [addNoBorrowExercise, { data: no }] = useAddNoBorrowExerciseMutation();
+  console.log(data, "the data");
+  console.log(no, "the no data");
+
+  const rangeParam = range.split(" to ")[1];
+
+  const handleAddExercise = (range_value: number) => {
+    if (operation === "noBorrowing") {
+      addNoBorrowExercise(range_value);
+    } else if (operation === "borrowing") {
+      addBorrowExercise(range_value);
+    }
+  };
 
   return (
-    <Link href={`/subtraction/select-questions?range=${rangeParam}`}>
+    <Link
+      href={`/subtraction/select-questions?range=${rangeParam}&operation=${operation}`}
+      onClick={() => handleAddExercise(parseInt(rangeParam))}
+    >
       <div className="p-4 text-center bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:border-blue-400">
         <p className="text-xs text-gray-600">number range</p>
         <p className="text-base font-semibold text-gray-800">{range}</p>

@@ -81,11 +81,11 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     profileData?.success && profileData?.data ? profileData.data : user;
 
   // Log current user data from Redux
-  console.log("Is authenticated:", isAuthenticated);
-  console.log("Profile data from API:", profileData);
-  console.log("Profile loading:", isProfileLoading);
-  console.log("Profile error:", profileError);
-  console.log("Current user from Redux:", user);
+  // console.log("Is authenticated:", isAuthenticated);
+  // console.log("Profile data from API:", profileData);
+  // console.log("Profile loading:", isProfileLoading);
+  // console.log("Profile error:", profileError);
+  // console.log("Current user from Redux:", user);
 
   // useOnClickOutside(notificationRef as React.RefObject<HTMLElement>, () =>
   //   setIsNotificationsOpen(false)

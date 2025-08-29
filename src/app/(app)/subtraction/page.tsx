@@ -50,7 +50,7 @@ export default function SubtractionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {subtractionExercises.noBorrowing.map((ex, index) => (
-                  <SubtractionCard key={index} operation="subtraction" {...ex} />
+                  <SubtractionCard key={index} operation="noBorrowing" {...ex} />
                 ))}
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function SubtractionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {subtractionExercises.borrowing.map((ex, index) => (
-                  <SubtractionCard key={index} operation="subtraction" {...ex} />
+                  <SubtractionCard key={index} operation="borrowing" {...ex} />
                 ))}
               </div>
             </div>

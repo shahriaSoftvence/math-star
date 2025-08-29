@@ -178,14 +178,7 @@ export default function SpeedModePage() {
     setGameState("playing");
   };
 
-  // const handleSubmit = () => {
-  //     if (!userAnswer) return;
-  //     const isCorrect = parseInt(userAnswer, 10) === question.answer;
-  //     if (isCorrect) {
-  //         setScore(prev => prev + 1);
-  //     }
-  //     generateQuestion();
-  // };
+  
   const handleSubmit = () => {
     if (!userAnswer) return;
 
