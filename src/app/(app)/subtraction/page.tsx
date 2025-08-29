@@ -1,11 +1,11 @@
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
-import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import SubtractionCard from './subtractionCard/page';
 
 const subtractionExercises = {
   noBorrowing: [
@@ -50,7 +50,7 @@ export default function SubtractionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {subtractionExercises.noBorrowing.map((ex, index) => (
-                  <ExerciseCard key={index} operation="subtraction" {...ex} />
+                  <SubtractionCard key={index} operation="subtraction" {...ex} />
                 ))}
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function SubtractionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {subtractionExercises.borrowing.map((ex, index) => (
-                  <ExerciseCard key={index} operation="subtraction" {...ex} />
+                  <SubtractionCard key={index} operation="subtraction" {...ex} />
                 ))}
               </div>
             </div>
