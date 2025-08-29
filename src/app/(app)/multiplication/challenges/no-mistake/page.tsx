@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {  Check, X, Delete, Target } from 'lucide-react';
+import { useAddMultiplicationNoMistakeMutation } from '@/Redux/features/multiplication/multiplicationApi';
+import { toast } from 'sonner';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };
@@ -41,7 +43,7 @@ const GameResultScreen = ({ score, questionsAnswered, onRetry, onHome }: { score
             </div>
             <div className="w-full mt-4 flex justify-center items-center gap-4">
                 <button onClick={onRetry} className="flex-1 py-2.5 bg-green-500 text-slate-50 rounded-md font-medium text-sm leading-tight hover:bg-green-600 transition-colors">Try Again</button>
-                <button onClick={onHome} className="flex-1 py-2.5 bg-slate-50 rounded-md border border-slate-200 text-slate-950 font-medium text-sm leading-tight hover:bg-slate-100 transition-colors">Home</button>
+                <button onClick={onHome} className="flex-1 py-2.5 bg-slate-50 rounded-md border border-slate-200 text-slate-950 font-medium text-sm leading-tight hover:bg-slate-100 transition-colors">Continue</button>
             </div>
         </div>
     </div>
@@ -72,6 +74,25 @@ export default function NoMistakePage() {
     const [userAnswer, setUserAnswer] = useState('');
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(5);
+
+    const [ addMultiplicationNoMistake ] = useAddMultiplicationNoMistakeMutation();
+
+    const handleContinue = async () => {
+    try {
+      await addMultiplicationNoMistake({ 
+        questions_answered: score,
+        final_score: score,
+      }).unwrap();
+
+      toast.success('Score saved successfully!');
+
+      router.push("/addition"); 
+    } catch (err) {
+      toast.error('Failed to save your score. Please try again.');
+
+    
+    }
+  };
 
     const generateQuestion = useCallback(() => {
         const num1 = Math.floor(Math.random() * 10) + 1;
@@ -132,7 +153,7 @@ export default function NoMistakePage() {
             score={score}
             questionsAnswered={score}
             onRetry={handleStart}
-            onHome={() => router.push('/')}
+            onHome={handleContinue}
         />
     }
 

@@ -1,52 +1,102 @@
-'use client';
+"use client";
 
-import React, { Suspense } from 'react'; // Import Suspense
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import React, { Suspense } from "react"; // Import Suspense
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { useAddMultiplicationExerciseMutation } from "@/Redux/features/multiplication/multiplicationApi";
 
 const questionCounts = [10, 20, 30, 40, 50];
 
 const practiceTips = [
-  'Start with tables you know well.',
-  'Try to memorize the answers.',
-  'Use the help chart if you get stuck.',
-  'Practice a little bit every day!',
+  "Start with tables you know well.",
+  "Try to memorize the answers.",
+  "Use the help chart if you get stuck.",
+  "Practice a little bit every day!",
 ];
 
-const QuestionCountCard = ({ count, table }: { count: number, table: string | null }) => (
-  <Link href={`/multiplication/practice?count=${count}&table=${table || 'all'}`}>
-    <div className="w-38 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105">
-      <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
-      <div className="text-center text-gray-600 text-sm">Questions</div>
-    </div>
-  </Link>
-);
+const QuestionCountCard = ({
+  count,
+  table,
+}: {
+  count: number;
+  table: string | null;
+}) => {
+  const [addMultiplicationExercise, {data}] = useAddMultiplicationExerciseMutation();
+  console.log(data, "data from multiplication");
+
+  const handleSetRange = () => {
+    if (!table) return;
+
+    let range_value;
+
+    if (table === "All") {
+      range_value = 100;
+    } else {
+      const match = table.match(/X(\d+)/);
+      
+      range_value = match ? parseInt(match[1], 10) : 1;
+      console.log(range_value, "match");
+    }
+
+    addMultiplicationExercise(range_value);
+  };
+
+  return (
+    <Link
+      href={`/multiplication/practice?count=${count}&table=${table || "all"}`}
+    >
+      <div
+        onClick={handleSetRange}
+        className="w-38 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105"
+      >
+        <div className="text-center text-gray-800 text-4xl font-bold">
+          {count}
+        </div>
+        <div className="text-center text-gray-600 text-sm">Questions</div>
+      </div>
+    </Link>
+  );
+};
 
 // Create a new component that uses the hook
 function SelectQuestionsContent() {
   const searchParams = useSearchParams();
-  const table = searchParams?.get('range');
+  const table = searchParams?.get("range");
 
   return (
     <div className="max-w-4xl mx-auto">
-       <div className="w-full flex justify-start">
-          <Link href="/multiplication" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4">
-            <ArrowLeft /> Go Back
-          </Link>
-        </div>
+      <div className="w-full flex justify-start">
+        <Link
+          href="/multiplication"
+          className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4"
+        >
+          <ArrowLeft /> Go Back
+        </Link>
+      </div>
       <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
-        <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions for x{table} Table</h2>
+        <h2 className="text-gray-800 text-2xl font-bold">
+          Select Number of Questions for x{table} Table
+        </h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} table={table ?? null} />
+            <QuestionCountCard
+              key={count}
+              count={count}
+              table={table ?? null}
+            />
           ))}
         </div>
         <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
-          <h3 className="text-gray-800 text-lg font-semibold mb-4">Practice Tips:</h3>
+          <h3 className="text-gray-800 text-lg font-semibold mb-4">
+            Practice Tips:
+          </h3>
           <ul className="space-y-2">
             {practiceTips.map((tip, index) => (
-              <li key={index} className="text-gray-600 text-sm list-disc list-inside">
+              <li
+                key={index}
+                className="text-gray-600 text-sm list-disc list-inside"
+              >
                 {tip}
               </li>
             ))}

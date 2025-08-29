@@ -1,4 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
+import { AdditionExercisePayload } from "../../../../type/practise";
 
 const multiplicationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,10 +11,69 @@ const multiplicationApi = baseApi.injectEndpoints({
       invalidatesTags: ["Multiplication"],
     }),
 
-    
+    addMultiplicationExercise: builder.mutation({
+      query: (range_value: number) => ({
+        url: "/practice/subtraction/no-carry/",
+        method: "POST",
+        body: { range_value },
+      }),
+      invalidatesTags: ["Multiplication"],
+    }),
+
+    addMultiplicationPractice: builder.mutation<void, AdditionExercisePayload>({
+      query: (data) => ({
+        url: "/practice/subtraction/no-carry/questionset/",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Multiplication"],
+    }),
+
+    addMultiplicationNoMistake: builder.mutation({
+      query: (body) => ({
+        url: "/practice/multiplication/challenge/no_mistake/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Multiplication"],
+    }),
+
+    addMultiplicationSpeedMode: builder.mutation({
+      query: (body) => ({
+        url: "/practice/multiplication/challenge/speed_mode/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Multiplication"],
+    }),
+
+    addMultiplication100Question: builder.mutation({
+      query: (body) => ({
+        url: "/practice/multiplication/challenge/100_questions/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Multiplication"],
+    }),
+
+    addMultiplicationWhatsMissing: builder.mutation({
+      query: (body) => ({
+        url: "/practice/multiplication/challenge/whats_missing/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Multiplication"],
+    }),
+
   }),
 });
 
 export const {
-    useSetMultiplicationMutation
+  useSetMultiplicationMutation,
+  useAddMultiplicationExerciseMutation,
+  useAddMultiplicationPracticeMutation,
+  useAddMultiplicationNoMistakeMutation,
+  useAddMultiplicationSpeedModeMutation,
+  useAddMultiplication100QuestionMutation,
+  useAddMultiplicationWhatsMissingMutation,
 } = multiplicationApi;

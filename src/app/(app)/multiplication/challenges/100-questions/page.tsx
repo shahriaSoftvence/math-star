@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { BsGrid3X3 } from "react-icons/bs";
 import CongratulationsScreen from '@/components/CongratulationsScreen';
+import { useAddMultiplication100QuestionMutation } from '@/Redux/features/multiplication/multiplicationApi';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };
@@ -130,6 +131,10 @@ export default function HundredQuestionsPage() {
     const [timeLeft, setTimeLeft] = useState(300);
     const [isComplete, setIsComplete] = useState(false);
     const [score, setScore] = useState(0);
+    const [addMultiplication100Question, {data}] = useAddMultiplication100QuestionMutation();
+    console.log("data from here", data);
+
+    const [totalClicks, setTotalClicks] = useState(0);
 
     const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
 
@@ -173,7 +178,7 @@ export default function HundredQuestionsPage() {
 
     const handleSubmit = useCallback(() => {
         if (!userAnswer) return;
-
+        setTotalClicks((prev) => prev + 1);
         const isCorrect = parseInt(userAnswer, 10) === currentQuestion?.answer;
         const newStatuses = [...questionStatuses];
         newStatuses[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
@@ -193,6 +198,19 @@ export default function HundredQuestionsPage() {
             setIsComplete(true);
         }
     }, [userAnswer, currentQuestion, questionStatuses, currentQuestionIndex, questions.length]);
+
+    const handleContinue = async () => {
+    try {
+      await addMultiplication100Question({
+        questions_answered: totalClicks,
+        final_score: score,
+      }).unwrap();
+
+      router.push("/multiplication");
+    } catch (error) {
+      console.error("Failed to save 100 Questions results:", error);
+    }
+  };
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -221,11 +239,11 @@ export default function HundredQuestionsPage() {
     }, [gameState, setUserAnswer, handleSubmit]);
 
     if (gameState === 'gameOver' && !isComplete) {
-         return <CongratulationsScreen onContinue={() => router.push('/multiplication')} rewardName={`You scored ${score}!`} />;
+         return <CongratulationsScreen onContinue={handleContinue} rewardName={`You scored ${score}!`} />;
     }
 
     if (isComplete) {
-        return <CongratulationsScreen onContinue={() => router.push('/multiplication')} rewardName="Challenge Crusher" />;
+        return <CongratulationsScreen onContinue={handleContinue} rewardName="Challenge Crusher" />;
     }
 
     if (gameState === 'ready') {
@@ -255,7 +273,7 @@ export default function HundredQuestionsPage() {
 
                 {/* Right Side: Numpad & Current Question */}
                 <div className="w-96 p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
-                    <div className="self-stretch p-6 bg-green-100 rounded-lg outline outline-2 outline-offset-[-2px] outline-green-300 flex flex-col justify-start items-start gap-2">
+                    <div className="self-stretch p-6 bg-green-100 rounded-lg outline-2 outline-offset-[-2px] outline-green-300 flex flex-col justify-start items-start gap-2">
                         {currentQuestion && (
                             <div className="self-stretch text-center justify-center text-gray-800 text-2xl font-bold font-Nunito leading-loose">
                                 {currentQuestion.num1} x {currentQuestion.num2} =
