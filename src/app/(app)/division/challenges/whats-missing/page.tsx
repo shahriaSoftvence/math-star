@@ -115,14 +115,13 @@ export default function WhatsMissingPage() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30); // 5 minutes
   const [totalSubmissions, setTotalSubmissions] = useState(0);
-  const [addDivisionWhatsMissing, {data}] = useAddDivisionWhatsMissingMutation();
-  console.log(data, "form here")
+  const [addDivisionWhatsMissing] = useAddDivisionWhatsMissingMutation();
 
   const generateQuestion = useCallback(() => {
     const num2 = Math.floor(Math.random() * 9) + 2;
     const answer = Math.floor(Math.random() * 9) + 2;
     const num1 = num2 * answer;
-    const missingIndex = Math.floor(Math.random() * 3); // 0 for num1, 1 for num2, 2 for answer
+    const missingIndex = Math.floor(Math.random() * 3); 
     setQuestion({ num1, num2, answer, missingIndex });
     setUserAnswer("");
   }, []);
