@@ -1,4 +1,4 @@
-"use client"; // Required for using hooks
+"use client"; 
 
 import React from 'react';
 import Link from 'next/link';
@@ -6,18 +6,23 @@ import { ArrowLeft } from 'lucide-react';
 import { IoStarSharp } from 'react-icons/io5';
 import RewardCard from '@/components/RewardCard';
 import { useGetRewardsQuery, useGetDailySummaryQuery } from '@/Redux/reward/rewardApi';
+import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 
 interface Reward {
   name: string;
   description: string;
-  cost: number;
+  star_range: number;
   icon?: string;
-  always_unlocked?: boolean | false;
+  unlocked?: boolean | false;
 }
 
 export default function RewardsPage() {
   // Fetch rewards list and user's star balance
   const { data: rewardsResponse, isLoading: rewardsLoading, isError: rewardsError } = useGetRewardsQuery({});
+
+  const {data} = useGetProfileQuery();
+
+  console.log(rewardsResponse?.data)
   const { data: summary, isLoading: summaryLoading, isError: summaryError } = useGetDailySummaryQuery({});
   
   // Handle the response structure - it might be wrapped in a data property
@@ -49,19 +54,19 @@ export default function RewardsPage() {
         <h2 className="text-2xl font-bold">Your Star Balance</h2>
         <div className="flex items-center justify-center gap-2 mt-2">
           <IoStarSharp className="text-4xl" />
-          <span className="text-4xl font-bold">{userStars.toLocaleString()}</span>
+          <span className="text-4xl font-bold">{data?.data?.star}</span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {rewardsData.map((reward: Reward) => (
+        {rewardsResponse?.data?.map((reward: Reward) => (
           <RewardCard 
-            key={reward.name}
-            icon={reward.icon || '⭐'} // Use a default icon if none provided
-            title={reward.name}
-            description={reward.description}
-            cost={reward.cost}
-            isUnlocked={userStars >= reward.cost || reward.always_unlocked || false} // Logic to check if reward is unlocked
+            key={reward?.name}
+            icon={reward?.icon || '⭐'} // Use a default icon if none provided
+            title={reward?.name}
+            description={reward?.description}
+            star_range={reward?.star_range}
+            isUnlocked={reward?.unlocked || false} // Logic to check if reward is unlocked
           />
         ))}
       </div>

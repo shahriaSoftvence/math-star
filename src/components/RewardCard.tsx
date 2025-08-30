@@ -1,26 +1,34 @@
 import React from 'react';
 import { IoStarSharp } from 'react-icons/io5';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import Image from 'next/image';
 
 type RewardCardProps = {
   icon: string;
   title: string;
   description: string;
-  cost: number;
+  star_range: number;
   isUnlocked: boolean;
 };
 
-export default function RewardCard({ icon, title, description, cost, isUnlocked }: RewardCardProps) {
+export default function RewardCard({ icon, title, description, star_range, isUnlocked }: RewardCardProps) {
   const cardBorder = isUnlocked ? 'border-green-300' : 'border-gray-200';
   const cardOpacity = isUnlocked ? '' : 'opacity-75';
 
   return (
     <div className={`bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center text-center transition-all hover:shadow-xl hover:scale-105 border-2 ${cardBorder} ${cardOpacity}`}>
-      <div className="text-6xl mb-4">{icon}</div>
+       <Image 
+    src={icon}
+    alt="User avatar" 
+    width={40} 
+    height={40} 
+    className="rounded-full" 
+  />
       <h3 className="text-xl font-bold text-gray-800">{title}</h3>
       <p className="text-sm text-gray-600 my-2 h-20">{description}</p>
       <div className="flex items-center gap-2 my-4">
         <IoStarSharp className="text-yellow-500 text-xl" />
-        <span className="text-lg font-bold text-gray-700">{cost.toLocaleString()}</span>
+        <span className="text-lg font-bold text-gray-700">{star_range.toLocaleString()}</span>
       </div>
       
       {isUnlocked ? (
