@@ -1,15 +1,18 @@
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
-import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import AdditionCard from './additionCard/page';
 
 const additionExercises = {
   noCarry: [
     { range: '0 to 10', percentage: 78 },
+    { range: '0 to 20', percentage: 78 },
+    {  range: '0 to 50', percentage: 78 },
+    {  range: '0 to 100', percentage: 78 },
   ],
   carry: [
     { range: '0 to 20', percentage: 78 },
@@ -47,7 +50,7 @@ export default function AdditionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {additionExercises.noCarry.map((ex, index) => (
-                  <ExerciseCard key={index} operation="addition" {...ex}/>
+                  <AdditionCard key={index} operation="noCarry" {...ex}/>
                 ))}
               </div>
             </div>
@@ -57,7 +60,7 @@ export default function AdditionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {additionExercises.carry.map((ex, index) => (
-                  <ExerciseCard key={index} operation="addition" {...ex} />
+                  <AdditionCard key={index} operation="carry" {...ex} />
                 ))}
               </div>
             </div>

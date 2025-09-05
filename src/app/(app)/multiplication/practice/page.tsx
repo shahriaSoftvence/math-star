@@ -34,7 +34,7 @@ const HelpChart = ({ num1 }: { num1: number }) => (
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
     <h3 className="mb-4 text-lg font-semibold text-gray-800">
-      Multiplication Table for {num1}
+      Multiplication ranges for {num1}
     </h3>
     <div className="grid grid-cols-2 gap-2">
       {Array.from({ length: 10 }).map((_, i) => (
@@ -75,35 +75,38 @@ function PracticePageContent() {
     return count && !isNaN(parseInt(count)) ? parseInt(count) : 10;
   }, [searchParams]);
 
-  const table = useMemo(() => {
-    return searchParams?.get("table");
-  }, [searchParams]);
+  const ranges = useMemo(() => {
+  const raw = searchParams?.get("ranges"); 
+  return raw ? raw.split(",").map((r) => r.trim()) : [];
+}, [searchParams]);
 
-  const fixedNum2 = useMemo(() => {
-    const raw = searchParams?.get("table") || "";
-    const m = raw.trim().match(/^x(\d+)$/i);
-    return m ? parseInt(m[1], 10) : null;
-  }, [searchParams]);
+const fixedNum2 = useCallback(() => {
+  if (!ranges || ranges.length === 0 || ranges[0] === "All") return null;
 
-  const generateQuestions = useCallback(() => {
-    const newQuestions: Question[] = Array.from(
-      { length: questionCount },
-      (_) => {
-        const num1 =
-          table && table !== "All" && !isNaN(parseInt(table))
-            ? parseInt(table)
-            : Math.floor(Math.random() * questionCount) + 1;
-        const num2 = fixedNum2 ?? Math.floor(Math.random() * questionCount) + 1;
-        return { num1, num2, answer: num1 * num2 };
-      }
-    );
-    setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill("pending"));
-    setCurrentQuestionIndex(0);
-    setUserAnswer("");
-    setFeedback({ type: null, message: "" });
-    setIsComplete(false);
-  }, [questionCount, table, fixedNum2]);
+  const randomIndex = Math.floor(Math.random() * ranges.length);
+  const selected = ranges[randomIndex];
+  const match = selected.match(/^x?(\d+)$/i);
+  return match ? parseInt(match[1], 10) : null;
+}, [ranges]);
+
+const generateQuestions = useCallback(() => {
+  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+    const num1 = Math.floor(Math.random() * questionCount) + 1
+    const num2Value = fixedNum2();
+    const num2 =
+      num2Value ?? Math.floor(Math.random() * questionCount) + 1;
+
+    return { num1, num2, answer: num1 * num2 };
+  });
+
+  setQuestions(newQuestions);
+  setProgress(Array(questionCount).fill("pending"));
+  setCurrentQuestionIndex(0);
+  setUserAnswer("");
+  setFeedback({ type: null, message: "" });
+  setIsComplete(false);
+}, [questionCount, ranges, fixedNum2]);
+
 
   // Generate questions on component mount
   useEffect(() => {
@@ -241,39 +244,42 @@ function PracticePageContent() {
     }
   }, [progress, questions.length, addPracticeSession]);
 
-  const handleContinue = async () => {
-    try {
-      // Determine range_value based on table selection
-      let range_value;
-      if (table === "All") {
-        range_value = 100;
-      } else {
-        const match = table?.match(/X(\d+)/);
-        range_value = match ? parseInt(match[1], 10) : 1;
-      }
+ const handleContinue = async () => {
+  try {
+    let range_value: number;
 
-      const question_number = questionCount;
-
-      // Derived with your formulas
-      const total_wrong = totalClicks - question_number;
-      const total_correct = question_number - total_wrong;
-
-      const payload = {
-        range_value,
-        question_number,
-        total_correct,
-        total_wrong,
-      };
-
-      await addMultiplicationPractice(payload).unwrap();
-
-      console.log("Practice data saved:", payload);
-      router.push("/multiplication");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
-      router.push("/multiplication");
+    if (!ranges || ranges.length === 0 || ranges.includes("All")) {
+      range_value = 100;
+    } else {
+      // Pick a random value from the array
+      const randomIndex = Math.floor(Math.random() * ranges.length);
+      const selected = ranges[randomIndex];
+      const match = selected.match(/^X?(\d+)$/i);
+      range_value = match ? parseInt(match[1], 10) : 1;
     }
-  };
+
+    const question_number = questionCount;
+
+    const total_wrong = totalClicks - question_number;
+    const total_correct = question_number - total_wrong;
+
+    const payload = {
+      range_value,
+      question_number,
+      total_correct,
+      total_wrong,
+    };
+
+    await addMultiplicationPractice(payload).unwrap();
+    console.log("Practice data saved:", payload);
+    router.push("/multiplication");
+  } catch (err) {
+    console.error("Failed to save practice:", err);
+    router.push("/multiplication");
+  }
+};
+
+
 
   useEffect(() => {
     if (isComplete) {

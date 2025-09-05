@@ -105,14 +105,48 @@ function PracticePageContent() {
   );
 
   const generateQuestions = () => {
-    const newQuestions: Question[] = Array.from(
-      { length: questionCount },
-      () => {
-        const num1 = Math.floor(Math.random() * (numberRange + 1));
-        const num2 = Math.floor(Math.random() * Math.min(num1 + 1, 10));
-        return { num1, num2, answer: num1 - num2 };
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      let num1: number;
+      let num2: number;
+      let answer: number;
+
+      if (operation === "borrowing") {
+        // num1: AB
+        const tensDigit = Math.floor(Math.random() * Math.floor(numberRange / 10) + 1);
+        const unitsDigit = Math.floor(Math.random() * 9); // 0–8
+        num1 = tensDigit * 10 + unitsDigit;
+
+        // num2: allow 1-digit or 2-digit randomly
+        if (Math.random() < 0.5) {
+          // 1-digit, but must be > unitsDigit
+          num2 = Math.floor(Math.random() * (9 - unitsDigit)) + (unitsDigit + 1);
+        } else {
+          // 2-digit, ensure its units digit > unitsDigit
+          const num2Tens = Math.floor(Math.random() * Math.floor(numberRange / 10));
+          const num2Units = Math.floor(Math.random() * (9 - unitsDigit)) + (unitsDigit + 1);
+          num2 = num2Tens * 10 + num2Units;
+        }
       }
-    );
+
+      else if (operation === "noBorrowing") {
+        // AB - C, units digit of AB (B) > C
+        const tensDigit = Math.floor(Math.random() * Math.floor(numberRange / 10) + 1);
+        const unitsDigit = Math.floor(Math.random() * 9) + 1; // 1–9 (so B > 0)
+        num1 = tensDigit * 10 + unitsDigit;
+
+        // pick num2 so that C < B
+        num2 = Math.floor(Math.random() * unitsDigit); // 0..B-1
+      }
+      else {
+        // default: random subtraction, safe so result non-negative
+        num1 = Math.floor(Math.random() * (numberRange + 1));
+        num2 = Math.floor(Math.random() * Math.min(num1 + 1, 10));
+      }
+
+      answer = num1 - num2;
+      return { num1, num2, answer };
+    });
+
     setQuestions(newQuestions);
     setProgress(Array(questionCount).fill("pending"));
     setCurrentQuestionIndex(0);
@@ -120,6 +154,7 @@ function PracticePageContent() {
     setFeedback({ type: null, message: "" });
     setIsComplete(false);
   };
+
 
   // Generate questions
   useEffect(() => {
@@ -374,8 +409,8 @@ function PracticePageContent() {
               status === "correct"
                 ? "bg-green-500"
                 : status === "incorrect"
-                ? "bg-red-500"
-                : "bg-gray-200";
+                  ? "bg-red-500"
+                  : "bg-gray-200";
             return (
               <div
                 key={index}
@@ -424,19 +459,17 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
-              feedback.type === "correct"
-                ? "border-emerald-500"
-                : "border-red-500"
-            }`}
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
+              ? "border-emerald-500"
+              : "border-red-500"
+              }`}
           >
             <div className="flex items-start">
               <div
-                className={`p-1 mr-3 text-xl rounded-full ${
-                  feedback.type === "correct"
-                    ? "bg-emerald-100 text-emerald-500"
-                    : "bg-red-100 text-red-500"
-                }`}
+                className={`p-1 mr-3 text-xl rounded-full ${feedback.type === "correct"
+                  ? "bg-emerald-100 text-emerald-500"
+                  : "bg-red-100 text-red-500"
+                  }`}
               >
                 {feedback.type === "correct" ? (
                   <Check size={20} />
@@ -446,22 +479,20 @@ function PracticePageContent() {
               </div>
               <div>
                 <p
-                  className={`font-semibold ${
-                    feedback.type === "correct"
-                      ? "text-emerald-600"
-                      : "text-red-600"
-                  }`}
+                  className={`font-semibold ${feedback.type === "correct"
+                    ? "text-emerald-600"
+                    : "text-red-600"
+                    }`}
                 >
                   {feedback.type === "correct"
                     ? "Correct Answer!"
                     : "Incorrect Answer"}
                 </p>
                 <p
-                  className={`text-sm ${
-                    feedback.type === "correct"
-                      ? "text-emerald-500"
-                      : "text-red-500"
-                  }`}
+                  className={`text-sm ${feedback.type === "correct"
+                    ? "text-emerald-500"
+                    : "text-red-500"
+                    }`}
                 >
                   {feedback.message}
                 </p>

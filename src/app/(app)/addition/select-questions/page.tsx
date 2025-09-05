@@ -4,10 +4,6 @@ import React, { Suspense } from "react"; // Import Suspense
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import {
-  useAddCarryExerciseMutation,
-  useAddNoCarryExerciseMutation,
-} from "@/Redux/features/addition/additionApi";
 
 const questionCounts = [10, 20, 30, 40, 50];
 
@@ -18,31 +14,10 @@ const practiceTips = [
   "Take breaks between practice sessions",
 ];
 
-const QuestionCountCard = ({
-  count,
-  range,
-}: {
-  count: number;
-  range: string | null;
-}) => {
-  const [addCarryExercise] = useAddCarryExerciseMutation();
-  const [addNoCarryExercise] = useAddNoCarryExerciseMutation();
-
-  const handleSetRange = () => {
-  if (!range) return;
-  const range_value = parseInt(range);
-
-  if (range_value === 10) {
-    addNoCarryExercise(range_value);
-  } else {
-    addCarryExercise(range_value); 
-  }
-};
-
+const QuestionCountCard = ({ count, range, operation }: { count: number; range: string | null; operation: string | null }) => {
   return (
-    <Link href={`/addition/practice?count=${count}&range=${range || "10"}`}>
+    <Link href={`/addition/practice?count=${count}&range=${range || '10'}&operation=${operation}`}>
       <div
-        onClick={handleSetRange}
         className="w-38 self-stretch p-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-blue-200 hover:to-blue-300 transition-all transform hover:scale-105"
       >
         <div className="text-center text-gray-800 text-4xl font-bold">
@@ -56,11 +31,9 @@ const QuestionCountCard = ({
 
 // Create a new component that uses the hook
 function SelectQuestionsContent() {
-  const searchParams = useSearchParams();
-  const rangeRaw = searchParams?.get("range");
-  const range: string | null =
-    typeof rangeRaw === "undefined" ? null : rangeRaw;
-
+const searchParams = useSearchParams();
+  const range = searchParams?.get('range') ?? null;
+  const operation = searchParams?.get('operation') ?? null;
   return (
     <div className="max-w-4xl mx-auto">
       <div className="w-full flex justify-start">
@@ -77,7 +50,7 @@ function SelectQuestionsContent() {
         </h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} range={range} />
+            <QuestionCountCard key={count} count={count} range={range} operation={operation}  />
           ))}
         </div>
         <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">

@@ -4,7 +4,6 @@ import React, { Suspense } from "react"; // Import Suspense
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { useAddMultiplicationExerciseMutation } from "@/Redux/features/multiplication/multiplicationApi";
 
 const questionCounts = [10, 20, 30, 40, 50];
 
@@ -17,37 +16,17 @@ const practiceTips = [
 
 const QuestionCountCard = ({
   count,
-  table,
+  ranges,
 }: {
   count: number;
-  table: string | null;
+  ranges: string[] | null;
 }) => {
-  const [addMultiplicationExercise, {data}] = useAddMultiplicationExerciseMutation();
-  console.log(data, "data from multiplication");
-
-  const handleSetRange = () => {
-    if (!table) return;
-
-    let range_value;
-
-    if (table === "All") {
-      range_value = 100;
-    } else {
-      const match = table.match(/X(\d+)/);
-      
-      range_value = match ? parseInt(match[1], 10) : 1;
-      console.log(range_value, "match");
-    }
-
-    addMultiplicationExercise(range_value);
-  };
 
   return (
     <Link
-      href={`/multiplication/practice?count=${count}&table=${table || "all"}`}
+      href={`/multiplication/practice?count=${count}&ranges=${ranges}`}
     >
       <div
-        onClick={handleSetRange}
         className="w-38 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105"
       >
         <div className="text-center text-gray-800 text-4xl font-bold">
@@ -62,7 +41,8 @@ const QuestionCountCard = ({
 // Create a new component that uses the hook
 function SelectQuestionsContent() {
   const searchParams = useSearchParams();
-  const table = searchParams?.get("range");
+const rangesParam = searchParams?.get("ranges");
+const ranges = rangesParam ? rangesParam.split(",") : []; 
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -76,14 +56,14 @@ function SelectQuestionsContent() {
       </div>
       <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
         <h2 className="text-gray-800 text-2xl font-bold">
-          Select Number of Questions for x{table} Table
+          Select Number of Questions for [ {ranges.join(",")} ] Table
         </h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
             <QuestionCountCard
               key={count}
               count={count}
-              table={table ?? null}
+              ranges={ranges ?? null}
             />
           ))}
         </div>

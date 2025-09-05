@@ -37,7 +37,7 @@ return (
 
         {/* Main content */}
         <main
-          className={`mt-6 ${isPracticePage ? "w-full h-screen" : ""}`}
+          className={`${isPracticePage ? "w-full h-screen" : ""}`}
         >
           {children}
         </main>

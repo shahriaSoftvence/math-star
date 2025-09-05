@@ -78,12 +78,9 @@ function PracticePageContent() {
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const [addNoCarryPractice, {data: no}] = useAddNoCarryPracticeMutation();
-  const [addCarryPractice, {data}] = useAddCarryPracticeMutation();
+  const [addNoCarryPractice, { data: no }] = useAddNoCarryPracticeMutation();
+  const [addCarryPractice, { data }] = useAddCarryPracticeMutation();
 
-  console.log("No Carry Data:", no);
-  console.log("Carry Data:", data);
-  // Memoize parameters from URL to prevent re-renders
   const questionCount = useMemo(
     () => parseInt(searchParams?.get("count") || "10", 10),
     [searchParams]
@@ -93,16 +90,78 @@ function PracticePageContent() {
     [searchParams]
   );
 
+  const operation = useMemo(
+    () => searchParams?.get("operation"),
+    [searchParams]
+  );
+
+  // const generateQuestions = () => {
+  //   const newQuestions: Question[] = Array.from(
+  //     { length: questionCount },
+  //     () => {
+  //       const num1 = Math.floor(Math.random() * (numberRange + 1));
+  //       const maxNum2 = Math.min(9, numberRange - num1);
+  //       const num2 = Math.floor(Math.random() * (maxNum2 + 1));
+  //       return { num1, num2, answer: num1 + num2 };
+  //     }
+  //   );
+  //   setQuestions(newQuestions);
+  //   setProgress(Array(questionCount).fill("pending"));
+  //   setCurrentQuestionIndex(0);
+  //   setUserAnswer("");
+  //   setFeedback({ type: null, message: "" });
+  //   setIsComplete(false);
+  // };
+
   const generateQuestions = () => {
-    const newQuestions: Question[] = Array.from(
-      { length: questionCount },
-      () => {
-        const num1 = Math.floor(Math.random() * (numberRange + 1));
-        const maxNum2 = Math.min(9, numberRange - num1);
-        const num2 = Math.floor(Math.random() * (maxNum2 + 1));
-        return { num1, num2, answer: num1 + num2 };
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      let num1: number;
+      let num2: number;
+      let answer: number;
+
+      if (operation === "carry") {
+        // Pick num2 between 1 and numberRange, ensuring it's not zero
+        const minNum2 = 1;
+        const maxNum2 = numberRange - 1; // so num1 + num2 <= numberRange
+        num2 = Math.floor(Math.random() * (maxNum2 - minNum2 + 1)) + minNum2;
+
+        // num1 must be at least 10 so that carry is possible
+        const minNum1 = Math.max(10, 10 - (num2 % 10)); // units + num2 > 9
+        const maxNum1 = numberRange;
+
+        num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+
+        // Ensure units + num2 > 9
+        const unitsDigit = num1 % 10;
+        if (unitsDigit + (num2 % 10) <= 9) {
+          const adjust = 10 - (unitsDigit + (num2 % 10));
+          num1 += adjust;
+          if (num1 > numberRange) num1 -= 10; // keep within range
+        }
       }
-    );
+      else if (operation === "noCarry") {
+        // num2 can be any number up to numberRange
+        num2 = Math.floor(Math.random() * numberRange) + 1;
+
+        // Ensure B + C < 10
+        const unitsC = num2 % 10;
+        const maxUnits = Math.min(8 - unitsC, 9, numberRange); // strictly less than 10
+        const unitsDigit = Math.floor(Math.random() * (maxUnits + 1));
+
+        const maxTens = Math.floor((numberRange - unitsDigit) / 10);
+        const tensDigit = Math.floor(Math.random() * (maxTens + 1));
+
+        num1 = tensDigit * 10 + unitsDigit;
+      }
+      else {
+        num1 = Math.floor(Math.random() * (numberRange + 1));
+        num2 = Math.floor(Math.random() * (numberRange + 1));
+      }
+
+      answer = num1 + num2;
+      return { num1, num2, answer };
+    });
+
     setQuestions(newQuestions);
     setProgress(Array(questionCount).fill("pending"));
     setCurrentQuestionIndex(0);
@@ -110,6 +169,9 @@ function PracticePageContent() {
     setFeedback({ type: null, message: "" });
     setIsComplete(false);
   };
+
+
+
 
   // Generate questions on component mount
   useEffect(() => {
@@ -149,97 +211,53 @@ function PracticePageContent() {
     playSound("/Sounds/delete-click-sound.wav");
   }, [playSound]);
 
-  // const handleSubmit = useCallback(() => {
-  //   if (!userAnswer) return;
 
-  //   const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
-  //   const newProgress = [...progress];
-  //   newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
-  //   setProgress(newProgress);
-
-  //   if (isCorrect) {
-  //     setFeedback({
-  //       type: "correct",
-  //       message: "Your answer is absolutely correct!",
-  //     });
-  //     setShowHelp(false);
-  //     playSound("/Sounds/Check-Click-sound.wav");
-
-  //     setTimeout(() => {
-  //       if (currentQuestionIndex < questions.length - 1) {
-  //         setCurrentQuestionIndex((prev) => prev + 1);
-  //         setUserAnswer("");
-  //         setFeedback({ type: null, message: "" });
-  //       } else {
-  //         setIsComplete(true);
-  //       }
-  //     }, 1500);
-  //   } else {
-  //     setFeedback({
-  //       type: "incorrect",
-  //       message: "Now enter the correct answer to continue",
-  //     });
-  //     setShowHelp(true);
-  //     playSound("/Sounds/Wrong-Answer-sound.wav");
-  //     setUserAnswer(""); // Clear the input field on wrong answer
-  //   }
-  // }, [
-  //   userAnswer,
-  //   currentQuestion,
-  //   progress,
-  //   currentQuestionIndex,
-  //   questions.length,
-  //   playSound,
-  // ]);
-
-  // Keyboard support with proper dependencies
-  
   const handleSubmit = useCallback(() => {
-  if (!userAnswer) return;
+    if (!userAnswer) return;
 
-  setTotalClicks((prev) => prev + 1); // ✅ count every submit
+    setTotalClicks((prev) => prev + 1); // ✅ count every submit
 
-  const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
-  const newProgress = [...progress];
-  newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
-  setProgress(newProgress);
+    const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
+    const newProgress = [...progress];
+    newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
+    setProgress(newProgress);
 
-  if (isCorrect) {
-    setFeedback({
-      type: "correct",
-      message: "Your answer is absolutely correct!",
-    });
-    setShowHelp(false);
-    playSound("/Sounds/Check-Click-sound.wav");
+    if (isCorrect) {
+      setFeedback({
+        type: "correct",
+        message: "Your answer is absolutely correct!",
+      });
+      setShowHelp(false);
+      playSound("/Sounds/Check-Click-sound.wav");
 
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex((prev) => prev + 1);
-        setUserAnswer("");
-        setFeedback({ type: null, message: "" });
-      } else {
-        setIsComplete(true);
-      }
-    }, 1500);
-  } else {
-    setFeedback({
-      type: "incorrect",
-      message: "Now enter the correct answer to continue",
-    });
-    setShowHelp(true);
-    playSound("/Sounds/Wrong-Answer-sound.wav");
-    setUserAnswer(""); // Clear the input field on wrong answer
-  }
-}, [
-  userAnswer,
-  currentQuestion,
-  progress,
-  currentQuestionIndex,
-  questions.length,
-  playSound,
-]);
+      setTimeout(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+          setCurrentQuestionIndex((prev) => prev + 1);
+          setUserAnswer("");
+          setFeedback({ type: null, message: "" });
+        } else {
+          setIsComplete(true);
+        }
+      }, 1500);
+    } else {
+      setFeedback({
+        type: "incorrect",
+        message: "Now enter the correct answer to continue",
+      });
+      setShowHelp(true);
+      playSound("/Sounds/Wrong-Answer-sound.wav");
+      setUserAnswer(""); // Clear the input field on wrong answer
+    }
+  }, [
+    userAnswer,
+    currentQuestion,
+    progress,
+    currentQuestionIndex,
+    questions.length,
+    playSound,
+  ]);
 
-  
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key >= "0" && event.key <= "9") {
@@ -288,36 +306,36 @@ function PracticePageContent() {
     }
   }, [progress, questions.length, addPracticeSession]);
 
-  
+
   const handleContinue = async () => {
-  try {
-    const range_value = numberRange; 
-    const question_number = questionCount; 
+    try {
+      const range_value = numberRange;
+      const question_number = questionCount;
 
-    // Derived with your formulas
-    const total_wrong = totalClicks - question_number;
-    const total_correct = question_number - total_wrong;
+      // Derived with your formulas
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
 
-    const payload = {
-      range_value,
-      question_number,
-      total_correct,
-      total_wrong,
-    };
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
 
-    if (range_value === 10) {
-      await addNoCarryPractice(payload).unwrap();
-    } else {
-      await addCarryPractice(payload).unwrap();
+      if (operation === "noCarry") {
+        await addNoCarryPractice(payload).unwrap();
+      } else {
+        await addCarryPractice(payload).unwrap();
+      }
+
+      console.log("Practice data saved:", payload);
+      router.push("/addition");
+    } catch (err) {
+      console.error("Failed to save practice:", err);
+      router.push("/addition");
     }
-
-    console.log("Practice data saved:", payload);
-    router.push("/addition");
-  } catch (err) {
-    console.error("Failed to save practice:", err);
-    router.push("/addition");
-  }
-};
+  };
 
 
   const handleReset = () => {
@@ -388,8 +406,8 @@ function PracticePageContent() {
               status === "correct"
                 ? "bg-green-500"
                 : status === "incorrect"
-                ? "bg-red-500"
-                : "bg-gray-200";
+                  ? "bg-red-500"
+                  : "bg-gray-200";
             return (
               <div
                 key={index}
@@ -438,19 +456,17 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
-              feedback.type === "correct"
-                ? "border-emerald-500"
-                : "border-red-500"
-            }`}
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
+              ? "border-emerald-500"
+              : "border-red-500"
+              }`}
           >
             <div className="flex items-start">
               <div
-                className={`p-1 mr-3 text-xl rounded-full ${
-                  feedback.type === "correct"
-                    ? "bg-emerald-100 text-emerald-500"
-                    : "bg-red-100 text-red-500"
-                }`}
+                className={`p-1 mr-3 text-xl rounded-full ${feedback.type === "correct"
+                  ? "bg-emerald-100 text-emerald-500"
+                  : "bg-red-100 text-red-500"
+                  }`}
               >
                 {feedback.type === "correct" ? (
                   <Check size={20} />
@@ -460,22 +476,20 @@ function PracticePageContent() {
               </div>
               <div>
                 <p
-                  className={`font-semibold ${
-                    feedback.type === "correct"
-                      ? "text-emerald-600"
-                      : "text-red-600"
-                  }`}
+                  className={`font-semibold ${feedback.type === "correct"
+                    ? "text-emerald-600"
+                    : "text-red-600"
+                    }`}
                 >
                   {feedback.type === "correct"
                     ? "Correct Answer!"
                     : "Incorrect Answer"}
                 </p>
                 <p
-                  className={`text-sm ${
-                    feedback.type === "correct"
-                      ? "text-emerald-500"
-                      : "text-red-500"
-                  }`}
+                  className={`text-sm ${feedback.type === "correct"
+                    ? "text-emerald-500"
+                    : "text-red-500"
+                    }`}
                 >
                   {feedback.message}
                 </p>

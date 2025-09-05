@@ -49,7 +49,8 @@ export default function SubscriptionPage() {
   
   // Derive subscription state from API data
   const subscription = {
-    isActive: activePlan?.is_active || false,
+    isActive: true,
+    // isActive: activePlan?.is_active || false,
     planName: activePlan?.plan?.name || "No Active Plan",
     renewsOn: activePlan?.end_date ? new Date(activePlan.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "",
     nextCharge: activePlan?.end_date ? new Date(activePlan.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "",

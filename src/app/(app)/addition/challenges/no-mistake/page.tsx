@@ -2,15 +2,18 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Check, X, Delete, Target } from "lucide-react";
+import { Check, X, Delete, Target, ArrowLeft } from "lucide-react";
 import { useAddAdditionNoMistakeMutation } from "@/Redux/features/addition/additionApi";
 import { toast } from "sonner";
+import Link from "next/link";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
 type GameState = "ready" | "playing" | "gameOver";
 
 // --- Reusable UI Components (specific to this page for simplicity) ---
+
+
 
 const ChallengeStartScreen = ({
   title,
@@ -59,15 +62,17 @@ const GameResultScreen = ({
   questionsAnswered,
   onRetry,
   onHome,
+  onCancel
 }: {
   score: number;
   questionsAnswered: number;
   onRetry: () => void;
   onHome: () => void;
+  onCancel: () => void;
 }) => (
   <div className="w-full min-h-screen relative bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
     <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] max-[704]:min-w-[400px] mx-auto">
-      <div className="w-20 h-20 bg-red-100 rounded-full flex justify-center items-center">
+      <div onClick={onCancel} className="w-20 h-20 cursor-pointer bg-red-100 rounded-full flex justify-center items-center">
         <X className="w-10 h-10 text-red-500" />
       </div>
       <h1 className="text-gray-800 text-3xl font-bold font-Nunito leading-9">
@@ -183,23 +188,21 @@ export default function NoMistakePage() {
   const [timeLeft, setTimeLeft] = useState(5);
 
   const [addAdditionNoMistake] = useAddAdditionNoMistakeMutation();
- const handleContinue = async () => {
+  const handleContinue = async () => {
     try {
-      await addAdditionNoMistake({ 
+      await addAdditionNoMistake({
         questions_answered: score,
         final_score: score,
       }).unwrap();
 
       toast.success('Score saved successfully!');
-
-      router.push("/addition"); 
+      router.push("/addition");
     } catch (err) {
       toast.error('Failed to save your score. Please try again.');
-
-    
+      router.push("/addition");
     }
   };
-  
+
 
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;
@@ -284,6 +287,7 @@ export default function NoMistakePage() {
         questionsAnswered={score}
         onRetry={handleStart}
         onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }
@@ -292,8 +296,16 @@ export default function NoMistakePage() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 md:p-6">
       <div className="flex items-start gap-4 md:gap-6 mb-12 md:mb-16">
-        <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-100 rounded-full flex justify-center items-center">
-          <Target className="w-10 h-10 text-blue-600" />
+        <div>
+          <Link
+            href="/addition"
+            className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4"
+          >
+            <ArrowLeft /> Go Back
+          </Link>
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-100 rounded-full flex justify-center items-center">
+            <Target className="w-10 h-10 text-blue-600" />
+          </div>
         </div>
         <div className="flex flex-col gap-2 md:gap-3">
           <h1 className="text-black text-4xl md:text-5xl font-bold font-Nunito leading-tight">

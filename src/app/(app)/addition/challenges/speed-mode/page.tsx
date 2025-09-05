@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Check, Delete } from "lucide-react";
+import { ArrowLeft, Check, Delete } from "lucide-react";
 import { PiTimerBold } from "react-icons/pi";
 import { toast } from "sonner";
 import { useAddAdditionSpeedModeMutation } from "@/Redux/features/addition/additionApi";
+import Link from "next/link";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -178,7 +179,7 @@ export default function SpeedModePage() {
     setGameState("playing");
   };
 
-  
+
   const handleSubmit = () => {
     if (!userAnswer) return;
 
@@ -232,71 +233,84 @@ export default function SpeedModePage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 md:p-6">
-      <div className="flex items-start gap-4 md:gap-6 mb-12 md:mb-16">
-        <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
-          <PiTimerBold className="w-14 h-14 text-blue-600" />
-        </div>
-        <div className="flex flex-col gap-2 md:gap-3">
-          <h1 className="text-black text-6xl font-bold font-Nunito leading-10">
-            Speedrun
-          </h1>
-          <p className="text-black text-2xl font-bold font-Nunito leading-10">
-            Solve as many problems as possible in 5 minutes
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-col lg:flex-row justify-start items-center lg:items-end gap-8 md:gap-16 lg:gap-24">
-        <div className="relative w-72 h-72">
-          <div className="w-72 h-72 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
-            <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">
-              {formatTime(timeLeft)}
+    <div className=" bg-gradient-to-b from-blue-50 to-purple-50 p-4 md:p-6">
+      <div className="min-h-screen max-w-7xl mx-auto">
+        <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
+          <div>
+            <Link
+              href="/addition"
+              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
+            >
+              <ArrowLeft /> Go Back
+            </Link>
+          </div>
+          <div className="flex items-start gap-4 md:gap-6">
+            <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
+              <PiTimerBold className="w-14 h-14 text-blue-600" />
             </div>
-            <div className="text-center text-white text-4xl font-normal font-Nunito leading-tight">
-              Remaining
+
+            <div className="flex flex-col gap-2 md:gap-3">
+              <h1 className="text-black text-6xl font-bold font-Nunito leading-10">
+                Speedrun
+              </h1>
+              <p className="text-black text-2xl font-bold font-Nunito leading-10">
+                Solve as many problems as possible in 5 minutes
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 lg:gap-24">
-          <div className="w-full md:w-[400px] lg:w-[569px] flex flex-col gap-4 md:gap-5">
-            <div className="self-stretch flex justify-between items-center">
-              <div className="h-20 flex flex-col">
-                <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
-                  Question
-                </span>
-                <span className="text-blue-600 text-4xl font-bold font-Nunito leading-loose">
-                  {score + 1}
-                </span>
+        <div className="flex flex-col lg:flex-row justify-start items-center lg:items-end gap-8 md:gap-16 lg:gap-24">
+          <div className="relative w-72 h-72">
+            <div className="w-72 h-72 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
+              <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">
+                {formatTime(timeLeft)}
               </div>
-              <div className="h-20 flex flex-col">
-                <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
-                  Score
-                </span>
-                <span className="text-green-600 text-4xl font-bold font-Nunito leading-loose">
-                  {score}
-                </span>
-              </div>
-            </div>
-            <div className="self-stretch p-12 rounded-[51px] border border-black flex justify-center items-center gap-5">
-              <span className="text-center text-gray-800 text-6xl font-bold font-Nunito leading-[80px]">
-                {question.num1} + {question.num2} =
-              </span>
-              <div className="w-36 h-20 px-0.5 py-3 rounded-xl border-2 border-black flex justify-center items-center overflow-hidden">
-                <span className="text-center text-black text-5xl font-normal font-Nunito">
-                  {userAnswer || "?"}
-                </span>
+              <div className="text-center text-white text-4xl font-normal font-Nunito leading-tight">
+                Remaining
               </div>
             </div>
           </div>
-          <Numpad
-            onNumberClick={(num) =>
-              setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
-            }
-            onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
-            onSubmit={handleSubmit}
-          />
+
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 lg:gap-24">
+            <div className="w-full md:w-[400px] lg:w-[569px] flex flex-col gap-4 md:gap-5">
+              <div className="self-stretch flex justify-between items-center">
+                <div className="h-20 flex flex-col">
+                  <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
+                    Question
+                  </span>
+                  <span className="text-blue-600 text-4xl font-bold font-Nunito leading-loose">
+                    {score + 1}
+                  </span>
+                </div>
+                <div className="h-20 flex flex-col">
+                  <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
+                    Score
+                  </span>
+                  <span className="text-green-600 text-4xl font-bold font-Nunito leading-loose">
+                    {score}
+                  </span>
+                </div>
+              </div>
+              <div className="self-stretch p-12 rounded-[51px] border border-black flex justify-center items-center gap-5">
+                <span className="text-center text-gray-800 text-6xl font-bold font-Nunito leading-[80px]">
+                  {question.num1} + {question.num2} =
+                </span>
+                <div className="w-36 h-20 px-0.5 py-3 rounded-xl border-2 border-black flex justify-center items-center overflow-hidden">
+                  <span className="text-center text-black text-5xl font-normal font-Nunito">
+                    {userAnswer || "?"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <Numpad
+              onNumberClick={(num) =>
+                setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
+              }
+              onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
+              onSubmit={handleSubmit}
+            />
+          </div>
         </div>
       </div>
     </div>

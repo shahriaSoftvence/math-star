@@ -1,24 +1,26 @@
+"use client"
+
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
-import ExerciseCard from '@/components/ExerciseCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import MultiplicationCard from './multiplicationCard/page';
 
 const multiplicationExercises = [
-  { range: 'X1', percentage: 98, stars: 0 },
-  { range: 'X2', percentage: 95, stars: 19 },
-  { range: 'X3', percentage: 92, stars: 18 },
-  { range: 'X4', percentage: 89, stars: 17 },
-  { range: 'X5', percentage: 94, stars: 19 },
-  { range: 'X6', percentage: 87, stars: 16 },
-  { range: 'X7', percentage: 85, stars: 15 },
-  { range: 'X8', percentage: 80, stars: 14 },
-  { range: 'X9', percentage: 75, stars: 13 },
-  { range: 'X10', percentage: 99, stars: 20 },
-  { range: 'All', percentage: 70, stars: 12 },
+  { range: ['X1'], percentage: 98, stars: 0 },
+  { range: ['X2'], percentage: 95, stars: 19 },
+  { range: ['X3'], percentage: 92, stars: 18 },
+  { range: ['X4'], percentage: 89, stars: 17 },
+  { range: ['X5'], percentage: 94, stars: 19 },
+  { range: ['X6'], percentage: 87, stars: 16 },
+  { range: ['X7'], percentage: 85, stars: 15 },
+  { range: ['X8'], percentage: 80, stars: 14 },
+  { range: ['X9'], percentage: 75, stars: 13 },
+  { range: ['X10'], percentage: 99, stars: 20 },
+  { range: ['All'], percentage: 70, stars: 12 },
 ];
 
 const multiplicationChallenges = [
@@ -29,13 +31,47 @@ const multiplicationChallenges = [
 ];
 
 export default function MultiplicationPage() {
+  const [selectedRanges, setSelectedRanges] = React.useState<string[]>([]);
+
+  const toggleRange = (ranges: string[]) => {
+    ranges.forEach(r => {
+      if (r === "All") {
+        setSelectedRanges(["All"]);
+      } else {
+        setSelectedRanges(prev => {
+          const newSelection = prev.includes(r)
+            ? prev.filter(x => x !== r)
+            : [...prev.filter(x => x !== "All"), r];
+          return newSelection;
+        });
+      }
+    });
+  };
+
+  const handleAddRange = () => {
+    let range_values: number[] = [];
+
+    if (selectedRanges.includes("All")) {
+      range_values = [100];
+    } else {
+      range_values = selectedRanges.map((r) => {
+        const match = r.match(/X(\d+)/);
+        return match ? parseInt(match[1], 10) : 1;
+      });
+    }
+
+    console.log(range_values)
+  }
+
+
   return (
     <div className="max-w-[1152px] mx-auto space-y-8">
-       <div className="mb-4">
+      <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
-            <ArrowLeft /> Go Back
-          </Link>
+          <ArrowLeft /> Go Back
+        </Link>
       </div>
+
       {/* Multiplication Exercise Section */}
       <div className="rounded-lg">
         <div className="p-4 bg-gradient-to-br from-green-400 to-green-500 rounded-t-lg">
@@ -44,14 +80,25 @@ export default function MultiplicationPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {multiplicationExercises.map((ex, index) => (
-              <ExerciseCard
+              <MultiplicationCard
                 key={index}
-                operation="multiplication"
-                range={`${ex.range}`}
+                range={ex.range}
                 percentage={ex.percentage}
+                isSelected={ex.range.some(r => selectedRanges.includes(r))}
+                onToggle={toggleRange}
               />
             ))}
           </div>
+
+          {selectedRanges.length > 0 && (
+            <Link
+              href={`/multiplication/select-questions?ranges=${selectedRanges.join(",")}`}
+            >
+              <button onClick={handleAddRange} className="w-full py-2 bg-gradient-to-bl from-green-400 to-green-500 text-white rounded-lg hover:bg-blue-600 mt-4">
+                Continue with [ {selectedRanges.join(", ")} ] range
+              </button>
+            </Link>
+          )}
         </div>
       </div>
 
