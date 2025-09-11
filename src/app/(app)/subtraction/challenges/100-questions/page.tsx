@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import {  ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { BsGrid3X3 } from "react-icons/bs";
 import CongratulationsScreen from '@/components/CongratulationsScreen';
 import { useAddSubtraction100QuestionMutation } from '@/Redux/features/subtraction/subtractionApi';
@@ -131,7 +131,7 @@ export default function HundredQuestionsPage() {
     const [timeLeft, setTimeLeft] = useState(300);
     const [isComplete, setIsComplete] = useState(false);
     const [score, setScore] = useState(0);
-    const [ addSubtraction100Question, {data} ] = useAddSubtraction100QuestionMutation();
+    const [addSubtraction100Question, { data }] = useAddSubtraction100QuestionMutation();
     console.log("data from 100 questions", data);
 
     const [totalClicks, setTotalClicks] = useState(0);
@@ -178,12 +178,12 @@ export default function HundredQuestionsPage() {
 
     const handleSubmit = useCallback(() => {
         if (!userAnswer) return;
-        setTotalClicks((prev) => prev + 1); 
+        setTotalClicks((prev) => prev + 1);
 
         const isCorrect = parseInt(userAnswer, 10) === currentQuestion?.answer;
         const newStatuses = [...questionStatuses];
         newStatuses[currentQuestionIndex] = isCorrect ? 'correct' : 'incorrect';
-        
+
         if (isCorrect) {
             setScore(prev => prev + 1);
         }
@@ -201,18 +201,18 @@ export default function HundredQuestionsPage() {
     }, [userAnswer, currentQuestion, questionStatuses, currentQuestionIndex, questions.length]);
 
     const handleContinue = async () => {
-    try {
-      await addSubtraction100Question({
-        questions_answered: totalClicks,
-        final_score: score,
-      }).unwrap();
+        try {
+            await addSubtraction100Question({
+                questions_answered: totalClicks,
+                final_score: score,
+            }).unwrap();
 
-      router.push("/subtraction");
-    } catch (error) {
-      console.error("Failed to save 100 Questions results:", error);
-    }
-  };
-    
+            router.push("/subtraction");
+        } catch (error) {
+            console.error("Failed to save 100 Questions results:", error);
+        }
+    };
+
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -224,7 +224,7 @@ export default function HundredQuestionsPage() {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (gameState !== 'playing') return;
-            
+
             if (event.key >= '0' && event.key <= '9') {
                 setUserAnswer(prev => prev.length < 3 ? prev + event.key : prev);
             } else if (event.key === 'Backspace') {
@@ -241,9 +241,9 @@ export default function HundredQuestionsPage() {
     }, [gameState, setUserAnswer, handleSubmit]);
 
     if (gameState === 'gameOver' && !isComplete) {
-         return <CongratulationsScreen onContinue={handleContinue} rewardName={`You scored ${score}!`} />;
+        return <CongratulationsScreen onContinue={handleContinue} rewardName={`You scored ${score}!`} />;
     }
-    
+
     if (isComplete) {
         return <CongratulationsScreen onContinue={handleContinue} rewardName="Challenge Crusher" />;
     }
@@ -253,45 +253,47 @@ export default function HundredQuestionsPage() {
     }
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 p-4 md:p-6">
-            <div className="flex items-center mb-6">
-                <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
-                    <ArrowLeft className="text-gray-600" />
-                </button>
-                <h1 className="ml-4 text-3xl font-bold font-Nunito text-gray-800">100 Questions Challenge</h1>
-            </div>
-        
-            <div className="flex flex-col lg:flex-row justify-center items-center gap-6">
-                {/* Left Side: Timer */}
-                <div className="w-72 h-72 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex flex-col justify-center items-center flex-shrink-0">
-                    <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">{formatTime(timeLeft)}</div>
-                    <div className="text-center text-white text-4xl font-normal font-Nunito leading-tight">Remaining</div>
+        <div className='bg-gradient-to-b from-pink-50 to-purple-50 py-4'>
+            <div className="max-w-[1440px] mx-auto min-h-screen p-4 md:p-6">
+                <div className="flex items-center mb-6">
+                    <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
+                        <ArrowLeft className="text-gray-600" />
+                    </button>
+                    <h1 className="ml-4 text-3xl font-bold font-Nunito text-gray-800">100 Questions Challenge</h1>
                 </div>
 
-                {/* Middle: Questions Grid */}
-                <div className="flex-grow max-w-4xl">
-                    {questions.length > 0 && <QuestionsGrid questions={questions} questionStatuses={questionStatuses} />}
-                </div>
+                <div className="flex flex-col lg:flex-row justify-center items-center gap-6">
+                    {/* Left Side: Timer */}
+                    <div className="w-72 h-72 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex flex-col justify-center items-center flex-shrink-0">
+                        <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">{formatTime(timeLeft)}</div>
+                        <div className="text-center text-white text-4xl font-normal font-Nunito leading-tight">Remaining</div>
+                    </div>
 
-                {/* Right Side: Numpad & Current Question */}
-                <div className="w-96 p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
-                    <div className="self-stretch p-6 bg-green-100 rounded-lg outline-2 outline-offset-[-2px] outline-green-300 flex flex-col justify-start items-start gap-2">
-                        {currentQuestion && (
-                            <div className="self-stretch text-center justify-center text-gray-800 text-2xl font-bold font-Nunito leading-loose">
-                                {currentQuestion.num1} - {currentQuestion.num2} =
-                            </div>
-                        )}
-                        <div className="self-stretch p-3 bg-white rounded flex flex-col justify-start items-center">
-                            <div className="self-stretch text-center justify-center text-gray-600 text-2xl font-bold font-Nunito leading-loose">
-                                {userAnswer || '?'}
+                    {/* Middle: Questions Grid */}
+                    <div className="flex-grow max-w-4xl">
+                        {questions.length > 0 && <QuestionsGrid questions={questions} questionStatuses={questionStatuses} />}
+                    </div>
+
+                    {/* Right Side: Numpad & Current Question */}
+                    <div className="w-96 p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
+                        <div className="self-stretch p-6 bg-green-100 rounded-lg outline-2 outline-offset-[-2px] outline-green-300 flex flex-col justify-start items-start gap-2">
+                            {currentQuestion && (
+                                <div className="self-stretch text-center justify-center text-gray-800 text-2xl font-bold font-Nunito leading-loose">
+                                    {currentQuestion.num1} - {currentQuestion.num2} =
+                                </div>
+                            )}
+                            <div className="self-stretch p-3 bg-white rounded flex flex-col justify-start items-center">
+                                <div className="self-stretch text-center justify-center text-gray-600 text-2xl font-bold font-Nunito leading-loose">
+                                    {userAnswer || '?'}
+                                </div>
                             </div>
                         </div>
+                        <Numpad
+                            onNumberClick={(num) => setUserAnswer(prev => prev.length < 3 ? prev + num : prev)}
+                            onBackspace={() => setUserAnswer(prev => prev.slice(0, -1))}
+                            onSubmit={handleSubmit}
+                        />
                     </div>
-                    <Numpad
-                        onNumberClick={(num) => setUserAnswer(prev => prev.length < 3 ? prev + num : prev)}
-                        onBackspace={() => setUserAnswer(prev => prev.slice(0, -1))}
-                        onSubmit={handleSubmit}
-                    />
                 </div>
             </div>
         </div>

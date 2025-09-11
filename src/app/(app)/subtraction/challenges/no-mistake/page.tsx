@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Check, X, Delete, Target } from "lucide-react";
+import { Check, X, Delete, Target, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useAddSubtractionNoMistakeMutation } from "@/Redux/features/subtraction/subtractionApi";
+import Link from "next/link";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -59,15 +60,17 @@ const GameResultScreen = ({
   questionsAnswered,
   onRetry,
   onHome,
+  onCancel
 }: {
   score: number;
   questionsAnswered: number;
   onRetry: () => void;
   onHome: () => void;
+  onCancel: () => void;
 }) => (
   <div className="w-full min-h-screen relative bg-gradient-to-b from-pink-50 to-purple-50 flex flex-col justify-center items-center p-4">
     <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] max-[704]:min-w-[400px] mx-auto">
-      <div className="w-20 h-20 bg-red-100 rounded-full flex justify-center items-center">
+      <div onClick={onCancel} className="w-20 h-20 cursor-pointer bg-red-100 rounded-full flex justify-center items-center">
         <X className="w-10 h-10 text-red-500" />
       </div>
       <h1 className="text-gray-800 text-3xl font-bold font-Nunito leading-9">
@@ -283,78 +286,90 @@ export default function NoMistakePage() {
         questionsAnswered={score}
         onRetry={handleStart}
         onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 p-4 md:p-6">
-      <div className="flex items-start gap-4 md:gap-6 mb-12 md:mb-16">
-        <div className="w-16 h-16 md:w-20 md:h-20 bg-pink-100 rounded-full flex justify-center items-center">
-          <Target className="w-10 h-10 text-pink-600" />
-        </div>
-        <div className="flex flex-col gap-2 md:gap-3">
-          <h1 className="text-black text-4xl md:text-5xl font-bold font-Nunito leading-tight">
-            No Mistakes
-          </h1>
-          <p className="text-black text-xl md:text-2xl font-medium font-Nunito leading-snug">
-            The challenge ends on your first mistake, You have 5 seconds for
-            each problem.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-col lg:flex-row justify-start items-center lg:items-end gap-8 md:gap-16 lg:gap-24">
-        <div className="relative w-64 h-64 md:w-80 md:h-80">
-          <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
-            <div className="w-full h-full bg-gradient-to-br from-pink-400 to-pink-500 rounded-full" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-              <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:0${timeLeft}`}</div>
-              <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">
-                Remaining
-              </div>
+    <div className="bg-gradient-to-b from-pink-50 to-purple-50 py-4">
+      <div className="max-w-7xl mx-auto min-h-screen p-4 md:p-6">
+        <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
+          <div>
+            <Link
+              href="/subtraction"
+              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
+            >
+              <ArrowLeft /> Go Back
+            </Link>
+          </div>
+          <div className="flex items-start gap-4 md:gap-6">
+            <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
+              <Target className="w-10 h-10 text-pink-600" />
+            </div>
+            <div className="flex flex-col gap-2 md:gap-3">
+              <h1 className="text-black text-6xl font-bold font-Nunito leading-10">
+                No Mistakes
+              </h1>
+              <p className="text-black text-xl md:text-2xl font-medium font-Nunito leading-snug">
+                The challenge ends on your first mistake, You have 5 seconds for
+                each problem.
+              </p>
             </div>
           </div>
         </div>
-
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 lg:gap-24">
-          <div className="w-full md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
-            <div className="self-stretch flex justify-between items-center">
-              <div className="h-16 flex flex-col">
-                <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">
-                  Question
-                </span>
-                <span className="text-pink-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
-                  {score + 1}
-                </span>
-              </div>
-              <div className="h-16 flex flex-col">
-                <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">
-                  Score
-                </span>
-                <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
-                  {score}
-                </span>
-              </div>
-            </div>
-            <div className="self-stretch p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-black flex justify-center items-center gap-2">
-              <span className="text-center text-gray-800 text-4xl md:text-5xl font-bold font-Nunito leading-[60px]">
-                {question.num1} - {question.num2} =
-              </span>
-              <div className="w-24 h-14 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
-                <span className="text-center text-black text-3xl md:text-4xl font-normal font-Nunito">
-                  {userAnswer || "?"}
-                </span>
+        <div className="flex flex-col lg:flex-row justify-start items-center lg:items-end gap-8 md:gap-16 lg:gap-24">
+          <div className="relative w-64 h-64 md:w-80 md:h-80">
+            <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
+              <div className="w-full h-full bg-gradient-to-br from-pink-400 to-pink-500 rounded-full" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:0${timeLeft}`}</div>
+                <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">
+                  Remaining
+                </div>
               </div>
             </div>
           </div>
-          <Numpad
-            onNumberClick={(num) =>
-              setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
-            }
-            onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
-            onSubmit={handleSubmit}
-          />
+
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 lg:gap-24">
+            <div className="w-full md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
+              <div className="self-stretch flex justify-between items-center">
+                <div className="h-16 flex flex-col">
+                  <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">
+                    Question
+                  </span>
+                  <span className="text-pink-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
+                    {score + 1}
+                  </span>
+                </div>
+                <div className="h-16 flex flex-col">
+                  <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">
+                    Score
+                  </span>
+                  <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
+                    {score}
+                  </span>
+                </div>
+              </div>
+              <div className="self-stretch p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-black flex justify-center items-center gap-2">
+                <span className="text-center text-gray-800 text-4xl md:text-5xl font-bold font-Nunito leading-[60px]">
+                  {question.num1} - {question.num2} =
+                </span>
+                <div className="w-24 h-14 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
+                  <span className="text-center text-black text-3xl md:text-4xl font-normal font-Nunito">
+                    {userAnswer || "?"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <Numpad
+              onNumberClick={(num) =>
+                setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
+              }
+              onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
+              onSubmit={handleSubmit}
+            />
+          </div>
         </div>
       </div>
     </div>

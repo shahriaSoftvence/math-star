@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { HelpCircle } from "lucide-react";
+import { ArrowLeft, HelpCircle } from "lucide-react";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { useAddAdditionWhatsMissingMutation } from "@/Redux/features/addition/additionApi";
+import Link from "next/link";
 
 // --- Type Definitions ---
 type Question = {
@@ -208,70 +209,84 @@ export default function WhatsMissingPage() {
     );
   }
 
+
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-6">
-      <div className="flex items-start gap-8 mb-12">
-        <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
-          <HelpCircle className="w-14 h-14 text-blue-600" />
-        </div>
-        <div className="max-w-2xl flex flex-col gap-5">
-          <h1 className="text-black text-6xl font-bold font-Nunito leading-tight">
-            What is missing?
-          </h1>
-          <p className="text-black text-2xl font-bold font-Nunito leading-snug">
-            You have 5 minutes to find as many missing numbers as possible.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-col  justify-around items-center lg:flex-row lg:items-end gap-8">
-        {/* Timer Circle */}
-        <div className="w-72 h-72 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
-          <div className="text-white text-6xl font-bold font-Nunito leading-tight">
-            {formatTime(timeLeft)}
+    <div className="bg-gradient-to-b from-blue-50 to-purple-50 py-4">
+      <div className="max-w-7xl mx-auto min-h-screen p-6">
+        <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
+          <div>
+            <Link
+              href="/addition"
+              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
+            >
+              <ArrowLeft /> Go Back
+            </Link>
           </div>
-          <div className="text-white text-4xl font-normal font-Nunito leading-tight">
-            Remaining
-          </div>
-        </div>
-
-        {/* Question and Score */}
-        <div className="flex flex-col gap-6">
-          <div className="flex justify-between items-center">
-            <div className="flex flex-col">
-              <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
-                Question
-              </span>
-              <span className="text-blue-600 text-4xl font-bold font-Nunito leading-tight">
-                {score + 1}
-              </span>
+          <div className="flex items-start gap-4 md:gap-6">
+            <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
+              <HelpCircle className="w-14 h-14 text-blue-600" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
-                Score
-              </span>
-              <span className="text-green-600 text-4xl font-bold font-Nunito leading-tight">
-                {score}
-              </span>
-            </div>
-          </div>
 
-          {/* Question Display */}
-          <div className="p-8 rounded-3xl border border-black min-w-[480px]">
-            <div className="text-center text-gray-800 text-6xl font-bold font-Nunito leading-tight">
-              {getQuestionString()}
+            <div className="flex flex-col gap-2 md:gap-3">
+              <h1 className="text-black text-6xl font-bold font-Nunito leading-10">
+                What is missing?
+              </h1>
+              <p className="text-black text-2xl font-bold font-Nunito leading-10">
+                You have 5 minutes to find as many missing numbers as possible.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Numpad */}
-        <Numpad
-          onNumberClick={(num) =>
-            setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
-          }
-          onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
-          onSubmit={handleSubmit}
-        />
+        <div className="flex flex-col  justify-around items-center lg:flex-row lg:items-end gap-8">
+          {/* Timer Circle */}
+          <div className="w-72 h-72 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
+            <div className="text-white text-6xl font-bold font-Nunito leading-tight">
+              {formatTime(timeLeft)}
+            </div>
+            <div className="text-white text-4xl font-normal font-Nunito leading-tight">
+              Remaining
+            </div>
+          </div>
+
+          {/* Question and Score */}
+          <div className="flex flex-col gap-6">
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col">
+                <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
+                  Question
+                </span>
+                <span className="text-blue-600 text-4xl font-bold font-Nunito leading-tight">
+                  {score + 1}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
+                  Score
+                </span>
+                <span className="text-green-600 text-4xl font-bold font-Nunito leading-tight">
+                  {score}
+                </span>
+              </div>
+            </div>
+
+            {/* Question Display */}
+            <div className="p-8 rounded-3xl border border-black min-w-[480px]">
+              <div className="text-center text-gray-800 text-6xl font-bold font-Nunito leading-tight">
+                {getQuestionString()}
+              </div>
+            </div>
+          </div>
+
+          {/* Numpad */}
+          <Numpad
+            onNumberClick={(num) =>
+              setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))
+            }
+            onBackspace={() => setUserAnswer((prev) => prev.slice(0, -1))}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </div>
     </div>
   );

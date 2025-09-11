@@ -51,7 +51,7 @@ export default function Home() {
     <div className="space-y-8 max-w-[1104px] mx-auto">
       {/* Choose Your Practice */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 text-center">Choose Your Practice</h2>
+        <h2 className="text-xl font-semibold my-4 text-gray-800 text-center">Choose Your Practice</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {practiceItems.map((item, index) => (
             <Link href={item.link} key={index}>

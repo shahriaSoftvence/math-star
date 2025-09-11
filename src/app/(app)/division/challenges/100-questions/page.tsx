@@ -346,7 +346,8 @@ export default function HundredQuestionsPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-purple-50 to-indigo-50 p-4 md:p-6">
+    <div className="bg-gradient-to-b from-purple-50 to-indigo-50">
+      <div className="max-w-[1440px] mx-auto min-h-screen p-4 md:p-6">
       <div className="flex items-center mb-6">
         <button
           onClick={() => router.back()}
@@ -403,6 +404,7 @@ export default function HundredQuestionsPage() {
           />
         </div>
       </div>
+    </div>
     </div>
   );
 }

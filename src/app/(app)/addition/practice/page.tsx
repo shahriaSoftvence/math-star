@@ -94,81 +94,74 @@ function PracticePageContent() {
     () => searchParams?.get("operation"),
     [searchParams]
   );
+  
 
-  // const generateQuestions = () => {
-  //   const newQuestions: Question[] = Array.from(
-  //     { length: questionCount },
-  //     () => {
-  //       const num1 = Math.floor(Math.random() * (numberRange + 1));
-  //       const maxNum2 = Math.min(9, numberRange - num1);
-  //       const num2 = Math.floor(Math.random() * (maxNum2 + 1));
-  //       return { num1, num2, answer: num1 + num2 };
-  //     }
-  //   );
-  //   setQuestions(newQuestions);
-  //   setProgress(Array(questionCount).fill("pending"));
-  //   setCurrentQuestionIndex(0);
-  //   setUserAnswer("");
-  //   setFeedback({ type: null, message: "" });
-  //   setIsComplete(false);
-  // };
+const generateQuestions = () => {
+  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+    let num1: number = 0;
+    let num2: number = 0;
+    let answer: number = 0;
 
-  const generateQuestions = () => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      let num1: number;
-      let num2: number;
-      let answer: number;
+    const maxTries = 100;
+    let tries = 0;
 
-      if (operation === "carry") {
-        // Pick num2 between 1 and numberRange, ensuring it's not zero
-        const minNum2 = 1;
-        const maxNum2 = numberRange - 1; // so num1 + num2 <= numberRange
-        num2 = Math.floor(Math.random() * (maxNum2 - minNum2 + 1)) + minNum2;
-
-        // num1 must be at least 10 so that carry is possible
-        const minNum1 = Math.max(10, 10 - (num2 % 10)); // units + num2 > 9
-        const maxNum1 = numberRange;
+    if (operation === "carry") {
+      do {
+        num2 = Math.floor(Math.random() * 9) + 1; 
+        const minNum1 = 10;
+        const maxNum1 = numberRange - num2;
 
         num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+        answer = num1 + num2;
+        tries++;
+      } while (
+        tries < maxTries &&
+        (
+          (num1 % 10) + num2 <= 9 || 
+          answer > numberRange
+        )
+      );
+    } 
+    else if (operation === "noCarry") {
+      do {
+        num2 = Math.floor(Math.random() * 9) + 1; 
 
-        // Ensure units + num2 > 9
-        const unitsDigit = num1 % 10;
-        if (unitsDigit + (num2 % 10) <= 9) {
-          const adjust = 10 - (unitsDigit + (num2 % 10));
-          num1 += adjust;
-          if (num1 > numberRange) num1 -= 10; // keep within range
-        }
-      }
-      else if (operation === "noCarry") {
-        // num2 can be any number up to numberRange
-        num2 = Math.floor(Math.random() * numberRange) + 1;
-
-        // Ensure B + C < 10
-        const unitsC = num2 % 10;
-        const maxUnits = Math.min(8 - unitsC, 9, numberRange); // strictly less than 10
+        const maxUnits = Math.min(9 - num2, numberRange); 
         const unitsDigit = Math.floor(Math.random() * (maxUnits + 1));
 
-        const maxTens = Math.floor((numberRange - unitsDigit) / 10);
+        const maxTens = Math.floor((numberRange - num2 - unitsDigit) / 10);
         const tensDigit = Math.floor(Math.random() * (maxTens + 1));
 
         num1 = tensDigit * 10 + unitsDigit;
-      }
-      else {
-        num1 = Math.floor(Math.random() * (numberRange + 1));
-        num2 = Math.floor(Math.random() * (numberRange + 1));
-      }
+        answer = num1 + num2;
+        tries++;
+      } while (
+        tries < maxTries &&
+        ( (num1 % 10) + num2 >= 9 || answer > numberRange )
+      );
+    } 
+    else {
+      do {
+        num2 = Math.floor(Math.random() * 9) + 1;
+        num1 = Math.floor(Math.random() * (numberRange - num2 + 1));
+        answer = num1 + num2;
+        tries++;
+      } while (answer > numberRange);
+    }
 
-      answer = num1 + num2;
-      return { num1, num2, answer };
-    });
+    return { num1, num2, answer };
+  });
 
-    setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill("pending"));
-    setCurrentQuestionIndex(0);
-    setUserAnswer("");
-    setFeedback({ type: null, message: "" });
-    setIsComplete(false);
-  };
+  setQuestions(newQuestions);
+  setProgress(Array(questionCount).fill("pending"));
+  setCurrentQuestionIndex(0);
+  setUserAnswer("");
+  setFeedback({ type: null, message: "" });
+  setIsComplete(false);
+};
+
+
+
 
 
 

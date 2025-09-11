@@ -43,7 +43,7 @@ function SelectQuestionsContent() {
   const divisor = rangesParam ? rangesParam.split(",") : [];
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto py-4">
       <div className="w-full flex justify-start">
         <Link
           href="/division"

@@ -30,7 +30,7 @@ function SelectQuestionsContent() {
   const operation = searchParams?.get('operation') ?? null;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto py-4">
        <div className="w-full flex justify-start">
           <Link href="/subtraction" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4">
             <ArrowLeft /> Go Back

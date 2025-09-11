@@ -35,7 +35,7 @@ const searchParams = useSearchParams();
   const range = searchParams?.get('range') ?? null;
   const operation = searchParams?.get('operation') ?? null;
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto py-4">
       <div className="w-full flex justify-start">
         <Link
           href="/addition"

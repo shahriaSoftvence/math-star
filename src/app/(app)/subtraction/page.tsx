@@ -31,7 +31,7 @@ const subtractionChallenges = [
 
 export default function SubtractionPage() {
   return (
-    <div className="max-w-[1152px] mx-auto space-y-8">
+    <div className="max-w-[1152px] mx-auto space-y-8 py-4">
        <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
             <ArrowLeft /> Go Back

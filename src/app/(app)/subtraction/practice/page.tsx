@@ -106,44 +106,52 @@ function PracticePageContent() {
 
   const generateQuestions = () => {
     const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      let num1: number;
-      let num2: number;
-      let answer: number;
+      let num1: number = 0;
+      let num2: number = 0;
+      let answer: number = 0;
 
       if (operation === "borrowing") {
-        // num1: AB
-        const tensDigit = Math.floor(Math.random() * Math.floor(numberRange / 10) + 1);
-        const unitsDigit = Math.floor(Math.random() * 9); // 0–8
-        num1 = tensDigit * 10 + unitsDigit;
+  do {
+    // num1 ≥ 10
+    num1 = Math.floor(Math.random() * (numberRange - 10 + 1)) + 10; // 10..numberRange
+    const unitsDigit = num1 % 10;
 
-        // num2: allow 1-digit or 2-digit randomly
-        if (Math.random() < 0.5) {
-          // 1-digit, but must be > unitsDigit
-          num2 = Math.floor(Math.random() * (9 - unitsDigit)) + (unitsDigit + 1);
-        } else {
-          // 2-digit, ensure its units digit > unitsDigit
-          const num2Tens = Math.floor(Math.random() * Math.floor(numberRange / 10));
-          const num2Units = Math.floor(Math.random() * (9 - unitsDigit)) + (unitsDigit + 1);
-          num2 = num2Tens * 10 + num2Units;
-        }
-      }
+    // num2: must be 0–9 and > unitsDigit
+    const minC = unitsDigit + 1;
+    const maxC = 9;
+
+    // ensure valid num2
+    if (minC > maxC) {
+      // if unitsDigit = 9, cannot borrow, skip this num1 and retry
+      continue;
+    }
+
+    num2 = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
+    answer = num1 - num2;
+  } while (answer < 0);
+}
 
       else if (operation === "noBorrowing") {
-        // AB - C, units digit of AB (B) > C
-        const tensDigit = Math.floor(Math.random() * Math.floor(numberRange / 10) + 1);
-        const unitsDigit = Math.floor(Math.random() * 9) + 1; // 1–9 (so B > 0)
-        num1 = tensDigit * 10 + unitsDigit;
+        do {
+          num1 = Math.floor(Math.random() * (numberRange + 1));
+          const unitsDigit = num1 % 10;
 
-        // pick num2 so that C < B
-        num2 = Math.floor(Math.random() * unitsDigit); // 0..B-1
+          // num2: 0–9, strictly less than unitsDigit
+          const minC = 0;
+          const maxC = Math.min(unitsDigit - 1, 9);
+          if (maxC < minC) continue; // cannot avoid borrowing, retry
+          num2 = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
+
+          answer = num1 - num2;
+        } while (answer < 0);
       }
       else {
-        // default: random subtraction, safe so result non-negative
+        // default subtraction
         num1 = Math.floor(Math.random() * (numberRange + 1));
-        num2 = Math.floor(Math.random() * Math.min(num1 + 1, 10));
+        num2 = Math.floor(Math.random() * 10); // 0–9
+        answer = num1 - num2;
       }
 
-      answer = num1 - num2;
       return { num1, num2, answer };
     });
 

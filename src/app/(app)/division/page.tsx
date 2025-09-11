@@ -6,7 +6,7 @@ import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronRight } from 'lucide-react';
 import DivisionCard from './divisionCard.tsx/page';
 
 const divisionExercises = [
@@ -62,7 +62,7 @@ export default function DivisionPage() {
   }
 
   return (
-    <div className="max-w-[1152px] mx-auto space-y-8">
+    <div className="max-w-[1152px] mx-auto space-y-8 py-4">
       <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
           <ArrowLeft /> Go Back
@@ -87,16 +87,19 @@ export default function DivisionPage() {
                 onToggle={toggleRange}
               />
             ))}
-          </div>
-
-          {selectedRanges.length > 0 && (
-
+            {selectedRanges.length > 0 && (
             <Link href={`/division/select-questions?ranges=${selectedRanges.join(",")}`} >
-              <button onClick={handleAddRange} className="w-full py-2 bg-gradient-to-br from-purple-400 to-purple-500 text-white rounded-lg hover:bg-purple-600 mt-4">
-                Continue with [ {selectedRanges.join(", ")} ] range
-              </button>
+              <div onClick={handleAddRange} className="p-4 text-center border-2 rounded-lg cursor-pointer transition-all border-purple-400 bg-white">
+                <h5 className='text-xs text-gray-600'>Continue with</h5>
+                <div className='flex justify-center items-center gap-1.5 my-2'>
+                  <h3 className='text-2xl font-semibold text-gray-800"'>Go</h3>
+                   <ChevronRight className='text-xl' />
+                </div>
+                <p className='text-sm font-medium overflow-hidden'>[ {selectedRanges.join(", ")} ]</p>               
+              </div>
             </Link>
           )}
+          </div>
         </div>
       </div>
 
