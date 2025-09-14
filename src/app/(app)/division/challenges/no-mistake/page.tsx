@@ -74,7 +74,7 @@ export default function NoMistakePage() {
     const [question, setQuestion] = useState<Question>({ num1: 0, num2: 0, answer: 0 });
     const [userAnswer, setUserAnswer] = useState('');
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(5); // Increased time for division
+    const [timeLeft, setTimeLeft] = useState(10); // Increased time for division
     const [addDivisionNoMistake, { data }] = useAddDivisionNoMistakeMutation();
     console.log(data, "form live")
 
@@ -94,12 +94,12 @@ export default function NoMistakePage() {
     };
 
     const generateQuestion = useCallback(() => {
-        const num2 = Math.floor(Math.random() * 9) + 2; // Divisor from 2 to 10
-        const answer = Math.floor(Math.random() * 9) + 2; // Answer from 2 to 10
+        const num2 = Math.floor(Math.random() * 9) + 2; 
+        const answer = Math.floor(Math.random() * 9) + 2; 
         const num1 = num2 * answer;
         setQuestion({ num1, num2, answer });
         setUserAnswer('');
-        setTimeLeft(5);
+        setTimeLeft(10);
     }, []);
 
     const handleGameOver = useCallback(() => {

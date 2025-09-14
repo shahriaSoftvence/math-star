@@ -49,7 +49,7 @@ const HeroSection = () => {
               Turn Screen Time Into real study time
             </span>
             <br />
-            <span className="bg-gradient-to-r from-[#0D1216] to-[#008EFF] inline-block text-transparent bg-clip-text text-neutral-900">
+            <span className="bg-gradient-to-r from-[#0D1216] to-[#008EFF] inline-block text-transparent bg-clip-text">
               Elementary school math made fun
             </span>
           </h1>

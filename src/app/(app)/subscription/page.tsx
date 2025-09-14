@@ -19,7 +19,7 @@ import {
   useAddPaymentMethodMutation,
 } from "@/Redux/features/subscription/subscriptionApi";
 import { toast } from "sonner";
-import { PaymentMethod, PaymentMethodData } from "../../../../type/subscription";
+import { PaymentMethodData } from "../../../../type/subscription";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
@@ -107,7 +107,7 @@ export default function SubscriptionPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">No Active Subscription</h1>
           <p className="text-gray-600 mb-6">You do not have an active subscription. Please subscribe to access premium features.</p>
-          <Link href="/pricing" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+          <Link href="/#pricing" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             View Plans
           </Link>
         </div>
@@ -166,7 +166,7 @@ export default function SubscriptionPage() {
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 bg-white rounded-3xl shadow-lg">
-            <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4">
+            <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4 ">
               Auto Renewal
             </h3>
             <div className="flex justify-between items-center">
