@@ -38,7 +38,7 @@ const Footer = () => {
               <li><Link href="#" className="hover:text-white">Help Center</Link></li>
               <li><Link href="#faq" className="hover:text-white">FAQs</Link></li>
               <li><Link href="#" className="hover:text-white">Privacy Policy</Link></li>
-              <li><Link href="#" className="hover:text-white">Terms of Service</Link></li>
+              <li><Link href="/terms" className="hover:text-white">Terms & Conditions</Link></li>
               <li><Link href="#" className="hover:text-white">Cookie Policy</Link></li>
             </ul>
           </div>
@@ -47,7 +47,7 @@ const Footer = () => {
           <p>© 2025 MathFun. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="#" className="hover:text-white">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white">Terms of Service</Link>
+            <Link href="/terms" className="hover:text-white">Terms & Conditions</Link>
             <Link href="#" className="hover:text-white">Cookie Policy</Link>
           </div>
         </div>
