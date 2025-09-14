@@ -1,35 +1,11 @@
+import { PaymentMethod, Plan, PlanResponse, UserActivePlan } from "../../../../type/subscription";
 import { baseApi } from "../../api/baseApi";
 
-interface Plan {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  features: string[];
-}
-
-interface UserActivePlan {
-  id: number;
-  plan: Plan;
-  start_date: string;
-  end_date: string;
-  is_active: boolean;
-  is_recurring: boolean;
-}
-
-interface PaymentMethod {
-  id: string;
-  brand: string;
-  last4: string;
-  exp_month: number;
-  exp_year: number;
-  is_default: boolean;
-}
 
 const subscriptionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get all available plans
-    getPlans: builder.query<Plan[], void>({
+    getPlans: builder.query<PlanResponse, void>({
       query: () => ({
         url: "/plan-list/",
         method: "GET",
@@ -64,8 +40,8 @@ const subscriptionApi = baseApi.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
-    // Get payment methods
-    getPaymentMethods: builder.query<PaymentMethod[], void>({
+    // Get payment methods ---------------------------------------------------------------------------------------
+    getPaymentMethods: builder.query<PaymentMethod, void>({
       query: () => ({
         url: "/payment-method/",
         method: "GET",
@@ -73,7 +49,8 @@ const subscriptionApi = baseApi.injectEndpoints({
       providesTags: ["Subscription"],
     }),
 
-    // Add a new payment method
+
+    // Add a new payment method ---------------------------------------------------------------------------------------------
     addPaymentMethod: builder.mutation({
       query: (paymentMethodData) => ({
         url: "/add-card/",
@@ -82,6 +59,8 @@ const subscriptionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Subscription"],
     }),
+
+    // ------------------------------------------------------------------------------------------------------------------
 
     // Renew subscription now
     renewSubscription: builder.mutation({

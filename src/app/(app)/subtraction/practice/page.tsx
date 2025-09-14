@@ -104,64 +104,85 @@ function PracticePageContent() {
     [searchParams]
   );
 
-  const generateQuestions = () => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      let num1: number = 0;
-      let num2: number = 0;
-      let answer: number = 0;
+  const generateQuestions = useCallback(() => {
+    const newQuestions: Question[] = [];
+    const maxAttempts = Math.max(1000, questionCount * 50);
+    let attempts = 0;
+
+    while (newQuestions.length < questionCount && attempts < maxAttempts) {
+      attempts++;
+
+      let num1 = 0;
+      let num2 = 0;
+      let answer = 0;
 
       if (operation === "borrowing") {
-  do {
-    // num1 ≥ 10
-    num1 = Math.floor(Math.random() * (numberRange - 10 + 1)) + 10; // 10..numberRange
-    const unitsDigit = num1 % 10;
-
-    // num2: must be 0–9 and > unitsDigit
-    const minC = unitsDigit + 1;
-    const maxC = 9;
-
-    // ensure valid num2
-    if (minC > maxC) {
-      // if unitsDigit = 9, cannot borrow, skip this num1 and retry
-      continue;
-    }
-
-    num2 = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
-    answer = num1 - num2;
-  } while (answer < 0);
-}
-
-      else if (operation === "noBorrowing") {
-        do {
+        // If numberRange is too small to have tens digit, fallback to default
+        if (numberRange < 10) {
+          // fallback to default behaviour if impossible to borrow
           num1 = Math.floor(Math.random() * (numberRange + 1));
-          const unitsDigit = num1 % 10;
-
-          // num2: 0–9, strictly less than unitsDigit
-          const minC = 0;
-          const maxC = Math.min(unitsDigit - 1, 9);
-          if (maxC < minC) continue; // cannot avoid borrowing, retry
-          num2 = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
-
+          num2 = Math.floor(Math.random() * 10);
           answer = num1 - num2;
-        } while (answer < 0);
-      }
-      else {
-        // default subtraction
+        } else {
+          // choose a num1 whose units digit is NOT 9 (so borrow is possible)
+          num1 = Math.floor(Math.random() * (numberRange - 10 + 1)) + 10; // 10..numberRange
+          const unitsDigit = num1 % 10;
+          if (unitsDigit === 9) {
+            // skip this num1 — cannot force borrowing when units digit is 9
+            continue;
+          }
+
+          const minC = unitsDigit + 1; // must be greater than units digit to force borrow
+          const maxC = 9;
+          if (minC > maxC) {
+            // Shouldn't happen due to check unitsDigit !== 9; but guard anyway
+            continue;
+          }
+          num2 = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
+          answer = num1 - num2;
+        }
+      } else if (operation === "noBorrowing") {
+        // choose num1 so that unitsDigit > 0 (otherwise impossible to avoid borrowing)
         num1 = Math.floor(Math.random() * (numberRange + 1));
-        num2 = Math.floor(Math.random() * 10); // 0–9
+        const unitsDigit = num1 % 10;
+        if (unitsDigit === 0) {
+          // can't avoid borrowing if unitsDigit is 0 because num2 must be < 0 -> skip
+          continue;
+        }
+        const minC = 0;
+        const maxC = Math.min(unitsDigit - 1, 9);
+        if (maxC < minC) {
+          continue;
+        }
+        num2 = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
+        answer = num1 - num2;
+      } else {
+        // default: any subtraction with num2 0..9
+        num1 = Math.floor(Math.random() * (numberRange + 1));
+        num2 = Math.floor(Math.random() * 10);
         answer = num1 - num2;
       }
 
-      return { num1, num2, answer };
-    });
+      // Safety: avoid negative answers
+      if (answer < 0) continue;
+
+      // Push the question
+      newQuestions.push({ num1, num2, answer });
+    }
+
+    if (newQuestions.length < questionCount) {
+      console.warn(
+        `generateQuestions: requested ${questionCount} but generated ${newQuestions.length}. Consider increasing numberRange or relaxing operation constraints.`
+      );
+    }
 
     setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill("pending"));
+    setProgress(Array(newQuestions.length).fill("pending"));
     setCurrentQuestionIndex(0);
     setUserAnswer("");
     setFeedback({ type: null, message: "" });
     setIsComplete(false);
-  };
+  }, [questionCount, numberRange, operation]);
 
 
   // Generate questions
@@ -203,49 +224,57 @@ function PracticePageContent() {
   }, [playSound]);
 
   const handleSubmit = useCallback(() => {
-    if (!userAnswer) return;
+  if (!userAnswer) return;
 
-    setTotalClicks((prev) => prev + 1);
+  setTotalClicks((prev) => prev + 1);
 
-    const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
-    const newProgress = [...progress];
-    newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
-    setProgress(newProgress);
+  const parsedAnswer = Number(userAnswer.trim());
+  const isCorrect =
+    !Number.isNaN(parsedAnswer) && parsedAnswer === currentQuestion.answer;
 
-    if (isCorrect) {
-      setFeedback({
-        type: "correct",
-        message: "Your answer is absolutely correct!",
-      });
-      setShowHelp(false);
-      playSound("/Sounds/Check-Click-sound.wav");
+  console.log(
+    `Q: ${currentQuestion.num1} - ${currentQuestion.num2} = ${currentQuestion.answer}, User: ${parsedAnswer}`
+  );
 
-      setTimeout(() => {
-        if (currentQuestionIndex < questions.length - 1) {
-          setCurrentQuestionIndex((prev) => prev + 1);
-          setUserAnswer("");
-          setFeedback({ type: null, message: "" });
-        } else {
-          setIsComplete(true);
-        }
-      }, 1500);
-    } else {
-      setFeedback({
-        type: "incorrect",
-        message: "Now enter the correct answer to continue",
-      });
-      setShowHelp(true);
-      playSound("/Sounds/Wrong-Answer-sound.wav");
-      setUserAnswer(""); // Clear the input field on wrong answer
-    }
-  }, [
-    userAnswer,
-    currentQuestion,
-    progress,
-    currentQuestionIndex,
-    questions.length,
-    playSound,
-  ]);
+  const newProgress = [...progress];
+  newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
+  setProgress(newProgress);
+
+  if (isCorrect) {
+    setFeedback({
+      type: "correct",
+      message: "Your answer is absolutely correct!",
+    });
+    setShowHelp(false);
+    playSound("/Sounds/Check-Click-sound.wav");
+
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setUserAnswer("");
+        setFeedback({ type: null, message: "" });
+      } else {
+        setIsComplete(true);
+      }
+    }, 1500);
+  } else {
+    setFeedback({
+      type: "incorrect",
+      message: `The correct answer is ${currentQuestion.answer}. Try again!`,
+    });
+    setShowHelp(true);
+    playSound("/Sounds/Wrong-Answer-sound.wav");
+    setUserAnswer(""); // Clear input on wrong
+  }
+}, [
+  userAnswer,
+  currentQuestion,
+  progress,
+  currentQuestionIndex,
+  questions.length,
+  playSound,
+]);
+
 
   // Keyboard support with proper dependencies
   useEffect(() => {

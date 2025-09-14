@@ -19,20 +19,19 @@ import {
   useAddPaymentMethodMutation,
 } from "@/Redux/features/subscription/subscriptionApi";
 import { toast } from "sonner";
+import { PaymentMethod, PaymentMethodData } from "../../../../type/subscription";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
   return (
     <button
       onClick={onToggle}
-      className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors ${
-        isEnabled ? "bg-blue-500" : "bg-gray-300"
-      }`}
+      className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors ${isEnabled ? "bg-blue-500" : "bg-gray-300"
+        }`}
     >
       <span
-        className={`inline-block w-5 h-5 transform bg-white rounded-full transition-transform ${
-          isEnabled ? "translate-x-5" : "translate-x-0.5"
-        }`}
+        className={`inline-block w-5 h-5 transform bg-white rounded-full transition-transform ${isEnabled ? "translate-x-5" : "translate-x-0.5"
+          }`}
       />
     </button>
   );
@@ -40,18 +39,19 @@ const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: (
 
 export default function SubscriptionPage() {
   const [loading, setLoading] = useState(false);
-  
+
   // Fetch subscription data using Redux APIs
   const { data: activePlan, isLoading: planLoading } = useGetUserActivePlanQuery();
   const { data: paymentMethods } = useGetPaymentMethodsQuery();
   const [cancelSubscription] = useCancelSubscriptionMutation();
   const [addPaymentMethod] = useAddPaymentMethodMutation();
-  
+
+
   // Derive subscription state from API data
   const subscription = {
     isActive: true,
     // isActive: activePlan?.is_active || false,
-    planName: activePlan?.plan?.name || "No Active Plan",
+    planName: activePlan?.plan || "No Active Plan",
     renewsOn: activePlan?.end_date ? new Date(activePlan.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "",
     nextCharge: activePlan?.end_date ? new Date(activePlan.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "",
     autoRenew: activePlan?.is_recurring || false,
@@ -60,27 +60,7 @@ export default function SubscriptionPage() {
 
   const handleManageSubscription = async () => {
     setLoading(true);
-    try {
-      const response = await fetch("/api/payments/manage-subscription", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ customerId: subscription.stripeCustomerId }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create Stripe portal session.");
-      }
-
-      const { url } = await response.json();
-      window.location.href = url; // Redirect to Stripe Customer Portal
-    } catch (error) {
-      console.error("Error managing subscription:", error);
-      alert("Could not open subscription management. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    
   };
 
   const handleCancelSubscription = async () => {
@@ -95,13 +75,20 @@ export default function SubscriptionPage() {
 
   const handleAddPaymentMethod = async () => {
     try {
-      await addPaymentMethod({}).unwrap();
-      toast.success("Payment method added successfully");
+      const res = await addPaymentMethod({}).unwrap();
+
+      if (res?.url) {
+        // redirect to the returned URL
+        window.location.href = res.url;
+      } else {
+        toast.success("Payment method added successfully");
+      }
     } catch (error) {
       console.error("Error adding payment method:", error);
       toast.error("Failed to add payment method");
     }
   };
+
 
   if (planLoading) {
     return (
@@ -116,15 +103,15 @@ export default function SubscriptionPage() {
   if (!subscription.isActive) {
     // Render a view for users without an active subscription
     return (
-        <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center items-center">
-            <div className="text-center">
-                <h1 className="text-2xl font-bold mb-4">No Active Subscription</h1>
-                <p className="text-gray-600 mb-6">You do not have an active subscription. Please subscribe to access premium features.</p>
-                <Link href="/pricing" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-                    View Plans
-                </Link>
-            </div>
+      <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center items-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">No Active Subscription</h1>
+          <p className="text-gray-600 mb-6">You do not have an active subscription. Please subscribe to access premium features.</p>
+          <Link href="/pricing" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+            View Plans
+          </Link>
         </div>
+      </div>
     );
   }
 
@@ -158,7 +145,7 @@ export default function SubscriptionPage() {
                 <h2 className="text-xl font-bold font-Nunito">
                   Current Subscription
                 </h2>
-                <p className="text-purple-100 font-Nunito">{subscription.planName}</p>
+                <p className="text-purple-100 font-Nunito">No plan</p>
               </div>
             </div>
             <div className="flex flex-col items-start sm:items-end gap-2">
@@ -199,7 +186,7 @@ export default function SubscriptionPage() {
               Quick Actions
             </h3>
             <div className="flex flex-col gap-3">
-              <button 
+              <button
                 onClick={handleManageSubscription}
                 disabled={loading}
                 className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 disabled:opacity-50">
@@ -210,7 +197,7 @@ export default function SubscriptionPage() {
               </button>
               <button
                 onClick={handleManageSubscription}
-                disabled={loading} 
+                disabled={loading}
                 className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-red-200 rounded-md hover:bg-red-50 disabled:opacity-50">
                 <XCircle size={16} className="text-red-600" />
                 <span className="text-red-600 text-sm font-medium font-Nunito">
@@ -237,15 +224,19 @@ export default function SubscriptionPage() {
           </div>
           <div className="space-y-4">
             {/* Display payment methods if available */}
-            {paymentMethods && paymentMethods.length > 0 ? (
-              paymentMethods.map((method) => (
+            {paymentMethods?.data?.length ? (
+              paymentMethods.data.map((method: PaymentMethodData) => (
                 <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <div>
                     <p className="font-medium">{method.brand} •••• {method.last4}</p>
-                    <p className="text-sm text-gray-500">Expires {method.exp_month}/{method.exp_year}</p>
+                    <p className="text-sm text-gray-500">
+                      Expires {method.exp_month} /{method.exp_year}
+                    </p>
                   </div>
                   {method.is_default && (
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Default</span>
+                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+                      Default
+                    </span>
                   )}
                 </div>
               ))
@@ -254,17 +245,16 @@ export default function SubscriptionPage() {
                 No payment methods on file. Add a card to continue your subscription.
               </p>
             )}
-             <button
-                onClick={handleManageSubscription}
-                disabled={loading}
-                className="w-full mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+            <button
+              onClick={handleManageSubscription}
+              disabled={loading}
+              className="w-full mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
             >
-                {loading ? "Loading..." : "Open Payment Settings"}
+              {loading ? "Loading..." : "Open Payment Settings"}
             </button>
           </div>
         </div>
-        
-        {/* Billing History (now dynamically loaded) */}
+
         <div>
           <GetPaymentData />
         </div>
