@@ -1,10 +1,9 @@
-// ste_br/src/components/landing/PricingSection.tsx
-'use client'; // <-- Add this line
+'use client';
+
 import { Check } from 'lucide-react';
 import React from 'react';
 import { IoStar } from "react-icons/io5";
-import { motion } from 'framer-motion'; // <-- Import motion
-import { useAuth } from '@/Redux/hooks';
+import { motion } from 'framer-motion'; 
 import { useRouter } from "next/navigation";
 
 
@@ -17,14 +16,8 @@ const pricingFeatures = [
 ];
 
 const PricingSection = () => {
-  const { isAuthenticated, user } = useAuth();
   const router = useRouter();
-  const handleAddSubscription = () => {
-    if (!isAuthenticated && !user) {
-      router.push("/signin");
-      return;
-    }
-  }
+
   return (
     <section id="pricing" className="py-24 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-4">
@@ -62,7 +55,7 @@ const PricingSection = () => {
                 </div>
               ))}
             </div>
-            <button onClick={handleAddSubscription} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
+            <button onClick={() => router.push("/subscription")} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
               Start 3 Day Free Trial
             </button>
           </div>

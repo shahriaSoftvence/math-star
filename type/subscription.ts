@@ -14,13 +14,20 @@ export interface PlanResponse {
 }
 
 
-export interface UserActivePlan {
+export interface ActivePlan {
   id: number;
-  plan: Plan;
+  user: number;      
+  plan: number;      
   start_date: string;
   end_date: string;
   is_active: boolean;
-  is_recurring: boolean;
+}
+
+export interface UserActivePlan {
+  status : string;
+  status_code : number;
+  message : string;
+  data : ActivePlan[];
 }
 
 export interface PaymentMethodData {
