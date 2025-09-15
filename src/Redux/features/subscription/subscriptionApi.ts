@@ -40,7 +40,6 @@ const subscriptionApi = baseApi.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
-    // Get payment methods ---------------------------------------------------------------------------------------
     getPaymentMethods: builder.query<PaymentMethod, void>({
       query: () => ({
         url: "/payment-method/",
@@ -50,7 +49,6 @@ const subscriptionApi = baseApi.injectEndpoints({
     }),
 
 
-    // Add a new payment method ---------------------------------------------------------------------------------------------
     addPaymentMethod: builder.mutation({
       query: (paymentMethodData) => ({
         url: "/add-card/",
@@ -60,7 +58,6 @@ const subscriptionApi = baseApi.injectEndpoints({
       invalidatesTags: ["Subscription"],
     }),
 
-    // ------------------------------------------------------------------------------------------------------------------
 
     // Renew subscription now
     renewSubscription: builder.mutation({
