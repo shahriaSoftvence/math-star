@@ -103,7 +103,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   // Handle profile navigation
   const handleProfileClick = () => {
     // Navigate to profile page - you can replace this with your routing logic
-    router.push("/profile");
+    router.push("/dashboard/profile");
     setIsProfileOpen(false);
   };
 

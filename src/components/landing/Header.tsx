@@ -66,30 +66,22 @@ const Header = () => {
           <Link href="/">
             <Image src={Logo} alt="Math Star Logo" className="w-32 md:w-40 h-auto" />
           </Link>
-          <nav className="md:flex md:items-center md:gap-8 lg:gap-16 hidden">
-            <Link
-              href="#features"
-              className="text-black text-lg font-medium font-Poppins leading-relaxed"
-            >
+          <nav className="hidden md:flex md:items-center md:gap-8 lg:gap-16">
+            <Link href="/#features" className="text-black text-lg font-medium font-Poppins leading-relaxed">
               What is Math Star?
             </Link>
-            <Link
-              href="#pricing"
-              className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
-            >
+            <Link href="/#pricing" className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
               Pricing
             </Link>
-            <Link
-              href="#faq"
-              className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
-            >
+            <Link href="/#faq" className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
               FAQ
             </Link>
           </nav>
+
           <div className="flex items-center gap-4">
             <Image src={Flag} alt="Language Flag" className="w-10 h-auto" />
             <div className="h-12 w-24 bg-gray-200 rounded-[100px] animate-pulse"></div>
-            <HamburgerMenu isOpen={false} setIsOpen={() => {}} />
+            <HamburgerMenu isOpen={false} setIsOpen={() => { }} />
           </div>
         </div>
       </header>
@@ -105,29 +97,28 @@ const Header = () => {
         <nav
           className={`
             md:flex md:items-center md:gap-8 lg:gap-16
-            ${
-              isMenuOpen
-                ? 'flex flex-col absolute top-24 left-0 w-full bg-white/90 p-8 gap-4'
-                : 'hidden'
+            ${isMenuOpen
+              ? 'flex flex-col absolute top-24 left-0 w-full bg-white/90 p-8 gap-4'
+              : 'hidden'
             }
           `}
         >
           <Link
-            href="#features"
+            href={{ pathname: "/", hash: "features" }}
             className="text-black text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
             What is Math Star?
           </Link>
           <Link
-            href="#pricing"
+            href={{ pathname: "/", hash: "pricing" }}
             className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
             Pricing
           </Link>
           <Link
-            href="#faq"
+            href={{ pathname: "/", hash: "faq" }}
             className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -136,7 +127,7 @@ const Header = () => {
         </nav>
         <div className="flex items-center gap-4">
           <Image src={Flag} alt="Language Flag" className="w-10 h-auto" />
-          
+
           {/* Show different buttons based on authentication status */}
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
@@ -147,11 +138,11 @@ const Header = () => {
                   className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-150"
                   aria-label="Profile menu"
                 >
-                  <Image 
-                    src={user.profile_pic || Profile} 
-                    width={48} 
-                    height={48} 
-                    alt="User Avatar" 
+                  <Image
+                    src={user.profile_pic || Profile}
+                    width={48}
+                    height={48}
+                    alt="User Avatar"
                     className="rounded-full cursor-pointer border-2 border-white/20"
                     onError={(e) => {
                       // Fallback to default profile image if profile_pic fails to load
@@ -160,7 +151,7 @@ const Header = () => {
                     }}
                   />
                 </button>
-                
+
                 {isProfileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-20 border">
                     <div className="py-2">
@@ -184,13 +175,13 @@ const Header = () => {
               </div>
             </div>
           ) : (
-            <Link href="/signin">
+            <Link href="/auth/signin">
               <button className="h-12 px-6 bg-blue-500 rounded-[100px] text-white text-lg font-medium font-Poppins leading-relaxed hover:bg-blue-600 transition-colors">
                 Sign In
               </button>
             </Link>
           )}
-          
+
           <HamburgerMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
         </div>
       </div>

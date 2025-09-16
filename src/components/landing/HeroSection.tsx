@@ -58,12 +58,12 @@ const HeroSection = () => {
             exciting challenges.
           </p>
           <div className="flex items-center gap-3">
-            <Link href="/signup">
+            <Link href="/auth/signup">
               <button className="h-14 px-5 py-3 bg-blue-500 rounded-lg text-white text-xl font-bold font-Quicksand leading-normal hover:bg-blue-600 transition-colors">
                 Sign Up
               </button>
             </Link>
-            <Link href="/signin">
+            <Link href="/auth/signin">
               <button className="h-14 px-5 py-3 bg-zinc-100 rounded-lg text-black text-xl font-bold font-Quicksand leading-normal hover:bg-zinc-200 transition-colors">
                 Sign In
               </button>

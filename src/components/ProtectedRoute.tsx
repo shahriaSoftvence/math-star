@@ -16,7 +16,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     // Check if user is authenticated
     if (!isAuthenticated || !user) {
       // Redirect to signin page if not authenticated
-      router.push("/signin");
+      router.push("/auth/signin");
     }
   }, [isAuthenticated, user, router]);
 
