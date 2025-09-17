@@ -21,20 +21,20 @@ const PracticeCard = ({
   textColor,
   iconColor,
 }: PracticeCardProps) => {
-  const [setAddition, {data}] = useSetAdditionMutation();
-  console.log(data, "the data");
+  const [setAddition] = useSetAdditionMutation();
   const [setSubtraction] = useSetSubtractionMutation();
   const [setMultiplication] = useSetMultiplicationMutation();
   const [setDivision] = useSetDivisionMutation();
 
   const handleSetMethod = async (title: string) => {
-    if (title === "Addition") {
+    console.log(title)
+    if (title === "Practice Addition") {
      await setAddition();
-    } else if (title === "Subtraction") {
+    } else if (title === "Practice Subtraction") {
      await setSubtraction();
-    } else if (title === "Multiplication") {
+    } else if (title === "Practice Multiplication") {
     await  setMultiplication();
-    } else if (title === "Division") {
+    } else if (title === "Practice Division") {
      await setDivision();
     }
   };

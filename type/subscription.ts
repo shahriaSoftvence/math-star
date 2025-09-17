@@ -50,3 +50,19 @@ export interface PaymentMethod {
   message: string;
   data : PaymentMethodData[]
 }
+
+
+export interface BillingHistoryItem {
+  billing_time: string;
+  plan_name: string;
+  card_brand: string | null;
+  card_last4: string | null;
+  amount: string;
+}
+
+export interface BillingHistoryResponse {
+  status: string;
+  status_code: number;
+  message: string;
+  data: BillingHistoryItem[];
+}

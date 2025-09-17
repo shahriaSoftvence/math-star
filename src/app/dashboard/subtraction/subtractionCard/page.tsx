@@ -37,7 +37,7 @@ export default function SubtractionCard({
 
   return (
     <Link
-      href={`/subtraction/select-questions?range=${rangeParam}&operation=${operation}`}
+      href={`/dashboard/subtraction/select-questions?range=${rangeParam}&operation=${operation}`}
       onClick={() => handleAddExercise(parseInt(rangeParam))}
     >
       <div className="p-4 text-center bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:border-blue-400">

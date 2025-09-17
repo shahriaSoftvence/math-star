@@ -24,26 +24,24 @@ export default function AppLayout({
 return (
   <ProtectedRoute>
     <div className="flex">
-      {/* Sidebar hidden on practice pages */}
       {!isPracticePage && (
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       )}
-
       <div className={`flex-1 ${!isPracticePage ? "md:ml-64" : ""}`}>
-        {/* Navbar hidden on practice pages */}
-        {!isPracticePage && (
+      
+          {!isPracticePage && (
           <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         )}
-
-        {/* Main content */}
+    
         <main
-          className={`${isPracticePage ? "w-full h-screen" : ""}`}
+          className={`pt-4 ${isPracticePage ? "w-full h-screen" : ""}`}
         >
           {children}
         </main>
       </div>
     </div>
   </ProtectedRoute>
+
 );
 
 }

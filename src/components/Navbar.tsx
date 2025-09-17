@@ -110,7 +110,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   // Don't render until client-side to prevent hydration mismatch
   if (!isClient) {
     return (
-      <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
+      <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white shadow-md rounded-2xl flex justify-between items-center">
         <div className="flex items-center gap-4">
           <button
             onClick={toggleSidebar}
@@ -140,7 +140,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   // If no user is authenticated, show loading or default state
   if (!displayUser || !isAuthenticated) {
     return (
-      <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
+      <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white shadow-md rounded flex justify-between items-center">
         <div className="flex items-center gap-4">
           <button
             onClick={toggleSidebar}
@@ -168,7 +168,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   }
 
   return (
-    <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white rounded-2xl flex justify-between items-center">
+    <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white shadow-md rounded-2xl flex justify-between items-center">
       <div className="flex items-center gap-4">
         <button
           onClick={toggleSidebar}

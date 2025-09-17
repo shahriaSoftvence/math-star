@@ -21,6 +21,7 @@ export default function AdditionCard({
     const [addNoCarryExercise] = useAddNoCarryExerciseMutation();
 
     const rangeParam = range.split(" to ")[1];
+    console.log("range params",rangeParam)
 
     const handleAddExercise = (range_value: number) => {
         if (operation === "noCarry") {

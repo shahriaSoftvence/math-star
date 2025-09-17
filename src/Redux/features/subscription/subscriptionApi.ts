@@ -1,4 +1,4 @@
-import { PaymentMethod, Plan, PlanResponse, UserActivePlan } from "../../../../type/subscription";
+import { BillingHistoryResponse, PaymentMethod, Plan, PlanResponse, UserActivePlan } from "../../../../type/subscription";
 import { baseApi } from "../../api/baseApi";
 
 
@@ -43,6 +43,14 @@ const subscriptionApi = baseApi.injectEndpoints({
     getPaymentMethods: builder.query<PaymentMethod, void>({
       query: () => ({
         url: "/payment-method/",
+        method: "GET",
+      }),
+      providesTags: ["Subscription"],
+    }),
+
+    getBillingHistory: builder.query<BillingHistoryResponse, void>({
+      query: () => ({
+        url: "/billing-history/",
         method: "GET",
       }),
       providesTags: ["Subscription"],
@@ -95,5 +103,6 @@ export const {
   useAddPaymentMethodMutation,
   useRenewSubscriptionMutation,
   useWebhookMutation,
-  useAutoRenewSubscriptionMutation
+  useAutoRenewSubscriptionMutation,
+  useGetBillingHistoryQuery
 } = subscriptionApi;
