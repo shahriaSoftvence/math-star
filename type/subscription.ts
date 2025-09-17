@@ -16,11 +16,15 @@ export interface PlanResponse {
 
 export interface ActivePlan {
   id: number;
-  user: number;      
-  plan: number;      
+  user: number;
+  plan_id: number;
+  plan_name: string;
   start_date: string;
   end_date: string;
   is_active: boolean;
+  is_trial: boolean;
+  is_auto_renew: boolean;
+  stripe_subscription_id: string;
 }
 
 export interface UserActivePlan {

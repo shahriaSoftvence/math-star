@@ -91,7 +91,7 @@ export default function SignUpPage() {
       if (result.success) {
         toast.success('OTP verified successfully! You can now sign in.');
         // Redirect to signin page with redirect parameter
-        window.location.href = `/signin?redirect=${encodeURIComponent(redirectTo)}`;
+        window.location.href = `/auth/signin?redirect=${encodeURIComponent(redirectTo)}`;
       }
     } catch (error: unknown) {
       const errorMessage = error && typeof error === 'object' && 'data' in error && 
@@ -271,7 +271,7 @@ export default function SignUpPage() {
 
             <div className="text-center mt-4">
               <span className="text-zinc-900 text-sm font-Quicksand">Already have an account? </span>
-              <Link href={`/signin?redirect=${encodeURIComponent(redirectTo)}`} className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
+              <Link href={`/auth/signin?redirect=${encodeURIComponent(redirectTo)}`} className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
                 Sign In
               </Link>
             </div>

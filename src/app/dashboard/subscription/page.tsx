@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -21,10 +21,14 @@ import {
   useGetPlansQuery,
   useCreateSubscriptionMutation,
   useRenewSubscriptionMutation,
+  useAutoRenewSubscriptionMutation,
 } from "@/Redux/features/subscription/subscriptionApi";
 import { toast } from "sonner";
 import { PaymentMethodData } from "../../../../type/subscription";
 import { IoStar } from "react-icons/io5";
+import moment from "moment";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
@@ -54,6 +58,7 @@ export default function SubscriptionPage() {
   const [addPaymentMethod] = useAddPaymentMethodMutation();
 
   const [renewSubscription] = useRenewSubscriptionMutation();
+  const [autoRenewSubscription] = useAutoRenewSubscriptionMutation();
 
   const [subscriptionActive, setSubscriptionActive] = useState<boolean | null>(null);
 
@@ -63,9 +68,19 @@ export default function SubscriptionPage() {
     }
   }, [activePlan]);
 
+  const userActivePlan = activePlan?.data?.[0];
   const handleManageSubscription = async () => {
     try {
       const res = await renewSubscription({}).unwrap();
+      toast.success(res?.message);
+    } catch (error: any) {
+      toast.error(error?.data?.message);
+    }
+  };
+
+  const handleToggleSubscription = async () => {
+    try {
+      const res = await autoRenewSubscription({}).unwrap();
       toast.success(res?.message);
     } catch (error: any) {
       toast.error(error?.data?.message);
@@ -129,12 +144,7 @@ export default function SubscriptionPage() {
       </div>
     );
   }
-
-  if (subscriptionActive) {
-
-    console.log(activePlan)
-
-    return (
+  return (
       <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
         <div className="w-full max-w-4xl flex flex-col gap-8">
           {/* Header */}
@@ -164,20 +174,39 @@ export default function SubscriptionPage() {
                   <h2 className="text-xl font-bold font-Nunito">
                     Current Subscription
                   </h2>
-                  <p className="text-purple-100 font-Nunito">No plan</p>
+                  <p className="text-purple-100 font-Nunito capitalize font-medium">{userActivePlan?.plan_name || "No Plan"}  {userActivePlan?.is_trial && "Free Trial"}</p>
                 </div>
               </div>
               <div className="flex flex-col items-start sm:items-end gap-2">
                 <div className="flex items-center gap-2 text-sm text-purple-100 font-Nunito">
                   <Calendar size={16} />
-                  <span>Renews on : </span>
+                  <span>Renews on : {userActivePlan?.end_date
+                    ? moment(userActivePlan.end_date).format("Do MMM, YYYY")
+                    : "N/A"}</span>
                 </div>
-                <button
-                  onClick={handleCancelSubscription}
+                {/* <button
+                  
                   disabled={loading}
                   className="px-3 py-2 bg-white text-red-500 text-sm font-medium font-Nunito rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50">
                   {loading ? "Loading..." : "Cancel Subscription"}
-                </button>
+                </button> */}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant={"outline"} className="text-red-500 hover:text-red-600">{userActivePlan?.is_active ? "Cancel Subscription" : "Buy Subscription"}</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to cancel your subscription?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>No</AlertDialogCancel>
+                      <AlertDialogAction className="bg-red-700 hover:bg-red-600" onClick={handleCancelSubscription}>{loading ? "Loading..." : "Continue"}</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </div>
@@ -194,10 +223,13 @@ export default function SubscriptionPage() {
                     Automatically renew subscription
                   </p>
                   <p className="text-gray-500 text-sm font-Nunito">
-                    Next charge on :
+                    Next charge on : {userActivePlan?.end_date
+                      ? moment(userActivePlan.end_date).add(1, "day").format("Do MMM, YYYY")
+                      : "N/A"}
+
                   </p>
                 </div>
-                <ToggleSwitch isEnabled={subscriptionActive} onToggle={handleManageSubscription} />
+                <ToggleSwitch isEnabled={userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
               </div>
             </div>
             <div className="p-6 bg-white rounded-3xl shadow-lg">
@@ -211,7 +243,7 @@ export default function SubscriptionPage() {
                   className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 disabled:opacity-50">
                   <RefreshCw size={16} className="text-slate-950" />
                   <span className="text-slate-950 text-sm font-medium font-Nunito">
-                    Manage Subscription
+                    Renew Now
                   </span>
                 </button>
                 {/* <button
@@ -264,13 +296,13 @@ export default function SubscriptionPage() {
                   No payment methods on file. Add a card to continue your subscription.
                 </p>
               )}
-              <button
+              {/* <button
                 onClick={handleManageSubscription}
                 disabled={loading}
                 className="w-full mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
               >
                 {loading ? "Loading..." : "Open Payment Settings"}
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -281,46 +313,52 @@ export default function SubscriptionPage() {
       </div>
     );
 
+  // if (subscriptionActive) {
 
-  }
-  const pricingFeatures = [
-    "Access to all basic math exercises",
-    "Progress tracking for 1 child",
-    "Basic reward system",
-    "Access to all challenges",
-    "Monthly cancellation"
-  ];
-  return (
-    <div className="mx-auto max-w-3xl grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
-      {
-        planLists?.data?.map((plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6">
-          <div className="flex justify-between items-start">
-            <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">{plan?.plan_name}</h3>
-            <div className="w-9 h-9  rounded-full flex items-center justify-center">
-              <IoStar size={38} className="fill-yellow-400" />
-            </div>
-          </div>
-          <div className="flex items-end gap-1">
-            <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">$ {plan?.price}</p>
-            <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
-          </div>
-          <div className="space-y-4">
-            {pricingFeatures.map(feature => (
-              <div key={feature} className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                  <Check size={12} className="text-white" />
-                </div>
-                <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">{feature}</p>
-              </div>
-            ))}
-          </div>
-          <button onClick={() => handleCreateSubscription(plan?.id)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
-            Subscribe
-          </button>
-        </div>)
-      }
-    </div>
-  );
+  //   console.log(activePlan)
+
+    
+
+
+  // }
+  // const pricingFeatures = [
+  //   "Access to all basic math exercises",
+  //   "Progress tracking for 1 child",
+  //   "Basic reward system",
+  //   "Access to all challenges",
+  //   "Monthly cancellation"
+  // ];
+  // return (
+  //   <div className="mx-auto max-w-3xl grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
+  //     {
+  //       planLists?.data?.map((plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6">
+  //         <div className="flex justify-between items-start">
+  //           <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">{plan?.plan_name}</h3>
+  //           <div className="w-9 h-9  rounded-full flex items-center justify-center">
+  //             <IoStar size={38} className="fill-yellow-400" />
+  //           </div>
+  //         </div>
+  //         <div className="flex items-end gap-1">
+  //           <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">$ {plan?.price}</p>
+  //           <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
+  //         </div>
+  //         <div className="space-y-4">
+  //           {pricingFeatures.map(feature => (
+  //             <div key={feature} className="flex items-center gap-2">
+  //               <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+  //                 <Check size={12} className="text-white" />
+  //               </div>
+  //               <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">{feature}</p>
+  //             </div>
+  //           ))}
+  //         </div>
+  //         <button onClick={() => handleCreateSubscription(plan?.id)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
+  //           Subscribe
+  //         </button>
+  //       </div>)
+  //     }
+  //   </div>
+  // );
 
 
 

@@ -67,13 +67,13 @@ const Header = () => {
             <Image src={Logo} alt="Math Star Logo" className="w-32 md:w-40 h-auto" />
           </Link>
           <nav className="hidden md:flex md:items-center md:gap-8 lg:gap-16">
-            <Link href="/#features" className="text-black text-lg font-medium font-Poppins leading-relaxed">
+            <Link href={{ pathname: "/", hash: "features" }} className="text-black text-lg font-medium font-Poppins leading-relaxed">
               What is Math Star?
             </Link>
-            <Link href="/#pricing" className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
+            <Link href={{ pathname: "/", hash: "pricing" }} className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
               Pricing
             </Link>
-            <Link href="/#faq" className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
+            <Link href={{ pathname: "/", hash: "faq" }} className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
               FAQ
             </Link>
           </nav>

@@ -67,6 +67,13 @@ const subscriptionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Subscription"],
     }),
+    autoRenewSubscription: builder.mutation({
+      query: () => ({
+        url: "/toggle-auto-renewal/",
+        method: "POST",
+      }),
+      invalidatesTags: ["Subscription"],
+    }),
 
     // Webhook endpoint
     webhook: builder.mutation({
@@ -88,4 +95,5 @@ export const {
   useAddPaymentMethodMutation,
   useRenewSubscriptionMutation,
   useWebhookMutation,
+  useAutoRenewSubscriptionMutation
 } = subscriptionApi;
