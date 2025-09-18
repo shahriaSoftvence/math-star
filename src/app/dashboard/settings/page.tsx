@@ -137,7 +137,7 @@ export default function SettingsPage() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link
-            href="/profile"
+            href="/dashboard/profile"
             className="p-2 rounded-full hover:bg-gray-200 transition-colors"
           >
             <ArrowLeft className="text-gray-600" />

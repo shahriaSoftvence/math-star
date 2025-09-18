@@ -18,6 +18,7 @@ import {
 } from "@/Redux/features/auth/authApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import SubscriptionCard from "@/components/SubscriptionCard";
 
 const achievements = [
   {
@@ -90,28 +91,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Subscription Card */}
-        <div className="p-6 bg-gradient-to-r from-purple-500 to-blue-600 rounded-3xl shadow-lg text-white">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center gap-4">
-              <Crown size={32} className="text-yellow-300" />
-              <div>
-                <h2 className="text-xl font-bold font-Nunito">
-                  Current Subscription
-                </h2>
-                <p className="text-purple-100 font-Nunito">Premium Plan</p>
-              </div>
-            </div>
-            <div className="flex flex-col items-start sm:items-end gap-2">
-              <div className="flex items-center gap-2 text-sm text-purple-100 font-Nunito">
-                <Calendar size={16} />
-                <span>Renews on February 15, 2024</span>
-              </div>
-              <button className="px-3 py-2 bg-white text-red-500 text-sm font-medium font-Nunito rounded-md hover:bg-gray-100 transition-colors">
-                Cancel Subscription
-              </button>
-            </div>
-          </div>
-        </div>
+         <SubscriptionCard/>
 
         {/* User Info Card */}
         <div className="p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center relative">
@@ -171,7 +151,7 @@ export default function ProfilePage() {
             Keep practicing to reach Level{" "}
             {`${(profileData?.data?.level ?? 0) + 1}`}!
           </p>
-          <Link href="/settings">
+          <Link href="/dashboard/settings">
             <button className="flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-800 font-Nunito">
               <Edit size={16} />
               <span>Edit Profile</span>

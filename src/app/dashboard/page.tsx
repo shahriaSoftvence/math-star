@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useGetDailySummaryQuery } from '@/Redux/reward/rewardApi'; 
 import { Key } from 'react';
-import { useSubscriptionActive } from '@/Redux/hooks';
+import { useIsPremium } from '@/Redux/hooks';
 
 const practiceItems = [
   { link: "/dashboard/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
@@ -22,7 +22,7 @@ export default function Home() {
   // Fetch data from the backend
   const { data: summary, isLoading, isError } = useGetDailySummaryQuery({});
 
-  const subscriptionActive = useSubscriptionActive();
+   const isPremium = useIsPremium();
 
   // Handle loading and error states
   if (isLoading) {
@@ -55,7 +55,7 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {practiceItems.map((item, index) => {
           // Only allow click if user has subscription or it's the Addition card
-          const isActive = subscriptionActive || item.link === "/dashboard/addition";
+          const isActive = isPremium || item.link === "/dashboard/addition";
 
           return (
             <Link
@@ -127,7 +127,7 @@ export default function Home() {
           <div>
             <h3 className="font-semibold text-lg">Your Star Balance</h3>
             <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {starBalance.toLocaleString()}</p>
-            <p className="text-sm opacity-80">Top up to win rewards</p>
+            <p className="text-sm opacity-90">Top up to win Rewards</p>
           </div>
           <div className="text-7xl absolute top-0 right-0">
             <Image src={BadgeBronze} alt='Badge' />

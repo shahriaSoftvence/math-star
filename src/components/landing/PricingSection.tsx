@@ -5,7 +5,7 @@ import React from 'react';
 import { IoStar } from "react-icons/io5";
 import { motion } from 'framer-motion';
 import { useCreateSubscriptionMutation, useGetPlansQuery } from '@/Redux/features/subscription/subscriptionApi';
-import { useAuth, useSubscriptionActive } from '@/Redux/hooks';
+import { useAuth, useIsPremium } from '@/Redux/hooks';
 import { useRouter } from 'next/navigation';
 
 
@@ -22,7 +22,7 @@ const PricingSection = () => {
 const router = useRouter();
 const { data: planLists } = useGetPlansQuery();
 const [createSubscription] = useCreateSubscriptionMutation();
-const subscriptionActive = useSubscriptionActive();
+ const isPremium = useIsPremium();
 
 const handleCreateSubscription = async (planId: number) => {
   if (!isAuthenticated || !user) {
@@ -67,7 +67,7 @@ const handleCreateSubscription = async (planId: number) => {
               <div className="flex justify-between items-start">
                 <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">{plan?.plan_name}</h3>
                 <div className="w-9 h-9  rounded-full flex items-center justify-center">
-                  <IoStar size={38} className="fill-yellow-400" />
+                  <IoStar size={38} className="fill-yellow-500" />
                 </div>
               </div>
               <div className="flex items-end gap-1">
@@ -84,7 +84,7 @@ const handleCreateSubscription = async (planId: number) => {
                   </div>
                 ))}
               </div>
-              { subscriptionActive? <button className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-green-500 text-base font-bold font-Open_Sans leading-normal">
+              { isPremium? <button className="w-full py-3.5 bg-white rounded-lg border-2 border-yellow-500 text-yellow-500 text-base font-bold font-Open_Sans leading-normal">
                 Subscribed
               </button> :
                 <button onClick={() => handleCreateSubscription(plan?.id)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">

@@ -1,28 +1,34 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  Crown,
-  Calendar,
   RefreshCw,
   Plus,
+  Trash2,
+  ReceiptText,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
-import GetPaymentData from "./_components/getPaymentData";
 import {
   useGetUserActivePlanQuery,
-  useCancelSubscriptionMutation,
   useGetPaymentMethodsQuery,
   useAddPaymentMethodMutation,
   useRenewSubscriptionMutation,
   useAutoRenewSubscriptionMutation,
+  useRemoveCardMutation,
+  useGetBillingHistoryQuery,
 } from "@/Redux/features/subscription/subscriptionApi";
 import { toast } from "sonner";
 import { PaymentMethodData } from "../../../../type/subscription";
 import moment from "moment";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import visaIcon from '../../../../public/visa.svg'
+import SubscriptionCard from "@/components/SubscriptionCard";
+import { useIsPremium } from "@/Redux/hooks";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
@@ -41,19 +47,19 @@ const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: (
 };
 
 export default function SubscriptionPage() {
-  const { data: activePlan, isLoading: planLoading, refetch: refetchActivePlan } = useGetUserActivePlanQuery();
+  const { data: activePlan, isLoading: planLoading } = useGetUserActivePlanQuery();
   const { data: paymentMethods } = useGetPaymentMethodsQuery();
-  const [cancelSubscription, { isLoading: cancelLoading }] = useCancelSubscriptionMutation();
   const [addPaymentMethod, { isLoading: addLoading }] = useAddPaymentMethodMutation();
   const [renewSubscription, { isLoading: renewLoading }] = useRenewSubscriptionMutation();
+  const [removeCard] = useRemoveCardMutation();
   const [autoRenewSubscription] = useAutoRenewSubscriptionMutation();
-  const [subscriptionActive, setSubscriptionActive] = useState<boolean | null>(null);
+  const { data: billingHistory } = useGetBillingHistoryQuery();
+  const [showAll, setShowAll] = useState(false);
 
-  useEffect(() => {
-    if (activePlan?.data?.[0]?.is_active !== undefined) {
-      setSubscriptionActive(activePlan.data[0].is_active);
-    }
-  }, [activePlan]);
+  const billingData = billingHistory?.data || [];
+  const visibleData = showAll ? billingData : billingData.slice(0, 6);
+
+  const isPremium = useIsPremium();
 
   const userActivePlan = activePlan?.data?.[0];
   const handleManageSubscription = async () => {
@@ -74,16 +80,6 @@ export default function SubscriptionPage() {
     }
   };
 
-  const handleCancelSubscription = async () => {
-    try {
-      await cancelSubscription({}).unwrap();
-      toast.success("Subscription cancelled successfully");
-      setSubscriptionActive(false);
-      await refetchActivePlan();
-    } catch (error) {
-      toast.error("Failed to cancel subscription");
-    }
-  };
 
   const handleAddPaymentMethod = async () => {
     try {
@@ -97,6 +93,17 @@ export default function SubscriptionPage() {
       }
     } catch (error) {
       toast.error("Failed to add payment method");
+    }
+  };
+
+
+  const handleRemovePaymentMethod = async (payment_method_id: string) => {
+    console.log(payment_method_id)
+    try {
+      const res = await removeCard(payment_method_id).unwrap();
+      toast.success(res?.message || "Payment method removed successfully");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to remove payment method");
     }
   };
 
@@ -122,7 +129,7 @@ export default function SubscriptionPage() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link
-            href="/profile"
+            href="/dashboard/settings"
             className="p-2 rounded-full hover:bg-gray-200 transition-colors"
           >
             <ArrowLeft className="text-gray-600" />
@@ -138,59 +145,8 @@ export default function SubscriptionPage() {
         </div>
 
         {/* Current Subscription Banner */}
-        <div className="p-6 bg-gradient-to-r from-purple-500 to-blue-600 rounded-3xl shadow-lg text-white">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center gap-4">
-              <Crown size={32} className="text-yellow-300" />
-              <div>
-                <h2 className="text-xl font-bold font-Nunito">
-                  Current Subscription
-                </h2>
-                <p className="text-purple-100 font-Nunito capitalize font-medium">{subscriptionActive ? (
-                  <>
-                    {userActivePlan?.plan_name} {userActivePlan?.is_trial && "/ Free Trial"}
-                  </>
-                ) : (
-                  "No Plan"
-                )}
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col items-start sm:items-end gap-2">
-              <div className="flex items-center gap-2 text-sm text-purple-100 font-Nunito">
-                <Calendar size={16} />
-                <span>Renews on : {userActivePlan?.end_date
-                  ? moment(userActivePlan.end_date).format("Do MMM, YYYY")
-                  : "N/A"}</span>
-              </div>
 
-
-              {
-                subscriptionActive ? <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant={"outline"} className="text-red-500 hover:text-red-600">Cancel Subscription</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Are you sure you want to cancel your subscription?
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>No</AlertDialogCancel>
-                      <AlertDialogAction className="bg-red-700 hover:bg-red-600" onClick={handleCancelSubscription}>{cancelLoading ? "Loading..." : "Continue"}</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog> : <Link href="/#pricing"><button
-                  className="px-3 py-2 bg-white text-red-500 text-sm font-medium font-Nunito rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50">
-                  Buy Subscription
-                </button></Link>
-              }
-            </div>
-          </div>
-        </div>
-
+        <SubscriptionCard />
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 bg-white rounded-3xl shadow-lg">
@@ -202,7 +158,7 @@ export default function SubscriptionPage() {
                 <p className="text-gray-600 font-Nunito">
                   Automatically renew subscription
                 </p>
-                {userActivePlan?.is_auto_renew &&
+                {isPremium && userActivePlan?.is_auto_renew &&
                   <p className="text-gray-500 text-sm font-Nunito">
                     Next charge on : {userActivePlan?.end_date
                       ? moment(userActivePlan.end_date).add(1, "day").format("Do MMM, YYYY")
@@ -211,7 +167,7 @@ export default function SubscriptionPage() {
                   </p>
                 }
               </div>
-              <ToggleSwitch isEnabled={subscriptionActive && userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
+              <ToggleSwitch isEnabled={isPremium && userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
             </div>
           </div>
           <div className="p-6 bg-white rounded-3xl shadow-lg">
@@ -260,17 +216,41 @@ export default function SubscriptionPage() {
             {paymentMethods?.data?.length ? (
               paymentMethods.data.map((method: PaymentMethodData) => (
                 <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium capitalize">{method.brand} •••• {method.last4}</p>
-                    <p className="text-sm text-gray-500">
-                      Expires {method.exp_month} /{method.exp_year}
-                    </p>
+                  <div className="flex items-center gap-4">
+                    <Image src={visaIcon} alt="visa" />
+                    <div className="flex items-start gap-6">
+                      <span>
+                        <p className="font-semibold capitalize">{method.brand} •••• {method.last4}</p>
+                        <p className="text-xs text-gray-500">
+                          Expires on {method.exp_month} / {method.exp_year}
+                        </p>
+                      </span>
+                      {method.is_default && (
+                        <p className="text-xs ml-4 bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                          Default
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  {method.is_default && (
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                      Default
-                    </span>
-                  )}
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button className="text-red-500 border-red-500 hover:text-red-600 hover:border-red-600" variant={"outline"}><Trash2 /></Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Remove this Card?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure want to remove this card?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>No</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => handleRemovePaymentMethod(method?.payment_method_id)} className="bg-red-700 hover:bg-red-600">Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
                 </div>
               ))
             ) : (
@@ -289,7 +269,62 @@ export default function SubscriptionPage() {
         </div>
 
         <div>
-          <GetPaymentData />
+          <div className="p-6 bg-white rounded-3xl shadow-lg">
+            <h3 className="text-gray-800 text-xl font-bold mb-6">Billing History</h3>
+            <div className="space-y-4">
+              {billingData.length > 0 ? (
+                <>
+                  {visibleData.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="p-4 bg-gray-50 rounded-2xl flex justify-between items-center"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex justify-center items-center">
+                          <ReceiptText size={24} className="text-white" />
+                        </div>
+                        <div>
+                          <p className="font-semibold capitalize text-gray-800">
+                            {item?.plan_name || "Free Plan"}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {moment(item?.billing_time).format("DD MMM YYYY, HH:mm")}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-gray-800">{item?.amount} USD</p>
+                        <p
+                          className={`${item?.status === "succeeded"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                            } px-3 py-1 text-sm font-medium rounded-full capitalize`}
+                        >
+                          {item?.status}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* See More / See Less button */}
+                  {billingData.length > 6 && (
+                    <div className="flex justify-center">
+                      <Button variant={"link"}
+                        onClick={() => setShowAll(!showAll)}
+                        className="text-[#8354FF] font-semibold hover:underline mt-2"
+                      >
+                        {showAll ? "See Less" : "See More"} {showAll ? <ChevronUp /> : <ChevronDown />}
+                      </Button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="text-center text-gray-500 mt-4">
+                  No Billing History Found
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

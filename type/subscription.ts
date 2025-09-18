@@ -58,6 +58,7 @@ export interface BillingHistoryItem {
   card_brand: string | null;
   card_last4: string | null;
   amount: string;
+  status: string;
 }
 
 export interface BillingHistoryResponse {

@@ -10,12 +10,12 @@ import SubtractionCard from './subtractionCard/page';
 const subtractionExercises = {
   noBorrowing: [
     { range: '0 to 10', percentage: 85 },
-    { range: '0 to 20', percentage: 72 },
+    { range: '0 to 25', percentage: 72 },
     { range: '0 to 50', percentage: 60 },
     { range: '0 to 100', percentage: 55 },
   ],
   borrowing: [
-    { range: '0 to 20', percentage: 65 },
+    { range: '0 to 25', percentage: 65 },
     { range: '0 to 50', percentage: 58 },
     { range: '0 to 100', percentage: 45 },
   ],

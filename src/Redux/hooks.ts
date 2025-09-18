@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "./store";
 import { useGetUserActivePlanQuery } from "./features/subscription/subscriptionApi";
+import { useGetProfileQuery } from "./features/auth/authApi";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -38,9 +39,8 @@ export const useAuthActions = () => {
   };
 };
 
-
-
-export const useSubscriptionActive = (): boolean => {
-  const { data: activePlan } = useGetUserActivePlanQuery();
-  return !!activePlan?.data?.[0]?.is_active;
+export const useIsPremium = (): boolean => {
+  const { data } = useGetProfileQuery();
+  return Boolean(data?.data?.is_premium);
 };
+

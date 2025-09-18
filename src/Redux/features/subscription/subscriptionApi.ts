@@ -53,7 +53,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/billing-history/",
         method: "GET",
       }),
-      providesTags: ["Subscription"],
+      providesTags: ["Subscription", "auth"],
     }),
 
 
@@ -62,6 +62,15 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/add-card/",
         method: "POST",
         body: paymentMethodData,
+      }),
+      invalidatesTags: ["Subscription"],
+    }),
+
+    removeCard: builder.mutation({
+      query: (payment_method_id) => ({
+        url: "/remove-card/",
+        method: "POST",
+        body: { payment_method_id },
       }),
       invalidatesTags: ["Subscription"],
     }),
@@ -105,5 +114,6 @@ export const {
   useRenewSubscriptionMutation,
   useWebhookMutation,
   useAutoRenewSubscriptionMutation,
-  useGetBillingHistoryQuery
+  useGetBillingHistoryQuery,
+  useRemoveCardMutation
 } = subscriptionApi;
