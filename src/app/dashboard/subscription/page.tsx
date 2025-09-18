@@ -20,7 +20,6 @@ import {
 } from "@/Redux/features/subscription/subscriptionApi";
 import { toast } from "sonner";
 import { PaymentMethodData } from "../../../../type/subscription";
-import { IoStar } from "react-icons/io5";
 import moment from "moment";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,6 @@ export default function SubscriptionPage() {
   const { data: paymentMethods } = useGetPaymentMethodsQuery();
   const [cancelSubscription, { isLoading: cancelLoading }] = useCancelSubscriptionMutation();
   const [addPaymentMethod, { isLoading: addLoading }] = useAddPaymentMethodMutation();
-
   const [renewSubscription, { isLoading: renewLoading }] = useRenewSubscriptionMutation();
   const [autoRenewSubscription] = useAutoRenewSubscriptionMutation();
   const [subscriptionActive, setSubscriptionActive] = useState<boolean | null>(null);
@@ -98,7 +96,6 @@ export default function SubscriptionPage() {
         toast.success("Payment method added successfully");
       }
     } catch (error) {
-      console.error("Error adding payment method:", error);
       toast.error("Failed to add payment method");
     }
   };
@@ -149,7 +146,14 @@ export default function SubscriptionPage() {
                 <h2 className="text-xl font-bold font-Nunito">
                   Current Subscription
                 </h2>
-                <p className="text-purple-100 font-Nunito capitalize font-medium">{userActivePlan?.plan_name || "No Plan"}  {userActivePlan?.is_trial && "/ Free Trial"}</p>
+                <p className="text-purple-100 font-Nunito capitalize font-medium">{subscriptionActive ? (
+                  <>
+                    {userActivePlan?.plan_name} {userActivePlan?.is_trial && "/ Free Trial"}
+                  </>
+                ) : (
+                  "No Plan"
+                )}
+                </p>
               </div>
             </div>
             <div className="flex flex-col items-start sm:items-end gap-2">
@@ -207,7 +211,7 @@ export default function SubscriptionPage() {
                   </p>
                 }
               </div>
-              <ToggleSwitch isEnabled={userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
+              <ToggleSwitch isEnabled={subscriptionActive && userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
             </div>
           </div>
           <div className="p-6 bg-white rounded-3xl shadow-lg">
@@ -221,7 +225,7 @@ export default function SubscriptionPage() {
                 className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 disabled:opacity-50">
                 <RefreshCw size={16} className="text-slate-950" />
                 <span className="text-slate-950 text-sm font-medium font-Nunito">
-                  {renewLoading? "Renewing your plan…" : "Renew Now"}
+                  {renewLoading ? "Renewing your plan…" : "Renew Now"}
                 </span>
               </button>
               {/* <button

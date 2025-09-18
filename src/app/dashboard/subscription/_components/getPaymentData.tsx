@@ -26,7 +26,8 @@ const {data: billingHistory } = useGetBillingHistoryQuery();
             {item?.plan_name || "Free Plan"}
           </p>
           <p className="text-sm text-gray-600">
-            {moment(item?.billing_time).format("DD MMM YYYY")}
+            {moment(item?.billing_time).format("DD MMM YYYY, HH:mm")}
+
           </p>
         </div>
       </div>

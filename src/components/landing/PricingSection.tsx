@@ -5,7 +5,7 @@ import React from 'react';
 import { IoStar } from "react-icons/io5";
 import { motion } from 'framer-motion';
 import { useCreateSubscriptionMutation, useGetPlansQuery } from '@/Redux/features/subscription/subscriptionApi';
-import { useAuth } from '@/Redux/hooks';
+import { useAuth, useSubscriptionActive } from '@/Redux/hooks';
 import { useRouter } from 'next/navigation';
 
 
@@ -22,6 +22,7 @@ const PricingSection = () => {
 const router = useRouter();
 const { data: planLists } = useGetPlansQuery();
 const [createSubscription] = useCreateSubscriptionMutation();
+const subscriptionActive = useSubscriptionActive();
 
 const handleCreateSubscription = async (planId: number) => {
   if (!isAuthenticated || !user) {
@@ -83,9 +84,13 @@ const handleCreateSubscription = async (planId: number) => {
                   </div>
                 ))}
               </div>
-              <button onClick={() => handleCreateSubscription(plan?.id)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
+              { subscriptionActive? <button className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-green-500 text-base font-bold font-Open_Sans leading-normal">
+                Subscribed
+              </button> :
+                <button onClick={() => handleCreateSubscription(plan?.id)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
                 Start 3 Days Trial
               </button>
+              }
             </div>)
           }
 

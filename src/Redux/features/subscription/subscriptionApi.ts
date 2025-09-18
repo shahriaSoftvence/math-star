@@ -90,6 +90,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         method: "POST",
         body: webhookData,
       }),
+      invalidatesTags: ["Subscription"],
     }),
   }),
 });

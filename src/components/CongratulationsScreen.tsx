@@ -3,13 +3,16 @@
 import React, { useEffect } from 'react';
 import FallingStars from './FallingStars';
 import { motion } from 'framer-motion';
+import pointStar from '../../public/point-star.png'
+import Image from 'next/image';
 
 type Props = {
   onContinue: () => void;
+  viewRewards?: () => void;
   rewardName?: string;
 };
 
-export default function CongratulationsScreen({ onContinue, rewardName = "Bright Spark" }: Props) {
+export default function CongratulationsScreen({ onContinue, viewRewards, rewardName = "0 Star"}: Props) {
 
   useEffect(() => {
     const audio = new Audio('/Sounds/Congratulation-sound.wav');
@@ -32,14 +35,17 @@ export default function CongratulationsScreen({ onContinue, rewardName = "Bright
         </div>
 
         {/* Heading */}
-        <h1 className="text-gray-800 text-4xl font-bold">
+        <h1 className="text-gray-800 text-[32px] font-bold">
           🎉 Congratulations! 🎉
         </h1>
         
         {/* Unlocked Reward Text */}
-        <div>
-          <p className="text-gray-700 text-xl">You have unlocked:</p>
-          <p className="text-gray-800 text-2xl font-bold mt-1">{rewardName}</p>
+        <div className='flex flex-col items-center gap-2'>
+          <p className="text-gray-700 text-xl">You have Earned</p>
+          <span className='flex items-center gap-2'>
+            <Image src={pointStar} alt="point star" width={30} height={30}/>
+            <p className="text-purple-600  text-3xl font-semibold mt-1">{rewardName}</p>
+          </span>
         </div>
 
         {/* Encouragement Message */}
@@ -50,9 +56,7 @@ export default function CongratulationsScreen({ onContinue, rewardName = "Bright
         {/* Action Buttons */}
         <div className="w-full mt-4 flex flex-col items-center gap-3">
           <button
-            onClick={() => {
-              /* Add navigation to rewards page if it exists */
-            }}
+            onClick={viewRewards}
             className="w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg transition-transform transform hover:scale-105"
           >
             View All Rewards

@@ -87,8 +87,8 @@ function PracticePageContent() {
 
   const [addNoBorrowPractice, { data }] = useAddNoBorrowPracticeMutation();
   console.log(data, "the no borrow practice data");
-  const [addBorrowPractice, { data: borrow }] = useAddBorrowPracticeMutation();
-  console.log(borrow, "the borrow practice data");
+  const [addBorrowPractice] = useAddBorrowPracticeMutation();
+  const [rewardName, setRewardName] = useState("");
 
   // Memoize parameters from URL
   const questionCount = useMemo(
@@ -365,24 +365,66 @@ function PracticePageContent() {
       }
 
       console.log("Practice data saved:", payload);
-      router.push("/addition");
+      router.push("/dashboard/subtraction");
     } catch (err) {
       console.error("Failed to save practice:", err);
-      router.push("/addition");
+      router.push("/dashboard/subtraction");
     }
   };
+
+  const viewRewards = async () => {
+    try {
+      const range_value = numberRange;
+      const question_number = questionCount;
+
+      // Derived with your formulas
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
+
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
+
+      if (operation === "noBorrowing") {
+        await addNoBorrowPractice(payload).unwrap();
+      } else {
+        await addBorrowPractice(payload).unwrap();
+      }
+
+      console.log("Practice data saved:", payload);
+      router.push("/dashboard/rewards");
+    } catch (err) {
+      console.error("Failed to save practice:", err);
+      router.push("/dashboard/rewards");
+    }
+  };
+
   const handleReset = () => {
     generateQuestions();
   };
 
+  // useEffect(() => {
+  //   if (isComplete) {
+  //     handleSaveSession();
+  //   }
+  // }, [isComplete, handleSaveSession]);
   useEffect(() => {
-    if (isComplete) {
-      handleSaveSession();
-    }
-  }, [isComplete, handleSaveSession]);
+      if (isComplete) {
+        handleSaveSession();
+  
+        // calculate stars here
+        const total_wrong = totalClicks - questionCount;
+        const total_correct = questionCount - total_wrong;
+  
+        setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
+      }
+    }, [isComplete, handleSaveSession, totalClicks, questionCount]);
 
   if (isComplete) {
-    return <CongratulationsScreen onContinue={handleContinue} />;
+    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {

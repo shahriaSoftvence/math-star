@@ -70,6 +70,7 @@ function PracticePageContent() {
   const [userAnswer, setUserAnswer] = useState("");
   const [progress, setProgress] = useState<ProgressStatus[]>([]);
   const [totalClicks, setTotalClicks] = useState(0);
+  const [rewardName, setRewardName] = useState("");
 
   const [feedback, setFeedback] = useState<{
     type: "correct" | "incorrect" | null;
@@ -78,8 +79,8 @@ function PracticePageContent() {
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const [addNoCarryPractice, { data: no }] = useAddNoCarryPracticeMutation();
-  const [addCarryPractice, { data }] = useAddCarryPracticeMutation();
+  const [addNoCarryPractice] = useAddNoCarryPracticeMutation();
+  const [addCarryPractice] = useAddCarryPracticeMutation();
 
   const questionCount = useMemo(
     () => parseInt(searchParams?.get("count") || "10", 10),
@@ -94,76 +95,71 @@ function PracticePageContent() {
     () => searchParams?.get("operation"),
     [searchParams]
   );
-  
-
-const generateQuestions = () => {
-  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-    let num1: number = 0;
-    let num2: number = 0;
-    let answer: number = 0;
-
-    const maxTries = 100;
-    let tries = 0;
-
-    if (operation === "carry") {
-      do {
-        num2 = Math.floor(Math.random() * 9) + 1; 
-        const minNum1 = 10;
-        const maxNum1 = numberRange - num2;
-
-        num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
-        answer = num1 + num2;
-        tries++;
-      } while (
-        tries < maxTries &&
-        (
-          (num1 % 10) + num2 <= 9 || 
-          answer > numberRange
-        )
-      );
-    } 
-    else if (operation === "noCarry") {
-      do {
-        num2 = Math.floor(Math.random() * 9) + 1; 
-
-        const maxUnits = Math.min(9 - num2, numberRange); 
-        const unitsDigit = Math.floor(Math.random() * (maxUnits + 1));
-
-        const maxTens = Math.floor((numberRange - num2 - unitsDigit) / 10);
-        const tensDigit = Math.floor(Math.random() * (maxTens + 1));
-
-        num1 = tensDigit * 10 + unitsDigit;
-        answer = num1 + num2;
-        tries++;
-      } while (
-        tries < maxTries &&
-        ( (num1 % 10) + num2 >= 9 || answer > numberRange )
-      );
-    } 
-    else {
-      do {
-        num2 = Math.floor(Math.random() * 9) + 1;
-        num1 = Math.floor(Math.random() * (numberRange - num2 + 1));
-        answer = num1 + num2;
-        tries++;
-      } while (answer > numberRange);
-    }
-
-    return { num1, num2, answer };
-  });
-
-  setQuestions(newQuestions);
-  setProgress(Array(questionCount).fill("pending"));
-  setCurrentQuestionIndex(0);
-  setUserAnswer("");
-  setFeedback({ type: null, message: "" });
-  setIsComplete(false);
-};
 
 
+  const generateQuestions = () => {
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      let num1: number = 0;
+      let num2: number = 0;
+      let answer: number = 0;
 
+      const maxTries = 100;
+      let tries = 0;
 
+      if (operation === "carry") {
+        do {
+          num2 = Math.floor(Math.random() * 9) + 1;
+          const minNum1 = 10;
+          const maxNum1 = numberRange - num2;
 
+          num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+          answer = num1 + num2;
+          tries++;
+        } while (
+          tries < maxTries &&
+          (
+            (num1 % 10) + num2 <= 9 ||
+            answer > numberRange
+          )
+        );
+      }
+      else if (operation === "noCarry") {
+        do {
+          num2 = Math.floor(Math.random() * 9) + 1;
+
+          const maxUnits = Math.min(9 - num2, numberRange);
+          const unitsDigit = Math.floor(Math.random() * (maxUnits + 1));
+
+          const maxTens = Math.floor((numberRange - num2 - unitsDigit) / 10);
+          const tensDigit = Math.floor(Math.random() * (maxTens + 1));
+
+          num1 = tensDigit * 10 + unitsDigit;
+          answer = num1 + num2;
+          tries++;
+        } while (
+          tries < maxTries &&
+          ((num1 % 10) + num2 >= 9 || answer > numberRange)
+        );
+      }
+      else {
+        do {
+          num2 = Math.floor(Math.random() * 9) + 1;
+          num1 = Math.floor(Math.random() * (numberRange - num2 + 1));
+          answer = num1 + num2;
+          tries++;
+        } while (answer > numberRange);
+      }
+
+      return { num1, num2, answer };
+    });
+
+    setQuestions(newQuestions);
+    setProgress(Array(questionCount).fill("pending"));
+    setCurrentQuestionIndex(0);
+    setUserAnswer("");
+    setFeedback({ type: null, message: "" });
+    setIsComplete(false);
+  };
 
 
   // Generate questions on component mount
@@ -208,7 +204,7 @@ const generateQuestions = () => {
   const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
 
-    setTotalClicks((prev) => prev + 1); // ✅ count every submit
+    setTotalClicks((prev) => prev + 1);
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion.answer;
     const newProgress = [...progress];
@@ -277,11 +273,8 @@ const generateQuestions = () => {
         (status) => status === "incorrect"
       ).length;
 
-      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
       const starsEarned = Math.max(0, correct - incorrect);
 
-      // Calculate duration in seconds
-      // For simplicity, we'll use a fixed time per question (5 seconds)
       const durationSeconds = questions.length * 5;
 
       // Save to backend
@@ -330,20 +323,56 @@ const generateQuestions = () => {
     }
   };
 
+  const viewRewards = async () => {
+    try {
+      const range_value = numberRange;
+      const question_number = questionCount;
+
+      // Derived with your formulas
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
+
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
+
+      if (operation === "noCarry") {
+        await addNoCarryPractice(payload).unwrap();
+      } else {
+        await addCarryPractice(payload).unwrap();
+      }
+
+      console.log("Practice data saved:", payload);
+      router.push("/dashboard/rewards");
+    } catch (err) {
+      console.error("Failed to save practice:", err);
+      router.push("/dashboard/rewards");
+    }
+  };
+
 
   const handleReset = () => {
     generateQuestions();
   };
 
-  // Save session when complete
   useEffect(() => {
     if (isComplete) {
       handleSaveSession();
+
+      // calculate stars here
+      const total_wrong = totalClicks - questionCount;
+      const total_correct = questionCount - total_wrong;
+
+      setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
     }
-  }, [isComplete, handleSaveSession]);
+  }, [isComplete, handleSaveSession, totalClicks, questionCount]);
+
 
   if (isComplete) {
-    return <CongratulationsScreen onContinue={handleContinue} />;
+    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {
