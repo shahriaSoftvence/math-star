@@ -66,6 +66,7 @@ function PracticePageContent() {
   const [isComplete, setIsComplete] = useState(false);
   const [addMultiplicationPractice] =
     useAddMultiplicationPracticeMutation();
+  const [rewardName, setRewardName] = useState("");
 
   const [totalClicks, setTotalClicks] = useState(0);
 
@@ -279,16 +280,60 @@ const generateQuestions = useCallback(() => {
   }
 };
 
+ const viewRewards = async () => {
+  try {
+    let range_value: number;
 
+    if (!ranges || ranges.length === 0 || ranges.includes("All")) {
+      range_value = 100;
+    } else {
+      // Pick a random value from the array
+      const randomIndex = Math.floor(Math.random() * ranges.length);
+      const selected = ranges[randomIndex];
+      const match = selected.match(/^X?(\d+)$/i);
+      range_value = match ? parseInt(match[1], 10) : 1;
+    }
+
+    const question_number = questionCount;
+
+    const total_wrong = totalClicks - question_number;
+    const total_correct = question_number - total_wrong;
+
+    const payload = {
+      range_value,
+      question_number,
+      total_correct,
+      total_wrong,
+    };
+
+    await addMultiplicationPractice(payload).unwrap();
+    console.log("Practice data saved:", payload);
+    router.push("/dashboard/rewards");
+  } catch (err) {
+    console.error("Failed to save practice:", err);
+    router.push("/dashboard/rewards");
+  }
+};
+
+  // useEffect(() => {
+  //   if (isComplete) {
+  //     handleSaveSession();
+  //   }
+  // }, [isComplete, handleSaveSession]);
 
   useEffect(() => {
-    if (isComplete) {
-      handleSaveSession();
-    }
-  }, [isComplete, handleSaveSession]);
+      if (isComplete) {
+        handleSaveSession();
+  
+        const total_wrong = totalClicks - questionCount;
+        const total_correct = questionCount - total_wrong;
+  
+        setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
+      }
+    }, [isComplete, handleSaveSession, totalClicks, questionCount]);
 
   if (isComplete) {
-    return <CongratulationsScreen onContinue={handleContinue} />;
+    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {

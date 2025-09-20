@@ -74,10 +74,9 @@ function PracticePageContent() {
   }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [addDivisionPractice, {data}] = useAddDivisionPracticeMutation();
+  const [addDivisionPractice, { data }] = useAddDivisionPracticeMutation();
   const [totalClicks, setTotalClicks] = useState(0);
-  console.log(data, "form live")
-
+  const [rewardName, setRewardName] = useState("");
   // Get question count from URL
   const questionCount = useMemo(() => {
     const count = searchParams?.get("count");
@@ -92,46 +91,46 @@ function PracticePageContent() {
   // }, [searchParams]);
 
   const divisor = useMemo(() => {
-  const divParam = searchParams?.get("divisor");
-  if (!divParam) return null;
+    const divParam = searchParams?.get("divisor");
+    if (!divParam) return null;
 
-  // Split by comma and parse each string to number
-  const parts = divParam.split(",").map(p => parseInt(p, 10)).filter(n => !isNaN(n));
-  return parts.length === 0 ? null : parts; // returns number[] | null
-}, [searchParams]);
+    // Split by comma and parse each string to number
+    const parts = divParam.split(",").map(p => parseInt(p, 10)).filter(n => !isNaN(n));
+    return parts.length === 0 ? null : parts; // returns number[] | null
+  }, [searchParams]);
 
 
   // Generate questions
   const generateQuestions = useCallback(() => {
-  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-    let num2: number;
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      let num2: number;
 
-    if (divisor === null) {
-      // No divisor specified, random
-      num2 = Math.floor(Math.random() * questionCount) + 1;
-    } else if (divisor.length === 1) {
-      // Only one divisor
-      num2 = divisor[0];
-    } else {
-      // Multiple divisors, pick randomly
-      const randomIndex = Math.floor(Math.random() * divisor.length);
-      num2 = divisor[randomIndex];
-    }
+      if (divisor === null) {
+        // No divisor specified, random
+        num2 = Math.floor(Math.random() * questionCount) + 1;
+      } else if (divisor.length === 1) {
+        // Only one divisor
+        num2 = divisor[0];
+      } else {
+        // Multiple divisors, pick randomly
+        const randomIndex = Math.floor(Math.random() * divisor.length);
+        num2 = divisor[randomIndex];
+      }
 
-    const multiplier = Math.floor(Math.random() * questionCount) + 1;
-    const num1 = num2 * multiplier;
-    const answer = multiplier;
+      const multiplier = Math.floor(Math.random() * questionCount) + 1;
+      const num1 = num2 * multiplier;
+      const answer = multiplier;
 
-    return { num1, num2, answer };
-  });
+      return { num1, num2, answer };
+    });
 
-  setQuestions(newQuestions);
-  setProgress(Array(questionCount).fill("pending"));
-  setCurrentQuestionIndex(0);
-  setUserAnswer("");
-  setFeedback({ type: null, message: "" });
-  setIsComplete(false);
-}, [questionCount, divisor]);
+    setQuestions(newQuestions);
+    setProgress(Array(questionCount).fill("pending"));
+    setCurrentQuestionIndex(0);
+    setUserAnswer("");
+    setFeedback({ type: null, message: "" });
+    setIsComplete(false);
+  }, [questionCount, divisor]);
 
   useEffect(() => {
     generateQuestions();
@@ -146,7 +145,7 @@ function PracticePageContent() {
   const playSound = useCallback((sound: string) => {
     try {
       const audio = new Audio(sound);
-      audio.play().catch(() => {});
+      audio.play().catch(() => { });
     } catch (error) {
       // ignore
     }
@@ -301,14 +300,61 @@ function PracticePageContent() {
     }
   };
 
+  const viewRewards = async () => {
+    try {
+      // Get the raw string value of divisor from URL
+      const divisorParam = searchParams?.get("divisor");
+
+      let range_value: number;
+      if (divisorParam === "All") {
+        range_value = 100;
+      } else {
+        range_value = divisorParam ? parseInt(divisorParam, 10) : 1;
+      }
+
+      const question_number = questionCount;
+
+      // Derived with your formulas
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
+
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
+
+      await addDivisionPractice(payload).unwrap();
+
+      console.log("Practice data saved:", payload);
+      router.push("/dashboard/rewards");
+    } catch (err) {
+      console.error("Failed to save practice:", err);
+      router.push("/dashboard/rewards");
+    }
+  };
+
+  // useEffect(() => {
+  //   if (isComplete) {
+  //     handleSaveSession();
+  //   }
+  // }, [isComplete, handleSaveSession]);
+
   useEffect(() => {
     if (isComplete) {
       handleSaveSession();
+
+      // calculate stars here
+      const total_wrong = totalClicks - questionCount;
+      const total_correct = questionCount - total_wrong;
+
+      setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
     }
-  }, [isComplete, handleSaveSession]);
+  }, [isComplete, handleSaveSession, totalClicks, questionCount]);
 
   if (isComplete) {
-    return <CongratulationsScreen onContinue={handleContinue} />;
+    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {
@@ -358,8 +404,8 @@ function PracticePageContent() {
               status === "correct"
                 ? "bg-green-500"
                 : status === "incorrect"
-                ? "bg-red-500"
-                : "bg-gray-200";
+                  ? "bg-red-500"
+                  : "bg-gray-200";
             return (
               <div
                 key={index}
@@ -405,19 +451,17 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
-              feedback.type === "correct"
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
                 ? "border-emerald-500"
                 : "border-red-500"
-            }`}
+              }`}
           >
             <div className="flex items-start">
               <div
-                className={`p-1 mr-3 text-xl rounded-full ${
-                  feedback.type === "correct"
+                className={`p-1 mr-3 text-xl rounded-full ${feedback.type === "correct"
                     ? "bg-emerald-100 text-emerald-500"
                     : "bg-red-100 text-red-500"
-                }`}
+                  }`}
               >
                 {feedback.type === "correct" ? (
                   <Check size={20} />
@@ -427,22 +471,20 @@ function PracticePageContent() {
               </div>
               <div>
                 <p
-                  className={`font-semibold ${
-                    feedback.type === "correct"
+                  className={`font-semibold ${feedback.type === "correct"
                       ? "text-emerald-600"
                       : "text-red-600"
-                  }`}
+                    }`}
                 >
                   {feedback.type === "correct"
                     ? "Correct Answer!"
                     : "Incorrect Answer"}
                 </p>
                 <p
-                  className={`text-sm ${
-                    feedback.type === "correct"
+                  className={`text-sm ${feedback.type === "correct"
                       ? "text-emerald-500"
                       : "text-red-500"
-                  }`}
+                    }`}
                 >
                   {feedback.message}
                 </p>
