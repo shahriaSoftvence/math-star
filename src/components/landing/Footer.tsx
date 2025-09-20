@@ -26,9 +26,9 @@ const Footer = () => {
             <h3 className="text-white text-lg font-bold font-Quicksand leading-7">Quick Links</h3>
             <ul className="mt-4 space-y-2">
               <li><Link href="#" className="hover:text-white">About Us</Link></li>
-              <li><Link href="#" className="hover:text-white">How It Works</Link></li>
+              <li><Link href={{ pathname: "/", hash: "features" }} className="hover:text-white">How It Works</Link></li>
               <li><Link href="#" className="hover:text-white">Curriculum</Link></li>
-              <li><Link href="#pricing" className="hover:text-white">Pricing</Link></li>
+              <li><Link href={{ pathname: "/", hash: "pricing" }} className="hover:text-white">Pricing</Link></li>
               <li><Link href="#" className="hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
@@ -36,19 +36,19 @@ const Footer = () => {
             <h3 className="text-white text-lg font-bold font-Quicksand leading-7">Support</h3>
             <ul className="mt-4 space-y-2">
               <li><Link href="#" className="hover:text-white">Help Center</Link></li>
-              <li><Link href="#faq" className="hover:text-white">FAQs</Link></li>
-              <li><Link href="#" className="hover:text-white">Privacy Policy</Link></li>
+              <li><Link href={{ pathname: "/", hash: "faq" }} className="hover:text-white">FAQs</Link></li>
+              <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white">Terms & Conditions</Link></li>
-              <li><Link href="#" className="hover:text-white">Cookie Policy</Link></li>
+              <li><Link href="/cookie" className="hover:text-white">Cookie Policy</Link></li>
             </ul>
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm">
           <p>© 2025 MathFun. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-white">Privacy Policy</Link>
+            <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white">Terms & Conditions</Link>
-            <Link href="#" className="hover:text-white">Cookie Policy</Link>
+            <Link href="/cookie" className="hover:text-white">Cookie Policy</Link>
           </div>
         </div>
       </div>

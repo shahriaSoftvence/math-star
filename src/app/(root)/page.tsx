@@ -1,11 +1,9 @@
 // src/app/page.tsx
 import React from 'react';
-import Header from '@/components/landing/Header';
-import HeroSection from '@/components/landing/HeroSection';
-import FeaturesSection from '@/components/landing/FeaturesSection';
-import PricingSection from '@/components/landing/PricingSection';
-import FaqSection from '@/components/landing/FaqSection';
-import Footer from '@/components/landing/Footer';
+import HeroSection from './_component/HeroSection';
+import FeaturesSection from './_component/FeaturesSection';
+import PricingSection from './_component/PricingSection';
+import FaqSection from './_component/FaqSection';
 
 export default function LandingPage() {
   return (

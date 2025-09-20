@@ -1,15 +1,13 @@
-// ste_br/src/components/landing/HeroSection.tsx
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import HeroImage from '../../../public/assets/banner-image.png';
-import { PlayCircle, X } from 'lucide-react';
-import Lines from '../../../public/Lines.png';
-import { motion } from 'framer-motion'; // <-- Import motion
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import HeroImage from "../../../../public/assets/banner-image.png";
+import { PlayCircle, X } from "lucide-react";
+import { motion } from "framer-motion";
 
-const HeroSection = () => {
+const HeroMedia = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const openVideo = () => setIsVideoOpen(true);
@@ -32,8 +30,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="w-full pt-[200px] pb-[100px] min-h-[800px] bg-gray-50 flex items-center justify-center relative overflow-hidden">
-      <Image src={Lines} className="absolute top-[8%] left-[17%]" alt="line" />
+    <>
       <motion.div
         className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 items-center z-10"
         variants={containerVariants}
@@ -70,18 +67,17 @@ const HeroSection = () => {
             </Link>
           </div>
         </motion.div>
+
         <motion.div
           className="flex justify-center items-center"
           variants={itemVariants}
         >
-          {/* FIX: Replaced fixed width and height with responsive classes */}
           <div className="w-full max-w-xl aspect-square relative group">
             <Image
               src={HeroImage}
               alt="Children learning on a computer"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-xl border-[3px] border-blue-500"
+              fill
+              className="rounded-xl border-[3px] border-blue-500 object-cover"
             />
             <div
               className="absolute inset-0 flex items-center justify-center bg-opacity-40 rounded-xl cursor-pointer transition-opacity opacity-0 group-hover:opacity-100"
@@ -115,8 +111,8 @@ const HeroSection = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
-export default HeroSection;
+export default HeroMedia;
