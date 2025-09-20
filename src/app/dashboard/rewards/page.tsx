@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, ShieldAlert } from 'lucide-react';
 import { IoStarSharp } from 'react-icons/io5';
 import RewardCard from '@/components/RewardCard';
-import { useGetRewardsQuery, useGetDailySummaryQuery } from '@/Redux/reward/rewardApi';
+import { useGetRewardsQuery } from '@/Redux/reward/rewardApi';
 import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 
 interface Reward {
@@ -22,18 +22,8 @@ export default function RewardsPage() {
 
   const { data } = useGetProfileQuery();
 
-  console.log(rewardsResponse?.data)
-  const { data: summary, isLoading: summaryLoading, isError: summaryError } = useGetDailySummaryQuery({});
-
-  // Handle the response structure - it might be wrapped in a data property
-  const rewardsData = Array.isArray(rewardsResponse) ? rewardsResponse :
-    (rewardsResponse?.data && Array.isArray(rewardsResponse.data)) ? rewardsResponse.data :
-      (rewardsResponse?.rewards && Array.isArray(rewardsResponse.rewards)) ? rewardsResponse.rewards : [];
-
-  const userStars = summary?.lifetime_stars || 0;
-
   // Handle loading and error states
-  if (rewardsLoading || summaryLoading) {
+  if (rewardsLoading) {
     return <div className='flex justify-center my-12' role="status">
       <svg aria-hidden="true" className="inline w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -43,7 +33,7 @@ export default function RewardsPage() {
     </div>
   }
 
-  if (rewardsError || summaryError) {
+  if (rewardsError) {
     return <div className='text-red-500 flex justify-center my-12 text-lg font-medium'><ShieldAlert className='mr-2' />Could not load rewards. Please try again later !</div>;
   }
 
@@ -68,11 +58,11 @@ export default function RewardsPage() {
         {rewardsResponse?.data?.map((reward: Reward) => (
           <RewardCard
             key={reward?.name}
-            icon={reward?.icon || '⭐'} // Use a default icon if none provided
+            icon={reward?.icon || '⭐'}
             title={reward?.name}
             description={reward?.description}
             star_range={reward?.star_range}
-            isUnlocked={reward?.unlocked || false} // Logic to check if reward is unlocked
+            isUnlocked={reward?.unlocked || false}
           />
         ))}
       </div>

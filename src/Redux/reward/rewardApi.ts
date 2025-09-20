@@ -1,4 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
+import { ProgressResponse } from "../../../type/progress";
 
 const rewardApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,10 +10,9 @@ const rewardApi = baseApi.injectEndpoints({
             }),
             providesTags: ["rewards"],
         }),
-        // Add this new endpoint to fetch all dashboard data at once
-        getDailySummary: builder.query({
+        getProgress: builder.query<ProgressResponse, void>({
             query: () => ({
-                url: "/daily-summary/", // Assuming this endpoint exists from your backend setup
+                url: "/progress-today/",
                 method: "GET",
             }),
             providesTags: ["rewards"],
@@ -21,4 +21,4 @@ const rewardApi = baseApi.injectEndpoints({
 });
 
 
-export const { useGetRewardsQuery, useGetDailySummaryQuery } = rewardApi;
+export const { useGetRewardsQuery, useGetProgressQuery } = rewardApi;

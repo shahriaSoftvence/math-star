@@ -8,6 +8,7 @@ import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import MultiplicationCard from './multiplicationCard/page';
+import { useAddMultiplicationExerciseMutation } from '@/Redux/features/multiplication/multiplicationApi';
 
 const multiplicationExercises = [
   { range: ['X1'], percentage: 98, stars: 0 },
@@ -32,6 +33,8 @@ const multiplicationChallenges = [
 
 export default function MultiplicationPage() {
   const [selectedRanges, setSelectedRanges] = React.useState<string[]>([]);
+
+  const [addMultiplicationExercise] = useAddMultiplicationExerciseMutation();
 
   const toggleRange = (ranges: string[]) => {
     ranges.forEach(r => {
@@ -60,7 +63,7 @@ export default function MultiplicationPage() {
       });
     }
 
-    console.log(range_values)
+    addMultiplicationExercise(range_values)
   }
 
 
@@ -104,8 +107,6 @@ export default function MultiplicationPage() {
             </Link>
           )}
           </div>
-
-          
         </div>
       </div>
 

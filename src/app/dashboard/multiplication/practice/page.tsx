@@ -12,8 +12,8 @@ import { ArrowLeft, Check, X, RefreshCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
 import Numpad from "@/components/Numpad";
-import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
 import { useAddMultiplicationPracticeMutation } from "@/Redux/features/multiplication/multiplicationApi";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = {
@@ -50,9 +50,6 @@ function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Add mutation for saving practice session
-  const [addPracticeSession] = useAddPracticeSessionMutation();
-
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -77,36 +74,37 @@ function PracticePageContent() {
   }, [searchParams]);
 
   const ranges = useMemo(() => {
-  const raw = searchParams?.get("ranges"); 
-  return raw ? raw.split(",").map((r) => r.trim()) : [];
-}, [searchParams]);
+    const raw = searchParams?.get("ranges");
+    return raw ? raw.split(",").map((r) => r.trim()) : [];
+  }, [searchParams]);
 
-const fixedNum2 = useCallback(() => {
-  if (!ranges || ranges.length === 0 || ranges[0] === "All") return null;
 
-  const randomIndex = Math.floor(Math.random() * ranges.length);
-  const selected = ranges[randomIndex];
-  const match = selected.match(/^x?(\d+)$/i);
-  return match ? parseInt(match[1], 10) : null;
-}, [ranges]);
+  const fixedNum2 = useCallback(() => {
+    if (!ranges || ranges.length === 0 || ranges[0] === "All") return null;
 
-const generateQuestions = useCallback(() => {
-  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-    const num1 = Math.floor(Math.random() * questionCount) + 1
-    const num2Value = fixedNum2();
-    const num2 =
-      num2Value ?? Math.floor(Math.random() * questionCount) + 1;
+    const randomIndex = Math.floor(Math.random() * ranges.length);
+    const selected = ranges[randomIndex];
+    const match = selected.match(/^x?(\d+)$/i);
+    return match ? parseInt(match[1], 10) : null;
+  }, [ranges]);
 
-    return { num1, num2, answer: num1 * num2 };
-  });
+  const generateQuestions = useCallback(() => {
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      const num1 = Math.floor(Math.random() * questionCount) + 1
+      const num2Value = fixedNum2();
+      const num2 =
+        num2Value ?? Math.floor(Math.random() * questionCount) + 1;
 
-  setQuestions(newQuestions);
-  setProgress(Array(questionCount).fill("pending"));
-  setCurrentQuestionIndex(0);
-  setUserAnswer("");
-  setFeedback({ type: null, message: "" });
-  setIsComplete(false);
-}, [questionCount, ranges, fixedNum2]);
+      return { num1, num2, answer: num1 * num2 };
+    });
+
+    setQuestions(newQuestions);
+    setProgress(Array(questionCount).fill("pending"));
+    setCurrentQuestionIndex(0);
+    setUserAnswer("");
+    setFeedback({ type: null, message: "" });
+    setIsComplete(false);
+  }, [questionCount, ranges, fixedNum2]);
 
 
   // Generate questions on component mount
@@ -213,124 +211,85 @@ const generateQuestions = useCallback(() => {
     generateQuestions();
   }, [generateQuestions]);
 
-  // Save practice session when complete
-  const handleSaveSession = useCallback(async () => {
+  const handleContinue = async () => {
     try {
-      // Count correct and incorrect answers
-      const correct = progress.filter((status) => status === "correct").length;
-      const incorrect = progress.filter(
-        (status) => status === "incorrect"
-      ).length;
+      let range_value: number[] = [];
 
-      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
-      const starsEarned = Math.max(0, correct - incorrect);
+      if (!ranges || ranges.length === 0 || ranges.includes("All")) {
+        // If no ranges or "All", return [100]
+        range_value = [100];
+      } else {
+        // Convert all ranges to numbers using X\d+ pattern
+        range_value = ranges.map((r) => {
+          const match = r.match(/^X?(\d+)$/i);
+          return match ? parseInt(match[1], 10) : 1;
+        });
+      }
 
-      // Calculate duration in seconds
-      // For simplicity, we'll use a fixed time per question (5 seconds)
-      const durationSeconds = questions.length * 5;
+      const question_number = questionCount;
 
-      // Save to backend
-      await addPracticeSession({
-        category: 3, // Multiplication category ID
-        mode: "practice",
-        correct: correct,
-        total: questions.length,
-        stars_earned: starsEarned,
-        duration_seconds: durationSeconds,
-      }).unwrap();
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
 
-      // console.log('Practice session saved successfully');
-    } catch (error) {
-      console.error("Failed to save practice session:", error);
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
+
+      console.log(payload)
+
+      await addMultiplicationPractice(payload).unwrap();
+      toast.success("Practice data saved successfully!");
+      router.push("/dashboard/multiplication");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save practice");
+      router.push("/dashboard/multiplication");
     }
-  }, [progress, questions.length, addPracticeSession]);
+  };
 
- const handleContinue = async () => {
-  try {
-    let range_value: number;
+  const viewRewards = async () => {
+    try {
+      let range_value: number[] = [];
 
-    if (!ranges || ranges.length === 0 || ranges.includes("All")) {
-      range_value = 100;
-    } else {
-      // Pick a random value from the array
-      const randomIndex = Math.floor(Math.random() * ranges.length);
-      const selected = ranges[randomIndex];
-      const match = selected.match(/^X?(\d+)$/i);
-      range_value = match ? parseInt(match[1], 10) : 1;
+      if (!ranges || ranges.length === 0 || ranges.includes("All")) {
+        range_value = [100];
+      } else {
+        range_value = ranges.map((r) => {
+          const match = r.match(/^X?(\d+)$/i);
+          return match ? parseInt(match[1], 10) : 1;
+        });
+      }
+
+      const question_number = questionCount;
+
+      const total_wrong = totalClicks - question_number;
+      const total_correct = question_number - total_wrong;
+
+      const payload = {
+        range_value,
+        question_number,
+        total_correct,
+        total_wrong,
+      };
+
+      await addMultiplicationPractice(payload).unwrap();
+      toast.success("Practice data saved successfully!");
+      router.push("/dashboard/rewards");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save practice");
+      router.push("/dashboard/rewards");
     }
-
-    const question_number = questionCount;
-
-    const total_wrong = totalClicks - question_number;
-    const total_correct = question_number - total_wrong;
-
-    const payload = {
-      range_value,
-      question_number,
-      total_correct,
-      total_wrong,
-    };
-
-    await addMultiplicationPractice(payload).unwrap();
-    console.log("Practice data saved:", payload);
-    router.push("/dashboard/multiplication");
-  } catch (err) {
-    console.error("Failed to save practice:", err);
-    router.push("/dashboard/multiplication");
-  }
-};
-
- const viewRewards = async () => {
-  try {
-    let range_value: number;
-
-    if (!ranges || ranges.length === 0 || ranges.includes("All")) {
-      range_value = 100;
-    } else {
-      // Pick a random value from the array
-      const randomIndex = Math.floor(Math.random() * ranges.length);
-      const selected = ranges[randomIndex];
-      const match = selected.match(/^X?(\d+)$/i);
-      range_value = match ? parseInt(match[1], 10) : 1;
-    }
-
-    const question_number = questionCount;
-
-    const total_wrong = totalClicks - question_number;
-    const total_correct = question_number - total_wrong;
-
-    const payload = {
-      range_value,
-      question_number,
-      total_correct,
-      total_wrong,
-    };
-
-    await addMultiplicationPractice(payload).unwrap();
-    console.log("Practice data saved:", payload);
-    router.push("/dashboard/rewards");
-  } catch (err) {
-    console.error("Failed to save practice:", err);
-    router.push("/dashboard/rewards");
-  }
-};
-
-  // useEffect(() => {
-  //   if (isComplete) {
-  //     handleSaveSession();
-  //   }
-  // }, [isComplete, handleSaveSession]);
+  };
 
   useEffect(() => {
-      if (isComplete) {
-        handleSaveSession();
-  
-        const total_wrong = totalClicks - questionCount;
-        const total_correct = questionCount - total_wrong;
-  
-        setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
-      }
-    }, [isComplete, handleSaveSession, totalClicks, questionCount]);
+    if (isComplete) {
+      const total_wrong = totalClicks - questionCount;
+      const total_correct = questionCount - total_wrong;
+      setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
+    }
+  }, [isComplete, totalClicks, questionCount]);
 
   if (isComplete) {
     return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
@@ -383,8 +342,8 @@ const generateQuestions = useCallback(() => {
               status === "correct"
                 ? "bg-green-500"
                 : status === "incorrect"
-                ? "bg-red-500"
-                : "bg-gray-200";
+                  ? "bg-red-500"
+                  : "bg-gray-200";
             return (
               <div
                 key={index}
@@ -428,19 +387,17 @@ const generateQuestions = useCallback(() => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${
-              feedback.type === "correct"
-                ? "border-emerald-500"
-                : "border-red-500"
-            }`}
+            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
+              ? "border-emerald-500"
+              : "border-red-500"
+              }`}
           >
             <div className="flex items-start">
               <div
-                className={`p-1 mr-3 text-xl rounded-full ${
-                  feedback.type === "correct"
-                    ? "bg-emerald-100 text-emerald-500"
-                    : "bg-red-100 text-red-500"
-                }`}
+                className={`p-1 mr-3 text-xl rounded-full ${feedback.type === "correct"
+                  ? "bg-emerald-100 text-emerald-500"
+                  : "bg-red-100 text-red-500"
+                  }`}
               >
                 {feedback.type === "correct" ? (
                   <Check size={20} />
@@ -450,22 +407,20 @@ const generateQuestions = useCallback(() => {
               </div>
               <div>
                 <p
-                  className={`font-semibold ${
-                    feedback.type === "correct"
-                      ? "text-emerald-600"
-                      : "text-red-600"
-                  }`}
+                  className={`font-semibold ${feedback.type === "correct"
+                    ? "text-emerald-600"
+                    : "text-red-600"
+                    }`}
                 >
                   {feedback.type === "correct"
                     ? "Correct Answer!"
                     : "Incorrect Answer"}
                 </p>
                 <p
-                  className={`text-sm ${
-                    feedback.type === "correct"
-                      ? "text-emerald-500"
-                      : "text-red-500"
-                  }`}
+                  className={`text-sm ${feedback.type === "correct"
+                    ? "text-emerald-500"
+                    : "text-red-500"
+                    }`}
                 >
                   {feedback.message}
                 </p>

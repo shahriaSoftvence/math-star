@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import PracticeCard from '@/components/PracticeCard';
 import ActivityItem from '@/components/ActivityItem';
@@ -7,9 +7,9 @@ import { IoStarSharp } from "react-icons/io5";
 import BadgeBronze from '../../../public/assets/Bronje.png';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useGetDailySummaryQuery } from '@/Redux/reward/rewardApi'; 
-import { Key } from 'react';
 import { useIsPremium } from '@/Redux/hooks';
+import { useGetProgressQuery } from '@/Redux/reward/rewardApi';
+import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 
 const practiceItems = [
   { link: "/dashboard/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
@@ -19,12 +19,12 @@ const practiceItems = [
 ];
 
 export default function Home() {
-  // Fetch data from the backend
-  const { data: summary, isLoading, isError } = useGetDailySummaryQuery({});
 
-   const isPremium = useIsPremium();
+  const isPremium = useIsPremium();
+  const { data: summary, isLoading, isError } = useGetProgressQuery();
+  const progress = summary?.data?.progress_today;
+  const { data } = useGetProfileQuery();
 
-  // Handle loading and error states
   if (isLoading) {
     return (
       <div className='flex justify-center my-12' role="status">
@@ -41,13 +41,6 @@ export default function Home() {
     return <div className='text-red-500 flex justify-center my-12 text-lg font-medium'><ShieldAlert className='mr-2' />Could not load your process. Please try again later !</div>;
   }
 
-  const {
-    goal_progress: dailyGoalProgress = 0,
-    practice_time: practiceTime = 0,
-    stars_earned_today: starsEarnedToday = 0,
-    recent_sessions: activityItems = [],
-    lifetime_stars: starBalance = 0,
-  } = summary;
 
   return (
     <div className="space-y-8 max-w-[1104px] mx-auto">
@@ -83,26 +76,26 @@ export default function Home() {
           <div className="space-y-5">
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Practice Time:</span>
-              <span className="font-medium text-[#2563EB]">{practiceTime} Minutes</span>
+              <span className="font-medium text-[#2563EB]">{progress?.practice_time_minutes} Minutes</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Stars Earned:</span>
               <div className="font-medium text-yellow-500 flex items-center">
-                <span>{starsEarnedToday}</span>
+                <span className='text-[#2563EB]'>{progress?.stars_earned}</span>
                 <Star size={16} className="ml-1 fill-[#EAB308] " />
               </div>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Best Challenge Score:</span>
-              <span className="font-medium text-gray-800">🏆 92/100</span>
+              <span className="font-medium text-green-500">🏆 {progress?.best_challenge_score}</span>
             </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-500">Daily Goal Progress:</span>
-                <span className="font-medium text-gray-800">{dailyGoalProgress}%</span>
+                <span className="font-medium text-gray-800">{progress?.daily_goal_progress}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-gradient-to-r from-blue-400 to-purple-500 h-2.5 rounded-full" style={{ width: `${dailyGoalProgress}%` }}></div>
+                <div className="bg-gradient-to-r from-blue-400 to-purple-500 h-2.5 rounded-full" style={{ width: `${progress?.daily_goal_progress}%` }}></div>
               </div>
             </div>
           </div>
@@ -110,13 +103,13 @@ export default function Home() {
         <div className="bg-white p-6 rounded-2xl">
           <h3 className="font-semibold mb-6 text-gray-800">Recent Activity</h3>
           <div className="space-y-4">
-            {activityItems.length > 0 ? (
+            {/* {activityItems.length > 0 ? (
               activityItems.map((item: { category_name: any; mode: any; correct: any; total: any; stars_earned: number; }, index: Key | null | undefined) => (
                 <ActivityItem key={index} title={`${item.category_name} - ${item.mode}`} score={`${item.correct}/${item.total} correct`} stars={item.stars_earned} />
               ))
             ) : (
               <p className="text-gray-500 text-sm">No recent activity to show.</p>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -126,11 +119,11 @@ export default function Home() {
         <div className="relative bg-gradient-to-r from-yellow-400 to-orange-400 p-6 rounded-2xl text-white flex justify-between items-center shadow-lg">
           <div>
             <h3 className="font-semibold text-lg">Your Star Balance</h3>
-            <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {starBalance.toLocaleString()}</p>
+            <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {data?.data?.star.toLocaleString() || 0}</p>
             <p className="text-sm opacity-90">Top up to win Rewards</p>
           </div>
-          <div className="text-7xl absolute top-0 right-0">
-            <Image src={BadgeBronze} alt='Badge' />
+          <div className="text-7xl absolute top-0 right-10">
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}`} alt='Badge' width={100} height={100} />
           </div>
         </div>
       </Link>

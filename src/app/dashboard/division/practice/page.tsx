@@ -12,10 +12,9 @@ import { ArrowLeft, Check, X, RefreshCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
 import Numpad from "@/components/Numpad";
-import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
 import { useAddDivisionPracticeMutation } from "@/Redux/features/division/divisionApi";
+import { toast } from "sonner";
 
-// --- Type Definitions ---
 type Question = {
   num1: number; // Dividend
   num2: number; // Divisor
@@ -60,9 +59,6 @@ function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Add mutation for saving practice session
-  const [addPracticeSession] = useAddPracticeSessionMutation();
-
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -83,18 +79,10 @@ function PracticePageContent() {
     return count ? parseInt(count, 10) : 10;
   }, [searchParams]);
 
-  // const divisor = useMemo(() => {
-  //   const divParam = searchParams?.get("divisor");
-  //   return divParam && !isNaN(parseInt(divParam, 10))
-  //     ? parseInt(divParam, 10)
-  //     : null;
-  // }, [searchParams]);
-
   const divisor = useMemo(() => {
     const divParam = searchParams?.get("divisor");
     if (!divParam) return null;
 
-    // Split by comma and parse each string to number
     const parts = divParam.split(",").map(p => parseInt(p, 10)).filter(n => !isNaN(n));
     return parts.length === 0 ? null : parts; // returns number[] | null
   }, [searchParams]);
@@ -233,37 +221,6 @@ function PracticePageContent() {
     generateQuestions();
   }, [generateQuestions]);
 
-  // Save practice session when complete
-  const handleSaveSession = useCallback(async () => {
-    try {
-      // Count correct and incorrect answers
-      const correct = progress.filter((status) => status === "correct").length;
-      const incorrect = progress.filter(
-        (status) => status === "incorrect"
-      ).length;
-
-      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
-      const starsEarned = Math.max(0, correct - incorrect);
-
-      // Calculate duration in seconds
-      // For simplicity, we'll use a fixed time per question (5 seconds)
-      const durationSeconds = questions.length * 5;
-
-      // Save to backend
-      await addPracticeSession({
-        category: 4, // Division category ID
-        mode: "practice",
-        correct: correct,
-        total: questions.length,
-        stars_earned: starsEarned,
-        duration_seconds: durationSeconds,
-      }).unwrap();
-
-      // console.log('Practice session saved successfully');
-    } catch (error) {
-      console.error("Failed to save practice session:", error);
-    }
-  }, [progress, questions.length, addPracticeSession]);
 
   const handleContinue = async () => {
     try {
@@ -292,10 +249,10 @@ function PracticePageContent() {
 
       await addDivisionPractice(payload).unwrap();
 
-      console.log("Practice data saved:", payload);
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/division");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
+    } catch (err : any) {
+      toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/division");
     }
   };
@@ -327,31 +284,23 @@ function PracticePageContent() {
 
       await addDivisionPractice(payload).unwrap();
 
-      console.log("Practice data saved:", payload);
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
+    } catch (err : any) {
+      toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/rewards");
     }
   };
 
-  // useEffect(() => {
-  //   if (isComplete) {
-  //     handleSaveSession();
-  //   }
-  // }, [isComplete, handleSaveSession]);
 
   useEffect(() => {
     if (isComplete) {
-      handleSaveSession();
-
-      // calculate stars here
       const total_wrong = totalClicks - questionCount;
       const total_correct = questionCount - total_wrong;
 
       setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
     }
-  }, [isComplete, handleSaveSession, totalClicks, questionCount]);
+  }, [isComplete, totalClicks, questionCount]);
 
   if (isComplete) {
     return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;

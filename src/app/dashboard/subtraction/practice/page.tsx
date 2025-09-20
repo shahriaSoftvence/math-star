@@ -20,11 +20,11 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
 import Numpad from "@/components/Numpad";
-import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
 import {
   useAddBorrowPracticeMutation,
   useAddNoBorrowPracticeMutation,
 } from "@/Redux/features/subtraction/subtractionApi";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = {
@@ -69,10 +69,6 @@ function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Add mutation for saving practice session
-  const [addPracticeSession] = useAddPracticeSessionMutation();
-
-  // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
@@ -117,18 +113,14 @@ function PracticePageContent() {
       let answer = 0;
 
       if (operation === "borrowing") {
-        // If numberRange is too small to have tens digit, fallback to default
         if (numberRange < 10) {
-          // fallback to default behaviour if impossible to borrow
           num1 = Math.floor(Math.random() * (numberRange + 1));
           num2 = Math.floor(Math.random() * 10);
           answer = num1 - num2;
         } else {
-          // choose a num1 whose units digit is NOT 9 (so borrow is possible)
           num1 = Math.floor(Math.random() * (numberRange - 10 + 1)) + 10; // 10..numberRange
           const unitsDigit = num1 % 10;
           if (unitsDigit === 9) {
-            // skip this num1 — cannot force borrowing when units digit is 9
             continue;
           }
 
@@ -224,56 +216,56 @@ function PracticePageContent() {
   }, [playSound]);
 
   const handleSubmit = useCallback(() => {
-  if (!userAnswer) return;
+    if (!userAnswer) return;
 
-  setTotalClicks((prev) => prev + 1);
+    setTotalClicks((prev) => prev + 1);
 
-  const parsedAnswer = Number(userAnswer.trim());
-  const isCorrect =
-    !Number.isNaN(parsedAnswer) && parsedAnswer === currentQuestion.answer;
+    const parsedAnswer = Number(userAnswer.trim());
+    const isCorrect =
+      !Number.isNaN(parsedAnswer) && parsedAnswer === currentQuestion.answer;
 
-  console.log(
-    `Q: ${currentQuestion.num1} - ${currentQuestion.num2} = ${currentQuestion.answer}, User: ${parsedAnswer}`
-  );
+    console.log(
+      `Q: ${currentQuestion.num1} - ${currentQuestion.num2} = ${currentQuestion.answer}, User: ${parsedAnswer}`
+    );
 
-  const newProgress = [...progress];
-  newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
-  setProgress(newProgress);
+    const newProgress = [...progress];
+    newProgress[currentQuestionIndex] = isCorrect ? "correct" : "incorrect";
+    setProgress(newProgress);
 
-  if (isCorrect) {
-    setFeedback({
-      type: "correct",
-      message: "Your answer is absolutely correct!",
-    });
-    setShowHelp(false);
-    playSound("/Sounds/Check-Click-sound.wav");
+    if (isCorrect) {
+      setFeedback({
+        type: "correct",
+        message: "Your answer is absolutely correct!",
+      });
+      setShowHelp(false);
+      playSound("/Sounds/Check-Click-sound.wav");
 
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex((prev) => prev + 1);
-        setUserAnswer("");
-        setFeedback({ type: null, message: "" });
-      } else {
-        setIsComplete(true);
-      }
-    }, 1500);
-  } else {
-    setFeedback({
-      type: "incorrect",
-      message: `The correct answer is ${currentQuestion.answer}. Try again!`,
-    });
-    setShowHelp(true);
-    playSound("/Sounds/Wrong-Answer-sound.wav");
-    setUserAnswer(""); // Clear input on wrong
-  }
-}, [
-  userAnswer,
-  currentQuestion,
-  progress,
-  currentQuestionIndex,
-  questions.length,
-  playSound,
-]);
+      setTimeout(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+          setCurrentQuestionIndex((prev) => prev + 1);
+          setUserAnswer("");
+          setFeedback({ type: null, message: "" });
+        } else {
+          setIsComplete(true);
+        }
+      }, 1500);
+    } else {
+      setFeedback({
+        type: "incorrect",
+        message: `The correct answer is ${currentQuestion.answer}. Try again!`,
+      });
+      setShowHelp(true);
+      playSound("/Sounds/Wrong-Answer-sound.wav");
+      setUserAnswer(""); // Clear input on wrong
+    }
+  }, [
+    userAnswer,
+    currentQuestion,
+    progress,
+    currentQuestionIndex,
+    questions.length,
+    playSound,
+  ]);
 
 
   // Keyboard support with proper dependencies
@@ -310,37 +302,6 @@ function PracticePageContent() {
     }
   };
 
-  // Save practice session when complete
-  const handleSaveSession = useCallback(async () => {
-    try {
-      // Count correct and incorrect answers
-      const correct = progress.filter((status) => status === "correct").length;
-      const incorrect = progress.filter(
-        (status) => status === "incorrect"
-      ).length;
-
-      // Calculate stars (1 star per correct answer, minus 1 for each incorrect answer, minimum 0)
-      const starsEarned = Math.max(0, correct - incorrect);
-
-      // Calculate duration in seconds
-      // For simplicity, we'll use a fixed time per question (5 seconds)
-      const durationSeconds = questions.length * 5;
-
-      // Save to backend
-      await addPracticeSession({
-        category: 2, // Subtraction category ID
-        mode: "practice",
-        correct: correct,
-        total: questions.length,
-        stars_earned: starsEarned,
-        duration_seconds: durationSeconds,
-      }).unwrap();
-
-      // console.log('Practice session saved successfully');
-    } catch (error) {
-      console.error("Failed to save practice session:", error);
-    }
-  }, [progress, questions.length, addPracticeSession]);
 
   const handleContinue = async () => {
     try {
@@ -364,10 +325,10 @@ function PracticePageContent() {
         await addBorrowPractice(payload).unwrap();
       }
 
-      console.log("Practice data saved:", payload);
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/subtraction");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/subtraction");
     }
   };
@@ -394,10 +355,10 @@ function PracticePageContent() {
         await addBorrowPractice(payload).unwrap();
       }
 
-      console.log("Practice data saved:", payload);
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
+    } catch (err: any) {
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
     }
   };
@@ -406,22 +367,14 @@ function PracticePageContent() {
     generateQuestions();
   };
 
-  // useEffect(() => {
-  //   if (isComplete) {
-  //     handleSaveSession();
-  //   }
-  // }, [isComplete, handleSaveSession]);
   useEffect(() => {
-      if (isComplete) {
-        handleSaveSession();
-  
-        // calculate stars here
-        const total_wrong = totalClicks - questionCount;
-        const total_correct = questionCount - total_wrong;
-  
-        setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
-      }
-    }, [isComplete, handleSaveSession, totalClicks, questionCount]);
+    if (isComplete) {
+      const total_wrong = totalClicks - questionCount;
+      const total_correct = questionCount - total_wrong;
+
+      setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
+    }
+  }, [isComplete, totalClicks, questionCount]);
 
   if (isComplete) {
     return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;

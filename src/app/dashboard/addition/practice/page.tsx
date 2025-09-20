@@ -12,11 +12,11 @@ import { ArrowLeft, Check, X, RefreshCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
 import Numpad from "@/components/Numpad";
-import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
 import {
   useAddCarryPracticeMutation,
   useAddNoCarryPracticeMutation,
 } from "@/Redux/features/addition/additionApi";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = {
@@ -60,9 +60,6 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // Add mutation for saving practice session
-  const [addPracticeSession] = useAddPracticeSessionMutation();
 
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -264,34 +261,6 @@ function PracticePageContent() {
     };
   }, [handleInput, handleBackspace, handleSubmit]);
 
-  // Save practice session when complete
-  const handleSaveSession = useCallback(async () => {
-    try {
-      // Count correct and incorrect answers
-      const correct = progress.filter((status) => status === "correct").length;
-      const incorrect = progress.filter(
-        (status) => status === "incorrect"
-      ).length;
-
-      const starsEarned = Math.max(0, correct - incorrect);
-
-      const durationSeconds = questions.length * 5;
-
-      // Save to backend
-      await addPracticeSession({
-        category: 1, // Addition category ID
-        mode: "practice",
-        correct: correct,
-        total: questions.length,
-        duration_seconds: durationSeconds,
-      }).unwrap();
-
-      // console.log("Practice session saved successfully");
-    } catch (error) {
-      console.error("Failed to save practice session:", error);
-    }
-  }, [progress, questions.length, addPracticeSession]);
-
 
   const handleContinue = async () => {
     try {
@@ -315,10 +284,10 @@ function PracticePageContent() {
         await addCarryPractice(payload).unwrap();
       }
 
-      console.log("Practice data saved:", payload);
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/addition");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/addition");
     }
   };
@@ -344,11 +313,10 @@ function PracticePageContent() {
       } else {
         await addCarryPractice(payload).unwrap();
       }
-
-      console.log("Practice data saved:", payload);
+      toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err) {
-      console.error("Failed to save practice:", err);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/rewards");
     }
   };
@@ -360,15 +328,12 @@ function PracticePageContent() {
 
   useEffect(() => {
     if (isComplete) {
-      handleSaveSession();
-
-      // calculate stars here
       const total_wrong = totalClicks - questionCount;
       const total_correct = questionCount - total_wrong;
 
       setRewardName(`${total_correct} Star${total_correct > 1 ? "s" : ""}`);
     }
-  }, [isComplete, handleSaveSession, totalClicks, questionCount]);
+  }, [isComplete, totalClicks, questionCount]);
 
 
   if (isComplete) {

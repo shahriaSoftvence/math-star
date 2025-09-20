@@ -1,5 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
-import { AdditionExercisePayload } from "../../../../type/practise";
+import { AdditionMultiplicationDivisionPayload } from "../../../../type/practise";
 
 const multiplicationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,7 +12,7 @@ const multiplicationApi = baseApi.injectEndpoints({
     }),
 
     addMultiplicationExercise: builder.mutation({
-      query: (range_value: number) => ({
+      query: (range_value: number[]) => ({
         url: "/practice/subtraction/no-carry/",
         method: "POST",
         body: { range_value },
@@ -20,7 +20,7 @@ const multiplicationApi = baseApi.injectEndpoints({
       invalidatesTags: ["Multiplication"],
     }),
 
-    addMultiplicationPractice: builder.mutation<void, AdditionExercisePayload>({
+    addMultiplicationPractice: builder.mutation<void, AdditionMultiplicationDivisionPayload>({
       query: (data) => ({
         url: "/practice/subtraction/no-carry/questionset/",
         method: "POST",
