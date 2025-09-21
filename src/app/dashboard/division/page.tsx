@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { use } from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
@@ -8,6 +8,7 @@ import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import DivisionCard from './divisionCard.tsx/page';
+import { useAddDivisionExerciseMutation } from '@/Redux/features/division/divisionApi';
 
 const divisionExercises = [
   { range: '2', percentage: 90, stars: 18 },
@@ -31,6 +32,7 @@ const divisionChallenges = [
 
 export default function DivisionPage() {
   const [selectedRanges, setSelectedRanges] = React.useState<string[]>([]);
+  const [addDivisionExercise] = useAddDivisionExerciseMutation();
 
   const toggleRange = (ranges: string[]) => {
     ranges.forEach(r => {
@@ -48,22 +50,22 @@ export default function DivisionPage() {
   };
 
   const handleAddRange = () => {
-    let range_values: number[] = [];
+    let range_value: number[] = [];
 
     if (selectedRanges.includes("All")) {
-      range_values = [100];
+      range_value = [100];
     } else {
-      range_values = selectedRanges.map((r) => {
+      range_value = selectedRanges.map((r) => {
         return parseInt(r)
       });
     }
-
-    console.log(range_values)
+    addDivisionExercise(range_value)
   }
 
   return (
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
       <div className="mb-4">
+        
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
           <ArrowLeft /> Go Back
         </Link>
@@ -88,17 +90,17 @@ export default function DivisionPage() {
               />
             ))}
             {selectedRanges.length > 0 && (
-            <Link href={`/dashboard/division/select-questions?ranges=${selectedRanges.join(",")}`} >
-              <div onClick={handleAddRange} className="p-4 text-center border-2 rounded-lg cursor-pointer transition-all border-purple-400 bg-white">
-                <h5 className='text-xs text-gray-600'>Continue with</h5>
-                <div className='flex justify-center items-center gap-1.5 my-2'>
-                  <h3 className='text-2xl font-semibold text-gray-800"'>Go</h3>
-                   <ChevronRight className='text-xl' />
+              <Link href={`/dashboard/division/select-questions?ranges=${selectedRanges.join(",")}`} >
+                <div onClick={handleAddRange} className="p-4 text-center border-2 rounded-lg cursor-pointer transition-all border-purple-400 bg-white">
+                  <h5 className='text-xs text-gray-600'>Continue with</h5>
+                  <div className='flex justify-center items-center gap-1.5 my-2'>
+                    <h3 className='text-2xl font-semibold text-gray-800"'>Go</h3>
+                    <ChevronRight className='text-xl' />
+                  </div>
+                  <p className='text-sm font-medium overflow-hidden'>[ {selectedRanges.join(", ")} ]</p>
                 </div>
-                <p className='text-sm font-medium overflow-hidden'>[ {selectedRanges.join(", ")} ]</p>               
-              </div>
-            </Link>
-          )}
+              </Link>
+            )}
           </div>
         </div>
       </div>

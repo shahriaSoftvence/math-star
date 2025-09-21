@@ -1,4 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
+import { AdditionMultiplicationDivisionPayload } from "../../../../type/practise";
 
 const divisionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,7 +12,7 @@ const divisionApi = baseApi.injectEndpoints({
     }),
 
     addDivisionExercise: builder.mutation({
-      query: (range_value: number) => ({
+      query: (range_value: number[]) => ({
         url: "/practice/division/no-carry/",
         method: "POST",
         body: { range_value },
@@ -19,7 +20,7 @@ const divisionApi = baseApi.injectEndpoints({
       invalidatesTags: ["Division"],
     }),
 
-    addDivisionPractice: builder.mutation({
+    addDivisionPractice: builder.mutation<void, AdditionMultiplicationDivisionPayload>({
       query: (data) => ({
         url: "/practice/division/no-carry/questionset/",
         method: "POST",

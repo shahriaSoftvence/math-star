@@ -224,14 +224,15 @@ function PracticePageContent() {
 
   const handleContinue = async () => {
     try {
-      // Get the raw string value of divisor from URL
-      const divisorParam = searchParams?.get("divisor");
+      const divisorParam = searchParams?.get("divisor"); 
 
-      let range_value: number;
-      if (divisorParam === "All") {
-        range_value = 100;
+      let range_value: number[];
+      
+
+      if (!divisorParam || divisorParam.includes("All")) {
+        range_value = [100];
       } else {
-        range_value = divisorParam ? parseInt(divisorParam, 10) : 1;
+        range_value = divisorParam.split(",").map((r) => parseInt(r, 10));
       }
 
       const question_number = questionCount;
@@ -251,7 +252,7 @@ function PracticePageContent() {
 
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/division");
-    } catch (err : any) {
+    } catch (err: any) {
       toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/division");
     }
@@ -259,15 +260,18 @@ function PracticePageContent() {
 
   const viewRewards = async () => {
     try {
-      // Get the raw string value of divisor from URL
-      const divisorParam = searchParams?.get("divisor");
+      const divisorParam = searchParams?.get("divisor"); 
 
-      let range_value: number;
-      if (divisorParam === "All") {
-        range_value = 100;
+      let range_value: number[];
+      
+
+      if (!divisorParam || divisorParam.includes("All")) {
+        range_value = [100];
       } else {
-        range_value = divisorParam ? parseInt(divisorParam, 10) : 1;
+        range_value = divisorParam.split(",").map((r) => parseInt(r, 10));
       }
+
+      console.log(range_value);
 
       const question_number = questionCount;
 
@@ -286,7 +290,7 @@ function PracticePageContent() {
 
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err : any) {
+    } catch (err: any) {
       toast.error(err.message || "Failed to save practice");
       router.push("/dashboard/rewards");
     }
@@ -401,15 +405,15 @@ function PracticePageContent() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
-                ? "border-emerald-500"
-                : "border-red-500"
+              ? "border-emerald-500"
+              : "border-red-500"
               }`}
           >
             <div className="flex items-start">
               <div
                 className={`p-1 mr-3 text-xl rounded-full ${feedback.type === "correct"
-                    ? "bg-emerald-100 text-emerald-500"
-                    : "bg-red-100 text-red-500"
+                  ? "bg-emerald-100 text-emerald-500"
+                  : "bg-red-100 text-red-500"
                   }`}
               >
                 {feedback.type === "correct" ? (
@@ -421,8 +425,8 @@ function PracticePageContent() {
               <div>
                 <p
                   className={`font-semibold ${feedback.type === "correct"
-                      ? "text-emerald-600"
-                      : "text-red-600"
+                    ? "text-emerald-600"
+                    : "text-red-600"
                     }`}
                 >
                   {feedback.type === "correct"
@@ -431,8 +435,8 @@ function PracticePageContent() {
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"
-                      ? "text-emerald-500"
-                      : "text-red-500"
+                    ? "text-emerald-500"
+                    : "text-red-500"
                     }`}
                 >
                   {feedback.message}
