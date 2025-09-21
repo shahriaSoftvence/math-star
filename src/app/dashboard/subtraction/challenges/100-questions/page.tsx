@@ -4,8 +4,9 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { BsGrid3X3 } from "react-icons/bs";
-import CongratulationsScreen from '@/components/CongratulationsScreen';
 import { useAddSubtraction100QuestionMutation } from '@/Redux/features/subtraction/subtractionApi';
+import { toast } from 'sonner';
+import GameResultScreen from '@/components/GameResultScreen';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };
@@ -131,8 +132,7 @@ export default function HundredQuestionsPage() {
     const [timeLeft, setTimeLeft] = useState(300);
     const [isComplete, setIsComplete] = useState(false);
     const [score, setScore] = useState(0);
-    const [addSubtraction100Question, { data }] = useAddSubtraction100QuestionMutation();
-    console.log("data from 100 questions", data);
+    const [addSubtraction100Question] = useAddSubtraction100QuestionMutation();
 
     const [totalClicks, setTotalClicks] = useState(0);
 
@@ -174,6 +174,7 @@ export default function HundredQuestionsPage() {
         setIsComplete(false);
         setUserAnswer('');
         setGameState('playing');
+        setTotalClicks(0);
     };
 
     const handleSubmit = useCallback(() => {
@@ -206,10 +207,10 @@ export default function HundredQuestionsPage() {
                 questions_answered: totalClicks,
                 final_score: score,
             }).unwrap();
-
+            toast.success("Challenge Score Saved!");
             router.push("/dashboard/subtraction");
         } catch (error) {
-            console.error("Failed to save 100 Questions results:", error);
+            toast.error("Failed to save Score.");
             router.push("/dashboard/subtraction");
         }
     };
@@ -242,13 +243,18 @@ export default function HundredQuestionsPage() {
     }, [gameState, setUserAnswer, handleSubmit]);
 
     if (gameState === 'gameOver' && !isComplete) {
-        return <CongratulationsScreen onContinue={handleContinue} rewardName={`You scored ${score}!`} />;
+        return (
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalClicks}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
+      />
+    );
     }
 
-    if (isComplete) {
-        return <CongratulationsScreen onContinue={handleContinue} rewardName="Challenge Crusher" />;
-    }
-
+  
     if (gameState === 'ready') {
         return <ChallengeStartScreen onStart={handleStart} onCancel={() => router.back()} />;
     }

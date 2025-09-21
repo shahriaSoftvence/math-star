@@ -110,7 +110,7 @@ const authApi = baseApi.injectEndpoints({
         url: "/profile/",
         method: "GET",
       }),
-      providesTags: ["auth", "Subscription" ],
+      providesTags: ["auth", "Subscription", "rewards", "Division", "Additions", "Multiplication", "Subtraction"],
     }),
 
     updateProfile: builder.mutation<UserResponse, Partial<UserData> | FormData>(

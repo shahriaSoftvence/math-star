@@ -3,9 +3,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, HelpCircle } from "lucide-react";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { useAddSubtractionWhatsMissingMutation } from "@/Redux/features/subtraction/subtractionApi";
 import Link from "next/link";
+import GameResultScreen from "@/components/GameResultScreen";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = {
@@ -146,6 +147,7 @@ export default function WhatsMissingPage() {
     setTimeLeft(300);
     generateQuestion();
     setGameState("playing");
+    setTotalSubmissions(0);
   };
 
   const handleContinue = async () => {
@@ -154,10 +156,11 @@ export default function WhatsMissingPage() {
         questions_answered: totalSubmissions,
         final_score: score,
       }).unwrap();
-
-      router.push("/dashboard/subtraction"); // navigate after sending
+      toast.success("Challenge Score Saved!");
+      router.push("/dashboard/subtraction"); 
     } catch (error) {
-      console.error("Failed to save Whats Missing results:", error);
+      toast.error("Failed to save Score.");
+      router.push("/dashboard/subtraction");
     }
   };
 
@@ -207,9 +210,12 @@ export default function WhatsMissingPage() {
 
   if (gameState === "gameOver") {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalSubmissions}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }

@@ -3,9 +3,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, HelpCircle } from "lucide-react";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { useAddAdditionWhatsMissingMutation } from "@/Redux/features/addition/additionApi";
 import Link from "next/link";
+import GameResultScreen from "@/components/GameResultScreen";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = {
@@ -143,6 +144,7 @@ export default function WhatsMissingPage() {
     setTimeLeft(300);
     generateQuestion();
     setGameState("playing");
+    setTotalSubmissions(0);
   };
 
   const handleContinue = async () => {
@@ -151,10 +153,10 @@ export default function WhatsMissingPage() {
         questions_answered: totalSubmissions,
         final_score: score,
       }).unwrap();
-
+      toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
     } catch (error) {
-      console.error("Failed to save Whats Missing results:", error);
+      toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
   };
@@ -162,7 +164,7 @@ export default function WhatsMissingPage() {
   const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
 
-    setTotalSubmissions((prev) => prev + 1); // count every submission
+    setTotalSubmissions((prev) => prev + 1); 
 
     let correctAnswer;
     if (question.missingIndex === 0) correctAnswer = question.num1;
@@ -203,9 +205,12 @@ export default function WhatsMissingPage() {
 
   if (gameState === "gameOver") {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalSubmissions}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }
@@ -217,7 +222,7 @@ export default function WhatsMissingPage() {
         <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
           <div>
             <Link
-              href="/addition"
+              href="/dashboard/addition"
               className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
             >
               <ArrowLeft /> Go Back

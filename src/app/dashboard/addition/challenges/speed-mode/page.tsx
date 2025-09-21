@@ -7,6 +7,7 @@ import { PiTimerBold } from "react-icons/pi";
 import { toast } from "sonner";
 import { useAddAdditionSpeedModeMutation } from "@/Redux/features/addition/additionApi";
 import Link from "next/link";
+import GameResultScreen from "@/components/GameResultScreen";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -53,48 +54,6 @@ const ChallengeStartScreen = ({
   </div>
 );
 
-const GameResultScreen = ({
-  score,
-  onRetry,
-  onHome,
-}: {
-  score: number;
-  onRetry: () => void;
-  onHome: () => void;
-}) => (
-  <div className="w-full min-h-screen relative bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 min-w-[672px] max-[704]:min-w-[400px] mx-auto">
-      <div className="w-20 h-20 bg-green-100 rounded-full flex justify-center items-center">
-        <Check className="w-10 h-10 text-green-500" />
-      </div>
-      <h1 className="text-gray-800 text-3xl font-bold font-Nunito leading-9">
-        Time is Up!
-      </h1>
-      <div>
-        <p className="text-xl text-gray-600 leading-7">
-          Final Score: <span className="font-bold text-blue-600">{score}</span>
-        </p>
-        <p className="text-base text-gray-600 leading-normal">
-          You answered {score} questions correctly!
-        </p>
-      </div>
-      <div className="w-full mt-4 flex justify-center items-center gap-4">
-        <button
-          onClick={onRetry}
-          className="flex-1 py-2.5 bg-blue-500 text-slate-50 rounded-md font-medium text-sm leading-tight hover:bg-blue-600 transition-colors"
-        >
-          Play Again
-        </button>
-        <button
-          onClick={onHome}
-          className="flex-1 py-2.5 bg-slate-50 rounded-md border border-slate-200 text-slate-950 font-medium text-sm leading-tight hover:bg-slate-100 transition-colors"
-        >
-          Continue
-        </button>
-      </div>
-    </div>
-  </div>
-);
 
 const Numpad = ({
   onNumberClick,
@@ -150,7 +109,7 @@ export default function SpeedModePage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(300); 
   const [totalClicks, setTotalClicks] = useState(0);
   const [addAdditionSpeedMode] = useAddAdditionSpeedModeMutation();
 
@@ -178,6 +137,7 @@ export default function SpeedModePage() {
     setTimeLeft(300);
     generateQuestion();
     setGameState("playing");
+    setTotalClicks(0);
   };
 
 
@@ -201,10 +161,10 @@ export default function SpeedModePage() {
         final_score: score,
       }).unwrap();
 
-      toast.success("Score saved successfully!");
+      toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
     } catch (err) {
-      toast.error("Failed to save your score. Please try again.");
+      toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
   };
@@ -222,12 +182,15 @@ export default function SpeedModePage() {
     return (
       <GameResultScreen
         score={score}
+        questionsAnswered={`Questions Answered: ${totalClicks}`}
         onRetry={handleStart}
         onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }
 
+  
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -240,7 +203,7 @@ export default function SpeedModePage() {
         <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
           <div>
             <Link
-              href="/addition"
+              href="/dashboard/addition"
               className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
             >
               <ArrowLeft /> Go Back

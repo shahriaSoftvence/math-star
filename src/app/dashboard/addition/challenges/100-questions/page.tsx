@@ -4,9 +4,9 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { BsGrid3X3 } from "react-icons/bs";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
-import { useAddPracticeSessionMutation } from "@/Redux/features/exercise/exerciseApi";
 import { useAddAddition100questionsMutation } from "@/Redux/features/addition/additionApi";
+import GameResultScreen from "@/components/GameResultScreen";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -182,7 +182,6 @@ const QuestionsGrid = ({
 // --- Main Challenge Page Component ---
 export default function HundredQuestionsPage() {
   const router = useRouter();
-  const [addPracticeSession] = useAddPracticeSessionMutation();
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionStatuses, setQuestionStatuses] = useState<ProgressStatus[]>(
@@ -193,7 +192,6 @@ export default function HundredQuestionsPage() {
   const [timeLeft, setTimeLeft] = useState(300);
   const [isComplete, setIsComplete] = useState(false);
   const [score, setScore] = useState(0);
-  const [startTime, setStartTime] = useState<number>(0);
   const [addAddition100questions] = useAddAddition100questionsMutation();
 
   const [totalClicks, setTotalClicks] = useState(0);
@@ -219,31 +217,6 @@ export default function HundredQuestionsPage() {
     generateQuestions();
   }, [generateQuestions]);
 
-  const handleSaveSession = useCallback(async () => {
-    try {
-      const correct = questionStatuses.filter(
-        (status) => status === "correct"
-      ).length;
-      const total = questionStatuses.filter(
-        (status) => status === "correct" || status === "incorrect"
-      ).length;
-      const durationSeconds = startTime
-        ? Math.floor((Date.now() - startTime) / 1000)
-        : 300;
-
-      await addPracticeSession({
-        category: 1, // Addition category
-        mode: "100_questions",
-        correct: correct,
-        total: total,
-        duration_seconds: durationSeconds,
-      }).unwrap();
-
-      // console.log('Challenge session saved successfully');
-    } catch (error) {
-      console.error("Failed to save challenge session:", error);
-    }
-  }, [questionStatuses, startTime, addPracticeSession]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -257,12 +230,7 @@ export default function HundredQuestionsPage() {
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
 
-  // Save session when game is over
-  useEffect(() => {
-    if (gameState === "gameOver") {
-      handleSaveSession();
-    }
-  }, [gameState, handleSaveSession]);
+
 
   const handleStart = () => {
     setCurrentQuestionIndex(0);
@@ -271,14 +239,14 @@ export default function HundredQuestionsPage() {
     setScore(0);
     setIsComplete(false);
     setUserAnswer("");
-    setStartTime(Date.now());
     setGameState("playing");
+    setTotalClicks(0);
   };
 
   const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
 
-    setTotalClicks((prev) => prev + 1); // count every submission
+    setTotalClicks((prev) => prev + 1);
 
     const isCorrect = parseInt(userAnswer, 10) === currentQuestion?.answer;
     const newStatuses = [...questionStatuses];
@@ -310,10 +278,10 @@ export default function HundredQuestionsPage() {
         questions_answered: totalClicks,
         final_score: score,
       }).unwrap();
-
+      toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
     } catch (error) {
-      console.error("Failed to save 100 Questions results:", error);
+      toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
   };
@@ -344,20 +312,15 @@ export default function HundredQuestionsPage() {
     };
   }, [gameState, setUserAnswer, handleSubmit]);
 
+
   if (gameState === "gameOver" && !isComplete) {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
-      />
-    );
-  }
-
-  if (isComplete) {
-    return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName="Challenge Crusher"
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalClicks}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }

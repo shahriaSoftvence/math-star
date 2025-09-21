@@ -4,8 +4,9 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { BsGrid3X3 } from "react-icons/bs";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { useAddDivision100QuestionsMutation } from "@/Redux/features/division/divisionApi";
+import { toast } from "sonner";
+import GameResultScreen from "@/components/GameResultScreen";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -248,6 +249,7 @@ export default function HundredQuestionsPage() {
     setIsComplete(false);
     setUserAnswer("");
     setGameState("playing");
+    setTotalClicks(0);
   };
 
   const handleSubmit = useCallback(() => {
@@ -286,9 +288,11 @@ export default function HundredQuestionsPage() {
         final_score: score,
       }).unwrap();
 
+      toast.success("Score saved successfully!");
       router.push("/dashboard/division");
     } catch (error) {
-      console.error("Failed to save 100 Questions results:", error);
+      toast.error("Failed to save score.");
+      router.push("/dashboard/division");
     }
   };
 
@@ -320,18 +324,12 @@ export default function HundredQuestionsPage() {
 
   if (gameState === "gameOver" && !isComplete) {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
-      />
-    );
-  }
-
-  if (isComplete) {
-    return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName="Challenge Crusher"
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalClicks}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }

@@ -4,10 +4,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Check, Delete } from "lucide-react";
 import { PiTimerBold } from "react-icons/pi";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { toast } from "sonner";
 import { useAddSubtractionSpeedModeMutation } from "@/Redux/features/subtraction/subtractionApi";
 import Link from "next/link";
+import GameResultScreen from "@/components/GameResultScreen";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -134,6 +134,7 @@ export default function SpeedModePage() {
     setTimeLeft(300);
     generateQuestion();
     setGameState("playing");
+    setTotalClicks(0);
   };
 
   const handleSubmit = () => {
@@ -152,11 +153,11 @@ export default function SpeedModePage() {
         questions_answered: totalClicks,
         final_score: score,
       }).unwrap();
-
-      toast.success("Score saved successfully!");
+      toast.success("Challenge Score Saved!");
       router.push("/dashboard/subtraction");
     } catch (err) {
-      toast.error("Failed to save your score. Please try again.");
+      toast.error("Failed to save Score.");
+      router.push("/dashboard/subtraction");
     }
   };
 
@@ -171,9 +172,12 @@ export default function SpeedModePage() {
 
   if (gameState === "gameOver") {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalClicks}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }

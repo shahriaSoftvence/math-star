@@ -3,9 +3,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, HelpCircle } from "lucide-react";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { useAddMultiplicationWhatsMissingMutation } from "@/Redux/features/multiplication/multiplicationApi";
 import Link from "next/link";
+import GameResultScreen from "@/components/GameResultScreen";
+import { toast } from "sonner";
 
 // --- Type Definitions ---
 type Question = {
@@ -114,7 +115,7 @@ export default function WhatsMissingPage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(15); // 5 minutes
   const [totalSubmissions, setTotalSubmissions] = useState(0);
   const [addMultiplicationWhatsMissing] = useAddMultiplicationWhatsMissingMutation();
 
@@ -122,7 +123,7 @@ export default function WhatsMissingPage() {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     const answer = num1 * num2;
-    const missingIndex = Math.floor(Math.random() * 3); // 0 for num1, 1 for num2, 2 for answer
+    const missingIndex = Math.floor(Math.random() * 3); 
     setQuestion({ num1, num2, answer, missingIndex });
     setUserAnswer("");
   }, []);
@@ -140,9 +141,10 @@ export default function WhatsMissingPage() {
 
   const handleStart = () => {
     setScore(0);
-    setTimeLeft(300);
+    setTimeLeft(15);
     generateQuestion();
     setGameState("playing");
+    setTotalSubmissions(0);
   };
 
   const handleContinue = async () => {
@@ -151,10 +153,10 @@ export default function WhatsMissingPage() {
         questions_answered: totalSubmissions,
         final_score: score,
       }).unwrap();
-
+      toast.success("Challenge Score Saved!");
       router.push("/dashboard/multiplication");
     } catch (error) {
-      console.error("Failed to save Whats Missing results:", error);
+      toast.error("Failed to save score.");
       router.push("/dashboard/multiplication");
     }
   };
@@ -206,9 +208,12 @@ export default function WhatsMissingPage() {
 
   if (gameState === "gameOver") {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalSubmissions}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }
@@ -276,7 +281,7 @@ export default function WhatsMissingPage() {
             </div>
 
             {/* Question Display */}
-            <div className="p-8 rounded-3xl border border-black w-full">
+            <div className="p-8 rounded-3xl border border-black min-w-[480px]">
               <div className="text-center text-gray-800 text-4xl sm:text-6xl font-bold font-Nunito leading-tight">
                 {getQuestionString()}
               </div>

@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, HelpCircle } from "lucide-react";
-import CongratulationsScreen from "@/components/CongratulationsScreen";
 import { useAddDivisionWhatsMissingMutation } from "@/Redux/features/division/divisionApi";
 import Link from "next/link";
 import { toast } from "sonner";
+import GameResultScreen from "@/components/GameResultScreen";
 
 // --- Type Definitions ---
 type Question = {
@@ -115,7 +115,7 @@ export default function WhatsMissingPage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(15); // 5 minutes
   const [totalSubmissions, setTotalSubmissions] = useState(0);
   const [addDivisionWhatsMissing] = useAddDivisionWhatsMissingMutation();
 
@@ -141,9 +141,10 @@ export default function WhatsMissingPage() {
 
   const handleStart = () => {
     setScore(0);
-    setTimeLeft(300);
+    setTimeLeft(15);
     generateQuestion();
     setGameState("playing");
+    setTotalSubmissions(0);
   };
 
   const handleContinue = async () => {
@@ -153,10 +154,10 @@ export default function WhatsMissingPage() {
         final_score: score,
       }).unwrap();
 
-      toast.success("Score saved successfully!");
+      toast.success("Challenge Score Saved!");
       router.push("/dashboard/division");
     } catch (err) {
-      toast.error("Failed to save your score. Please try again.");
+      toast.error("Failed to save Score.");
       router.push("/dashboard/division");
     }
   };
@@ -207,9 +208,12 @@ export default function WhatsMissingPage() {
 
   if (gameState === "gameOver") {
     return (
-      <CongratulationsScreen
-        onContinue={handleContinue}
-        rewardName={`You scored ${score}!`}
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalSubmissions}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
       />
     );
   }
@@ -274,7 +278,7 @@ export default function WhatsMissingPage() {
             </div>
 
             {/* Question Display */}
-            <div className="p-8 rounded-3xl border border-black w-full">
+            <div className="p-8 rounded-3xl border border-black min-w-[480px]">
               <div className="text-center text-gray-800 text-4xl sm:text-6xl font-bold font-Nunito leading-tight">
                 {getQuestionString()}
               </div>
