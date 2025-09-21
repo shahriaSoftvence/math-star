@@ -122,7 +122,7 @@ export default function Home() {
             <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {data?.data?.star.toLocaleString() || 0}</p>
             <p className="text-sm opacity-90">Top up to win Rewards</p>
           </div>
-          <div className="text-7xl absolute top-0 right-10">
+          <div className="text-7xl absolute top-0 right-20">
             <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}`} alt='Badge' width={100} height={100} />
           </div>
         </div>
