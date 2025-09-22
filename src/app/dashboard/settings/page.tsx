@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   UserCircle,
   Edit,
-  Bell,
   LockKeyhole,
   Save,
   Eye,

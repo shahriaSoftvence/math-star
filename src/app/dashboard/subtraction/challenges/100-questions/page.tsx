@@ -46,7 +46,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: {
             audio.play().catch(() => {
                 // Silently handle audio play failures
             });
-        } catch (error) {
+        } catch {
             // Silently handle audio creation failures
         }
     };
@@ -209,8 +209,9 @@ export default function HundredQuestionsPage() {
             }).unwrap();
             toast.success("Challenge Score Saved!");
             router.push("/dashboard/subtraction");
-        } catch (error) {
-            toast.error("Failed to save Score.");
+        } catch (error: unknown) {
+            if (error instanceof Error) console.error(error.message);
+            toast.error("Failed to save score.");
             router.push("/dashboard/subtraction");
         }
     };
@@ -244,17 +245,17 @@ export default function HundredQuestionsPage() {
 
     if (gameState === 'gameOver' && !isComplete) {
         return (
-      <GameResultScreen
-        score={score}
-        questionsAnswered={`Questions Answered: ${totalClicks}`}
-        onRetry={handleStart}
-        onHome={handleContinue}
-        onCancel={() => router.back()}
-      />
-    );
+            <GameResultScreen
+                score={score}
+                questionsAnswered={`Questions Answered: ${totalClicks}`}
+                onRetry={handleStart}
+                onHome={handleContinue}
+                onCancel={() => router.back()}
+            />
+        );
     }
 
-  
+
     if (gameState === 'ready') {
         return <ChallengeStartScreen onStart={handleStart} onCancel={() => router.back()} />;
     }

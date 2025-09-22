@@ -160,10 +160,12 @@ export default function SpeedModePage() {
 
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/division");
-    } catch (err) {
-      toast.error("Failed to save Score.");
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
+      toast.error("Failed to save score.");
       router.push("/dashboard/division");
     }
+
   };
 
   if (gameState === "ready") {

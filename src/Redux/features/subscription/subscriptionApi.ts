@@ -1,4 +1,4 @@
-import { BillingHistoryResponse, PaymentMethod, Plan, PlanResponse, UserActivePlan } from "../../../../type/subscription";
+import { BillingHistoryResponse, PaymentMethod, PlanResponse, UserActivePlan } from "../../../../type/subscription";
 import { baseApi } from "../../api/baseApi";
 
 

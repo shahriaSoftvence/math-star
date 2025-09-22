@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Check, X, Delete, Target, ArrowLeft } from "lucide-react";
+import { Check, Delete, Target, ArrowLeft } from "lucide-react";
 import { useAddAdditionNoMistakeMutation } from "@/Redux/features/addition/additionApi";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -75,7 +75,7 @@ const Numpad = ({
       audio.play().catch(() => {
         // Silently handle audio play failures
       });
-    } catch (error) {
+    } catch {
       // Silently handle audio creation failures
     }
   };
@@ -152,8 +152,11 @@ export default function NoMistakePage() {
 
       toast.success('Score saved successfully!');
       router.push("/dashboard/addition");
-    } catch (err) {
-      toast.error('Failed to save your score. Please try again.');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+      toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
   };

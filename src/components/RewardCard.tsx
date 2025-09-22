@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 import { IoStarSharp } from 'react-icons/io5';
 
@@ -15,7 +16,7 @@ export default function RewardCard({ icon, title, description, star_range, isUnl
 
   return (
     <div className={`bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center text-center transition-all hover:shadow-xl hover:scale-105 border-2 ${cardBorder} ${cardOpacity}`}>
-      <img className="rounded-full w-24" src={icon} alt="icon" />
+      <Image width={96} height={96} className="max-w-24 object-cover" src={icon} alt="icon" />
       <h3 className="text-xl font-bold mt-4 text-gray-800">{title}</h3>
       <p className="text-sm text-gray-600 my-2 h-20">{description}</p>
       <div className="flex items-center gap-2 my-4">

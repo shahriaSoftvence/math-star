@@ -109,7 +109,7 @@ export default function SpeedModePage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(300); 
+  const [timeLeft, setTimeLeft] = useState(300);
   const [totalClicks, setTotalClicks] = useState(0);
   const [addAdditionSpeedMode] = useAddAdditionSpeedModeMutation();
 
@@ -163,10 +163,14 @@ export default function SpeedModePage() {
 
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
-    } catch (err) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
       toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
+
   };
 
   if (gameState === "ready") {
@@ -190,7 +194,7 @@ export default function SpeedModePage() {
     );
   }
 
-  
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;

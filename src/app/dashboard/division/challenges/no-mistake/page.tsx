@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, X, Delete, Target, ArrowLeft } from 'lucide-react';
+import { Check, Delete, Target, ArrowLeft } from 'lucide-react';
 import { useAddDivisionNoMistakeMutation } from '@/Redux/features/division/divisionApi';
 import { toast } from 'sonner';
 import Link from 'next/link';
@@ -69,15 +69,16 @@ export default function NoMistakePage() {
             }).unwrap();
             toast.success("Challenge Score Saved!");
             router.push("/dashboard/division");
-        } catch (err) {
-           toast.error("Failed to save Score.");
+        } catch (err: unknown) {
+            if (err instanceof Error) console.error(err.message);
+            toast.error("Failed to save Score.");
             router.push("/dashboard/division");
         }
     };
 
     const generateQuestion = useCallback(() => {
-        const num2 = Math.floor(Math.random() * 9) + 2; 
-        const answer = Math.floor(Math.random() * 9) + 2; 
+        const num2 = Math.floor(Math.random() * 9) + 2;
+        const answer = Math.floor(Math.random() * 9) + 2;
         const num1 = num2 * answer;
         setQuestion({ num1, num2, answer });
         setUserAnswer('');
@@ -132,14 +133,14 @@ export default function NoMistakePage() {
 
     if (gameState === 'gameOver') {
         return (
-      <GameResultScreen
-        score={score}
-        questionsAnswered={`Questions Answered: ${score}`}
-        onRetry={handleStart}
-        onHome={handleContinue}
-        onCancel={() => router.back()}
-      />
-    );
+            <GameResultScreen
+                score={score}
+                questionsAnswered={`Questions Answered: ${score}`}
+                onRetry={handleStart}
+                onHome={handleContinue}
+                onCancel={() => router.back()}
+            />
+        );
     }
 
     return (

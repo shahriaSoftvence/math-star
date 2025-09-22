@@ -155,16 +155,20 @@ export default function WhatsMissingPage() {
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
       toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
+
   };
 
   const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
 
-    setTotalSubmissions((prev) => prev + 1); 
+    setTotalSubmissions((prev) => prev + 1);
 
     let correctAnswer;
     if (question.missingIndex === 0) correctAnswer = question.num1;

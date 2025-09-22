@@ -157,9 +157,10 @@ export default function WhatsMissingPage() {
         final_score: score,
       }).unwrap();
       toast.success("Challenge Score Saved!");
-      router.push("/dashboard/subtraction"); 
-    } catch (error) {
-      toast.error("Failed to save Score.");
+      router.push("/dashboard/subtraction");
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
+      toast.error("Failed to save score.");
       router.push("/dashboard/subtraction");
     }
   };

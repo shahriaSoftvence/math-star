@@ -70,7 +70,7 @@ function PracticePageContent() {
   }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [addDivisionPractice, { data }] = useAddDivisionPracticeMutation();
+  const [addDivisionPractice] = useAddDivisionPracticeMutation();
   const [totalClicks, setTotalClicks] = useState(0);
   const [rewardName, setRewardName] = useState("");
   // Get question count from URL
@@ -134,7 +134,7 @@ function PracticePageContent() {
     try {
       const audio = new Audio(sound);
       audio.play().catch(() => { });
-    } catch (error) {
+    } catch {
       // ignore
     }
   }, []);
@@ -224,10 +224,10 @@ function PracticePageContent() {
 
   const handleContinue = async () => {
     try {
-      const divisorParam = searchParams?.get("divisor"); 
+      const divisorParam = searchParams?.get("divisor");
 
       let range_value: number[];
-      
+
 
       if (!divisorParam || divisorParam.includes("All")) {
         range_value = [100];
@@ -252,18 +252,19 @@ function PracticePageContent() {
 
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/division");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save practice");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to save practice";
+      toast.error(message);
       router.push("/dashboard/division");
     }
   };
 
   const viewRewards = async () => {
     try {
-      const divisorParam = searchParams?.get("divisor"); 
+      const divisorParam = searchParams?.get("divisor");
 
       let range_value: number[];
-      
+
 
       if (!divisorParam || divisorParam.includes("All")) {
         range_value = [100];
@@ -290,8 +291,9 @@ function PracticePageContent() {
 
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save practice");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to save practice";
+      toast.error(message);
       router.push("/dashboard/rewards");
     }
   };

@@ -1,5 +1,5 @@
 import { Calendar, Crown } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog'
 import { Button } from './ui/button'
 import Link from 'next/link'
@@ -19,10 +19,12 @@ export default function SubscriptionCard() {
         try {
             const res = await cancelSubscription({}).unwrap();
             toast.success(res?.message || "Subscription cancelled successfully");
-        } catch (error: any) {
-            toast.error(error?.data?.message || "Failed to cancel subscription");
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Failed to cancel subscription";
+            toast.error(message);
         }
     };
+
     return (
         <div className="p-6 bg-gradient-to-r from-purple-500 to-blue-600 rounded-3xl shadow-lg text-white">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

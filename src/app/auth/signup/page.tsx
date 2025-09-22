@@ -1,11 +1,10 @@
-// src/app/(auth)/signup/page.tsx
 'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { User, Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import SignUpImage from '../../../../public/assets/signup.png';
-import { FcGoogle } from "react-icons/fc";
 import { useRegisterMutation, useVerifyOtpMutation, useResendOtpMutation } from '../../../../src/Redux/features/auth/authApi';
 import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';

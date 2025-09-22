@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, X, Delete, Target, ArrowLeft } from 'lucide-react';
+import { Check, Delete, Target, ArrowLeft } from 'lucide-react';
 import { useAddMultiplicationNoMistakeMutation } from '@/Redux/features/multiplication/multiplicationApi';
 import { toast } from 'sonner';
 import Link from 'next/link';
@@ -68,7 +68,8 @@ export default function NoMistakePage() {
             }).unwrap();
             toast.success("Challenge Score Saved!");
             router.push("/dashboard/multiplication");
-        } catch (err) {
+        } catch (err: unknown) {
+            if (err instanceof Error) console.error(err.message);
             toast.error("Failed to save Score.");
             router.push("/dashboard/multiplication");
         }

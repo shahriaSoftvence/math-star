@@ -1,13 +1,13 @@
 "use client"
 
-import React, { use } from 'react';
+import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
 import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
-import DivisionCard from './divisionCard.tsx/page';
+import DivisionCard from './divisionCard/page';
 import { useAddDivisionExerciseMutation } from '@/Redux/features/division/divisionApi';
 
 const divisionExercises = [

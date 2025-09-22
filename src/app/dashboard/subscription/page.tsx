@@ -66,8 +66,10 @@ export default function SubscriptionPage() {
     try {
       const res = await renewSubscription({}).unwrap();
       toast.success(res?.message);
-    } catch (error: any) {
-      toast.error(error?.data?.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Failed to update profile picture.";
+      console.error(message);
+      toast.error(message);
     }
   };
 
@@ -75,8 +77,8 @@ export default function SubscriptionPage() {
     try {
       const res = await autoRenewSubscription({}).unwrap();
       toast.success(res?.message);
-    } catch (error: any) {
-      toast.error(error?.data?.message);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
     }
   };
 
@@ -91,7 +93,8 @@ export default function SubscriptionPage() {
       } else {
         toast.success("Payment method added successfully");
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
       toast.error("Failed to add payment method");
     }
   };
@@ -102,9 +105,11 @@ export default function SubscriptionPage() {
     try {
       const res = await removeCard(payment_method_id).unwrap();
       toast.success(res?.message || "Payment method removed successfully");
-    } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to remove payment method");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Failed to remove payment method.";
+      toast.error(message);
     }
+
   };
 
 

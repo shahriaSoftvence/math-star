@@ -156,7 +156,8 @@ export default function SpeedModePage() {
 
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/multiplication");
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
       toast.error("Failed to save Score.");
       router.push("/dashboard/multiplication");
     }
@@ -204,7 +205,7 @@ export default function SpeedModePage() {
           </div>
           <div className="flex items-start gap-4 md:gap-6">
             <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
-               <PiTimerBold className="w-14 h-14 text-green-600" />
+              <PiTimerBold className="w-14 h-14 text-green-600" />
             </div>
 
             <div className="flex flex-col gap-2 md:gap-3">

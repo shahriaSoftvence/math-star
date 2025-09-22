@@ -5,8 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft,
-  Crown,
-  Calendar,
   Edit,
   Award,
   Star,
@@ -68,8 +66,8 @@ export default function ProfilePage() {
 
       await updateProfile(formData).unwrap();
       toast.success("Image uploaded successfully!");
-    } catch (error) {
-      console.error("Profile update error:", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
       toast.error("Failed to update profile picture.");
     }
   };
@@ -91,7 +89,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Subscription Card */}
-         <SubscriptionCard/>
+        <SubscriptionCard />
 
         {/* User Info Card */}
         <div className="p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center relative">
@@ -171,25 +169,22 @@ export default function ProfilePage() {
             {achievements.map((ach) => (
               <div
                 key={ach.title}
-                className={`p-4 rounded-xl border flex items-center gap-4 ${
-                  ach.unlocked
+                className={`p-4 rounded-xl border flex items-center gap-4 ${ach.unlocked
                     ? "bg-green-50 border-green-200"
                     : "bg-gray-50 border-gray-200 opacity-60"
-                }`}
+                  }`}
               >
                 <span className="text-2xl">{ach.icon}</span>
                 <div className="flex-1">
                   <p
-                    className={`font-bold font-Nunito ${
-                      ach.unlocked ? "text-green-800" : "text-gray-500"
-                    }`}
+                    className={`font-bold font-Nunito ${ach.unlocked ? "text-green-800" : "text-gray-500"
+                      }`}
                   >
                     {ach.title}
                   </p>
                   <p
-                    className={`text-sm font-Nunito ${
-                      ach.unlocked ? "text-green-600" : "text-gray-400"
-                    }`}
+                    className={`text-sm font-Nunito ${ach.unlocked ? "text-green-600" : "text-gray-400"
+                      }`}
                   >
                     {ach.description}
                   </p>

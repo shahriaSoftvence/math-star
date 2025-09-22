@@ -38,9 +38,14 @@ const PricingSection = () => {
             if (res?.url) {
                 window.location.href = res.url;
             }
-        } catch (error: any) {
-            console.error("Subscription error:", error?.data || error);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Subscription error:", error.message);
+            } else {
+                console.error("Subscription error:", error);
+            }
         }
+
     };
 
     return (

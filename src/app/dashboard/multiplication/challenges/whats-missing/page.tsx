@@ -123,7 +123,7 @@ export default function WhatsMissingPage() {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     const answer = num1 * num2;
-    const missingIndex = Math.floor(Math.random() * 3); 
+    const missingIndex = Math.floor(Math.random() * 3);
     setQuestion({ num1, num2, answer, missingIndex });
     setUserAnswer("");
   }, []);
@@ -155,7 +155,8 @@ export default function WhatsMissingPage() {
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/multiplication");
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
       toast.error("Failed to save score.");
       router.push("/dashboard/multiplication");
     }

@@ -19,6 +19,7 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: NumpadProps) => {
         // Silently handle audio play failures
       });
     } catch (error) {
+      console.error('Error playing sound:', error);
       // Silently handle audio creation failures
     }
   };

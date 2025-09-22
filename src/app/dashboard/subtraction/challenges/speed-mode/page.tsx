@@ -155,10 +155,12 @@ export default function SpeedModePage() {
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/subtraction");
-    } catch (err) {
-      toast.error("Failed to save Score.");
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
+      toast.error("Failed to save score.");
       router.push("/dashboard/subtraction");
     }
+
   };
 
   if (gameState === "ready") {

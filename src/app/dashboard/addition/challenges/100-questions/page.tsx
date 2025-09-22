@@ -68,8 +68,8 @@ const Numpad = ({
       audio.play().catch(() => {
         // Silently handle audio play failures
       });
-    } catch (error) {
-      // Silently handle audio creation failures
+    } catch {
+      // silently ignore any other errors
     }
   };
 
@@ -280,10 +280,14 @@ export default function HundredQuestionsPage() {
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
       toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
+
   };
 
   const formatTime = (seconds: number) => {

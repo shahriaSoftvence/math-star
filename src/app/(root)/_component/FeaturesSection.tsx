@@ -12,7 +12,7 @@ const FeaturesSection = () => {
             <span className="text-blue-500">Math Star?</span>
           </h2>
           <p className="text-gray-600 text-xl font-normal font-sans leading-7 mt-4">
-            Our special features that make your child's learning more effective
+            Our special features that make your child&apos;s learning more effective
             and enjoyable
           </p>
         </div>

@@ -94,7 +94,7 @@ function PracticePageContent() {
   );
 
 
-  const generateQuestions = () => {
+  const generateQuestions = useCallback(() => {
     const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
       let num1: number = 0;
       let num2: number = 0;
@@ -156,13 +156,15 @@ function PracticePageContent() {
     setUserAnswer("");
     setFeedback({ type: null, message: "" });
     setIsComplete(false);
-  };
+  }, [questionCount, numberRange, operation]);
 
 
   // Generate questions on component mount
+
   useEffect(() => {
     generateQuestions();
-  }, [questionCount, numberRange]);
+  }, [generateQuestions]);
+
 
   const currentQuestion = useMemo(
     () => questions[currentQuestionIndex],
@@ -176,7 +178,7 @@ function PracticePageContent() {
       audio.play().catch(() => {
         // Silently handle audio play failures
       });
-    } catch (error) {
+    } catch {
       // Silently handle audio creation failures
     }
   }, []);
@@ -286,10 +288,16 @@ function PracticePageContent() {
 
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/addition");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save practice");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to save practice");
+      }
       router.push("/dashboard/addition");
     }
+
   };
 
   const viewRewards = async () => {
@@ -315,10 +323,12 @@ function PracticePageContent() {
       }
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save practice");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to save practice";
+      toast.error(message);
       router.push("/dashboard/rewards");
     }
+
   };
 
 

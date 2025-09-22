@@ -1,11 +1,10 @@
-// src/app/(auth)/signin/page.tsx
 'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
 import SignInImage from '../../../../public/assets/signin.png';
-import { FcGoogle } from "react-icons/fc";
 import { useLoginMutation } from '../../../../src/Redux/features/auth/authApi';
 import { useAuthActions } from '../../../../src/Redux/hooks';
 import { toast } from 'sonner';

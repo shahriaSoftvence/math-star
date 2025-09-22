@@ -7,18 +7,17 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-
     <div className="">
       <main className="max-w-7xl mx-auto p-8 prose space-y-12 mt-20">
-        <h1 className="text-4xl font-bold font-Quicksand">Terms & Conditions</h1>
+        <h1 className="text-4xl font-bold font-Quicksand">Terms &amp; Conditions</h1>
         <p><strong>Effective date:</strong> September 15, 2025</p>
 
         <section>
           <h2>1. Introduction</h2>
           <p>
-            Welcome to <strong>Math Star</strong>. These Terms &amp; Conditions ("Terms")
+            Welcome to <strong>Math Star</strong>. These Terms &amp; Conditions (&quot;Terms&quot;)
             govern your access to and use of the Math Star website, applications and
-            services (together, the "Service"). By using the Service you agree to be bound
+            services (together, the &quot;Service&quot;). By using the Service you agree to be bound
             by these Terms.
           </p>
         </section>

@@ -104,7 +104,7 @@ function PracticePageContent() {
     setUserAnswer("");
     setFeedback({ type: null, message: "" });
     setIsComplete(false);
-  }, [questionCount, ranges, fixedNum2]);
+  }, [questionCount, fixedNum2]);
 
 
   // Generate questions on component mount
@@ -124,7 +124,7 @@ function PracticePageContent() {
       audio.play().catch(() => {
         // Silently handle audio play failures
       });
-    } catch (error) {
+    } catch {
       // Silently handle audio creation failures
     }
   }, []);
@@ -243,8 +243,9 @@ function PracticePageContent() {
       await addMultiplicationPractice(payload).unwrap();
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/multiplication");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save practice");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to save practice";
+      toast.error(message);
       router.push("/dashboard/multiplication");
     }
   };
@@ -277,8 +278,9 @@ function PracticePageContent() {
       await addMultiplicationPractice(payload).unwrap();
       toast.success("Practice data saved successfully!");
       router.push("/dashboard/rewards");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save practice");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to save practice";
+      toast.error(message);
       router.push("/dashboard/rewards");
     }
   };

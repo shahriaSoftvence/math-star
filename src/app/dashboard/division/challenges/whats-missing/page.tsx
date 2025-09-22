@@ -156,7 +156,8 @@ export default function WhatsMissingPage() {
 
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/division");
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
       toast.error("Failed to save Score.");
       router.push("/dashboard/division");
     }
