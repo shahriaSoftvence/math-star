@@ -1,5 +1,6 @@
 import React from 'react';
 import FaqItem from './FaqItem';
+import Link from 'next/link';
 
 const faqData = [
   { 
@@ -38,9 +39,9 @@ const FaqSection : React.FC = () => {
         </div>
         <div className="text-center mt-8">
           <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">Still have questions? We are here to help!</p>
-          <button className="mt-4 px-6 py-3 bg-blue-500 rounded-lg text-white text-base font-normal font-Open_Sans leading-normal hover:bg-blue-600 transition-colors">
+          <Link href="/contact"><button className="mt-4 px-6 py-3 bg-blue-500 rounded-lg text-white text-base font-normal font-Open_Sans leading-normal hover:bg-blue-600 transition-colors">
             Contact Support
-          </button>
+          </button></Link>
         </div>
       </div>
     </section>

@@ -3,8 +3,6 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-
-import { toast } from "sonner";
 import { logout } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
@@ -29,11 +27,11 @@ const baseQueryWithRefreshToken: BaseQueryFn = async (args, api, extraOptions) =
   let result = await baseQuery(args, api, extraOptions);
   if (result?.error?.status === 404) {
     const errorData = result.error.data as { message?: string };
-    toast.error(errorData?.message || 'Not found');
+    console.error(errorData?.message);
   }
   if (result?.error?.status === 403) {
     const errorData = result.error.data as { message?: string };
-    toast.error(errorData?.message || 'Forbidden');
+    console.error(errorData?.message);
   }
   if (result?.error?.status === 401) {
     // Check if we're in the middle of a logout process

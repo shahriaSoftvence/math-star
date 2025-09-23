@@ -15,31 +15,29 @@ const Footer = () => {
             <p className="text-base font-normal font-Open_Sans leading-normal max-w-sm">
               Making math an adventure for children ages 5-10 through playful, adaptive learning.
             </p>
-            <div className="flex gap-4 mt-4">
+            {/* <div className="flex gap-4 mt-4">
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex justify-center items-center hover:bg-gray-700"><Facebook size={20} className="text-white" /></a>
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex justify-center items-center hover:bg-gray-700"><Twitter size={20} className="text-white" /></a>
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex justify-center items-center hover:bg-gray-700"><Instagram size={20} className="text-white" /></a>
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex justify-center items-center hover:bg-gray-700"><Youtube size={20} className="text-white" /></a>
-            </div>
+            </div> */}
           </div>
           <div>
             <h3 className="text-white text-lg font-bold font-Quicksand leading-7">Quick Links</h3>
             <ul className="mt-4 space-y-2">
-              <li><Link href="#" className="hover:text-white">About Us</Link></li>
+              <li><Link href="/" className="hover:text-white">Home</Link></li>
               <li><Link href={{ pathname: "/", hash: "features" }} className="hover:text-white">How It Works</Link></li>
-              <li><Link href="#" className="hover:text-white">Curriculum</Link></li>
+              {/* <li><Link href="#" className="hover:text-white">Curriculum</Link></li> */}
               <li><Link href={{ pathname: "/", hash: "pricing" }} className="hover:text-white">Pricing</Link></li>
-              <li><Link href="#" className="hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-white text-lg font-bold font-Quicksand leading-7">Support</h3>
             <ul className="mt-4 space-y-2">
-              <li><Link href="#" className="hover:text-white">Help Center</Link></li>
-              <li><Link href={{ pathname: "/", hash: "faq" }} className="hover:text-white">FAQs</Link></li>
               <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white">Terms & Conditions</Link></li>
-              <li><Link href="/cookie" className="hover:text-white">Cookie Policy</Link></li>
+              <li><Link href={{ pathname: "/", hash: "faq" }} className="hover:text-white">FAQs</Link></li>
+              <li><Link href="/contact" className="hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
         </div>
@@ -47,8 +45,8 @@ const Footer = () => {
           <p>© 2025 MathFun. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white">Terms & Conditions</Link>
-            <Link href="/cookie" className="hover:text-white">Cookie Policy</Link>
+            <li><Link href="/terms" className="hover:text-white">Terms & Conditions</Link></li>
+            <li><Link href="/contact" className="hover:text-white">Contact Us</Link></li>
           </div>
         </div>
       </div>

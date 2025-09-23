@@ -46,7 +46,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   const profileRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   // Get current user from Redux
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   // Get logout function from Redux actions
   const { logout } = useAuthActions();
@@ -54,11 +54,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   // Fetch user profile data
   const {
     data: profileData
-  } = useGetProfileQuery(undefined, {
-    skip: !isAuthenticated, 
-    refetchOnMountOrArgChange: false, 
-    refetchOnFocus: false, 
-  });
+  } = useGetProfileQuery();
 
 
   useOnClickOutside(profileRef as React.RefObject<HTMLElement>, () =>
@@ -76,8 +72,10 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     router.push("/dashboard/profile");
     setIsProfileOpen(false);
   };
+  
 
-  if (!user || !isAuthenticated) {
+
+  if (!profileData || !isAuthenticated) {
     return (
       <nav className="max-w-[1478px] mx-auto px-6 py-4 bg-white shadow-md rounded flex justify-between items-center">
         <div className="flex items-center gap-4">

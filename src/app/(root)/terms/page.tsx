@@ -1,5 +1,10 @@
 import React from "react";
 
+export const metadata = {
+  title: "Allgemeine Geschäftsbedingungen (AGB) — Math Star",
+  description:
+    "Allgemeine Geschäftsbedingungen (AGB) für Math-Star.de. Hier finden Sie alle Informationen zu Vertragsbedingungen, Laufzeiten, Preisen, Widerrufsrecht, Nutzungsrechten und Haftung.",
+};
 
 export default function TermsPage() {
   return (
@@ -26,7 +31,11 @@ export default function TermsPage() {
             </p>
 
             <p>
-              <span className="font-semibold">E-Mail:</span> kontakt@math-star.de
+              <span className="font-semibold">E-Mail: </span>{" "}
+              <a href="mailto:info@star-math.de" className="text-blue-600 hover:underline">
+                info@star-math.de
+              </a>
+
               <br />
               <span className="font-semibold">Steuernummer:</span> [Steuernummer ergänzen]
             </p>
@@ -62,7 +71,7 @@ export default function TermsPage() {
 
           <h3 className="text-sm font-bold">2.3 Technische Voraussetzungen</h3>
           <p className="text-sm leading-relaxed">Zur Nutzung der Plattform benötigt der Nutzer:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Einen internetfähigen Computer, Tablet oder Smartphone</li>
             <li>Einen aktuellen Webbrowser mit aktiviertem JavaScript</li>
             <li>Eine stabile Internetverbindung</li>
@@ -77,7 +86,7 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">2.5 Gewährleistung und Richtigkeit der Inhalte</h3>
           <p className="text-sm leading-relaxed"><span className="font-semibold">Sorgfältige Inhaltserstellung:</span> Die Lerninhalte werden nach bestem Wissen und Gewissen sowie unter Anwendung anerkannter pädagogischer und fachlicher Standards erstellt.</p>
           <p className="text-sm font-semibold">Haftungsausschluss für Inhaltsrichtigkeit:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Eine Garantie für die vollständige Richtigkeit, Aktualität oder Vollständigkeit der Lerninhalte kann nicht übernommen werden</li>
             <li>Insbesondere bei sich ändernden Lehrplänen, Prüfungsordnungen oder wissenschaftlichen Erkenntnissen können Anpassungen erforderlich werden</li>
             <li>Nutzer sind verpflichtet, sich bei wichtigen Entscheidungen (Prüfungen, Abschlüsse) zusätzlich aus anderen Quellen zu informieren</li>
@@ -85,7 +94,7 @@ export default function TermsPage() {
 
           <p className="text-sm leading-relaxed"><span className="font-semibold">Kardinalpflichten bleiben unberührt: </span>Die Haftung für vorsätzlich oder grob fahrlässig unrichtige Inhalte sowie für die Verletzung wesentlicher Vertragspflichten (ordnungsgemäße Bereitstellung der Lernplattform) bleibt bestehen.</p>
 
-          <p className="text-sm leading-relaxed"><span className="font-semibold">Kontinuierliche Verbesserung: </span>Der Anbieter ist bemüht, Fehler schnellstmöglich zu korrigieren. Nutzer werden gebeten, inhaltliche Fehler über kontakt@math-star.de zu melden.</p>
+          <p className="text-sm leading-relaxed"><span className="font-semibold">Kontinuierliche Verbesserung: </span>Der Anbieter ist bemüht, Fehler schnellstmöglich zu korrigieren. Nutzer werden gebeten, inhaltliche Fehler über info@star-math.de zu melden.</p>
 
           <p className="text-sm leading-relaxed"><span className="font-semibold">Keine Lernerfolgs-Garantie: </span>Eine Garantie für bestimmte Lernerfolge, Prüfungsergebnisse oder Notenverbesserungen wird ausdrücklich nicht übernommen. Der Lernerfolg hängt von individuellen Faktoren und dem Engagement des Nutzers ab.</p>
         </section>
@@ -103,7 +112,7 @@ export default function TermsPage() {
           <p className="text-sm leading-relaxed">
             Vertragsschluss für kostenpflichtige Leistungen erfolgt durch:
           </p>
-          <ol className="list-decimal list-inside text-sm leading-relaxed">
+          <ol className="ml-2.5 list-decimal list-inside text-sm leading-relaxed">
             <li>Auswahl des gewünschten Premium-Abonnements</li>
             <li>Eingabe der erforderlichen Daten und Zahlungsinformationen</li>
             <li>Bestätigung der Bestellung durch Klick auf &quot;Kostenpflichtig bestellen&quot;</li>
@@ -136,9 +145,9 @@ export default function TermsPage() {
           </p>
 
           <p className="text-sm font-semibold">Kündigungsmöglichkeiten für den Nutzer:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Online über die Kündigung-Funktion im Nutzerkonto</li>
-            <li>Per E-Mail an kontakt@math-star.de</li>
+            <li>Per E-Mail an info@star-math.de</li>
             <li>Per Brief an die oben genannte Adresse</li>
           </ul>
 
@@ -149,7 +158,7 @@ export default function TermsPage() {
           <p className="text-sm leading-relaxed">Das Recht zur fristlosen Kündigung aus wichtigem Grund bleibt unberührt. Ein wichtiger Grund liegt insbesondere vor bei:
           </p>
 
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Zahlungsverzug von mehr als 30 Tagen</li>
             <li>Schwerwiegenden Verstößen gegen diese AGB</li>
             <li>Missbrauch der Plattform oder illegaler Nutzung</li>
@@ -158,7 +167,7 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">4.4 Folgen der Beendigung</h3>
           <p className="text-sm leading-relaxed">Nach Beendigung des Vertrags:</p>
 
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Erlischt das Nutzungsrecht für Premium-Inhalte sofort</li>
             <li>Werden persönliche Daten gemäß der Datenschutzerklärung behandelt</li>
             <li>Können Lernfortschrittsdaten 30 Tage zur Wiederherstellung gespeichert bleiben</li>
@@ -173,7 +182,7 @@ export default function TermsPage() {
           </p>
 
           <h3 className="text-sm font-bold">5.2 Zahlungsmodalitäten</h3>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Die Zahlung erfolgt monatlich im Voraus für die gesamte Vertragslaufzeit</li>
             <li>Zahlungsabwicklung über den Zahlungsdienstleister Stripe Inc.</li>
             <li>·	Verfügbare Zahlungsmethoden: Kreditkarte, SEPA-Lastschrift, weitere durch Stripe unterstützte Methoden</li>
@@ -181,7 +190,7 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">5.3 Zahlungsverzug</h3>
           <p className="text-sm leading-relaxed">Bei Zahlungsverzug:
           </p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Erste Mahnung: 5,00 EUR Mahngebühr nach 14 Tagen Verzug</li>
             <li>Zweite Mahnung: 10,00 EUR Mahngebühr nach weiteren 14 Tagen</li>
             <li>Der Zugang kann nach 30 Tagen Zahlungsverzug gesperrt werden</li>
@@ -190,7 +199,7 @@ export default function TermsPage() {
 
           <h3 className="text-sm font-bold">5.4 Preisänderungen</h3>
           <p className="text-sm leading-relaxed"><span className="font-semibold">Preisänderungen als Neuvertragsangebot: </span>Beabsichtigt der Anbieter eine Preisänderung, kündigt er den bestehenden Vertrag mit einer Frist von 30 Tagen und unterbreitet gleichzeitig ein Angebot zum Abschluss eines neuen Vertrags zu den geänderten Preisen.</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li><span className="font-semibold">Ausdrückliche Annahme: </span>Der Nutzer kann das Neuvertragsangebot ausdrücklich durch Bestätigung per E-Mail oder über sein Nutzerkonto annehmen</li>
             <li><span className="font-semibold">Konkludente Annahme: </span>Nutzt der Nutzer die Plattform nach Ablauf der Kündigungsfrist weiter, gilt dies als Annahme des Neuvertragsangebots zu den geänderten Preisen</li>
             <li><span className="font-semibold">Ablehnung: </span>Bei Ablehnung des Neuvertragsangebots endet das Vertragsverhältnis zum Ablauf der Kündigungsfrist</li>
@@ -205,7 +214,7 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">Widerrufsrecht</h3>
           <p className="text-sm leading-relaxed">Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>
           <p className="text-sm leading-relaxed">Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.</p>
-          <p className="text-sm leading-relaxed">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Stefan Breitkreuz, Bayernstraße 30, 63739 Aschaffenburg, E-Mail: kontakt@math-star.de) mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
+          <p className="text-sm leading-relaxed">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Stefan Breitkreuz, Bayernstraße 30, 63739 Aschaffenburg, E-Mail: info@star-math.de) mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
           <p className="text-sm leading-relaxed">Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.</p>
           <p className="text-sm leading-relaxed font-semibold">Folgen des Widerrufes</p>
           <p className="text-sm leading-relaxed">Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrages bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung Entgelte berechnet.</p>
@@ -222,7 +231,7 @@ export default function TermsPage() {
           <p className="text-sm leading-relaxed"><span className="font-semibold">Erlaubte Downloads: </span>Das Herunterladen von Lerninhalten ist nur insoweit gestattet, als die Plattform diese Funktion explizit zur Verfügung stellt (z.B. durch einen {"\"Download\""}-Button). Ausschließlich streambare Inhalte (ohne Download-Option) dürfen nicht heruntergeladen werden.</p>
 
           <p className="text-sm font-semibold">Urheberrechtsschutz - Streng untersagt sind:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Die Vervielfältigung, Kopierung oder Weiterverbreitung der Lerninhalte außerhalb der gestatteten privaten Nutzung</li>
             <li>Die Bereitstellung der Inhalte auf anderen Plattformen oder Websites</li>
             <li>Die kommerzielle Nutzung oder der Verkauf der Inhalte</li>
@@ -231,7 +240,7 @@ export default function TermsPage() {
           </ul>
 
           <p className="text-sm font-semibold">Weitere Nutzungsverbote:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Die Weitergabe der Zugangsdaten an Dritte</li>
             <li>Reverse Engineering oder Dekompilierung der Software/App</li>
             <li>Die Nutzung automatisierter Systeme zum Herunterladen von Inhalten</li>
@@ -239,7 +248,7 @@ export default function TermsPage() {
 
           <p className="text-sm leading-relaxed"><span className="font-semibold">Rechtsfolgen bei Verstößen: </span>Verstöße gegen diese Nutzungsbeschränkungen, insbesondere gegen den Urheberrechtsschutz, führen zu:</p>
 
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Sofortiger außerordentlicher Kündigung und Kontosperrung</li>
             <li>Schadensersatzansprüchen des Anbieters</li>
             <li>Möglichen strafrechtlichen Konsequenzen nach dem Urheberrechtsgesetz</li>
@@ -248,7 +257,7 @@ export default function TermsPage() {
 
           <h3 className="text-sm font-bold">7.3 Nutzerverhalten</h3>
           <p className="text-sm leading-relaxed">Der Nutzer verpflichtet sich zu einem respektvollen Umgang und unterlässt:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Belästigungen oder Diskriminierungen</li>
             <li>Die Verbreitung illegaler oder jugendgefährdender Inhalte</li>
             <li>Handlungen, die die Funktionsfähigkeit der Plattform beeinträchtigen</li>
@@ -270,7 +279,7 @@ export default function TermsPage() {
 
           <h3 className="text-sm font-bold">8.4 Ausschluss der weitergehenden Haftung</h3>
           <p className="text-sm leading-relaxed">Eine weitergehende Haftung des Anbieters ist ausgeschlossen. Dies gilt insbesondere für:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Datenverlust durch technische Störungen</li>
             <li>Schäden durch Viren oder Malware</li>
             <li>Folge- und Vermögensschäden</li>
@@ -301,7 +310,7 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">10.2 Zustimmung zu Änderungen - Ausdrückliche Erklärung erforderlich</h3>
           <p className="text-sm leading-relaxed">Änderungen der AGB bedürfen der ausdrücklichen Zustimmung des Nutzers. Eine stillschweigende Zustimmung durch Weiternutzung der Plattform ist nicht möglich.</p>
           <p className="text-sm font-semibold">Zustimmungsverfahren:</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Der Nutzer wird beim nächsten Login aufgefordert, den geänderten AGB ausdrücklich zuzustimmen</li>
             <li>Ohne Zustimmung ist eine weitere Nutzung der kostenpflichtigen Funktionen nicht möglich</li>
             <li>Der Nutzer kann die Änderungen ablehnen und stattdessen kündigen</li>
@@ -310,13 +319,13 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">10.3 Wahlrecht des Nutzers bei AGB-Änderungen</h3>
           <p className="text-sm leading-relaxed">Bei Bekanntgabe von AGB-Änderungen hat der Nutzer folgende Optionen:</p>
           <p className="text-sm font-semibold">Option 1: Zustimmung</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Ausdrückliche Annahme der geänderten AGB durch Klick auf {"\"Ich stimme zu\""}</li>
             <li>Fortsetzung des Vertragsverhältnisses zu den neuen Bedingungen</li>
           </ul>
 
           <p className="text-sm font-semibold">Option 2: Kündigung</p>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Ablehnung der AGB-Änderungen durch Kündigung</li>
             <li>Sonderkündigungsrecht ohne Einhaltung der regulären Kündigungsfrist</li>
             <li>Vertrag endet zum Zeitpunkt des Inkrafttretens der neuen AGB</li>
@@ -324,14 +333,14 @@ export default function TermsPage() {
           </ul>
 
           <h3 className="text-sm font-bold">10.4 Technische Umsetzung</h3>
-          <ul className="list-disc list-inside text-sm leading-relaxed">
+          <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Bei AGB-Änderungen wird der Plattform-Zugang vorübergehend auf eine Zustimmungsseite umgeleitet</li>
             <li>Dort werden die Änderungen nochmals dargestellt und die Wahlmöglichkeiten erläutert</li>
             <li>Erst nach ausdrücklicher Entscheidung (Zustimmung oder Kündigung) ist die Plattformnutzung wieder möglich</li>
           </ul>
         </section>
 
-         {/* 11. Preise und Zahlungsbedingungen */}
+        {/* 11. Preise und Zahlungsbedingungen */}
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">11. Störungen und Wartungsarbeiten</h2>
           <h3 className="text-sm font-bold">11.1 Technische Verfügbarkeit</h3>
@@ -344,7 +353,7 @@ export default function TermsPage() {
           <p className="text-sm leading-relaxed">Bei ungeplanten technischen Störungen wird der Anbieter unverzüglich an der Behebung arbeiten. Ein Anspruch auf Schadensersatz oder Erstattung besteht nicht, es sei denn, die Störung beruht auf einer groben Pflichtverletzung des Anbieters.</p>
         </section>
 
-         {/* 12. Preise und Zahlungsbedingungen */}
+        {/* 12. Preise und Zahlungsbedingungen */}
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">12. Schlussbestimmungen</h2>
           <h3 className="text-sm font-bold">12.1 Anwendbares Recht</h3>
