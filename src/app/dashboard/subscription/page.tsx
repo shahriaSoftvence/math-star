@@ -100,10 +100,10 @@ export default function SubscriptionPage() {
   };
 
 
-  const handleRemovePaymentMethod = async (payment_method_id: string) => {
-    console.log(payment_method_id)
+  const handleRemovePaymentMethod = async (stripe_payment_method_id: string) => {
+    console.log(stripe_payment_method_id)
     try {
-      const res = await removeCard(payment_method_id).unwrap();
+      const res = await removeCard(stripe_payment_method_id).unwrap();
       toast.success(res?.message || "Payment method removed successfully");
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Failed to remove payment method.";
@@ -115,7 +115,7 @@ export default function SubscriptionPage() {
 
   if (planLoading) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center items-center">
+      <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 mt-4 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center items-center">
         <div className="text-center">
           <div role="status">
             <svg aria-hidden="true" className="inline w-24 h-24 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +129,7 @@ export default function SubscriptionPage() {
     );
   }
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
+    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 mt-4 p-4 sm:p-6 md:p-8 flex justify-center">
       <div className="w-full max-w-4xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-center gap-4">
@@ -225,7 +225,7 @@ export default function SubscriptionPage() {
                     <Image src={visaIcon} alt="visa" />
                     <div className="flex items-start gap-6">
                       <span>
-                        <p className="font-semibold capitalize">{method.brand} •••• {method.last4}</p>
+                        <p className="font-semibold capitalize">{method.card_brand} •••• {method.card_last4}</p>
                         <p className="text-xs text-gray-500">
                           Expires on {method.exp_month} / {method.exp_year}
                         </p>
@@ -251,7 +251,7 @@ export default function SubscriptionPage() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>No</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleRemovePaymentMethod(method?.payment_method_id)} className="bg-red-700 hover:bg-red-600">Continue</AlertDialogAction>
+                        <AlertDialogAction onClick={() => handleRemovePaymentMethod(method?.stripe_payment_method_id)} className="bg-red-700 hover:bg-red-600">Continue</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>

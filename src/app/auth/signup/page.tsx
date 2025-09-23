@@ -25,10 +25,11 @@ export default function SignUpPage() {
   const [register, { isLoading: isRegistering }] = useRegisterMutation();
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
   const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
-  
+  const [accepted, setAccepted] = useState(false);
+
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get('redirect') || '/dashboard';
-  
+
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +42,7 @@ export default function SignUpPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
       return;
@@ -66,8 +67,8 @@ export default function SignUpPage() {
         toast.success('Registration successful! Please check your email for OTP.');
       }
     } catch (error: unknown) {
-      const errorMessage = error && typeof error === 'object' && 'data' in error && 
-        typeof error.data === 'object' && error.data && 'message' in error.data && 
+      const errorMessage = error && typeof error === 'object' && 'data' in error &&
+        typeof error.data === 'object' && error.data && 'message' in error.data &&
         typeof error.data.message === 'string' ? error.data.message : 'Registration failed';
       toast.error(errorMessage);
     }
@@ -75,26 +76,26 @@ export default function SignUpPage() {
 
   const handleOtpVerification = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (otp.length !== 6) {
       toast.error('Please enter a valid 6-digit OTP');
       return;
     }
 
     try {
-      const result = await verifyOtp({ 
+      const result = await verifyOtp({
         otp,
         email: email // Include the email in the OTP verification request
       }).unwrap();
-      
+
       if (result.success) {
         toast.success('OTP verified successfully! You can now sign in.');
         // Redirect to signin page with redirect parameter
         window.location.href = `/auth/signin?redirect=${encodeURIComponent(redirectTo)}`;
       }
     } catch (error: unknown) {
-      const errorMessage = error && typeof error === 'object' && 'data' in error && 
-        typeof error.data === 'object' && error.data && 'message' in error.data && 
+      const errorMessage = error && typeof error === 'object' && 'data' in error &&
+        typeof error.data === 'object' && error.data && 'message' in error.data &&
         typeof error.data.message === 'string' ? error.data.message : 'OTP verification failed';
       toast.error(errorMessage);
     }
@@ -238,30 +239,54 @@ export default function SignUpPage() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
-                <Lock size={20} className="text-zinc-600" />
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirm_password"
-                  placeholder="Confirm Password"
-                  value={formData.confirm_password}
-                  onChange={handleInputChange}
-                  required
-                  minLength={6}
-                  className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="text-zinc-600 hover:text-zinc-800 transition-colors"
-                >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+              <div>
+                <div className="self-stretch h-12 px-5 py-3.5 bg-zinc-100 rounded-xl flex items-center gap-2">
+                  <Lock size={20} className="text-zinc-600" />
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirm_password"
+                    placeholder="Confirm Password"
+                    value={formData.confirm_password}
+                    onChange={handleInputChange}
+                    required
+                    minLength={6}
+                    className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="text-zinc-600 hover:text-zinc-800 transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+                <div className="ml-2 mt-2 flex items-center gap-2">
+                  <input
+                    className="w-4 h-4"
+                    type="checkbox"
+                    id="terms"
+                    checked={accepted}
+                    onChange={(e) => setAccepted(e.target.checked)}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-zinc-900 text-sm font-Quicksand italic cursor-pointer"
+                  >
+                    I agree to the{" "}
+                    <Link
+                      className="text-blue-500 text-sm font-bold font-Quicksand hover:underline"
+                      href="/terms"
+                    >
+                      Terms and Conditions
+                    </Link>
+                    .
+                  </label>
+                </div>
               </div>
 
               <button
                 type="submit"
-                disabled={isRegistering}
+                disabled={isRegistering || !accepted}
                 className="self-stretch h-12 px-4 py-3 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {isRegistering ? 'Creating Account...' : 'Next'}

@@ -36,9 +36,9 @@ export interface UserActivePlan {
 
 export interface PaymentMethodData {
   id: number;
-  payment_method_id: string;
-  brand: string;
-  last4: string;
+  stripe_payment_method_id: string;
+  card_brand: string;
+  card_last4: string;
   name_on_card: string;
   exp_month: number;
   exp_year: number;

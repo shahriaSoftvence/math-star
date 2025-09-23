@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useIsPremium } from '@/Redux/hooks';
 import { useGetProgressQuery } from '@/Redux/reward/rewardApi';
 import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
+import rewardsBadge from '../../../public/rewards.png';
 
 const practiceItems = [
   { link: "/dashboard/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
@@ -120,8 +121,8 @@ export default function Home() {
             <p className="text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {data?.data?.star.toLocaleString() || 0}</p>
             <p className="text-sm opacity-90">Top up to win Rewards</p>
           </div>
-          <div className="text-7xl absolute top-0 right-20">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}`} alt='Badge' width={100} height={100} />
+          <div className="text-7xl absolute right-15">
+            <Image src={data?.data?.reward?.icon? `${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}`: rewardsBadge } alt='Badge' width={120} height={120} />
           </div>
         </div>
       </Link>

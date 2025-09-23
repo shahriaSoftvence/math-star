@@ -73,7 +73,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
+    <div className="w-full min-h-screen bg-gradient-to-b mt-4 from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
       <div className="w-full max-w-3xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-center gap-4">

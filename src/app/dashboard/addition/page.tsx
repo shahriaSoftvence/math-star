@@ -15,7 +15,7 @@ const additionExercises = {
     {  range: '0 to 100', percentage: 78 },
   ],
   carry: [
-    { range: '0 to 25', percentage: 78 },
+    { range: '0 to 20', percentage: 78 },
     {  range: '0 to 50', percentage: 78 },
     {  range: '0 to 100', percentage: 78 },
   ],
