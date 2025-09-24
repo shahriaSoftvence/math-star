@@ -147,7 +147,7 @@ export default function ProfilePage() {
           </div>
           <p className="text-gray-600 mt-2 font-Nunito">
             Keep practicing to reach Level{" "}
-            {`${(profileData?.data?.level ?? 0) + 1}`}!
+            {`${(profileData?.data?.level ?? 0) + 1}`} !
           </p>
           <Link href="/dashboard/settings">
             <button className="flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-800 font-Nunito">

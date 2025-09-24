@@ -103,23 +103,50 @@ function PracticePageContent() {
       const maxTries = 100;
       let tries = 0;
 
-      if (operation === "carry") {
-        do {
-          num2 = Math.floor(Math.random() * 9) + 1;
-          const minNum1 = 10;
-          const maxNum1 = numberRange - num2;
+      // if (operation === "carry") {
+      //   do {
+      //     num2 = Math.floor(Math.random() * 9) + 1;
+      //     const minNum1 = 10;
+      //     const maxNum1 = numberRange - num2;
 
-          num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
-          answer = num1 + num2;
-          tries++;
-        } while (
-          tries < maxTries &&
-          (
-            (num1 % 10) + num2 <= 9 ||
-            answer > numberRange
-          )
-        );
-      }
+      //     num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+      //     answer = num1 + num2;
+      //     tries++;
+      //   } while (
+      //     tries < maxTries &&
+      //     (
+      //       (num1 % 10) + num2 <= 9 ||
+      //       answer > numberRange
+      //     )
+      //   );
+      // }
+      if (operation === "carry") {
+  do {
+    num2 = Math.floor(Math.random() * 9) + 1;
+
+    // 🔹 MODIFIED: Special case when range = 20
+    if (numberRange === 20) {
+      const minAnswer = 10;
+      const maxAnswer = 20;
+      answer = Math.floor(Math.random() * (maxAnswer - minAnswer + 1)) + minAnswer;
+      num1 = answer - num2;
+    } else {
+      const minNum1 = 10;
+      const maxNum1 = numberRange - num2;
+      num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+      answer = num1 + num2;
+    }
+
+    tries++;
+  } while (
+    tries < maxTries &&
+    (
+      (num1 % 10) + num2 <= 9 ||
+      answer > numberRange
+    )
+  );
+}
+
       else if (operation === "noCarry") {
         do {
           num2 = Math.floor(Math.random() * 9) + 1;
@@ -146,6 +173,7 @@ function PracticePageContent() {
           tries++;
         } while (answer > numberRange);
       }
+      
 
       return { num1, num2, answer };
     });

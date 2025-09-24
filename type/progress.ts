@@ -9,6 +9,11 @@ export interface ProgressResponse {
       best_challenge_score: number;
       daily_goal_progress: number;
     };
-    recent_activity: Record<string, any>; 
+    recent_activities: {
+      stars: number;
+      description: string;
+      created_at: string; 
+    }[];
+    recent_activities_count: number;
   };
 }

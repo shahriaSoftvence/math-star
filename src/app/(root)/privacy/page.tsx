@@ -29,8 +29,8 @@ export default function PrivacyPage() {
             <p>
               <span className="font-bold">Kontakt:</span> <br />
               <span className="font-semibold">E-Mail: </span>
-              <a href="mailto:info@star-math.de" className="text-blue-600 hover:underline">
-                info@star-math.de
+              <a href="mailto:kontakt@math-star.de" className="text-blue-600 hover:underline">
+                kontakt@math-star.de
               </a>
             </p>
           </div>

@@ -32,8 +32,8 @@ export default function TermsPage() {
 
             <p>
               <span className="font-semibold">E-Mail: </span>{" "}
-              <a href="mailto:info@star-math.de" className="text-blue-600 hover:underline">
-                info@star-math.de
+              <a href="mailto:kontakt@math-star.de" className="text-blue-600 hover:underline">
+                kontakt@math-star.de
               </a>
 
               <br />
@@ -94,7 +94,7 @@ export default function TermsPage() {
 
           <p className="text-sm leading-relaxed"><span className="font-semibold">Kardinalpflichten bleiben unberührt: </span>Die Haftung für vorsätzlich oder grob fahrlässig unrichtige Inhalte sowie für die Verletzung wesentlicher Vertragspflichten (ordnungsgemäße Bereitstellung der Lernplattform) bleibt bestehen.</p>
 
-          <p className="text-sm leading-relaxed"><span className="font-semibold">Kontinuierliche Verbesserung: </span>Der Anbieter ist bemüht, Fehler schnellstmöglich zu korrigieren. Nutzer werden gebeten, inhaltliche Fehler über info@star-math.de zu melden.</p>
+          <p className="text-sm leading-relaxed"><span className="font-semibold">Kontinuierliche Verbesserung: </span>Der Anbieter ist bemüht, Fehler schnellstmöglich zu korrigieren. Nutzer werden gebeten, inhaltliche Fehler über kontakt@math-star.de zu melden.</p>
 
           <p className="text-sm leading-relaxed"><span className="font-semibold">Keine Lernerfolgs-Garantie: </span>Eine Garantie für bestimmte Lernerfolge, Prüfungsergebnisse oder Notenverbesserungen wird ausdrücklich nicht übernommen. Der Lernerfolg hängt von individuellen Faktoren und dem Engagement des Nutzers ab.</p>
         </section>
@@ -147,7 +147,7 @@ export default function TermsPage() {
           <p className="text-sm font-semibold">Kündigungsmöglichkeiten für den Nutzer:</p>
           <ul className="ml-2.5 list-disc list-inside text-sm leading-relaxed">
             <li>Online über die Kündigung-Funktion im Nutzerkonto</li>
-            <li>Per E-Mail an info@star-math.de</li>
+            <li>Per E-Mail an kontakt@math-star.de</li>
             <li>Per Brief an die oben genannte Adresse</li>
           </ul>
 
@@ -214,7 +214,7 @@ export default function TermsPage() {
           <h3 className="text-sm font-bold">Widerrufsrecht</h3>
           <p className="text-sm leading-relaxed">Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>
           <p className="text-sm leading-relaxed">Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.</p>
-          <p className="text-sm leading-relaxed">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Stefan Breitkreuz, Bayernstraße 30, 63739 Aschaffenburg, E-Mail: info@star-math.de) mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
+          <p className="text-sm leading-relaxed">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Stefan Breitkreuz, Bayernstraße 30, 63739 Aschaffenburg, E-Mail: kontakt@math-star.de) mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
           <p className="text-sm leading-relaxed">Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.</p>
           <p className="text-sm leading-relaxed font-semibold">Folgen des Widerrufes</p>
           <p className="text-sm leading-relaxed">Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrages bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung Entgelte berechnet.</p>
