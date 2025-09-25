@@ -13,6 +13,17 @@ import GameResultScreen from "@/components/GameResultScreen";
 type Question = { num1: number; num2: number; answer: number };
 type GameState = "ready" | "playing" | "gameOver";
 
+// --- Sound Utility Function ---
+const playSound = (sound: string) => {
+  try {
+    const audio = new Audio(sound);
+    audio.play().catch(() => {
+      // Silently handle audio play failures
+    });
+  } catch {
+    // Silently handle audio creation failures
+  }
+};
 
 // --- Reusable UI Components ---
 
@@ -54,7 +65,6 @@ const ChallengeStartScreen = ({
   </div>
 );
 
-
 const Numpad = ({
   onNumberClick,
   onBackspace,
@@ -64,32 +74,47 @@ const Numpad = ({
   onBackspace: () => void;
   onSubmit: () => void;
 }) => {
+  const handleNumberClick = (num: string) => {
+    onNumberClick(num);
+    playSound("/Sounds/Number-Click-sound.wav");
+  };
+
+  const handleBackspace = () => {
+    onBackspace();
+    playSound("/Sounds/delete-click-sound.wav");
+  };
+
+  const handleSubmit = () => {
+    onSubmit();
+    playSound("/Sounds/Check-Click-sound.wav");
+  };
+
   const buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return (
     <div className="grid grid-cols-3 gap-4 w-96">
       {buttons.map((btn) => (
         <button
           key={btn}
-          onClick={() => onNumberClick(btn)}
+          onClick={() => handleNumberClick(btn)}
           className="h-24 text-3xl font-bold text-blue-800 bg-blue-100 rounded-2xl transition-colors hover:bg-blue-200"
         >
           {btn}
         </button>
       ))}
       <button
-        onClick={onBackspace}
+        onClick={handleBackspace}
         className="flex items-center justify-center h-24 text-2xl font-bold text-red-800 bg-red-100 rounded-2xl transition-colors hover:bg-red-200"
       >
         <Delete size={32} />
       </button>
       <button
-        onClick={() => onNumberClick("0")}
+        onClick={() => handleNumberClick("0")}
         className="h-24 text-3xl font-bold text-blue-800 bg-blue-100 rounded-2xl transition-colors hover:bg-blue-200"
       >
         0
       </button>
       <button
-        onClick={onSubmit}
+        onClick={handleSubmit}
         className="flex items-center justify-center h-24 text-3xl font-bold text-green-800 bg-green-100 rounded-2xl transition-colors hover:bg-green-200"
       >
         <Check size={32} />
@@ -112,7 +137,6 @@ export default function SpeedModePage() {
   const [timeLeft, setTimeLeft] = useState(300);
   const [totalClicks, setTotalClicks] = useState(0);
   const [addAdditionSpeedMode] = useAddAdditionSpeedModeMutation();
-
 
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;
@@ -140,8 +164,7 @@ export default function SpeedModePage() {
     setTotalClicks(0);
   };
 
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!userAnswer) return;
 
     setTotalClicks((prev) => prev + 1);
@@ -152,7 +175,7 @@ export default function SpeedModePage() {
     }
 
     generateQuestion();
-  };
+  }, [userAnswer, question.answer, generateQuestion]);
 
   const handleContinue = async () => {
     try {
@@ -170,8 +193,40 @@ export default function SpeedModePage() {
       toast.error("Failed to save Score.");
       router.push("/dashboard/addition");
     }
-
   };
+
+  // Keyboard support with sound
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (gameState !== "playing") return;
+
+      if (event.key >= "0" && event.key <= "9") {
+        setUserAnswer((prev) => {
+          if (prev.length < 3) {
+            playSound("/Sounds/Number-Click-sound.wav");
+            return prev + event.key;
+          }
+          return prev;
+        });
+      } else if (event.key === "Backspace") {
+        setUserAnswer((prev) => {
+          if (prev.length > 0) {
+            playSound("/Sounds/delete-click-sound.wav");
+            return prev.slice(0, -1);
+          }
+          return prev;
+        });
+      } else if (event.key === "Enter") {
+        playSound("/Sounds/Check-Click-sound.wav");
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [gameState, handleSubmit]);
 
   if (gameState === "ready") {
     return (
@@ -193,7 +248,6 @@ export default function SpeedModePage() {
       />
     );
   }
-
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
