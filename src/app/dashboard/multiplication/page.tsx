@@ -95,13 +95,13 @@ export default function MultiplicationPage() {
             <Link
               href={`/dashboard/multiplication/select-questions?ranges=${selectedRanges.join(",")}`}
             >
-              <div onClick={handleAddRange} className="p-4 text-center border-2 rounded-lg cursor-pointer transition-all border-green-400 bg-white">
-                <h5 className='text-xs text-gray-600'>Continue with</h5>
+              <div onClick={handleAddRange} className="p-6 text-center border-2 rounded-lg cursor-pointer transition-all border-green-400 bg-white">
+                <h5 className='text-sm text-gray-600'>Continue with</h5>
                 <div className='flex justify-center items-center gap-1.5 my-2'>
-                  <h3 className='text-2xl font-semibold text-gray-800"'>Go</h3>
-                   <ChevronRight className='text-xl' />
+                  <h3 className='text-lg font-bold text-gray-800'>Go</h3>
+                   <ChevronRight className='text-lg' />
                 </div>
-                <p className='text-sm font-medium overflow-hidden'>[ {selectedRanges.join(", ")} ]</p>
+                <p className='text-xs font-medium text-gray-800'>[ {selectedRanges.join(", ")} ]</p>
                
               </div>
             </Link>

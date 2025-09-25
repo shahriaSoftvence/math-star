@@ -26,6 +26,8 @@ export default function Home() {
   const activities = summary?.data?.recent_activities;
   const { data } = useGetProfileQuery();
 
+  console.log(isPremium)
+
   if (isLoading) {
     return (
       <div className='flex justify-center my-12' role="status">
@@ -50,7 +52,7 @@ export default function Home() {
 
           return (
             <Link
-              href={isActive ? item.link : "/dashboard/subscription"}
+              href={isActive ? item.link : ""}
               key={index}
               className={`relative block rounded-2xl overflow-hidden ${isActive ? "cursor-pointer hover:scale-105 transition-transform" : "opacity-25 cursor-not-allowed"
                 }`}

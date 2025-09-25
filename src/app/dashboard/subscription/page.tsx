@@ -26,7 +26,7 @@ import moment from "moment";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import visaIcon from '../../../../public/visa.svg'
+import visaIcon from '@/asset/visa.svg'
 import SubscriptionCard from "@/components/SubscriptionCard";
 import { useIsPremium } from "@/Redux/hooks";
 import LoadingFile from '@/asset/loader.svg'
@@ -220,7 +220,7 @@ export default function SubscriptionPage() {
               paymentMethods.data.map((method: PaymentMethodData) => (
                 <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-4">
-                    <Image src={visaIcon} alt="visa" />
+                    <Image width={40} height={40} src={visaIcon} alt="visa" />
                     <div className="flex items-start gap-6">
                       <span>
                         <p className="font-semibold capitalize">{method.card_brand} •••• {method.card_last4}</p>

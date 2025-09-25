@@ -17,7 +17,6 @@ type ExerciseCardProps = {
 
 export default function SubtractionCard({
   range,
-  percentage,
   operation,
 }: ExerciseCardProps) {
   const [addBorrowExercise, { data }] = useAddBorrowExerciseMutation();
@@ -40,13 +39,13 @@ export default function SubtractionCard({
       href={`/dashboard/subtraction/select-questions?range=${rangeParam}&operation=${operation}`}
       onClick={() => handleAddExercise(parseInt(rangeParam))}
     >
-      <div className="p-4 text-center bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:border-blue-400">
-        <p className="text-xs text-gray-600">number range</p>
-        <p className="text-base font-semibold text-gray-800">{range}</p>
-        <p className="text-xs text-gray-600">{percentage}%</p>
+      <div className="p-6 text-center bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:border-blue-400">
+        <p className="text-sm text-gray-600">number range</p>
+        <p className="text-lg font-bold my-2 text-gray-800">{range}</p>
+        {/* <p className="text-xs text-gray-600">{percentage}%</p> */}
         <p className="text-[#EAB308] flex justify-center items-center gap-2 mt-1">
           <Image src={pointStar} alt="point star" />
-          20
+          <Image src={pointStar} alt="point star" />
         </p>
       </div>
     </Link>

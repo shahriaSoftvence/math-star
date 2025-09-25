@@ -19,7 +19,6 @@ const PricingSection = async () => {
     const url = `${process.env.NEXT_PUBLIC_BASE_API}plan-list/`;
     const res = await fetch(url);
     const text = await res.text();
-    console.log("API response:", text);
     let planLists;
     try {
         planLists = JSON.parse(text);

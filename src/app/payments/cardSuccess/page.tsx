@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CircleGauge } from 'lucide-react'
+import { CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import Lottie from "lottie-react";
@@ -14,7 +14,7 @@ export default function CardSuccess() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/dashboard");
+      router.push("/dashboard/subscription");
     }, 10000);
 
     return () => clearTimeout(timer);
@@ -25,16 +25,16 @@ export default function CardSuccess() {
         <div className="flex flex-col items-center">
           <Lottie animationData={groovyWalkAnimation} loop={true} />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mt-4">
-            Payment Successful
+            Card Added
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2 text-center">
-            Thank you for your payment. Your payment has been processed successfully.
+            Your new payment method has been added successfully.
           </p>
 
         </div>
         <div className="flex justify-center">
-          <Link href="/dashboard">
-            <Button ><CircleGauge /> Dashboard</Button>
+          <Link href="/dashboard/subscription">
+            <Button className='bg-purple-700 hover:bg-purple-600' ><CreditCard /> Subscription</Button>
           </Link>
         </div>
       </Card>

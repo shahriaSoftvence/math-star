@@ -192,7 +192,8 @@ export default function HundredQuestionsPage() {
   const [timeLeft, setTimeLeft] = useState(300);
   const [isComplete, setIsComplete] = useState(false);
   const [score, setScore] = useState(0);
-  const [addAddition100questions] = useAddAddition100questionsMutation();
+  const [addAddition100questions, {data}] = useAddAddition100questionsMutation();
+  console.log(data)
 
   const [totalClicks, setTotalClicks] = useState(0);
 
@@ -275,8 +276,10 @@ export default function HundredQuestionsPage() {
   const handleContinue = async () => {
     try {
       await addAddition100questions({
-        questions_answered: totalClicks,
-        final_score: score,
+        current_question: totalClicks,
+        total_correct: score,
+        total_wrong: totalClicks - score,
+        time_taken_seconds: 300 - timeLeft,
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/addition");
