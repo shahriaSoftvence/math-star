@@ -12,10 +12,19 @@ import GameResultScreen from "@/components/GameResultScreen";
 type Question = { num1: number; num2: number; answer: number };
 type GameState = "ready" | "playing" | "gameOver";
 
-// --- Reusable UI Components (specific to this page for simplicity) ---
+// --- Sound Utility Function ---
+const playSound = (sound: string) => {
+  try {
+    const audio = new Audio(sound);
+    audio.play().catch(() => {
+      // Silently handle audio play failures
+    });
+  } catch {
+    // Silently handle audio creation failures
+  }
+};
 
-
-
+// --- Reusable UI Components ---
 const ChallengeStartScreen = ({
   title,
   description,
@@ -58,8 +67,6 @@ const ChallengeStartScreen = ({
   </div>
 );
 
-
-
 const Numpad = ({
   onNumberClick,
   onBackspace,
@@ -69,17 +76,6 @@ const Numpad = ({
   onBackspace: () => void;
   onSubmit: () => void;
 }) => {
-  const playSound = (sound: string) => {
-    try {
-      const audio = new Audio(sound);
-      audio.play().catch(() => {
-        // Silently handle audio play failures
-      });
-    } catch {
-      // Silently handle audio creation failures
-    }
-  };
-
   const handleNumberClick = (num: string) => {
     onNumberClick(num);
     playSound("/Sounds/Number-Click-sound.wav");
@@ -161,7 +157,6 @@ export default function NoMistakePage() {
     }
   };
 
-
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
@@ -207,16 +202,29 @@ export default function NoMistakePage() {
     }
   }, [userAnswer, question.answer, generateQuestion, handleGameOver]);
 
-  // Keyboard support
+  // Keyboard support with sound
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (gameState !== "playing") return;
 
       if (event.key >= "0" && event.key <= "9") {
-        setUserAnswer((prev) => (prev.length < 3 ? prev + event.key : prev));
+        setUserAnswer((prev) => {
+          if (prev.length < 3) {
+            playSound("/Sounds/Number-Click-sound.wav");
+            return prev + event.key;
+          }
+          return prev;
+        });
       } else if (event.key === "Backspace") {
-        setUserAnswer((prev) => prev.slice(0, -1));
+        setUserAnswer((prev) => {
+          if (prev.length > 0) {
+            playSound("/Sounds/delete-click-sound.wav");
+            return prev.slice(0, -1);
+          }
+          return prev;
+        });
       } else if (event.key === "Enter") {
+        playSound("/Sounds/Check-Click-sound.wav");
         handleSubmit();
       }
     };
@@ -225,7 +233,7 @@ export default function NoMistakePage() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [gameState, setUserAnswer, handleSubmit]);
+  }, [gameState, handleSubmit]);
 
   if (gameState === "ready") {
     return (
@@ -249,7 +257,6 @@ export default function NoMistakePage() {
       />
     );
   }
-
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-purple-50 py-4">
