@@ -17,6 +17,18 @@ type Question = {
 };
 type GameState = "ready" | "playing" | "gameOver";
 
+// --- Sound Utility Function ---
+const playSound = (sound: string) => {
+  try {
+    const audio = new Audio(sound);
+    audio.play().catch(() => {
+      // Silently handle audio play failures
+    });
+  } catch {
+    // silently ignore any other errors
+  }
+};
+
 // --- Reusable UI Components ---
 const ChallengeStartScreen = ({
   onStart,
@@ -35,7 +47,7 @@ const ChallengeStartScreen = ({
           Ready to Start?
         </h2>
         <p className="text-gray-600 mt-2 text-base font-normal font-Poppins leading-relaxed">
-          Fill in the missing numbers in 5 minutes!
+          Fill in the missing numbers in 15 seconds!
         </p>
       </div>
       <div className="flex items-center gap-4 mt-4">
@@ -65,9 +77,12 @@ const Numpad = ({
   onBackspace: () => void;
   onSubmit: () => void;
 }) => {
-  const handleClick = (e: React.MouseEvent, action: () => void) => {
+  const handleClick = (e: React.MouseEvent, action: () => void, sound?: string) => {
     e.preventDefault();
     action();
+    if (sound) {
+      playSound(sound);
+    }
   };
 
   return (
@@ -75,26 +90,26 @@ const Numpad = ({
       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
         <button
           key={num}
-          onClick={(e) => handleClick(e, () => onNumberClick(num.toString()))}
+          onClick={(e) => handleClick(e, () => onNumberClick(num.toString()), "/Sounds/Number-Click-sound.wav")}
           className="h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-800 text-3xl font-bold hover:bg-purple-200 transition-colors"
         >
           {num}
         </button>
       ))}
       <button
-        onClick={(e) => handleClick(e, onBackspace)}
+        onClick={(e) => handleClick(e, onBackspace, "/Sounds/delete-click-sound.wav")}
         className="h-16 bg-red-100 rounded-2xl flex items-center justify-center text-red-800 text-2xl font-bold hover:bg-red-200 transition-colors"
       >
         ⌫
       </button>
       <button
-        onClick={(e) => handleClick(e, () => onNumberClick("0"))}
+        onClick={(e) => handleClick(e, () => onNumberClick("0"), "/Sounds/Number-Click-sound.wav")}
         className="h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-800 text-3xl font-bold hover:bg-purple-200 transition-colors"
       >
         0
       </button>
       <button
-        onClick={(e) => handleClick(e, onSubmit)}
+        onClick={(e) => handleClick(e, onSubmit, "/Sounds/Check-Click-sound.wav")}
         className="h-16 bg-green-100 rounded-2xl flex items-center justify-center text-green-800 text-3xl font-bold hover:bg-green-200 transition-colors"
       >
         ✓
@@ -115,7 +130,7 @@ export default function WhatsMissingPage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(15); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(300); // 15 seconds
   const [totalSubmissions, setTotalSubmissions] = useState(0);
   const [addDivisionWhatsMissing] = useAddDivisionWhatsMissingMutation();
 
@@ -141,7 +156,7 @@ export default function WhatsMissingPage() {
 
   const handleStart = () => {
     setScore(0);
-    setTimeLeft(15);
+    setTimeLeft(300);
     generateQuestion();
     setGameState("playing");
     setTotalSubmissions(0);
@@ -180,6 +195,39 @@ export default function WhatsMissingPage() {
     }
     generateQuestion();
   }, [userAnswer, question, generateQuestion]);
+
+  // Keyboard support with sound
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (gameState !== "playing") return;
+
+      if (event.key >= "0" && event.key <= "9") {
+        setUserAnswer((prev) => {
+          if (prev.length < 3) {
+            playSound("/Sounds/Number-Click-sound.wav");
+            return prev + event.key;
+          }
+          return prev;
+        });
+      } else if (event.key === "Backspace") {
+        setUserAnswer((prev) => {
+          if (prev.length > 0) {
+            playSound("/Sounds/delete-click-sound.wav");
+            return prev.slice(0, -1);
+          }
+          return prev;
+        });
+      } else if (event.key === "Enter") {
+        playSound("/Sounds/Check-Click-sound.wav");
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [gameState, handleSubmit]);
 
   const getQuestionString = () => {
     const { num1, num2, answer, missingIndex } = question;
@@ -240,7 +288,7 @@ export default function WhatsMissingPage() {
                 What is missing?
               </h1>
               <p className="text-black text-2xl font-bold font-Nunito leading-10">
-                You have 5 minutes to find as many missing numbers as possible.
+                You have 15 seconds to find as many missing numbers as possible.
               </p>
             </div>
           </div>
