@@ -13,6 +13,18 @@ type Question = { num1: number; num2: number; answer: number };
 type GameState = "ready" | "playing" | "gameOver";
 type ProgressStatus = "pending" | "current" | "correct" | "incorrect";
 
+// --- Sound Utility Function ---
+const playSound = (sound: string) => {
+  try {
+    const audio = new Audio(sound);
+    audio.play().catch(() => {
+      // Silently handle audio play failures
+    });
+  } catch {
+    // Silently handle audio creation failures
+  }
+};
+
 // --- Reusable UI Components ---
 
 const ChallengeStartScreen = ({
@@ -62,17 +74,6 @@ const Numpad = ({
   onBackspace: () => void;
   onSubmit: () => void;
 }) => {
-  const playSound = (sound: string) => {
-    try {
-      const audio = new Audio(sound);
-      audio.play().catch(() => {
-        // Silently handle audio play failures
-      });
-    } catch {
-      // Silently handle audio creation failures
-    }
-  };
-
   const handleClick = (
     e: React.MouseEvent,
     action: () => void,
@@ -303,16 +304,29 @@ export default function HundredQuestionsPage() {
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  // Keyboard support
+  // Keyboard support with sound
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (gameState !== "playing") return;
 
       if (event.key >= "0" && event.key <= "9") {
-        setUserAnswer((prev) => (prev.length < 3 ? prev + event.key : prev));
+        setUserAnswer((prev) => {
+          if (prev.length < 3) {
+            playSound("/Sounds/Number-Click-sound.wav");
+            return prev + event.key;
+          }
+          return prev;
+        });
       } else if (event.key === "Backspace") {
-        setUserAnswer((prev) => prev.slice(0, -1));
+        setUserAnswer((prev) => {
+          if (prev.length > 0) {
+            playSound("/Sounds/delete-click-sound.wav");
+            return prev.slice(0, -1);
+          }
+          return prev;
+        });
       } else if (event.key === "Enter") {
+        playSound("/Sounds/Check-Click-sound.wav");
         handleSubmit();
       }
     };
@@ -321,7 +335,7 @@ export default function HundredQuestionsPage() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [gameState, setUserAnswer, handleSubmit]);
+  }, [gameState, handleSubmit]);
 
   if (gameState === "gameOver" && !isComplete) {
     return (
