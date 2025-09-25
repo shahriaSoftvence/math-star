@@ -2,7 +2,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export', // Add this line
+  // output: 'export', 
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

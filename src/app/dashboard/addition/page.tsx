@@ -9,15 +9,15 @@ import AdditionCard from './additionCard/page';
 
 const additionExercises = {
   noCarry: [
-    { range: '0 to 10', percentage: 78 },
-    { range: '0 to 20', percentage: 78 },
-    {  range: '0 to 50', percentage: 78 },
-    {  range: '0 to 100', percentage: 78 },
+    { range: '0 to 10' },
+    { range: '0 to 20' },
+    {  range: '0 to 50' },
+    {  range: '0 to 100' },
   ],
   carry: [
-    { range: '0 to 20', percentage: 78 },
-    {  range: '0 to 50', percentage: 78 },
-    {  range: '0 to 100', percentage: 78 },
+    { range: '0 to 20' },
+    {  range: '0 to 50' },
+    {  range: '0 to 100' },
   ],
 };
 

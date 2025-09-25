@@ -50,17 +50,13 @@ export default function Home() {
 
           return (
             <Link
-              href={isActive ? item.link : "#"} // disable link if not active
+              href={isActive ? item.link : "/dashboard/subscription"}
               key={index}
-              className={`relative block rounded-2xl overflow-hidden ${isActive ? "cursor-pointer hover:scale-105 transition-transform" : "cursor-not-allowed opacity-50"
+              className={`relative block rounded-2xl overflow-hidden ${isActive ? "cursor-pointer hover:scale-105 transition-transform" : "opacity-25 cursor-not-allowed"
                 }`}
             >
               <PracticeCard {...item} />
-              {!isActive && (
-                <div className="absolute inset-0 bg-black/10 flex items-center justify-center text-foreground font-bold">
-                  Subscription Required
-                </div>
-              )}
+              
             </Link>
           );
         })}

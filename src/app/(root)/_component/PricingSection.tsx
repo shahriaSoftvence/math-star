@@ -1,12 +1,9 @@
-'use client';
-
 import { Check } from 'lucide-react';
 import React from 'react';
 import { IoStar } from "react-icons/io5";
-import { motion } from 'framer-motion';
-import { useAuth, useIsPremium } from '@/Redux/hooks';
-import { useRouter } from 'next/navigation';
-import { useCreateSubscriptionMutation, useGetPlansQuery } from '@/Redux/features/subscription/subscriptionApi';
+import PricingBtn from './PricingBtn';
+import { Plan } from '../../../../type/subscription';
+import Link from 'next/link';
 
 
 const pricingFeatures = [
@@ -17,36 +14,19 @@ const pricingFeatures = [
     "Monthly cancellation"
 ];
 
-const PricingSection = () => {
-    const { isAuthenticated, user } = useAuth();
-    const router = useRouter();
-    const { data: planLists } = useGetPlansQuery();
-    const [createSubscription] = useCreateSubscriptionMutation();
-    const isPremium = useIsPremium();
+const PricingSection = async () => {
 
-    const handleCreateSubscription = async (planId: number) => {
-        if (!isAuthenticated || !user) {
-            router.push("/auth/signin");
-            return;
-        }
+    const url = `${process.env.NEXT_PUBLIC_BASE_API}plan-list/`;
+    const res = await fetch(url);
+    const text = await res.text();
+    console.log("API response:", text);
+    let planLists;
+    try {
+        planLists = JSON.parse(text);
+    } catch {
+        throw new Error("API did not return valid JSON");
+    }
 
-        try {
-            const res = await createSubscription(planId).unwrap();
-
-            console.log("Response:", res);
-
-            if (res?.url) {
-                window.location.href = res.url;
-            }
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.error("Subscription error:", error.message);
-            } else {
-                console.error("Subscription error:", error);
-            }
-        }
-
-    };
 
     return (
         <section id="pricing" className="py-24 px-4 bg-gray-50">
@@ -57,16 +37,11 @@ const PricingSection = () => {
                         Money is not our motivation! Therefore, we want to make Math Star accessible to everybody at the lowest price possible.
                     </p>
                 </div>
-                <motion.div
-                    className="w-full max-w-md mt-12"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
-                >
+                <div
+                    className="w-full max-w-md mt-12">
 
                     {
-                        planLists?.data?.map((plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6">
+                        planLists?.data?.map((plan: Plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6 hover:scale-103 transition-transform">
                             <div className="flex justify-between items-start">
                                 <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">{plan?.plan_name}</h3>
                                 <div className="w-9 h-9  rounded-full flex items-center justify-center">
@@ -87,23 +62,17 @@ const PricingSection = () => {
                                     </div>
                                 ))}
                             </div>
-                            {isPremium ? <button className="w-full py-3.5 bg-white rounded-lg border-2 border-yellow-500 text-yellow-500 text-base font-bold font-Open_Sans leading-normal">
-                                Subscribed
-                            </button> :
-                                <button onClick={() => handleCreateSubscription(plan?.id)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
-                                    Start 3 Days Trial
-                                </button>
-                            }
+                            <PricingBtn planId={plan?.id} />
                         </div>)
                     }
 
                     <div className="text-center mt-8">
                         <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">No credit card required to start.</p>
                         <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">
-                            Have questions? <a href="#" className="text-blue-500">Contact our support team</a>
+                            Have questions? <Link className="text-blue-500 hover:text-blue-600" href="/contact">Contact Our Team</Link>
                         </p>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );

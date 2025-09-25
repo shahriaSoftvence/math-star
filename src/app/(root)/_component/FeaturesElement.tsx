@@ -1,8 +1,5 @@
-'use client';
-
 import React from "react";
 import { IoStar } from "react-icons/io5";
-import { motion } from "framer-motion";
 
 const featureData = [
   {
@@ -37,12 +34,8 @@ const FeatureCard = ({
   footer,
   list,
 }: (typeof featureData)[0]) => (
-  <motion.div
-    className="flex-1 h-96 relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg p-8 text-white flex flex-col"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    viewport={{ once: true }}
+  <div
+    className="flex-1 h-96 relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg p-8 text-white flex flex-col hover:scale-105 transition-transform"
   >
     <div className="absolute -top-6 -right-6 flex items-center justify-center">
       <IoStar size={62} className="fill-yellow-400" />
@@ -70,12 +63,13 @@ const FeatureCard = ({
         {footer}
       </p>
     )}
-  </motion.div>
+  </div>
 );
 
 const FeaturesElement = () => {
   return (
-    <div className="self-stretch grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="self-stretch grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+ >
       {featureData.map((feature) => (
         <FeatureCard key={feature.title} {...feature} />
       ))}

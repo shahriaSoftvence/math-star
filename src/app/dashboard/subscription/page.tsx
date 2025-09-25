@@ -101,10 +101,10 @@ export default function SubscriptionPage() {
   };
 
 
-  const handleRemovePaymentMethod = async (stripe_payment_method_id: string) => {
-    console.log(stripe_payment_method_id)
+  const handleRemovePaymentMethod = async (payment_method_id: string) => {
+    console.log(payment_method_id)
     try {
-      const res = await removeCard(stripe_payment_method_id).unwrap();
+      const res = await removeCard(payment_method_id).unwrap();
       toast.success(res?.message || "Payment method removed successfully");
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Failed to remove payment method.";
@@ -298,10 +298,10 @@ export default function SubscriptionPage() {
                       <div className="text-right">
                         <p className="font-bold text-gray-800">{item?.amount} USD</p>
                         <p
-                          className={`${item?.status === "succeeded"
-                            ? "bg-green-100 text-green-800"
+                          className={`${item?.status === "Paid"
+                            ? "bg-green-100 text-green-800 font-semibold"
                             : "bg-red-100 text-red-800"
-                            } px-3 py-1 text-sm font-medium rounded-full capitalize`}
+                            } px-3 py-1 text-sm font-medium rounded-full capitalize text-center`}
                         >
                           {item?.status}
                         </p>

@@ -67,10 +67,10 @@ const subscriptionApi = baseApi.injectEndpoints({
     }),
 
     removeCard: builder.mutation({
-      query: (stripe_payment_method_id) => ({
+      query: (payment_method_id) => ({
         url: "/remove-card/",
         method: "POST",
-        body: { stripe_payment_method_id },
+        body: { payment_method_id },
       }),
       invalidatesTags: ["Subscription"],
     }),

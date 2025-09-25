@@ -16,8 +16,6 @@ const FeaturesSection = () => {
             and enjoyable
           </p>
         </div>
-
-        {/* Client side feature cards */}
         <FeaturesElement />
       </div>
     </section>
