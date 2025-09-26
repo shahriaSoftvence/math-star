@@ -14,14 +14,14 @@ type GameState = 'ready' | 'playing' | 'gameOver';
 
 // --- Sound Utility Function ---
 const playSound = (sound: string) => {
-  try {
-    const audio = new Audio(sound);
-    audio.play().catch(() => {
-      // Silently handle audio play failures
-    });
-  } catch {
-    // Silently handle audio creation failures
-  }
+    try {
+        const audio = new Audio(sound);
+        audio.play().catch(() => {
+            // Silently handle audio play failures
+        });
+    } catch {
+        // Silently handle audio creation failures
+    }
 };
 
 // --- Reusable UI Components (specific to this page for simplicity) ---
@@ -85,13 +85,13 @@ export default function NoMistakePage() {
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10); // Increased time for division
     const [addDivisionNoMistake, { data }] = useAddDivisionNoMistakeMutation();
-    console.log(data, "form live")
+    // console.log(data, "form live")
 
     const handleContinue = async () => {
         try {
             await addDivisionNoMistake({
                 questions_answered: score,
-                final_score: score,
+                time_taken_seconds: score * 10,
             }).unwrap();
             toast.success("Challenge Score Saved!");
             router.push("/dashboard/division");

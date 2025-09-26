@@ -206,7 +206,7 @@ export default function HundredQuestionsPage() {
   const [totalClicks, setTotalClicks] = useState(0);
 
   const [addDivision100Questions, { data }] = useAddDivision100QuestionsMutation();
-  console.log(data, "from live")
+  // console.log(data, "from live")
 
   const currentQuestion = useMemo(
     () => questions[currentQuestionIndex],
@@ -285,8 +285,10 @@ export default function HundredQuestionsPage() {
   const handleContinue = async () => {
     try {
       await addDivision100Questions({
-        questions_answered: totalClicks,
-        final_score: score,
+        current_question: totalClicks,
+        total_correct: score,
+        total_wrong: totalClicks - score,
+        time_taken_seconds: 300 - timeLeft,
       }).unwrap();
 
       toast.success("Score saved successfully!");

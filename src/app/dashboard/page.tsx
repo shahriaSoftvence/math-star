@@ -26,7 +26,7 @@ export default function Home() {
   const activities = summary?.data?.recent_activities;
   const { data } = useGetProfileQuery();
 
-  console.log(isPremium)
+  // console.log(isPremium)
 
   if (isLoading) {
     return (

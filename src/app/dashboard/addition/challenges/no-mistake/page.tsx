@@ -136,14 +136,15 @@ export default function NoMistakePage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(10);
 
   const [addAdditionNoMistake] = useAddAdditionNoMistakeMutation();
+  // console.log(data)
   const handleContinue = async () => {
     try {
       await addAdditionNoMistake({
         questions_answered: score,
-        final_score: score,
+        time_taken_seconds: score * 10,
       }).unwrap();
 
       toast.success('Score saved successfully!');
@@ -162,7 +163,7 @@ export default function NoMistakePage() {
     const num2 = Math.floor(Math.random() * 10) + 1;
     setQuestion({ num1, num2, answer: num1 + num2 });
     setUserAnswer("");
-    setTimeLeft(5);
+    setTimeLeft(10);
   }, []);
 
   const handleGameOver = useCallback(() => {
@@ -239,7 +240,7 @@ export default function NoMistakePage() {
     return (
       <ChallengeStartScreen
         title="Ready to Start?"
-        description="The challenge ends on your first mistake, You have 5 seconds for each problem."
+        description="The challenge ends on your first mistake, You have 10 seconds for each problem."
         onStart={handleStart}
         onCancel={() => router.back()}
       />
@@ -290,7 +291,8 @@ export default function NoMistakePage() {
             <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
               <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-500 rounded-full" />
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:0${timeLeft}`}</div>
+                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:${timeLeft.toString().padStart(2, "0")}`}
+                </div>
                 <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">
                   Remaining
                 </div>

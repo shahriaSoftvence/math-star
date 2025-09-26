@@ -1,11 +1,14 @@
+"use client";
+
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
-import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import SubtractionCard from './subtractionCard/page';
+import SubtractionChallengeCard from './_component/subtractionChallengeCard';
+import { useGetTopScoreSubtractionQuery } from '@/Redux/features/subtraction/subtractionApi';
 
 const subtractionExercises = {
   noBorrowing: [
@@ -21,15 +24,21 @@ const subtractionExercises = {
   ],
 };
 
-const subtractionChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/subtraction/challenges/no-mistake' },
-    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/subtraction/challenges/speed-mode' },
-    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/subtraction/challenges/100-questions' },
-    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/subtraction/challenges/whats-missing" },
-];
-
 
 export default function SubtractionPage() {
+  const {data} = useGetTopScoreSubtractionQuery();
+
+  const noMistakeTopScore = data?.data?.find(item => item.challenge_type === "NO_MISTAKE")?.display_top_score;
+  const speedModeTopScore = data?.data?.find(item => item.challenge_type === "SPEED_MODE")?.display_top_score;
+  const hundredQuestionTopScore = data?.data?.find(item => item.challenge_type === "100_QUESTIONS")?.display_top_score;
+  const whatsMissingTopScore = data?.data?.find(item => item.challenge_type === "WHATS_MISSING")?.display_top_score;
+
+  const subtractionChallenges = [
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/subtraction/challenges/no-mistake', display_top_score: noMistakeTopScore },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/subtraction/challenges/speed-mode', display_top_score: speedModeTopScore },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/subtraction/challenges/100-questions', display_top_score: hundredQuestionTopScore },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/subtraction/challenges/whats-missing", display_top_score: whatsMissingTopScore },
+];
   return (
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
        <div className="mb-4">
@@ -77,7 +86,7 @@ export default function SubtractionPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {subtractionChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
-                <ChallengeCard iconColor="text-white" {...challenge} />
+                <SubtractionChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

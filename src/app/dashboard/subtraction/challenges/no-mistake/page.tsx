@@ -136,16 +136,16 @@ export default function NoMistakePage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(5);
-  const [addSubtractionNoMistake, { data }] =
+  const [timeLeft, setTimeLeft] = useState(10);
+  const [addSubtractionNoMistake] =
     useAddSubtractionNoMistakeMutation();
-  console.log(data, "data from addition no mistake");
+  // console.log(data, "data from addition no mistake");
 
   const handleContinue = async () => {
     try {
       await addSubtractionNoMistake({
         questions_answered: score,
-        final_score: score,
+        time_taken_seconds: score * 10,
       }).unwrap();
 
       toast.success("Challenge Score Saved!");
@@ -240,7 +240,7 @@ export default function NoMistakePage() {
     return (
       <ChallengeStartScreen
         title="Ready to Start?"
-        description="The challenge ends on your first mistake, You have 5 seconds for each problem."
+        description="The challenge ends on your first mistake, You have 10 seconds for each problem."
         onStart={handleStart}
         onCancel={() => router.back()}
       />

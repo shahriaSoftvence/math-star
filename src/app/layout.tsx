@@ -16,7 +16,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#F8F7FA]">
+      <body className="bg-[#F8F7FA]" cz-shortcut-listen="true">
+
         <Provider>
           {children}
           <Toaster position="top-right" richColors />
@@ -25,3 +26,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+

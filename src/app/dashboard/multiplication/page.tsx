@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
-import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import MultiplicationCard from './multiplicationCard/page';
-import { useAddMultiplicationExerciseMutation } from '@/Redux/features/multiplication/multiplicationApi';
+import { useAddMultiplicationExerciseMutation, useGetTopScoreMultiplicationQuery } from '@/Redux/features/multiplication/multiplicationApi';
+import MultiplicationChallengeCard from './_component/multiplicationChallengeCard';
 
 const multiplicationExercises = [
   { range: ['X1'], percentage: 98, stars: 0 },
@@ -24,17 +24,27 @@ const multiplicationExercises = [
   { range: ['All'], percentage: 70, stars: 12 },
 ];
 
-const multiplicationChallenges = [
-  { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/multiplication/challenges/no-mistake' },
-  { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/multiplication/challenges/speed-mode' },
-  { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/multiplication/challenges/100-questions' },
-  { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/multiplication/challenges/whats-missing" },
-];
+
 
 export default function MultiplicationPage() {
   const [selectedRanges, setSelectedRanges] = React.useState<string[]>([]);
 
   const [addMultiplicationExercise] = useAddMultiplicationExerciseMutation();
+
+  const { data } = useGetTopScoreMultiplicationQuery();
+
+  const noMistakeTopScore = data?.data?.find(item => item.challenge_type === "NO_MISTAKE")?.display_top_score;
+  const speedModeTopScore = data?.data?.find(item => item.challenge_type === "SPEED_MODE")?.display_top_score;
+  const hundredQuestionTopScore = data?.data?.find(item => item.challenge_type === "100_QUESTIONS")?.display_top_score;
+  const whatsMissingTopScore = data?.data?.find(item => item.challenge_type === "WHATS_MISSING")?.display_top_score;
+
+
+  const multiplicationChallenges = [
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/multiplication/challenges/no-mistake', display_top_score: noMistakeTopScore },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/multiplication/challenges/speed-mode', display_top_score: speedModeTopScore },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/multiplication/challenges/100-questions', display_top_score: hundredQuestionTopScore },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/multiplication/challenges/whats-missing", display_top_score: whatsMissingTopScore },
+  ];
 
   const toggleRange = (ranges: string[]) => {
     ranges.forEach(r => {
@@ -92,20 +102,20 @@ export default function MultiplicationPage() {
               />
             ))}
             {selectedRanges.length > 0 && (
-            <Link
-              href={`/dashboard/multiplication/select-questions?ranges=${selectedRanges.join(",")}`}
-            >
-              <div onClick={handleAddRange} className="p-6 text-center border-2 rounded-lg cursor-pointer transition-all border-green-400 bg-white">
-                <h5 className='text-sm text-gray-600'>Continue with</h5>
-                <div className='flex justify-center items-center gap-1.5 my-2'>
-                  <h3 className='text-lg font-bold text-gray-800'>Go</h3>
-                   <ChevronRight className='text-lg' />
+              <Link
+                href={`/dashboard/multiplication/select-questions?ranges=${selectedRanges.join(",")}`}
+              >
+                <div onClick={handleAddRange} className="p-6 text-center border-2 rounded-lg cursor-pointer transition-all border-green-400 bg-white">
+                  <h5 className='text-sm text-gray-600'>Continue with</h5>
+                  <div className='flex justify-center items-center gap-1.5 my-2'>
+                    <h3 className='text-lg font-bold text-gray-800'>Go</h3>
+                    <ChevronRight className='text-lg' />
+                  </div>
+                  <p className='text-xs font-medium text-gray-800'>[ {selectedRanges.join(", ")} ]</p>
+
                 </div>
-                <p className='text-xs font-medium text-gray-800'>[ {selectedRanges.join(", ")} ]</p>
-               
-              </div>
-            </Link>
-          )}
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -119,7 +129,7 @@ export default function MultiplicationPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {multiplicationChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
-                <ChallengeCard iconColor="text-white" {...challenge} />
+                <MultiplicationChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

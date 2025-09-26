@@ -1,5 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
-import { AdditionExercisePayload } from "../../../../type/practise";
+import { AdditionExercisePayload, ChallengeTopScoresResponse } from "../../../../type/practise";
 
 const subtractionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -80,6 +80,13 @@ const subtractionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Subtraction"],
     }),
+    getTopScoreSubtraction: builder.query<ChallengeTopScoresResponse, void>({
+          query: () => ({
+            url: "/challenge-top-scores/subtraction/",
+            method: "GET",
+          }),
+          providesTags: ["Subtraction"],
+        }),
   }),
 });
 
@@ -93,4 +100,5 @@ export const {
   useAddSubtractionSpeedModeMutation,
   useAddSubtraction100QuestionMutation,
   useAddSubtractionWhatsMissingMutation,
+  useGetTopScoreSubtractionQuery,
 } = subtractionApi;

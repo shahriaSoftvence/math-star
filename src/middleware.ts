@@ -22,10 +22,10 @@ if (!res.ok) {
 }
 
 const profile = await res.json(); // ✅ already parsed object
-console.log(profile, "res from server");
+// console.log(profile, "res from server");
 
 const is_premium = profile?.data?.is_premium === true;
-console.log("is_premium:", is_premium);
+// console.log("is_premium:", is_premium);
 
 
   if (!is_premium) {

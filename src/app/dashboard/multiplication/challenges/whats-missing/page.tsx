@@ -165,8 +165,10 @@ export default function WhatsMissingPage() {
   const handleContinue = async () => {
     try {
       await addMultiplicationWhatsMissing({
-        questions_answered: totalSubmissions,
-        final_score: score,
+        total_correct: score,
+        total_wrong: totalSubmissions - score,
+        time_taken_seconds: 300,
+        whats_missing_pattern: "number_sequence"
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/multiplication");

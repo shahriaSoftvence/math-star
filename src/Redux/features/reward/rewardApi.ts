@@ -1,4 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
+import { AchievementsResponse } from "../../../../type/practise";
 
 const rewardApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,8 +10,16 @@ const rewardApi = baseApi.injectEndpoints({
         }),
         providesTags: ["rewards"],
         }),
+
+        getMyAchievements: builder.query<AchievementsResponse, void>({
+        query: () => ({
+            url: "/my-achievements/",
+            method: "GET",
+        }),
+        providesTags: ["rewards"],
+        }),
     }), 
 });
 
 
-export const { useGetRewardsQuery } = rewardApi;
+export const { useGetRewardsQuery, useGetMyAchievementsQuery } = rewardApi;

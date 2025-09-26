@@ -10,6 +10,7 @@ import {
   ReceiptText,
   ChevronUp,
   ChevronDown,
+  CreditCard,
 } from "lucide-react";
 import {
   useGetUserActivePlanQuery,
@@ -102,7 +103,7 @@ export default function SubscriptionPage() {
 
 
   const handleRemovePaymentMethod = async (payment_method_id: string) => {
-    console.log(payment_method_id)
+    // console.log(payment_method_id)
     try {
       const res = await removeCard(payment_method_id).unwrap();
       toast.success(res?.message || "Payment method removed successfully");
@@ -220,7 +221,9 @@ export default function SubscriptionPage() {
               paymentMethods.data.map((method: PaymentMethodData) => (
                 <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-4">
-                    <Image width={40} height={40} src={visaIcon} alt="visa" />
+                    <div className="w-10 h-8 bg-gradient-to-r from-purple-500 to-blue-600 rounded-md flex justify-center items-center">
+                          <CreditCard size={24} className="text-white" />
+                        </div>
                     <div className="flex items-start gap-6">
                       <span>
                         <p className="font-semibold capitalize">{method.card_brand} •••• {method.card_last4}</p>

@@ -27,7 +27,7 @@ const authApi = baseApi.injectEndpoints({
             }
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       },
       invalidatesTags: ["auth"],
@@ -55,7 +55,7 @@ const authApi = baseApi.injectEndpoints({
             }
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       },
     }),

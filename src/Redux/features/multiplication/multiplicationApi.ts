@@ -1,5 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
-import { AdditionMultiplicationDivisionPayload } from "../../../../type/practise";
+import { AdditionMultiplicationDivisionPayload, ChallengeTopScoresResponse } from "../../../../type/practise";
 
 const multiplicationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -65,6 +65,14 @@ const multiplicationApi = baseApi.injectEndpoints({
       invalidatesTags: ["Multiplication"],
     }),
 
+    getTopScoreMultiplication: builder.query<ChallengeTopScoresResponse, void>({
+      query: () => ({
+        url: "/challenge-top-scores/multiplication/",
+        method: "GET",
+      }),
+      providesTags: ["Multiplication"],
+    }),
+
   }),
 });
 
@@ -76,4 +84,5 @@ export const {
   useAddMultiplicationSpeedModeMutation,
   useAddMultiplication100QuestionMutation,
   useAddMultiplicationWhatsMissingMutation,
+  useGetTopScoreMultiplicationQuery,
 } = multiplicationApi;

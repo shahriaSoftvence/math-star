@@ -1,41 +1,55 @@
+"use client";
+
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
-import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import AdditionCard from './additionCard/page';
+import AdditionChallengeCard from './_component/additionChallengeCard';
+import { useGetTopScoreAdditionQuery } from '@/Redux/features/addition/additionApi';
 
 const additionExercises = {
   noCarry: [
     { range: '0 to 10' },
     { range: '0 to 20' },
-    {  range: '0 to 50' },
-    {  range: '0 to 100' },
+    { range: '0 to 50' },
+    { range: '0 to 100' },
   ],
   carry: [
     { range: '0 to 20' },
-    {  range: '0 to 50' },
-    {  range: '0 to 100' },
+    { range: '0 to 50' },
+    { range: '0 to 100' },
   ],
 };
 
-const additionChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/addition/challenges/no-mistake' },
-    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/addition/challenges/speed-mode' },
-    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/addition/challenges/100-questions' },
-    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/addition/challenges/whats-missing" },
-];
+
 
 export default function AdditionPage() {
+
+  const { data } = useGetTopScoreAdditionQuery();
+
+  const noMistakeTopScore = data?.data?.find(item => item.challenge_type === "NO_MISTAKE")?.display_top_score;
+  const speedModeTopScore = data?.data?.find(item => item.challenge_type === "SPEED_MODE")?.display_top_score;
+  const hundredQuestionTopScore = data?.data?.find(item => item.challenge_type === "100_QUESTIONS")?.display_top_score;
+  const whatsMissingTopScore = data?.data?.find(item => item.challenge_type === "WHATS_MISSING")?.display_top_score;
+
+
+
+  const additionChallenges = [
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/addition/challenges/no-mistake', display_top_score: noMistakeTopScore },
+    { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/addition/challenges/speed-mode', display_top_score: speedModeTopScore },
+    { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/addition/challenges/100-questions', display_top_score: hundredQuestionTopScore },
+    { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/addition/challenges/whats-missing", display_top_score: whatsMissingTopScore },
+  ];
 
   return (
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
       <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
-            <ArrowLeft /> Go Back
-          </Link>
+          <ArrowLeft /> Go Back
+        </Link>
       </div>
       {/* Addition Exercise Section */}
       <div className="rounded-lg ">
@@ -50,7 +64,7 @@ export default function AdditionPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {additionExercises.noCarry.map((ex, index) => (
-                  <AdditionCard key={index} operation="noCarry" {...ex}/>
+                  <AdditionCard key={index} operation="noCarry" {...ex} />
                 ))}
               </div>
             </div>
@@ -81,7 +95,7 @@ export default function AdditionPage() {
                 key={index}
                 className="cursor-pointer"
               >
-                <ChallengeCard iconColor="text-white" {...challenge} />
+                <AdditionChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

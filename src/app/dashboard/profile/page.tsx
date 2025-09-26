@@ -17,6 +17,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import SubscriptionCard from "@/components/SubscriptionCard";
+import { useGetMyAchievementsQuery } from "@/Redux/features/reward/rewardApi";
+import { Achievement } from "../../../../type/practise";
 
 const achievements = [
   {
@@ -49,7 +51,8 @@ export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
   const [updateProfile] = useUpdateProfileMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  console.log("form my test", profileData);
+  const { data: achievementData } = useGetMyAchievementsQuery();
+  // console.log("form my test", profileData);
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
@@ -166,34 +169,36 @@ export default function ProfilePage() {
             </h3>
           </div>
           <div className="space-y-3">
-            {achievements.map((ach) => (
-              <div
-                key={ach.title}
-                className={`p-4 rounded-xl border flex items-center gap-4 ${ach.unlocked
-                    ? "bg-green-50 border-green-200"
-                    : "bg-gray-50 border-gray-200 opacity-60"
-                  }`}
-              >
-                <span className="text-2xl">{ach.icon}</span>
-                <div className="flex-1">
-                  <p
-                    className={`font-bold font-Nunito ${ach.unlocked ? "text-green-800" : "text-gray-500"
-                      }`}
-                  >
-                    {ach.title}
-                  </p>
-                  <p
-                    className={`text-sm font-Nunito ${ach.unlocked ? "text-green-600" : "text-gray-400"
-                      }`}
-                  >
-                    {ach.description}
-                  </p>
+            {achievementData?.data?.map((ach: Achievement) => {
+              const unlocked = ach.progress >= ach.achievement_details.requirement; 
+              return (
+                <div
+                  key={ach.id}
+                  className={`p-4 rounded-xl border flex items-center gap-4 ${unlocked
+                      ? "bg-green-50 border-green-200"
+                      : "bg-gray-50 border-gray-200 opacity-60"
+                    }`}
+                >
+                  <span className="text-2xl">{ach.achievement_details.icon}</span>
+                  <div className="flex-1">
+                    <p
+                      className={`font-bold font-Nunito ${unlocked ? "text-green-800" : "text-gray-500"
+                        }`}
+                    >
+                      {ach.achievement_details.name}
+                    </p>
+                    <p
+                      className={`text-sm font-Nunito ${unlocked ? "text-green-600" : "text-gray-400"
+                        }`}
+                    >
+                      {ach.achievement_details.description}
+                    </p>
+                  </div>
+                  {unlocked && <Star className="fill-green-500 stroke-green-500" />}
                 </div>
-                {ach.unlocked && (
-                  <Star className="fill-green-500 stroke-green-500" />
-                )}
-              </div>
-            ))}
+              );
+            })}
+
           </div>
         </div>
       </div>

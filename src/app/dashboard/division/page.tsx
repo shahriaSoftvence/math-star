@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { FiTarget, FiHelpCircle } from 'react-icons/fi';
-import ChallengeCard from '@/components/ChallengeCard';
 import { PiTimerBold } from "react-icons/pi";
 import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import DivisionCard from './divisionCard/page';
-import { useAddDivisionExerciseMutation } from '@/Redux/features/division/divisionApi';
+import { useAddDivisionExerciseMutation, useGetTopScoreDivisionQuery } from '@/Redux/features/division/divisionApi';
+import DivisionChallengeCard from './_component/divisionChallengeCard';
 
 const divisionExercises = [
   { range: '2', percentage: 90, stars: 18 },
@@ -23,16 +23,24 @@ const divisionExercises = [
   { range: 'All', percentage: 65, stars: 11 },
 ];
 
-const divisionChallenges = [
-  { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/division/challenges/no-mistake' },
-  { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/division/challenges/speed-mode' },
-  { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/division/challenges/100-questions' },
-  { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/division/challenges/whats-missing" },
-];
+
 
 export default function DivisionPage() {
   const [selectedRanges, setSelectedRanges] = React.useState<string[]>([]);
   const [addDivisionExercise] = useAddDivisionExerciseMutation();
+  const {data} = useGetTopScoreDivisionQuery();
+
+  const noMistakeTopScore = data?.data?.find(item => item.challenge_type === "NO_MISTAKE")?.display_top_score;
+  const speedModeTopScore = data?.data?.find(item => item.challenge_type === "SPEED_MODE")?.display_top_score;
+  const hundredQuestionTopScore = data?.data?.find(item => item.challenge_type === "100_QUESTIONS")?.display_top_score;
+  const whatsMissingTopScore = data?.data?.find(item => item.challenge_type === "WHATS_MISSING")?.display_top_score;
+
+  const divisionChallenges = [
+  { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/division/challenges/no-mistake', display_top_score: noMistakeTopScore },
+  { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/division/challenges/speed-mode', display_top_score: speedModeTopScore },
+  { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/division/challenges/100-questions', display_top_score: hundredQuestionTopScore },
+  { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/division/challenges/whats-missing", display_top_score: whatsMissingTopScore },
+];
 
   const toggleRange = (ranges: string[]) => {
     ranges.forEach(r => {
@@ -114,7 +122,7 @@ export default function DivisionPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {divisionChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
-                <ChallengeCard iconColor="text-white" {...challenge} />
+                <DivisionChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

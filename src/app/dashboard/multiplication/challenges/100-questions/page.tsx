@@ -15,14 +15,14 @@ type ProgressStatus = 'pending' | 'current' | 'correct' | 'incorrect';
 
 // --- Sound Utility Function ---
 const playSound = (sound: string) => {
-  try {
-    const audio = new Audio(sound);
-    audio.play().catch(() => {
-      // Silently handle audio play failures
-    });
-  } catch {
-    // Silently handle audio creation failures
-  }
+    try {
+        const audio = new Audio(sound);
+        audio.play().catch(() => {
+            // Silently handle audio play failures
+        });
+    } catch {
+        // Silently handle audio creation failures
+    }
 };
 
 // --- Reusable UI Components ---
@@ -204,8 +204,10 @@ export default function HundredQuestionsPage() {
     const handleContinue = async () => {
         try {
             await addMultiplication100Question({
-                questions_answered: totalClicks,
-                final_score: score,
+                current_question: totalClicks,
+                total_correct: score,
+                total_wrong: totalClicks - score,
+                time_taken_seconds: 300 - timeLeft,
             }).unwrap();
             toast.success("Challenge Score Saved!");
             router.push("/dashboard/multiplication");

@@ -6,9 +6,10 @@ type ChallengeCardProps = {
   description: string;
   bgColor: string;
   iconColor: string;
+  display_top_score?: string;
 };
 
-export default function ChallengeCard({ icon, title, description, bgColor, iconColor }: ChallengeCardProps) {
+export default function AdditionChallengeCard({ icon, title, description, bgColor, iconColor, display_top_score }: ChallengeCardProps) {
   return (
     <div className={`${bgColor} p-6 rounded-2xl flex flex-col items-center text-center shadow-lg text-white hover:scale-105 transition-transform`}>
         <div className={`w-16 h-16 bg-white/30 rounded-full flex items-center justify-center mb-4 ${iconColor}`}>
@@ -16,6 +17,7 @@ export default function ChallengeCard({ icon, title, description, bgColor, iconC
         </div>
         <h3 className="font-medium text-xl">{title}</h3>
         <p className="text-sm opacity-90 mt-1">{description}</p>
+        <p className='text-sm bg-white/20 rounded-md px-4 w-full py-0.5 mt-2 font-medium'>{display_top_score}</p>
     </div>
     
   );

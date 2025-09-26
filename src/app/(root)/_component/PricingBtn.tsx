@@ -24,7 +24,7 @@ export default function PricingBtn({ planId }: PricingBtnProps) {
         try {
             const res = await createSubscription(planId).unwrap();
 
-            console.log("Response:", res);
+            // console.log("Response:", res);
 
             if (res?.url) {
                 window.location.href = res.url;

@@ -133,9 +133,9 @@ export default function WhatsMissingPage() {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [totalSubmissions, setTotalSubmissions] = useState(0);
 
-  const [addSubtractionWhatsMissing, { data }] = useAddSubtractionWhatsMissingMutation();
+  const [addSubtractionWhatsMissing] = useAddSubtractionWhatsMissingMutation();
 
-  console.log("Mutation data:", data);
+  // console.log("Mutation data:", data);
 
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 20) + 1;
@@ -168,8 +168,10 @@ export default function WhatsMissingPage() {
   const handleContinue = async () => {
     try {
       await addSubtractionWhatsMissing({
-        questions_answered: totalSubmissions,
-        final_score: score,
+        total_correct: score,
+        total_wrong: totalSubmissions - score,
+        time_taken_seconds: 300,
+        whats_missing_pattern: "number_sequence"
       }).unwrap();
       toast.success("Challenge Score Saved!");
       router.push("/dashboard/subtraction");

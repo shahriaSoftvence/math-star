@@ -1,5 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
-import { AdditionExercisePayload } from "../../../../type/practise";
+import { AdditionExercisePayload, ChallengeTopScoresResponse } from "../../../../type/practise";
 
 const additionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -82,6 +82,13 @@ const additionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Additions"],
     }),
+    getTopScoreAddition: builder.query<ChallengeTopScoresResponse, void>({
+      query: () => ({
+        url: "/challenge-top-scores/addition/",
+        method: "GET",
+      }),
+      providesTags: ["Additions"],
+    }),
   }),
 });
 
@@ -95,4 +102,5 @@ export const {
   useAddAdditionSpeedModeMutation,
   useAddAddition100questionsMutation,
   useAddAdditionWhatsMissingMutation,
+  useGetTopScoreAdditionQuery
 } = additionApi;

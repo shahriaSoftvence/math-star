@@ -27,7 +27,7 @@ const PracticeCard = ({
   const [setDivision] = useSetDivisionMutation();
 
   const handleSetMethod = async (title: string) => {
-    console.log(title)
+    // console.log(title)
     if (title === "Practice Addition") {
      await setAddition();
     } else if (title === "Practice Subtraction") {

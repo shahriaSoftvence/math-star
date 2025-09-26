@@ -272,7 +272,7 @@ function PracticePageContent() {
         range_value = divisorParam.split(",").map((r) => parseInt(r, 10));
       }
 
-      console.log(range_value);
+      // console.log(range_value);
 
       const question_number = questionCount;
 

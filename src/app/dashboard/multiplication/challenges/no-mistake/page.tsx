@@ -14,14 +14,14 @@ type GameState = 'ready' | 'playing' | 'gameOver';
 
 // --- Sound Utility Function ---
 const playSound = (sound: string) => {
-  try {
-    const audio = new Audio(sound);
-    audio.play().catch(() => {
-      // Silently handle audio play failures
-    });
-  } catch {
-    // Silently handle audio creation failures
-  }
+    try {
+        const audio = new Audio(sound);
+        audio.play().catch(() => {
+            // Silently handle audio play failures
+        });
+    } catch {
+        // Silently handle audio creation failures
+    }
 };
 
 // --- Reusable UI Components (specific to this page for simplicity) ---
@@ -83,7 +83,7 @@ export default function NoMistakePage() {
     const [question, setQuestion] = useState<Question>({ num1: 0, num2: 0, answer: 0 });
     const [userAnswer, setUserAnswer] = useState('');
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(5);
+    const [timeLeft, setTimeLeft] = useState(10);
 
     const [addMultiplicationNoMistake] = useAddMultiplicationNoMistakeMutation();
 
@@ -91,7 +91,7 @@ export default function NoMistakePage() {
         try {
             await addMultiplicationNoMistake({
                 questions_answered: score,
-                final_score: score,
+                time_taken_seconds: score * 10,
             }).unwrap();
             toast.success("Challenge Score Saved!");
             router.push("/dashboard/multiplication");
@@ -183,7 +183,7 @@ export default function NoMistakePage() {
     if (gameState === 'ready') {
         return <ChallengeStartScreen
             title="Ready to Start?"
-            description="The challenge ends on your first mistake, You have 5 seconds for each problem."
+            description="The challenge ends on your first mistake, You have 10 seconds for each problem."
             onStart={handleStart}
             onCancel={() => router.back()}
         />;

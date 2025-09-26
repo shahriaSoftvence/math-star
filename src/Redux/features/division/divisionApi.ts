@@ -1,5 +1,5 @@
 import { baseApi } from "@/Redux/api/baseApi";
-import { AdditionMultiplicationDivisionPayload } from "../../../../type/practise";
+import { AdditionMultiplicationDivisionPayload, ChallengeTopScoresResponse } from "../../../../type/practise";
 
 const divisionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -62,6 +62,13 @@ const divisionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Division"],
     }),
+    getTopScoreDivision: builder.query<ChallengeTopScoresResponse, void>({
+      query: () => ({
+        url: "/challenge-top-scores/division/",
+        method: "GET",
+      }),
+      providesTags: ["Division"],
+    }),
   }),
 });
 
@@ -72,5 +79,6 @@ export const {
   useAddDivision100QuestionsMutation,
   useAddDivisionNoMistakeMutation,
   useAddDivisionSpeedModeMutation,
-  useAddDivisionWhatsMissingMutation
+  useAddDivisionWhatsMissingMutation,
+  useGetTopScoreDivisionQuery,
 } = divisionApi;

@@ -134,11 +134,11 @@ export default function SpeedModePage() {
   });
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(15); // 15 seconds in seconds
-  const [addDivisionSpeedMode, { data }] = useAddDivisionSpeedModeMutation();
+  const [timeLeft, setTimeLeft] = useState(30); // 15 seconds in seconds
+  const [addDivisionSpeedMode] = useAddDivisionSpeedModeMutation();
   const [totalClicks, setTotalClicks] = useState(0);
 
-  console.log(data, "form here")
+  // console.log(data, "form here")
 
   const generateQuestion = useCallback(() => {
     const num2 = Math.floor(Math.random() * 9) + 2;
@@ -161,7 +161,7 @@ export default function SpeedModePage() {
 
   const handleStart = () => {
     setScore(0);
-    setTimeLeft(15);
+    setTimeLeft(300);
     generateQuestion();
     setGameState("playing");
     setTotalClicks(0);
@@ -180,8 +180,10 @@ export default function SpeedModePage() {
   const handleContinue = async () => {
     try {
       await addDivisionSpeedMode({
-        questions_answered: totalClicks,
-        final_score: score,
+        total_correct: score,
+        total_wrong: totalClicks - score,
+        time_taken_seconds: 300,
+        speed_mode_time: 300
       }).unwrap();
 
       toast.success("Challenge Score Saved!");

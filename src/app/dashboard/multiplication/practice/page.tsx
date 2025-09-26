@@ -238,7 +238,7 @@ function PracticePageContent() {
         total_wrong,
       };
 
-      console.log(payload)
+      // console.log(payload)
 
       await addMultiplicationPractice(payload).unwrap();
       toast.success("Practice data saved successfully!");

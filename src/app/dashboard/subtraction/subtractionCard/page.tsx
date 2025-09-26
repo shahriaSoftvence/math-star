@@ -19,10 +19,8 @@ export default function SubtractionCard({
   range,
   operation,
 }: ExerciseCardProps) {
-  const [addBorrowExercise, { data }] = useAddBorrowExerciseMutation();
-  const [addNoBorrowExercise, { data: no }] = useAddNoBorrowExerciseMutation();
-  console.log(data, "the data");
-  console.log(no, "the no data");
+  const [addBorrowExercise] = useAddBorrowExerciseMutation();
+  const [addNoBorrowExercise] = useAddNoBorrowExerciseMutation();
 
   const rangeParam = range.split(" to ")[1];
 

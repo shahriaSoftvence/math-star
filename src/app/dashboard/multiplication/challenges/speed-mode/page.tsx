@@ -177,8 +177,10 @@ export default function SpeedModePage() {
   const handleContinue = async () => {
     try {
       await addMultiplicationSpeedMode({
-        questions_answered: totalClicks,
-        final_score: score,
+        total_correct: score,
+        total_wrong: totalClicks - score,
+        time_taken_seconds: 300,
+        speed_mode_time: 300
       }).unwrap();
 
       toast.success("Challenge Score Saved!");

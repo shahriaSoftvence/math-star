@@ -80,8 +80,8 @@ function PracticePageContent() {
   const [isComplete, setIsComplete] = useState(false);
   const [totalClicks, setTotalClicks] = useState(0);
 
-  const [addNoBorrowPractice, { data }] = useAddNoBorrowPracticeMutation();
-  console.log(data, "the no borrow practice data");
+  const [addNoBorrowPractice] = useAddNoBorrowPracticeMutation();
+  // console.log(data, "the no borrow practice data");
   const [addBorrowPractice] = useAddBorrowPracticeMutation();
   const [rewardName, setRewardName] = useState("");
 
