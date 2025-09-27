@@ -47,7 +47,7 @@ const ChallengeStartScreen = ({
           Ready to Start?
         </h2>
         <p className="text-gray-600 mt-2 text-base font-normal font-Poppins leading-relaxed">
-          Fill in the missing numbers in 15 seconds!
+          Fill in the missing numbers in 5 minutes!
         </p>
       </div>
       <div className="flex items-center gap-4 mt-4">

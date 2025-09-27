@@ -205,7 +205,7 @@ export default function HundredQuestionsPage() {
   const [score, setScore] = useState(0);
   const [totalClicks, setTotalClicks] = useState(0);
 
-  const [addDivision100Questions, { data }] = useAddDivision100QuestionsMutation();
+  const [addDivision100Questions] = useAddDivision100QuestionsMutation();
   // console.log(data, "from live")
 
   const currentQuestion = useMemo(

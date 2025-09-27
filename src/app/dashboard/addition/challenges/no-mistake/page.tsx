@@ -143,8 +143,9 @@ export default function NoMistakePage() {
   const handleContinue = async () => {
     try {
       await addAdditionNoMistake({
+        total_correct: score,
         questions_answered: score,
-        time_taken_seconds: score * 10,
+        time_taken_seconds: score * 7,
       }).unwrap();
 
       toast.success('Score saved successfully!');
