@@ -38,11 +38,8 @@ export const useAuthActions = () => {
   };
 };
 
-export const useIsPremium = ()=> {
-  // Always call the hook
-  const { data } = useGetProfileQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
-  return data?.data?.is_premium;
+export const useIsPremium = (): boolean => {
+  const { data } = useGetProfileQuery();
+  return Boolean(data?.data?.is_premium);
 };
 

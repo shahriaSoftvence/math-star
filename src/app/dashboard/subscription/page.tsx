@@ -62,7 +62,6 @@ export default function SubscriptionPage() {
   const visibleData = showAll ? billingData : billingData.slice(0, 6);
   const isPremium = useIsPremium();
   const { refetch } = useGetProfileQuery();
-  const router = useRouter();
 
   const userActivePlan = activePlan?.data?.[0];
   const handleManageSubscription = async () => {
@@ -70,7 +69,7 @@ export default function SubscriptionPage() {
       const res = await renewSubscription({}).unwrap();
       await refetch();
       toast.success(res?.message);
-      router.push('/dashboard');
+      window.location.reload();
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Failed to renew subscription.";
       console.error(message);

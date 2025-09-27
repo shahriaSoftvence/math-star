@@ -126,7 +126,7 @@ const authApi = baseApi.injectEndpoints({
               : undefined,
           };
         },
-        invalidatesTags: ["auth"],
+        invalidatesTags: ["auth", "Subscription", "rewards", "Division", "Additions", "Multiplication", "Subtraction"],
       }
     ),
 
