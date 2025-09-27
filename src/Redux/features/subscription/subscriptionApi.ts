@@ -37,7 +37,8 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/subscription-cancel/",
         method: "POST",
       }),
-      invalidatesTags: ["Subscription"],
+      // keep these so normal invalidation still applies
+      invalidatesTags: ["Subscription", "auth"],
     }),
 
     getPaymentMethods: builder.query<PaymentMethod, void>({
@@ -53,7 +54,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/billing-history/",
         method: "GET",
       }),
-      providesTags: ["Subscription", "auth"],
+      providesTags: ["Subscription"],
     }),
 
 
@@ -82,7 +83,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/renew-now/",
         method: "POST",
       }),
-      invalidatesTags: ["Subscription"],
+      invalidatesTags: ["Subscription", "auth"],
     }),
     autoRenewSubscription: builder.mutation({
       query: () => ({

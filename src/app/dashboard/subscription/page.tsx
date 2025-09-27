@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -26,11 +26,11 @@ import { PaymentMethodData } from "../../../../type/subscription";
 import moment from "moment";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import visaIcon from '@/asset/visa.svg'
 import SubscriptionCard from "@/components/SubscriptionCard";
 import { useIsPremium } from "@/Redux/hooks";
 import LoadingFile from '@/asset/loader.svg'
+import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
+import { useRouter } from "next/navigation";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
@@ -60,16 +60,19 @@ export default function SubscriptionPage() {
 
   const billingData = billingHistory?.data || [];
   const visibleData = showAll ? billingData : billingData.slice(0, 6);
-
   const isPremium = useIsPremium();
+  const { refetch } = useGetProfileQuery();
+  const router = useRouter();
 
   const userActivePlan = activePlan?.data?.[0];
   const handleManageSubscription = async () => {
     try {
       const res = await renewSubscription({}).unwrap();
+      await refetch();
       toast.success(res?.message);
+      router.push('/dashboard');
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to update profile picture.";
+      const message = error instanceof Error ? error.message : "Failed to renew subscription.";
       console.error(message);
       toast.error(message);
     }
@@ -181,7 +184,7 @@ export default function SubscriptionPage() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleManageSubscription}
-                disabled={renewLoading}
+                disabled={renewLoading || isPremium}
                 className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 disabled:opacity-50">
                 <RefreshCw size={16} className="text-slate-950" />
                 <span className="text-slate-950 text-sm font-medium font-Nunito">
@@ -222,8 +225,8 @@ export default function SubscriptionPage() {
                 <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-8 bg-gradient-to-r from-purple-500 to-blue-600 rounded-md flex justify-center items-center">
-                          <CreditCard size={24} className="text-white" />
-                        </div>
+                      <CreditCard size={24} className="text-white" />
+                    </div>
                     <div className="flex items-start gap-6">
                       <span>
                         <p className="font-semibold capitalize">{method.card_brand} •••• {method.card_last4}</p>
