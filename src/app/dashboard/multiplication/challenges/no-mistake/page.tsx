@@ -107,7 +107,7 @@ export default function NoMistakePage() {
         const num2 = Math.floor(Math.random() * 10) + 1;
         setQuestion({ num1, num2, answer: num1 * num2 });
         setUserAnswer('');
-        setTimeLeft(5);
+        setTimeLeft(10);
     }, []);
 
     const handleGameOver = useCallback(() => {
@@ -234,7 +234,7 @@ export default function NoMistakePage() {
                         <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
                             <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-500 rounded-full" />
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:0${timeLeft}`}</div>
+                                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:${timeLeft.toString().padStart(2, "0")}`}</div>
                                 <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">Remaining</div>
                             </div>
                         </div>

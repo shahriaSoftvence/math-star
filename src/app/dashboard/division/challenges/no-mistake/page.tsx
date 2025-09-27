@@ -84,7 +84,7 @@ export default function NoMistakePage() {
     const [userAnswer, setUserAnswer] = useState('');
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10); // Increased time for division
-    const [addDivisionNoMistake, { data }] = useAddDivisionNoMistakeMutation();
+    const [addDivisionNoMistake] = useAddDivisionNoMistakeMutation();
     // console.log(data, "form live")
 
     const handleContinue = async () => {
@@ -236,7 +236,7 @@ export default function NoMistakePage() {
                         <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
                             <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-500 rounded-full" />
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:${timeLeft < 10 ? '0' : ''}${timeLeft}`}</div>
+                                <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:${timeLeft.toString().padStart(2, "0")}`}</div>
                                 <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">Remaining</div>
                             </div>
                         </div>
