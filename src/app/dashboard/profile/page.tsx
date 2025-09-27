@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -9,6 +9,8 @@ import {
   Award,
   Star,
   Camera,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import {
   useGetProfileQuery,
@@ -20,32 +22,32 @@ import SubscriptionCard from "@/components/SubscriptionCard";
 import { useGetMyAchievementsQuery } from "@/Redux/features/reward/rewardApi";
 import { Achievement } from "../../../../type/practise";
 
-const achievements = [
-  {
-    icon: "⭐",
-    title: "First Star!",
-    description: "Earned your first star",
-    unlocked: true,
-  },
-  {
-    icon: "⚡",
-    title: "Speed Demon",
-    description: "Completed Speed Mode 10 times",
-    unlocked: true,
-  },
-  {
-    icon: "🏆",
-    title: "Perfect Score",
-    description: "Got 100% in a challenge",
-    unlocked: true,
-  },
-  {
-    icon: "🧮",
-    title: "Math Master",
-    description: "Practice all 4 operations",
-    unlocked: false,
-  },
-];
+// const achievements = [
+//   {
+//     icon: "⭐",
+//     title: "First Star!",
+//     description: "Earned your first star",
+//     unlocked: true,
+//   },
+//   {
+//     icon: "⚡",
+//     title: "Speed Demon",
+//     description: "Completed Speed Mode 10 times",
+//     unlocked: true,
+//   },
+//   {
+//     icon: "🏆",
+//     title: "Perfect Score",
+//     description: "Got 100% in a challenge",
+//     unlocked: true,
+//   },
+//   {
+//     icon: "🧮",
+//     title: "Math Master",
+//     description: "Practice all 4 operations",
+//     unlocked: false,
+//   },
+// ];
 
 export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
@@ -56,6 +58,11 @@ export default function ProfilePage() {
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
+
+  const [showAll, setShowAll] = useState(false);
+
+  const achievements = achievementData?.data || [];
+  const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -168,37 +175,41 @@ export default function ProfilePage() {
               Achievements
             </h3>
           </div>
-          <div className="space-y-3">
-            {achievementData?.data?.map((ach: Achievement) => {
-              const unlocked = ach.progress >= ach.achievement_details.requirement; 
-              return (
-                <div
-                  key={ach.id}
-                  className={`p-4 rounded-xl border flex items-center gap-4 ${unlocked
-                      ? "bg-green-50 border-green-200"
-                      : "bg-gray-50 border-gray-200 opacity-60"
-                    }`}
-                >
-                  <span className="text-2xl">{ach.achievement_details.icon}</span>
-                  <div className="flex-1">
-                    <p
-                      className={`font-bold font-Nunito ${unlocked ? "text-green-800" : "text-gray-500"
-                        }`}
-                    >
-                      {ach.achievement_details.name}
-                    </p>
-                    <p
-                      className={`text-sm font-Nunito ${unlocked ? "text-green-600" : "text-gray-400"
-                        }`}
-                    >
-                      {ach.achievement_details.description}
-                    </p>
-                  </div>
-                  {unlocked && <Star className="fill-green-500 stroke-green-500" />}
+          <div className="space-y-4">
+            {visibleAchievements.map((ach: Achievement) => (
+              <div
+                key={ach.id}
+                className="p-4 rounded-xl border flex items-center gap-4 bg-green-50 border-green-200"
+              >
+                <span className="text-2xl">{ach.achievement_details.icon}</span>
+                <div className="flex-1">
+                  <p className="font-bold font-Nunito text-green-800">
+                    {ach.achievement_details.name}
+                  </p>
+                  <p className="text-sm font-Nunito text-green-800">
+                    {ach.achievement_details.description}
+                  </p>
                 </div>
-              );
-            })}
+                <Star className="fill-green-500 stroke-green-500" />
+              </div>
+            ))}
 
+            {achievements.length > 4 && (
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="mt-4 ml-1.5 flex items-center gap-2 text-green-700 font-semibold hover:underline transition-all"
+              >
+                {showAll ? (
+                  <>
+                    See Less <ChevronUp className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    See More <ChevronDown className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
