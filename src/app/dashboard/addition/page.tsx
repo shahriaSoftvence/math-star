@@ -12,15 +12,15 @@ import { useGetTopScoreAdditionQuery } from '@/Redux/features/addition/additionA
 
 const additionExercises = {
   noCarry: [
-    { range: '0 to 10' },
-    { range: '0 to 20' },
-    { range: '0 to 50' },
-    { range: '0 to 100' },
+    { range: '0 to 10', star: 1 },
+    { range: '0 to 20', star: 2 },
+    { range: '0 to 50', star: 3 },
+    { range: '0 to 100', star: 4 },
   ],
   carry: [
-    { range: '0 to 20' },
-    { range: '0 to 50' },
-    { range: '0 to 100' },
+    { range: '0 to 20', star: 1 },
+    { range: '0 to 50', star: 2 },
+    { range: '0 to 100', star: 3 },
   ],
 };
 
@@ -47,7 +47,7 @@ export default function AdditionPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
       <div className="mb-4">
-        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
           <ArrowLeft /> Go Back
         </Link>
       </div>

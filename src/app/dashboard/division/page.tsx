@@ -11,16 +11,16 @@ import { useAddDivisionExerciseMutation, useGetTopScoreDivisionQuery } from '@/R
 import DivisionChallengeCard from './_component/divisionChallengeCard';
 
 const divisionExercises = [
-  { range: '2', percentage: 90, stars: 18 },
-  { range: '3', percentage: 85, stars: 17 },
-  { range: '4', percentage: 82, stars: 16 },
-  { range: '5', percentage: 95, stars: 19 },
-  { range: '6', percentage: 78, stars: 15 },
-  { range: '7', percentage: 75, stars: 14 },
-  { range: '8', percentage: 70, stars: 13 },
-  { range: '9', percentage: 68, stars: 12 },
-  { range: '10', percentage: 98, stars: 20 },
-  { range: 'All', percentage: 65, stars: 11 },
+  { range: '2' },
+  { range: '3' },
+  { range: '4' },
+  { range: '5' },
+  { range: '6' },
+  { range: '7' },
+  { range: '8' },
+  { range: '9' },
+  { range: '10' },
+  { range: 'All' },
 ];
 
 
@@ -74,7 +74,7 @@ export default function DivisionPage() {
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
       <div className="mb-4">
         
-        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
           <ArrowLeft /> Go Back
         </Link>
       </div>
@@ -90,7 +90,6 @@ export default function DivisionPage() {
               <DivisionCard
                 key={index}
                 range={[ex.range]}
-                percentage={ex.percentage}
                 isSelected={ex.range === "All"
                   ? selectedRanges.includes("All")
                   : ex.range.replace('÷', '').split(',').some(r => selectedRanges.includes(r))}

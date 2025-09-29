@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Logo from '../../../public/assets/Logo.png';
-import Flag from '../../../public/assets/Flag.png';
+import Flag from '@/asset/Flag.png';
 import Profile from '../../../public/assets/Profile.png';
 import { HamburgerMenu } from './HamburgerMenu'; // <-- Import HamburgerMenu
 import { useAuth, useAuthActions } from '../../Redux/hooks';
@@ -79,7 +79,7 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Image src={Flag} alt="Language Flag" className="w-10 h-auto" />
+            <button><Image src={Flag} alt="Language Flag" className="w-10 h-auto" /></button>
             <div className="h-12 w-24 bg-gray-200 rounded-[100px] animate-pulse"></div>
             <HamburgerMenu isOpen={false} setIsOpen={() => { }} />
           </div>

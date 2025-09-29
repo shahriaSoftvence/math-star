@@ -258,7 +258,7 @@ export default function SpeedModePage() {
           <div>
             <Link
               href="/dashboard/subtraction"
-              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
+              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4 gap-2"
             >
               <ArrowLeft /> Go Back
             </Link>

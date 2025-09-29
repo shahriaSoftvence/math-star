@@ -6,7 +6,6 @@ import pointStar from "../../../../../public/point-star.png";
 
 type ExerciseCardProps = {
   range: string[];
-  percentage: number;
   isSelected: boolean;
   onToggle: (range: string[]) => void;
 };
@@ -31,7 +30,6 @@ export default function MultiplicationCard({
       <p className="text-lg font-bold my-2 text-gray-800">{range.join(", ")}</p>
       {/* <p className="text-xs text-gray-600">{percentage}%</p> */}
       <p className="text-[#EAB308] flex justify-center items-center gap-2 mt-1">
-        <Image src={pointStar} alt="point star" />
         <Image src={pointStar} alt="point star" />
       </p>
     </div>

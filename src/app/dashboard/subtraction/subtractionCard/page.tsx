@@ -11,13 +11,14 @@ import {
 
 type ExerciseCardProps = {
   range: string;
-  percentage: number;
+  star: number;
   operation: "borrowing" | "noBorrowing";
 };
 
 export default function SubtractionCard({
   range,
   operation,
+  star,
 }: ExerciseCardProps) {
   const [addBorrowExercise] = useAddBorrowExerciseMutation();
   const [addNoBorrowExercise] = useAddNoBorrowExerciseMutation();
@@ -42,8 +43,9 @@ export default function SubtractionCard({
         <p className="text-lg font-bold my-2 text-gray-800">{range}</p>
         {/* <p className="text-xs text-gray-600">{percentage}%</p> */}
         <p className="text-[#EAB308] flex justify-center items-center gap-2 mt-1">
-          <Image src={pointStar} alt="point star" />
-          <Image src={pointStar} alt="point star" />
+          {Array.from({ length: star }).map((_, index) => (
+            <Image key={index} src={pointStar} alt="point star" width={20} height={20} />
+          ))}
         </p>
       </div>
     </Link>

@@ -12,15 +12,15 @@ import { useGetTopScoreSubtractionQuery } from '@/Redux/features/subtraction/sub
 
 const subtractionExercises = {
   noBorrowing: [
-    { range: '0 to 10', percentage: 85 },
-    { range: '0 to 20', percentage: 72 },
-    { range: '0 to 50', percentage: 60 },
-    { range: '0 to 100', percentage: 55 },
+    { range: '0 to 10', star : 1 },
+    { range: '0 to 20', star : 2 },
+    { range: '0 to 50', star : 3 },
+    { range: '0 to 100', star : 4 },
   ],
   borrowing: [
-    { range: '0 to 20', percentage: 65 },
-    { range: '0 to 50', percentage: 58 },
-    { range: '0 to 100', percentage: 45 },
+    { range: '0 to 20', star : 1 },
+    { range: '0 to 50', star : 2 },
+    { range: '0 to 100', star : 3 },
   ],
 };
 
@@ -42,7 +42,7 @@ export default function SubtractionPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
        <div className="mb-4">
-        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
             <ArrowLeft /> Go Back
           </Link>
       </div>

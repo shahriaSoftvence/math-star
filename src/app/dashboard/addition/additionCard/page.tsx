@@ -9,11 +9,12 @@ import { useAddCarryExerciseMutation, useAddNoCarryExerciseMutation } from "@/Re
 type ExerciseCardProps = {
     range: string;
     operation: "noCarry" | "carry";
+    star: number
 };
 
 export default function AdditionCard({
     range,
-    operation,
+    operation, star
 }: ExerciseCardProps) {
     const [addCarryExercise] = useAddCarryExerciseMutation();
     const [addNoCarryExercise] = useAddNoCarryExerciseMutation();
@@ -39,8 +40,9 @@ export default function AdditionCard({
                 <p className="text-lg font-bold my-2 text-gray-800">{range}</p>
                 {/* <p className="text-xs text-gray-600">{percentage}%</p> */}
                 <p className="text-[#EAB308] flex justify-center items-center gap-2 mt-1">
-                    <Image src={pointStar} alt="point star" />
-                    <Image src={pointStar} alt="point star" />  
+                    {Array.from({ length: star }).map((_, index) => (
+            <Image key={index} src={pointStar} alt="point star" width={20} height={20} />
+          ))}
                 </p>
             </div>
             

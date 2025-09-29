@@ -276,7 +276,7 @@ export default function WhatsMissingPage() {
           <div>
             <Link
               href="/dashboard/division"
-              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4"
+              className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4 gap-2"
             >
               <ArrowLeft /> Go Back
             </Link>
@@ -290,7 +290,7 @@ export default function WhatsMissingPage() {
                 What is missing?
               </h1>
               <p className="text-black text-2xl font-bold font-Nunito leading-10">
-                You have 15 seconds to find as many missing numbers as possible.
+                You have 5 minutes to find as many missing numbers as possible.
               </p>
             </div>
           </div>

@@ -258,7 +258,7 @@ export default function HundredQuestionsPage() {
         };
     }, [gameState, handleSubmit]);
 
-    if (gameState === 'gameOver' && !isComplete) {
+    if (gameState === "gameOver"  || isComplete) {
         return (
             <GameResultScreen
                 score={score}

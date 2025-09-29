@@ -58,7 +58,7 @@ export default function RewardsPage() {
             key={reward?.name}
             icon={`${reward?.icon}` || '⭐'}
             title={reward?.name}
-            description={reward?.description}
+            // description={reward?.description}
             star_range={reward?.star_range}
             isUnlocked={reward?.unlocked || false}
           />

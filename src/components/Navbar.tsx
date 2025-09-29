@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Menu, LogOut, User } from "lucide-react";
 import Profile from "../../public/assets/Profile.png";
-import Flag from "../../public/assets/Flag.png";
+import Flag from "@/asset/Flag.png";
 import { TiStarFullOutline } from "react-icons/ti";
 import { FaCrown } from "react-icons/fa";
 import { useAuth, useAuthActions } from "../Redux/hooks";
@@ -39,19 +39,13 @@ function useOnClickOutside(
 }
 
 export default function Navbar({ toggleSidebar }: NavbarProps) {
-  // const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  // const [isClient, setIsClient] = useState(false);
-  // const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  // Get current user from Redux
   const { isAuthenticated } = useAuth();
 
-  // Get logout function from Redux actions
   const { logout } = useAuthActions();
 
-  // Fetch user profile data
   const {
     data: profileData
   } = useGetProfileQuery();
@@ -61,13 +55,11 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     setIsProfileOpen(false)
   );
 
-  // Handle logout
   const handleLogout = () => {
     logout();
     setIsProfileOpen(false);
   };
 
-  // Handle profile navigation
   const handleProfileClick = () => {
     router.push("/dashboard/profile");
     setIsProfileOpen(false);
@@ -127,7 +119,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               </span>
             </div>
             <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
-              <FaCrown className="text-[#EAB308] text-[20px]" />
+              <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${profileData?.data?.reward?.icon}`}alt="Star" width={20} height={20} />
               <span className="text-yellow-700 text-base font-bold">
                 {profileData?.data?.reward?.name || "Beginner"}
               </span>
@@ -136,33 +128,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </div>
       </div>
       <div className="flex items-center gap-6">
-        {/* <Image src={Flag} alt='Country flag' width={32} height={32} />
-        <div className="relative" ref={notificationRef}>
-          <button
-            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className="relative"
-            aria-label="Notifications"
-          >
-            <Bell size={36} strokeWidth={1.5} />
-            <div className="w-3 h-3 absolute top-0 right-0 bg-red-500 rounded-full border-2 border-white" />
-          </button>
-          {isNotificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-20 border">
-              <div className="py-2">
-                <div className="px-4 py-2 font-bold text-gray-800 border-b">Notifications</div>
-                <ul>
-                  {notifications.map((notification) => (
-                    <li key={notification.id} className="border-b last:border-b-0">
-                      <a href="#" className="block px-4 py-3 text-gray-600 hover:bg-gray-100 transition-colors duration-150">
-                        {notification.message}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-        </div> */}
 
         {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>

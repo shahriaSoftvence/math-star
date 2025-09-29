@@ -11,17 +11,17 @@ import { useAddMultiplicationExerciseMutation, useGetTopScoreMultiplicationQuery
 import MultiplicationChallengeCard from './_component/multiplicationChallengeCard';
 
 const multiplicationExercises = [
-  { range: ['X1'], percentage: 98, stars: 0 },
-  { range: ['X2'], percentage: 95, stars: 19 },
-  { range: ['X3'], percentage: 92, stars: 18 },
-  { range: ['X4'], percentage: 89, stars: 17 },
-  { range: ['X5'], percentage: 94, stars: 19 },
-  { range: ['X6'], percentage: 87, stars: 16 },
-  { range: ['X7'], percentage: 85, stars: 15 },
-  { range: ['X8'], percentage: 80, stars: 14 },
-  { range: ['X9'], percentage: 75, stars: 13 },
-  { range: ['X10'], percentage: 99, stars: 20 },
-  { range: ['All'], percentage: 70, stars: 12 },
+  { range: ['X1']},
+  { range: ['X2'] },
+  { range: ['X3'] },
+  { range: ['X4'] },
+  { range: ['X5'] },
+  { range: ['X6'] },
+  { range: ['X7'] },
+  { range: ['X8'] },
+  { range: ['X9'] },
+  { range: ['X10']},
+  { range: ['All']},
 ];
 
 
@@ -80,7 +80,7 @@ export default function MultiplicationPage() {
   return (
     <div className="max-w-[1152px] mx-auto space-y-8 py-4">
       <div className="mb-4">
-        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center">
+        <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
           <ArrowLeft /> Go Back
         </Link>
       </div>
@@ -96,7 +96,6 @@ export default function MultiplicationPage() {
               <MultiplicationCard
                 key={index}
                 range={ex.range}
-                percentage={ex.percentage}
                 isSelected={ex.range.some(r => selectedRanges.includes(r))}
                 onToggle={toggleRange}
               />
