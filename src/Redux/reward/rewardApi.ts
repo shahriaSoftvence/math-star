@@ -15,7 +15,7 @@ const rewardApi = baseApi.injectEndpoints({
                 url: "/progress-today/",
                 method: "GET",
             }),
-            providesTags: ["rewards"],
+            providesTags: ["rewards", "Division", "Additions", "Multiplication", "Subtraction"],
         }),
     }), 
 });
