@@ -190,7 +190,7 @@ export default function HundredQuestionsPage() {
   );
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(300);
   const [isComplete, setIsComplete] = useState(false);
   const [score, setScore] = useState(0);
   const [addAddition100questions] = useAddAddition100questionsMutation();
@@ -237,7 +237,7 @@ export default function HundredQuestionsPage() {
   const handleStart = () => {
     setCurrentQuestionIndex(0);
     generateQuestions();
-    setTimeLeft(30);
+    setTimeLeft(300);
     setScore(0);
     setIsComplete(false);
     setUserAnswer("");
