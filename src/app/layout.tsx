@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Provider } from "../Redux/Provider";
 import { Toaster } from "sonner";
+// import { LanguageProvider } from "@/context/TranslationContext";
 
 export const metadata: Metadata = {
   title: "Math Star",
@@ -17,11 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#F8F7FA]" cz-shortcut-listen="true">
-
-        <Provider>
-          {children}
-          <Toaster position="top-right" richColors />
-        </Provider>
+        {/* <LanguageProvider> */}
+          <Provider>
+            {children}
+            <Toaster position="top-right" richColors />
+          </Provider>
+        {/* </LanguageProvider> */}
       </body>
     </html>
   );
