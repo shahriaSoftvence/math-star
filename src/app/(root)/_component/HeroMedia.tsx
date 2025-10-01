@@ -5,7 +5,6 @@ import HeroImage from "../../../../public/assets/banner-image.png";
 import { PlayCircle, X } from "lucide-react";
 import Image from 'next/image';
 
-
 const HeroMedia = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
@@ -14,9 +13,7 @@ const HeroMedia = () => {
 
   return (
     <>
-      <div
-        className="flex justify-center items-center"
-      >
+      <div className="flex justify-center items-center">
         <div className="w-full max-w-xl aspect-square relative group">
           <Image
             src={HeroImage}
@@ -25,7 +22,7 @@ const HeroMedia = () => {
             className="rounded-xl border-[3px] border-blue-500 object-cover"
           />
           <div
-            className="absolute inset-0 flex items-center justify-center bg-opacity-40 rounded-xl cursor-pointer transition-opacity opacity-0 group-hover:opacity-100"
+            className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-xl cursor-pointer transition-opacity opacity-0 group-hover:opacity-100"
             onClick={openVideo}
           >
             <PlayCircle size={80} className="text-white" />
@@ -34,17 +31,18 @@ const HeroMedia = () => {
       </div>
 
       {isVideoOpen && (
-        <div className="fixed inset-0 bg-[#00000048] bg-opacity-75 flex items-center justify-center z-50">
-          <div className="relative w-full max-w-[90%] h-[80%] p-4">
-            <button
-              onClick={closeVideo}
-              className="absolute top-1/4 right-0 text-white hover:text-gray-300"
-            >
-              <X size={32} />
-            </button>
-            <div className="aspect-w-16 h-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center rounded-2xl bg-black/90">
+          <button
+            onClick={closeVideo}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 z-50"
+          >
+            <X size={32} />
+          </button>
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full max-w-[100vw] max-h-[100vh]">
               <iframe
-                src="https://www.youtube.com/embed/5oH9Nr3bKfw?si=nVpOpb7mue9lqFFL"
+                src="https://youtube.com/embed/B1J6Ou4q8vE?si=VEJt0CVyAjbb9HAL"
+                // src="https://www.youtube.com/embed/5oH9Nr3bKfw?si=nVpOpb7mue9lqFFL"
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -38,21 +38,21 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
     <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="grid grid-cols-10 gap-2 md:gap-3 lg:gap-2 mb-4">
       {Array.from({ length: num1 }).map((_, i) => (
         <div
           key={`n1-${i}`}
-          className="w-6 h-6 bg-blue-400 border-2 border-blue-500 rounded-full"
+          className="w-5 md:w-6 h-5 md:h-6 bg-blue-400 border-2 border-blue-500 rounded-full"
         />
       ))}
       {Array.from({ length: num2 }).map((_, i) => (
         <div
           key={`n2-${i}`}
-          className="w-6 h-6 bg-red-400 border-2 border-red-500 rounded-full"
+          className="w-5 md:w-6 h-5 md:h-6 bg-red-400 border-2 border-red-500 rounded-full"
         />
       ))}
     </div>
-    <p className="mt-4 text-sm text-gray-600">(all time visible)</p>
+    {/* <p className="mt-4 text-sm text-gray-600">(all time visible)</p> */}
   </motion.div>
 );
 
@@ -106,11 +106,20 @@ function PracticePageContent() {
       // if (operation === "carry") {
       //   do {
       //     num2 = Math.floor(Math.random() * 9) + 1;
-      //     const minNum1 = 10;
-      //     const maxNum1 = numberRange - num2;
 
-      //     num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
-      //     answer = num1 + num2;
+      //     // 🔹 MODIFIED: Special case when range = 20
+      //     if (numberRange === 20) {
+      //       const minAnswer = 10;
+      //       const maxAnswer = 20;
+      //       answer = Math.floor(Math.random() * (maxAnswer - minAnswer + 1)) + minAnswer;
+      //       num1 = answer - num2;
+      //     } else {
+      //       const minNum1 = 10;
+      //       const maxNum1 = numberRange - num2;
+      //       num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+      //       answer = num1 + num2;
+      //     }
+
       //     tries++;
       //   } while (
       //     tries < maxTries &&
@@ -121,31 +130,32 @@ function PracticePageContent() {
       //   );
       // }
       if (operation === "carry") {
-  do {
-    num2 = Math.floor(Math.random() * 9) + 1;
+        do {
+          if (numberRange === 20) {
+            // Both digits 1-9
+            num1 = Math.floor(Math.random() * 9) + 1;
+            num2 = Math.floor(Math.random() * 9) + 1;
+            answer = num1 + num2;
 
-    // 🔹 MODIFIED: Special case when range = 20
-    if (numberRange === 20) {
-      const minAnswer = 10;
-      const maxAnswer = 20;
-      answer = Math.floor(Math.random() * (maxAnswer - minAnswer + 1)) + minAnswer;
-      num1 = answer - num2;
-    } else {
-      const minNum1 = 10;
-      const maxNum1 = numberRange - num2;
-      num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
-      answer = num1 + num2;
-    }
+            // Retry if sum not between 11-20
+          } else {
+            num2 = Math.floor(Math.random() * 9) + 1;
+            const minNum1 = 10;
+            const maxNum1 = numberRange - num2;
+            num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+            answer = num1 + num2;
+          }
 
-    tries++;
-  } while (
-    tries < maxTries &&
-    (
-      (num1 % 10) + num2 <= 9 ||
-      answer > numberRange
-    )
-  );
-}
+          tries++;
+        } while (
+          tries < maxTries &&
+          (
+            (numberRange === 20 && (answer < 11 || answer > 20 || num1 < 1 || num2 < 1)) ||
+            (numberRange !== 20 && ((num1 % 10) + num2 <= 9 || answer > numberRange))
+          )
+        );
+      }
+
 
       else if (operation === "noCarry") {
         do {
@@ -173,7 +183,7 @@ function PracticePageContent() {
           tries++;
         } while (answer > numberRange);
       }
-      
+
 
       return { num1, num2, answer };
     });
@@ -241,7 +251,7 @@ function PracticePageContent() {
     if (isCorrect) {
       setFeedback({
         type: "correct",
-        message: "Your answer is absolutely correct!",
+        message: "Your answer is absolutely right!",
       });
       setShowHelp(false);
       playSound("/Sounds/Check-Click-sound.wav");
@@ -258,7 +268,7 @@ function PracticePageContent() {
     } else {
       setFeedback({
         type: "incorrect",
-        message: "Now enter the correct answer to continue",
+        message: "Now enter the right answer to continue",
       });
       setShowHelp(true);
       playSound("/Sounds/Wrong-Answer-sound.wav");
@@ -397,7 +407,7 @@ function PracticePageContent() {
           >
             <ArrowLeft className="text-gray-600" />
           </button>
-          <h1 className="ml-4 text-3xl font-bold text-gray-800">
+          <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
             Practice Addition
           </h1>
         </div>
@@ -481,10 +491,9 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
-              ? "border-emerald-500"
-              : "border-red-500"
+            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 p-4 w-[calc(100%-2rem)] max-w-sm rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
               }`}
+
           >
             <div className="flex items-start">
               <div
@@ -507,8 +516,8 @@ function PracticePageContent() {
                     }`}
                 >
                   {feedback.type === "correct"
-                    ? "Correct Answer!"
-                    : "Incorrect Answer"}
+                    ? "Right Answer!"
+                    : "Wrong Answer"}
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"

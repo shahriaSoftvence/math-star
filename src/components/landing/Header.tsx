@@ -12,8 +12,6 @@ import Profile from '../../../public/assets/Profile.png';
 import { HamburgerMenu } from './HamburgerMenu'; // <-- Import HamburgerMenu
 import { useAuth, useAuthActions } from '../../Redux/hooks';
 import { LogOut, LayoutDashboard } from 'lucide-react';
-// import { useLanguage } from '@/context/TranslationContext';
-
 function useOnClickOutside(
   ref: React.RefObject<HTMLElement>,
   handler: (event: MouseEvent | TouchEvent) => void
@@ -44,6 +42,7 @@ const Header = () => {
   const router = useRouter();
   const [language, setLanguage] = useState<"en" | "de">('de');
 // const { setCurrentLanguage, isTranslating } = useLanguage();
+
 
   // Prevent hydration mismatch by only rendering after client-side mount
   useEffect(() => {

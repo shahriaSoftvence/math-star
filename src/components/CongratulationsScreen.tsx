@@ -20,7 +20,7 @@ export default function CongratulationsScreen({ onContinue, viewRewards, rewardN
   }, []);
 
   return (
-    <div className="w-full h-screen bg-gradient-to-b from-purple-400 via-pink-400 to-yellow-400 flex justify-center items-center overflow-hidden fixed top-0 left-0 z-99">
+    <div className="w-full h-screen px-4 bg-gradient-to-b from-purple-400 via-pink-400 to-yellow-400 flex justify-center items-center fixed top-0 left-0 z-99">
       <FallingStars />
       
       <motion.div

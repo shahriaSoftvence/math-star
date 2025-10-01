@@ -32,7 +32,7 @@ function SelectQuestionsContent() {
   return (
     <div className="max-w-4xl mx-auto py-4">
        <div className="w-full flex justify-start">
-          <Link href="/dashboard/subtraction" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4">
+          <Link href="/dashboard/subtraction" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4 gap-2">
             <ArrowLeft /> Go Back
           </Link>
         </div>

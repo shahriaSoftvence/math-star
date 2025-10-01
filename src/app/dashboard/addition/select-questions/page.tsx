@@ -39,7 +39,7 @@ const searchParams = useSearchParams();
       <div className="w-full flex justify-start">
         <Link
           href="/dashboard/addition"
-          className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4"
+          className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4 gap-2"
         >
           <ArrowLeft /> Go Back
         </Link>

@@ -167,7 +167,7 @@ function PracticePageContent() {
     if (isCorrect) {
       setFeedback({
         type: "correct",
-        message: "Your answer is absolutely correct!",
+        message: "Your answer is absolutely right!",
       });
       setShowHelp(false);
       playSound("/Sounds/Check-Click-sound.wav");
@@ -184,7 +184,7 @@ function PracticePageContent() {
     } else {
       setFeedback({
         type: "incorrect",
-        message: "Now enter the correct answer to continue",
+        message: "Now enter the right answer to continue",
       });
       setShowHelp(true);
       playSound("/Sounds/Wrong-Answer-sound.wav");
@@ -331,7 +331,7 @@ function PracticePageContent() {
           >
             <ArrowLeft className="text-gray-600" />
           </button>
-          <h1 className="ml-4 text-3xl font-bold text-gray-800">
+          <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
             Practice Division
           </h1>
         </div>
@@ -432,8 +432,8 @@ function PracticePageContent() {
                     }`}
                 >
                   {feedback.type === "correct"
-                    ? "Correct Answer!"
-                    : "Incorrect Answer"}
+                    ? "Right Answer!"
+                    : "Wrong Answer"}
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"

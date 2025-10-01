@@ -45,11 +45,11 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
     <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="grid grid-cols-10 gap-2 md:gap-3 lg:gap-2 mb-4">
       {Array.from({ length: num1 }).map((_, i) => (
         <div
           key={`n1-${i}`}
-          className="relative w-6 h-6 bg-blue-400 border-2 border-blue-500 rounded-full"
+          className="relative w-5 md:w-6 h-5 md:h-6 bg-blue-400 border-2 border-blue-500 rounded-full"
         >
           {i >= num1 - num2 && (
             <X
@@ -234,7 +234,7 @@ function PracticePageContent() {
     if (isCorrect) {
       setFeedback({
         type: "correct",
-        message: "Your answer is absolutely correct!",
+        message: "Your answer is absolutely right!",
       });
       setShowHelp(false);
       playSound("/Sounds/Check-Click-sound.wav");
@@ -251,7 +251,7 @@ function PracticePageContent() {
     } else {
       setFeedback({
         type: "incorrect",
-        message: `The correct answer is ${currentQuestion.answer}. Try again!`,
+        message: `Now enter the right answer to continue`,
       });
       setShowHelp(true);
       playSound("/Sounds/Wrong-Answer-sound.wav");
@@ -405,7 +405,7 @@ function PracticePageContent() {
           >
             <ArrowLeft className="text-gray-600" />
           </button>
-          <h1 className="ml-4 text-3xl font-bold text-gray-800">
+          <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
             Practice Subtraction
           </h1>
         </div>
@@ -491,7 +491,7 @@ function PracticePageContent() {
       </div>
 
       {/* Feedback Toast Animation */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {feedback.type && (
           <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -523,8 +523,8 @@ function PracticePageContent() {
                     }`}
                 >
                   {feedback.type === "correct"
-                    ? "Correct Answer!"
-                    : "Incorrect Answer"}
+                    ? "Right Answer!"
+                    : "Wrong Answer"}
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"
@@ -538,7 +538,54 @@ function PracticePageContent() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
+      <AnimatePresence>
+              {feedback.type && (
+                <motion.div
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                  className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 p-4 w-[calc(100%-2rem)] max-w-sm rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
+                    }`}
+      
+                >
+                  <div className="flex items-start">
+                    <div
+                      className={`p-1 mr-3 text-xl rounded-full ${feedback.type === "correct"
+                        ? "bg-emerald-100 text-emerald-500"
+                        : "bg-red-100 text-red-500"
+                        }`}
+                    >
+                      {feedback.type === "correct" ? (
+                        <Check size={20} />
+                      ) : (
+                        <X size={20} />
+                      )}
+                    </div>
+                    <div>
+                      <p
+                        className={`font-semibold ${feedback.type === "correct"
+                          ? "text-emerald-600"
+                          : "text-red-600"
+                          }`}
+                      >
+                        {feedback.type === "correct"
+                          ? "Right Answer!"
+                          : "Wrong Answer"}
+                      </p>
+                      <p
+                        className={`text-sm ${feedback.type === "correct"
+                          ? "text-emerald-500"
+                          : "text-red-500"
+                          }`}
+                      >
+                        {feedback.message}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
     </div>
   );
 }
