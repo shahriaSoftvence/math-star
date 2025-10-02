@@ -22,7 +22,7 @@ export default function RewardCard({ icon, title, star_range, isUnlocked }: Rewa
 >
   {/* Top content */}
   <div className="flex flex-col items-center flex-grow">
-    <Image width={150} height={150} src={icon} alt="icon" />
+    <Image width={120} height={120} src={icon} alt="icon" />
     <h3 className="text-2xl font-bold my-8 text-gray-800">{title}</h3>
     {/* <p className="text-sm text-gray-600 my-2 h-20">{description}</p> */}
     

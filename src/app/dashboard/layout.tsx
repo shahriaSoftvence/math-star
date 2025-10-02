@@ -27,7 +27,7 @@ return (
       {!isPracticePage && (
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       )}
-      <div className={`flex-1 ${!isPracticePage ? "md:ml-64" : ""}`}>
+      <div className={`flex-1 ${!isPracticePage ? "xl:ml-64" : ""}`}>
       
           {!isPracticePage && (
           <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />

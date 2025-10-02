@@ -190,15 +190,6 @@ export default function SubscriptionPage() {
                   {renewLoading ? "Renewing your plan…" : "Renew Now"}
                 </span>
               </button>
-              {/* <button
-
-                  disabled={loading}
-                  className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-red-200 rounded-md hover:bg-red-50 disabled:opacity-50">
-                  <XCircle size={16} className="text-red-600" />
-                  <span className="text-red-600 text-sm font-medium font-Nunito">
-                    Cancel Subscription
-                  </span>
-                </button> */}
             </div>
           </div>
         </div>
@@ -218,61 +209,70 @@ export default function SubscriptionPage() {
             </button>
           </div>
           <div className="space-y-4">
-            {/* Display payment methods if available */}
             {paymentMethods?.data?.length ? (
               paymentMethods.data.map((method: PaymentMethodData) => (
-                <div key={method.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-8 bg-gradient-to-r from-purple-500 to-blue-600 rounded-md flex justify-center items-center">
+                <div
+                  key={method.id}
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center p-3 bg-gray-50 rounded-lg gap-4"
+                >
+                  <div className="flex items-start gap-4 w-full md:w-auto">
+                    <div className="w-10 h-8 bg-gradient-to-r from-purple-500 to-blue-600 rounded-md flex justify-center items-center shrink-0">
                       <CreditCard size={24} className="text-white" />
                     </div>
-                    <div className="flex items-start gap-6">
-                      <span>
-                        <p className="font-semibold capitalize">{method.card_brand} •••• {method.card_last4}</p>
+                    <div className="flex items-center gap-2 md:gap-6 w-full">
+                      <span className="flex flex-col">
+                        <p className="font-semibold capitalize">
+                          {method.card_brand} •••• {method.card_last4}
+                        </p>
                         <p className="text-xs text-gray-500">
                           Expires on {method.exp_month} / {method.exp_year}
                         </p>
                       </span>
                       {method.is_default && (
-                        <p className="text-xs ml-4 bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                        <p className="text-xs text-center bg-green-100 text-green-700 px-3 py-1 rounded-full mt-2 sm:mt-0">
                           Default
                         </p>
                       )}
                     </div>
                   </div>
 
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button className="text-red-500 border-red-500 hover:text-red-600 hover:border-red-600" variant={"outline"}><Trash2 /></Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Remove this Card?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure want to remove this card?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>No</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleRemovePaymentMethod(method?.stripe_payment_method_id)} className="bg-red-700 hover:bg-red-600">Continue</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-
+                  <div className="self-end md:self-auto">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          className="text-red-500 border-red-500 hover:text-red-600 hover:border-red-600 w-full md:w-auto"
+                          variant={"outline"}
+                        >
+                          <Trash2 />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Remove this Card?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure want to remove this card?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>No</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleRemovePaymentMethod(method?.stripe_payment_method_id)}
+                            className="bg-red-700 hover:bg-red-600"
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
+
               ))
             ) : (
               <p className="text-gray-600 text-center font-Nunito">
                 No payment methods on file. Add a card to continue your subscription.
               </p>
             )}
-            {/* <button
-                onClick={handleManageSubscription}
-                disabled={loading}
-                className="w-full mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
-              >
-                {loading ? "Loading..." : "Open Payment Settings"}
-              </button> */}
           </div>
         </div>
 
@@ -285,7 +285,7 @@ export default function SubscriptionPage() {
                   {visibleData.map((item, idx) => (
                     <div
                       key={idx}
-                      className="p-4 bg-gray-50 rounded-2xl flex justify-between items-center"
+                      className="p-4 bg-gray-50 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-start md:items-center"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex justify-center items-center">
@@ -300,7 +300,7 @@ export default function SubscriptionPage() {
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
+                      <div className="flex flex-col items-end md:items-center self-end md:self-auto">
                         <p className="font-bold text-gray-800">{item?.amount} USD</p>
                         <p
                           className={`${item?.status === "Paid"

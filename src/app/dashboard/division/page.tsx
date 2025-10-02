@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import DivisionCard from './divisionCard/page';
 import { useAddDivisionExerciseMutation, useGetTopScoreDivisionQuery } from '@/Redux/features/division/divisionApi';
-import DivisionChallengeCard from './_component/divisionChallengeCard';
+import ChallengeCard from '@/components/challengeCard';
 
 const divisionExercises = [
   { range: '2' },
@@ -71,7 +71,7 @@ export default function DivisionPage() {
   }
 
   return (
-    <div className="max-w-[1152px] mx-auto space-y-8 py-4">
+    <div className="max-w-[1152px] mx-auto space-y-8 p-4">
       <div className="mb-4">
         
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
@@ -84,8 +84,8 @@ export default function DivisionPage() {
         <div className="p-4 bg-gradient-to-br from-purple-400 to-purple-500 rounded-t-lg">
           <h2 className="text-xl font-bold text-white">Division exercise.</h2>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div className="px-0 md:px-6 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {divisionExercises.map((ex, index) => (
               <DivisionCard
                 key={index}
@@ -118,10 +118,10 @@ export default function DivisionPage() {
           <h2 className="text-xl font-bold text-white">Division challenges.</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {divisionChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
-                <DivisionChallengeCard iconColor="text-white" {...challenge} />
+                <ChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

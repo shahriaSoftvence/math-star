@@ -31,8 +31,8 @@ const PricingSection = async () => {
         <section id="pricing" className="py-24 px-4 bg-gray-50">
             <div className="max-w-7xl mx-auto flex flex-col items-center gap-4">
                 <div className="text-center max-w-3xl">
-                    <h2 className="text-gray-800 text-4xl font-bold font-Quicksand leading-10">Our pricing policy</h2>
-                    <p className="text-gray-600 text-xl font-normal font-Open_Sans leading-7 mt-4">
+                    <h2 className="text-gray-800 text-2xl md:text-4xl font-bold font-Quicksand leading-10">Our pricing policy</h2>
+                    <p className="text-gray-600 text-base md:text-xl font-normal font-Open_Sans leading-7 mt-4">
                         Money is not our motivation! Therefore, we want to make Math Star accessible to everybody at the lowest price possible.
                     </p>
                 </div>

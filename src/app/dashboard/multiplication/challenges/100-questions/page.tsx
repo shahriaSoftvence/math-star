@@ -7,6 +7,7 @@ import { BsGrid3X3 } from "react-icons/bs";
 import { useAddMultiplication100QuestionMutation } from '@/Redux/features/multiplication/multiplicationApi';
 import { toast } from 'sonner';
 import GameResultScreen from '@/components/GameResultScreen';
+import { Button } from '@/components/ui/button';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };
@@ -28,21 +29,40 @@ const playSound = (sound: string) => {
 // --- Reusable UI Components ---
 
 const ChallengeStartScreen = ({ onStart, onCancel }: { onStart: () => void, onCancel: () => void }) => (
-    <div className="w-full min-h-screen relative bg-gradient-to-b from-green-50 to-purple-50 flex flex-col justify-center items-center p-4">
-        <div className="w-full max-w-[450px] min-[516px]:max-w-[600px] p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex justify-center items-center">
+    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
+        <div className="w-full max-w-[90%] sm:max-w-md md:max-w-xl p-6 sm:p-8 md:p-10 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 sm:gap-6">
+
+            {/* Icon */}
+            <div className="bg-blue-100 rounded-full flex justify-center items-center p-2 sm:p-3">
                 <BsGrid3X3 className="w-10 h-10 text-green-600" />
             </div>
+
+            {/* Title and Description */}
             <div>
-                <h2 className="text-gray-800 text-2xl font-bold font-Nunito leading-loose">Ready to Start?</h2>
-                <p className="text-gray-600 mt-2 text-base font-normal font-Nunito leading-normal">
-                    Solve all 100 multiplication problems!
+                <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-snug sm:leading-loose">
+                    Ready to Start?
+                </h2>
+                <p className="text-gray-600 mt-1 text-sm md:text-base">
+                    Solve all 100 division problems!
                 </p>
             </div>
-            <div className="flex items-center gap-4 mt-4">
-                <button onClick={onCancel} className="px-8 py-2 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 text-lg capitalize leading-7 min-w-[206px]">Cancel</button>
-                <button onClick={onStart} className="px-8 py-2 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 text-lg capitalize leading-7 min-w-[206px]">Start Challenge</button>
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full">
+                <Button
+                    className="bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 w-full sm:w-auto flex-1"
+                    onClick={onCancel}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    className="bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 w-full sm:w-auto flex-1"
+                    onClick={onStart}
+                >
+                    Start Challenge
+                </Button>
             </div>
+
         </div>
     </div>
 );
@@ -111,10 +131,15 @@ const QuestionsGrid = ({ questions, questionStatuses }: { questions: Question[],
                 <div className="flex items-center"><div className="w-4 h-4 bg-green-400 rounded mr-2"></div><span className="text-sm font-Nunito text-[#000]">Correct</span></div>
                 <div className="flex items-center"><div className="w-4 h-4 bg-red-400 rounded mr-2"></div><span className="text-sm font-Nunito text-[#000]">Wrong</span></div>
             </div>
-            <div className="grid grid-cols-10 gap-2">
+            <div className="grid grid-cols-6 md:grid-cols-10 gap-2">
                 {questions.map((q, index) => (
-                    <div key={index} className={`h-12 rounded flex justify-center items-center ${getStatusColor(questionStatuses[index])}`}>
-                        <span className="text-gray-800 text-xs font-bold font-Nunito leading-none">{`${q.num1} x ${q.num2}`}</span>
+                    <div
+                        key={index}
+                        className={`h-12 w-12 rounded flex justify-center items-center ${getStatusColor(
+                            questionStatuses[index]
+                        )}`}
+                    >
+                        <span className="text-gray-800 text-xs font-bold font-Nunito leading-none">{`${q.num1} + ${q.num2}`}</span>
                     </div>
                 ))}
             </div>
@@ -257,7 +282,7 @@ export default function HundredQuestionsPage() {
         };
     }, [gameState, handleSubmit]);
 
-    if (gameState === "gameOver"  || isComplete) {
+    if (gameState === "gameOver" || isComplete) {
         return (
             <GameResultScreen
                 score={score}
@@ -280,10 +305,10 @@ export default function HundredQuestionsPage() {
                     <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
                         <ArrowLeft className="text-gray-600" />
                     </button>
-                    <h1 className="ml-4 text-3xl font-bold font-Nunito text-gray-800">100 Questions Challenge</h1>
+                    <h1 className="ml-4 text-2xl md:text-3xl font-bold font-Nunito text-gray-800">100 Questions Challenge</h1>
                 </div>
 
-                <div className="flex flex-col lg:flex-row justify-center items-center gap-6">
+                <div className="flex flex-col xl:flex-row justify-center items-center gap-6">
                     {/* Left Side: Timer */}
                     <div className="w-72 h-72 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex flex-col justify-center items-center flex-shrink-0">
                         <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">{formatTime(timeLeft)}</div>

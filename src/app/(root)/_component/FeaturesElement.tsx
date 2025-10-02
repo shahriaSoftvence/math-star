@@ -43,11 +43,11 @@ const FeatureCard = ({
     <h3 className="text-2xl font-semibold font-Quicksand leading-loose">
       {title}
     </h3>
-    <p className="text-base font-normal font-sans leading-relaxed mt-4">
+    <p className="text-base font-normal font-sans leading-relaxed mt-2">
       {content}
     </p>
     {list && (
-      <ul className="mt-4 space-y-2">
+      <ul className="mt-2 space-y-2">
         {list.map((item) => (
           <li
             key={item}
@@ -68,7 +68,7 @@ const FeatureCard = ({
 
 const FeaturesElement = () => {
   return (
-    <div className="self-stretch grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+    <div className="self-stretch grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 px-1 md:px-5 lg:px-12 xl:px-0"
  >
       {featureData.map((feature) => (
         <FeatureCard key={feature.title} {...feature} />

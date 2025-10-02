@@ -389,10 +389,9 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
-              ? "border-emerald-500"
-              : "border-red-500"
+            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 p-4 w-[calc(100%-2rem)] max-w-sm rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
               }`}
+
           >
             <div className="flex items-start">
               <div

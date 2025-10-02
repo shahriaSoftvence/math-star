@@ -17,7 +17,7 @@ const HeroSection = () => {
         <div
           className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start"
         >
-          <h1 className="text-5xl md:text-6xl font-semibold font-Poppins leading-tight">
+          <h1 className="text-4xl lg:text-5xl xl:text-6xl font-semibold font-Poppins leading-tight">
             <span className="text-blue-600">
               Turn Screen Time Into real study time
             </span>
@@ -26,7 +26,7 @@ const HeroSection = () => {
               Elementary school math made fun
             </span>
           </h1>
-          <p className="text-black text-xl font-medium font-Quicksand leading-loose max-w-lg">
+          <p className="text-black text-lg md:text-xl font-medium font-Quicksand leading-loose max-w-lg">
             Become a math star! Study with Interactive exercises and master
             exciting challenges.
           </p>

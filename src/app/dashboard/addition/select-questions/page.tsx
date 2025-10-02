@@ -18,7 +18,7 @@ const QuestionCountCard = ({ count, range, operation }: { count: number; range: 
   return (
     <Link href={`/dashboard/addition/practice?count=${count}&range=${range || '10'}&operation=${operation}`}>
       <div
-        className="w-38 self-stretch p-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-blue-200 hover:to-blue-300 transition-all transform hover:scale-105"
+        className="w-36 self-stretch p-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-blue-200 hover:to-blue-300 transition-all transform hover:scale-105"
       >
         <div className="text-center text-gray-800 text-4xl font-bold">
           {count}
@@ -35,7 +35,7 @@ const searchParams = useSearchParams();
   const range = searchParams?.get('range') ?? null;
   const operation = searchParams?.get('operation') ?? null;
   return (
-    <div className="max-w-4xl mx-auto py-4">
+    <div className="max-w-4xl mx-auto p-4">
       <div className="w-full flex justify-start">
         <Link
           href="/dashboard/addition"

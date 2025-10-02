@@ -16,7 +16,7 @@ const practiceTips = [
 
 const QuestionCountCard = ({ count, range, operation }: { count: number; range: string | null; operation: string | null }) => (
   <Link href={`/dashboard/subtraction/practice?count=${count}&range=${range || '10'}&operation=${operation}`}>
-    <div className="w-38 self-stretch p-8 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-pink-200 hover:to-pink-300 transition-all transform hover:scale-105">
+    <div className="w-36 self-stretch p-8 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-pink-200 hover:to-pink-300 transition-all transform hover:scale-105">
       <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
       <div className="text-center text-gray-600 text-sm">Questions</div>
     </div>
@@ -30,7 +30,7 @@ function SelectQuestionsContent() {
   const operation = searchParams?.get('operation') ?? null;
 
   return (
-    <div className="max-w-4xl mx-auto py-4">
+    <div className="max-w-4xl mx-auto p-4">
        <div className="w-full flex justify-start">
           <Link href="/dashboard/subtraction" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4 gap-2">
             <ArrowLeft /> Go Back

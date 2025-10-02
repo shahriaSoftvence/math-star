@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, Settings, CreditCard, X } from 'lucide-react';
+import { LayoutDashboard, User, Settings, CreditCard, ArrowLeft, ChevronFirst, PanelRightOpen } from 'lucide-react';
 import Logo from '../../public/assets/Logo.png';
 import Image from 'next/image';
 interface SidebarProps {
@@ -25,22 +25,27 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   ];
 
   return (
-    <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white rounded-r-[30px] border-r flex-col justify-between p-6 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex transition-transform duration-300 ease-in-out`}>
+    <aside
+      className={`fixed inset-y-0 left-0 z-50 w-64 bg-white rounded-r-[30px] border-r flex-col justify-between p-6 transform 
+  ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+  xl:translate-x-0 transition-transform duration-300 ease-in-out`}
+    >
+
       <div>
         <div className="mb-16 flex justify-between items-center">
           <Link href="/">
-            <Image src={Logo} alt='Logo' />
+            <Image className='w-36 xl:w-40 h-auto' src={Logo} alt='Logo' />
           </Link>
-          <button onClick={() => setSidebarOpen(false)} className="md:hidden">
-            <X className='text-[#000]' size={24} />
+          <button onClick={() => setSidebarOpen(false)} className="xl:hidden cursor-pointer">
+            <PanelRightOpen className='text-gray-700 hover:text-gray-500' size={24} />
           </button>
         </div>
-        <nav>
+        <nav className=''>
           <ul>
             {menuItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <li key={item.name} className="mb-2">
+                <li  onClick={() => setSidebarOpen(false)} key={item.name} className="mb-2">
                   <Link
                     href={item.href}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 ${isActive

@@ -7,8 +7,8 @@ import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import SubtractionCard from './subtractionCard/page';
-import SubtractionChallengeCard from './_component/subtractionChallengeCard';
 import { useGetTopScoreSubtractionQuery } from '@/Redux/features/subtraction/subtractionApi';
+import ChallengeCard from '@/components/challengeCard';
 
 const subtractionExercises = {
   noBorrowing: [
@@ -34,13 +34,13 @@ export default function SubtractionPage() {
   const whatsMissingTopScore = data?.data?.find(item => item.challenge_type === "WHATS_MISSING")?.display_top_score;
 
   const subtractionChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/subtraction/challenges/no-mistake', display_top_score: noMistakeTopScore },
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/subtraction/challenges/no-mistake', display_top_score: noMistakeTopScore },
     { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/subtraction/challenges/speed-mode', display_top_score: speedModeTopScore },
     { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/subtraction/challenges/100-questions', display_top_score: hundredQuestionTopScore },
     { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/subtraction/challenges/whats-missing", display_top_score: whatsMissingTopScore },
 ];
   return (
-    <div className="max-w-[1152px] mx-auto space-y-8 py-4">
+    <div className="max-w-[1152px] mx-auto space-y-8 p-4">
        <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
             <ArrowLeft /> Go Back
@@ -51,8 +51,8 @@ export default function SubtractionPage() {
         <div className="p-4 bg-gradient-to-br from-pink-400 to-pink-500 rounded-t-lg">
           <h2 className="text-xl font-bold text-white">Subtraction exercise.</h2>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="px-0 md:px-6 py-6">
+          <div className="grid grid-cols-2 gap-3 md:gap-6">
             <div>
               <div className="p-3 mb-4 text-center text-black bg-pink-200 rounded">
                 <h3 className="font-semibold">no borrowing</h3>
@@ -83,10 +83,10 @@ export default function SubtractionPage() {
           <h2 className="text-xl font-bold text-white">Subtraction challenges.</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {subtractionChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
-                <SubtractionChallengeCard iconColor="text-white" {...challenge} />
+                <ChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

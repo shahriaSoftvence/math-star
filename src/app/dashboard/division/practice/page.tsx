@@ -35,7 +35,7 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
     <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">
       Help chart (÷{divisor} Table)
     </h3>
-    <div className="space-y-1">
+    <div className="grid grid-cols-2 gap-2">
       {Array.from({ length: 10 }, (_, i) => (i + 1) * divisor).map(
         (dividend) => (
           <div
@@ -43,11 +43,9 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
             className="flex justify-between text-sm mx-auto max-w-[120px]"
           >
             <span className="text-gray-600">
-              {dividend} ÷ {divisor} =
+              {dividend} ÷ {divisor} = {dividend / divisor}
             </span>
-            <span className="font-bold text-gray-800">
-              {dividend / divisor}
-            </span>
+            
           </div>
         )
       )}
@@ -406,10 +404,9 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 p-4 w-full max-w-sm rounded-xl shadow-lg border ${feedback.type === "correct"
-              ? "border-emerald-500"
-              : "border-red-500"
+            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 p-4 w-[calc(100%-2rem)] max-w-sm rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
               }`}
+
           >
             <div className="flex items-start">
               <div

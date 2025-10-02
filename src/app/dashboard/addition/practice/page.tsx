@@ -103,32 +103,6 @@ function PracticePageContent() {
       const maxTries = 100;
       let tries = 0;
 
-      // if (operation === "carry") {
-      //   do {
-      //     num2 = Math.floor(Math.random() * 9) + 1;
-
-      //     // 🔹 MODIFIED: Special case when range = 20
-      //     if (numberRange === 20) {
-      //       const minAnswer = 10;
-      //       const maxAnswer = 20;
-      //       answer = Math.floor(Math.random() * (maxAnswer - minAnswer + 1)) + minAnswer;
-      //       num1 = answer - num2;
-      //     } else {
-      //       const minNum1 = 10;
-      //       const maxNum1 = numberRange - num2;
-      //       num1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
-      //       answer = num1 + num2;
-      //     }
-
-      //     tries++;
-      //   } while (
-      //     tries < maxTries &&
-      //     (
-      //       (num1 % 10) + num2 <= 9 ||
-      //       answer > numberRange
-      //     )
-      //   );
-      // }
       if (operation === "carry") {
         do {
           if (numberRange === 20) {
@@ -412,12 +386,6 @@ function PracticePageContent() {
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          {/* <button onClick={handlePrevious} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === 0}>
-            <ArrowLeftCircle className="text-gray-600" />
-          </button>
-          <button onClick={handleSkip} className="p-2 transition-colors rounded-full hover:bg-gray-200" disabled={currentQuestionIndex === questions.length - 1}>
-            <ArrowRight className="text-gray-600" />
-          </button> */}
           <button
             onClick={handleReset}
             className="p-2 transition-colors rounded-full hover:bg-gray-200"

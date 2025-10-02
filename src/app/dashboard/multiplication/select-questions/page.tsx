@@ -27,7 +27,7 @@ const QuestionCountCard = ({
       href={`/dashboard/multiplication/practice?count=${count}&ranges=${ranges}`}
     >
       <div
-        className="w-38 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105"
+        className="w-36 self-stretch p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-green-200 hover:to-green-300 transition-all transform hover:scale-105"
       >
         <div className="text-center text-gray-800 text-4xl font-bold">
           {count}
@@ -45,7 +45,7 @@ const rangesParam = searchParams?.get("ranges");
 const ranges = rangesParam ? rangesParam.split(",") : []; 
 
   return (
-    <div className="max-w-4xl mx-auto py-4">
+    <div className="max-w-4xl mx-auto p-4">
       <div className="w-full flex justify-start">
         <Link
           href="/dashboard/multiplication"

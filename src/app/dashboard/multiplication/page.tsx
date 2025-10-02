@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import MultiplicationCard from './multiplicationCard/page';
 import { useAddMultiplicationExerciseMutation, useGetTopScoreMultiplicationQuery } from '@/Redux/features/multiplication/multiplicationApi';
-import MultiplicationChallengeCard from './_component/multiplicationChallengeCard';
+import ChallengeCard from '@/components/challengeCard';
 
 const multiplicationExercises = [
   { range: ['X1']},
@@ -78,7 +78,7 @@ export default function MultiplicationPage() {
 
 
   return (
-    <div className="max-w-[1152px] mx-auto space-y-8 py-4">
+    <div className="max-w-[1152px] mx-auto space-y-8 p-4">
       <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
           <ArrowLeft /> Go Back
@@ -90,8 +90,8 @@ export default function MultiplicationPage() {
         <div className="p-4 bg-gradient-to-br from-green-400 to-green-500 rounded-t-lg">
           <h2 className="text-xl font-bold text-white">Multiplication exercise.</h2>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div className="px-0 md:px-6 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {multiplicationExercises.map((ex, index) => (
               <MultiplicationCard
                 key={index}
@@ -125,10 +125,10 @@ export default function MultiplicationPage() {
           <h2 className="text-xl font-bold text-white">Multiplication challenges.</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {multiplicationChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
-                <MultiplicationChallengeCard iconColor="text-white" {...challenge} />
+                <ChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

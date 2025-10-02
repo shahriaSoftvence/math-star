@@ -7,8 +7,8 @@ import { BsGrid3X3 } from "react-icons/bs";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import AdditionCard from './additionCard/page';
-import AdditionChallengeCard from './_component/additionChallengeCard';
 import { useGetTopScoreAdditionQuery } from '@/Redux/features/addition/additionApi';
+import ChallengeCard from '@/components/challengeCard';
 
 const additionExercises = {
   noCarry: [
@@ -38,14 +38,14 @@ export default function AdditionPage() {
 
 
   const additionChallenges = [
-    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/addition/challenges/no-mistake', display_top_score: noMistakeTopScore },
+    { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/addition/challenges/no-mistake', display_top_score: noMistakeTopScore },
     { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/addition/challenges/speed-mode', display_top_score: speedModeTopScore },
     { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/addition/challenges/100-questions', display_top_score: hundredQuestionTopScore },
     { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/addition/challenges/whats-missing", display_top_score: whatsMissingTopScore },
   ];
 
   return (
-    <div className="max-w-[1152px] mx-auto space-y-8 py-4">
+    <div className="max-w-[1152px] mx-auto space-y-8 p-4">
       <div className="mb-4">
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
           <ArrowLeft /> Go Back
@@ -56,8 +56,8 @@ export default function AdditionPage() {
         <div className="p-4 bg-gradient-to-br from-blue-400 to-blue-500 rounded-t-lg">
           <h2 className="text-xl font-bold text-white">Addition exercise.</h2>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="px-0 md:px-6 py-6">
+          <div className="grid grid-cols-2 gap-3 md:gap-6">
             <div>
               <div className="p-3 mb-4 text-center text-black bg-blue-200 rounded">
                 <h3 className="font-semibold">no carrying over</h3>
@@ -88,14 +88,14 @@ export default function AdditionPage() {
           <h2 className="text-xl font-bold text-white">Addition challenges.</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {additionChallenges.map((challenge, index) => (
               <Link
                 href={challenge.link}
                 key={index}
                 className="cursor-pointer"
               >
-                <AdditionChallengeCard iconColor="text-white" {...challenge} />
+                <ChallengeCard iconColor="text-white" {...challenge} />
               </Link>
             ))}
           </div>

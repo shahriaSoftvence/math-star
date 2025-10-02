@@ -69,7 +69,7 @@ const Header = () => {
   // Don't render until client-side to prevent hydration mismatch
   if (!isClient) {
     return (
-      <header className="w-full h-24 px-4 sm:px-10 md:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">
+      <header className="w-full h-24 px-4 lg:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">
         <div className="max-w-[1250px] mx-auto flex justify-between items-center w-full">
           <Link href="/">
             <Image src={Logo} alt="Math Star Logo" className="w-32 md:w-40 h-auto" />
@@ -97,7 +97,7 @@ const Header = () => {
   }
 
   return (
-    <header className="w-full h-24 px-4 sm:px-10 md:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">
+    <header className="w-full h-24 px-4 lg:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">
       <div className="max-w-[1250px] mx-auto flex justify-between items-center w-full">
         <Link href="/">
           <Image src={Logo} alt="Math Star Logo" className="w-32 md:w-40 h-auto" />

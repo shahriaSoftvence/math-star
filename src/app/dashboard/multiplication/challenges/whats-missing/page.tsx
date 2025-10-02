@@ -7,6 +7,7 @@ import { useAddMultiplicationWhatsMissingMutation } from "@/Redux/features/multi
 import Link from "next/link";
 import GameResultScreen from "@/components/GameResultScreen";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 // --- Type Definitions ---
 type Question = {
@@ -37,33 +38,40 @@ const ChallengeStartScreen = ({
   onStart: () => void;
   onCancel: () => void;
 }) => (
-  <div className="w-full min-h-screen relative bg-gradient-to-b from-green-50 to-purple-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[450px] min-[516px]:max-w-[600px] p-8 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-6">
-      <div className="w-20 h-20 bg-green-100 rounded-full flex justify-center items-center">
-        <HelpCircle className="w-10 h-10 text-green-600" />
+  <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
+    <div className="w-full max-w-[90%] sm:max-w-md md:max-w-xl p-6 sm:p-8 md:p-10 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 sm:gap-6">
+
+      {/* Icon */}
+      <div className="bg-green-100 rounded-full flex justify-center items-center p-2 sm:p-3">
+        <HelpCircle className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
       </div>
+
+      {/* Title and Description */}
       <div>
-        <h2 className="text-gray-800 text-2xl font-medium font-Poppins leading-loose">
+        <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-snug sm:leading-loose">
           Ready to Start?
         </h2>
-        <p className="text-gray-600 mt-2 text-base font-normal font-Poppins leading-relaxed">
+        <p className="text-gray-600 mt-1 text-sm md:text-base">
           Fill in the missing numbers in 5 minutes!
         </p>
       </div>
-      <div className="flex items-center gap-4 mt-4">
-        <button
+
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full">
+        <Button
+          className="bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 w-full sm:w-auto flex-1"
           onClick={onCancel}
-          className="px-8 py-2 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 text-lg capitalize leading-7 min-w-[206px]"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
+          className="bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 w-full sm:w-auto flex-1"
           onClick={onStart}
-          className="px-8 py-2 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 text-lg capitalize leading-7 min-w-[206px]"
         >
           Start Challenge
-        </button>
+        </Button>
       </div>
+
     </div>
   </div>
 );
@@ -282,17 +290,15 @@ export default function WhatsMissingPage() {
               <ArrowLeft /> Go Back
             </Link>
           </div>
-          <div className="flex items-start gap-4 md:gap-6">
-            <div className="w-24 h-24 bg-blue-100 rounded-full flex justify-center items-center">
-              <HelpCircle className="w-14 h-14 text-green-600" />
-
+          <div className="flex gap-4 items-start md:gap-6">
+            <div className="p-3 bg-green-100 rounded-full flex justify-center items-center">
+              <HelpCircle className="w-7 md:w-10 h-7 md:h-10 text-green-600" />
             </div>
-
             <div className="flex flex-col gap-2 md:gap-3">
-              <h1 className="text-black text-6xl font-bold font-Nunito leading-10">
+              <h1 className="text-black text-3xl md:text-6xl font-bold font-Nunito leading-10">
                 What is missing?
               </h1>
-              <p className="text-black text-2xl font-bold font-Nunito leading-10">
+              <p className="text-black text-lg md:text-2xl font-medium font-Nunito leading-snug">
                 You have 5 minutes to find as many missing numbers as possible.
               </p>
             </div>
@@ -332,8 +338,8 @@ export default function WhatsMissingPage() {
             </div>
 
             {/* Question Display */}
-            <div className="p-8 rounded-3xl border border-black min-w-[480px]">
-              <div className="text-center text-gray-800 text-4xl sm:text-6xl font-bold font-Nunito leading-tight">
+            <div className="p-8 rounded-3xl border border-black w-[330px] md:w-[400px] lg:w-[450px]">
+              <div className="text-center text-gray-800 text-4xl font-bold font-Nunito leading-tight">
                 {getQuestionString()}
               </div>
             </div>
