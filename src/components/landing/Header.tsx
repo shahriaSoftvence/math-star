@@ -12,6 +12,8 @@ import Profile from '../../../public/assets/Profile.png';
 import { HamburgerMenu } from './HamburgerMenu'; // <-- Import HamburgerMenu
 import { useAuth, useAuthActions } from '../../Redux/hooks';
 import { LogOut, LayoutDashboard } from 'lucide-react';
+import { Button } from '../ui/button';
+import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 function useOnClickOutside(
   ref: React.RefObject<HTMLElement>,
   handler: (event: MouseEvent | TouchEvent) => void
@@ -41,7 +43,11 @@ const Header = () => {
   const { logout } = useAuthActions();
   const router = useRouter();
   const [language, setLanguage] = useState<"en" | "de">('de');
-// const { setCurrentLanguage, isTranslating } = useLanguage();
+  const {
+    data: profileData
+  } = useGetProfileQuery();
+  // const { setCurrentLanguage, isTranslating } = useLanguage();
+
 
 
   // Prevent hydration mismatch by only rendering after client-side mount
@@ -61,7 +67,7 @@ const Header = () => {
     setIsProfileOpen(false);
   };
 
-  const handleSelectLanguage = (lang : "en" | "de") => {
+  const handleSelectLanguage = (lang: "en" | "de") => {
     setLanguage(lang);
     // setCurrentLanguage(lang);
   };
@@ -72,7 +78,7 @@ const Header = () => {
       <header className="w-full h-24 px-4 lg:px-28 fixed left-0 top-0 bg-white/60 border-b border-white/40 backdrop-blur-[10px] flex justify-between items-center z-20">
         <div className="max-w-[1250px] mx-auto flex justify-between items-center w-full">
           <Link href="/">
-            <Image src={Logo} alt="Math Star Logo" className="w-32 md:w-40 h-auto" />
+            <Image src={Logo} alt="Math Star Logo" className="w-24 sm:w-30 md:w-40 h-auto" />
           </Link>
           <nav className="hidden md:flex md:items-center md:gap-8 lg:gap-16">
             <Link href={{ pathname: "/", hash: "features" }} className="text-black text-lg font-medium font-Poppins leading-relaxed">
@@ -148,7 +154,7 @@ const Header = () => {
                   aria-label="Profile menu"
                 >
                   <Image
-                    src={user.profile_pic || Profile}
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}${profileData?.data?.profile_pic}`}
                     width={48}
                     height={48}
                     alt="User Avatar"
@@ -185,9 +191,17 @@ const Header = () => {
             </div>
           ) : (
             <Link href="/auth/signin">
-              <button className="h-12 px-6 bg-blue-500 rounded-[100px] text-white text-lg font-medium font-Poppins leading-relaxed hover:bg-blue-600 transition-colors">
+              {/* <button className="h-12 px-6 bg-blue-500 rounded-[100px] text-white text-sm md:text-lg font-medium font-Poppins leading-relaxed hover:bg-blue-600 transition-colors">
                 Sign In
-              </button>
+              </button> */}
+              <Button
+                className="bg-blue-500 hover:bg-blue-600 rounded-xl 
+             text-base md:text-lg 
+             px-4 py-3 md:px-5 md:py-[22px]"
+              >
+                Sign In
+              </Button>
+
             </Link>
           )}
 

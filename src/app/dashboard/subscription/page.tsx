@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -30,7 +30,6 @@ import SubscriptionCard from "@/components/SubscriptionCard";
 import { useIsPremium } from "@/Redux/hooks";
 import LoadingFile from '@/asset/loader.svg'
 import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
-import { useRouter } from "next/navigation";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {

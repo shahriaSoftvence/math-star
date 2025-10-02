@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div className="space-y-8 mt-8 max-w-[1104px] mx-auto px-4">
       {/* Choose Your Practice */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-4">
         {practiceItems.map((item, index) => {
           // Only allow click if user has subscription or it's the Addition card
           const isActive = isPremium || item.link === "/dashboard/addition";
