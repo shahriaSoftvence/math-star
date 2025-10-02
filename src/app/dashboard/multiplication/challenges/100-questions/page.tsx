@@ -139,7 +139,7 @@ const QuestionsGrid = ({ questions, questionStatuses }: { questions: Question[],
                             questionStatuses[index]
                         )}`}
                     >
-                        <span className="text-gray-800 text-xs font-bold font-Nunito leading-none">{`${q.num1} + ${q.num2}`}</span>
+                        <span className="text-gray-800 text-xs font-bold font-Nunito leading-none">{`${q.num1} x ${q.num2}`}</span>
                     </div>
                 ))}
             </div>
@@ -299,7 +299,7 @@ export default function HundredQuestionsPage() {
     }
 
     return (
-        <div className="bg-gradient-to-b from-green-50 to-purple-50 p-4 md:p-6">
+        <div className="bg-gradient-to-b from-green-50 to-purple-50">
             <div className="max-w-[1440px] mx-auto min-h-screen p-4 md:p-6">
                 <div className="flex items-center mb-6">
                     <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">

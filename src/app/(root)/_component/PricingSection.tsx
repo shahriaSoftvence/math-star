@@ -7,11 +7,10 @@ import Link from 'next/link';
 
 
 const pricingFeatures = [
-    "Access to all basic math exercises",
-    "Progress tracking for 1 child",
-    "Basic reward system",
-    "Access to all challenges",
-    "Monthly cancellation"
+    "Access to all Math Exercises",
+    "Reward System",
+    "Access to all Challenges",
+    "Monthly Cancellation"
 ];
 
 const PricingSection = async () => {
@@ -42,7 +41,10 @@ const PricingSection = async () => {
                     {
                         planLists?.data?.map((plan: Plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6 hover:scale-103 transition-transform">
                             <div className="flex justify-between items-start">
-                                <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">{plan?.plan_name}</h3>
+                                <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">
+                                    {/* {plan?.plan_name} */}
+                                    Math Star Plan
+                                    </h3>
                                 <div className="w-9 h-9  rounded-full flex items-center justify-center">
                                     <IoStar size={38} className="fill-yellow-500" />
                                 </div>
@@ -51,7 +53,7 @@ const PricingSection = async () => {
                                 <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">$ {plan?.price}</p>
                                 <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
                             </div>
-                            <div className="space-y-4">
+                            <div className="space-y-4 my-1.5">
                                 {pricingFeatures.map(feature => (
                                     <div key={feature} className="flex items-center gap-2">
                                         <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">

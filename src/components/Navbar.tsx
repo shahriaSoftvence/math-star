@@ -6,11 +6,11 @@ import { Menu, LogOut, User } from "lucide-react";
 import Profile from "../../public/assets/Profile.png";
 import Flag from "@/asset/Flag.png";
 import { TiStarFullOutline } from "react-icons/ti";
-import { FaCrown } from "react-icons/fa";
 import { useAuth, useAuthActions } from "../Redux/hooks";
 import { useGetProfileQuery } from "../Redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import rewardsBadge from '../../public/rewards.png';
 
 
 type NavbarProps = {
@@ -109,7 +109,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           </button>
           <div className="flex-col justify-center items-start gap-1.5 hidden md:flex">
             <h1 className="text-black text-xl lg:text-2xl font-medium">
-              Hi, {profileData?.data?.name || profileData?.data?.email}! Ready to
+              Hi, {profileData?.data?.grade || "Math Star"}! Ready to
               become a Math Star today?
             </h1>
             <div className="inline-flex justify-start items-start gap-3">
@@ -120,7 +120,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                 </span>
               </div>
               <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">
-                <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${profileData?.data?.reward?.icon}`} alt="Star" width={20} height={20} />
+                <Image src={profileData?.data?.reward?.icon ? `${process.env.NEXT_PUBLIC_BASE_URL}${profileData?.data?.reward?.icon}` : rewardsBadge} alt="Star" width={20} height={20} />
                 <span className="text-yellow-700 text-base font-bold">
                   {profileData?.data?.reward?.name || "Beginner"}
                 </span>

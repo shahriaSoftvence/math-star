@@ -269,13 +269,7 @@ export default function SpeedModePage() {
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-purple-50 p-4">
-      <div className="min-h-screen max-w-7xl mx-auto p-4 md:p-6">
-
-
-
-
-
-
+      <div className="min-h-screen max-w-7xl mx-auto">
         <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
           <div>
             <Link

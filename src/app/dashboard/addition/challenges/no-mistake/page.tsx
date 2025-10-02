@@ -271,7 +271,7 @@ export default function NoMistakePage() {
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-purple-50 p-4">
-      <div className="max-w-7xl mx-auto min-h-screen p-4 md:p-6">
+      <div className="max-w-7xl mx-auto min-h-screen">
         <div className="flex flex-col justify-start items-start mb-12 gap-2 md:mb-16">
           <div>
             <Link
@@ -311,7 +311,7 @@ export default function NoMistakePage() {
                 </div>
               </div>
             </div>
-            <div className="w-[330px] md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
+            <div className="w-[300px] md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
               <div className="self-stretch flex justify-between items-center">
                 <div className="h-16 flex flex-col">
                   <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">

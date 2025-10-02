@@ -365,7 +365,7 @@ export default function HundredQuestionsPage() {
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-purple-50 py-4">
-      <div className="max-w-[1440px] mx-auto min-h-screen p-4 md:p-6">
+      <div className="max-w-[1440px] mx-auto min-h-screen">
         <div className="flex items-center mb-6">
           <button
             onClick={() => router.back()}

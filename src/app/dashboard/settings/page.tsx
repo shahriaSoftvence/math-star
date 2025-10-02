@@ -204,7 +204,7 @@ export default function SettingsPage() {
               {/* Grade Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 font-Nunito mb-1">
-                  Grade
+                  Math Star Name
                 </label>
                 {isEditing ? (
                   <input
