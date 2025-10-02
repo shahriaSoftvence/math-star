@@ -141,7 +141,7 @@ const Header = () => {
         </nav>
         <div className="flex items-center gap-4">
 
-          <button onClick={() => handleSelectLanguage(language === 'de' ? 'en' : 'de')}>{language === 'de' ? <Image src={Flag} alt="Language Flag" className="w-10 h-auto" /> : <Image src={usaFlag} alt="Language Flag" className="w-10 h-auto rounded" />}</button>
+          <button className='cursor-pointer' onClick={() => handleSelectLanguage(language === 'de' ? 'en' : 'de')}>{language === 'de' ? <Image src={Flag} alt="Language Flag" className="w-10 h-auto" /> : <Image src={usaFlag} alt="Language Flag" className="w-10 h-auto rounded" />}</button>
 
           {/* Show different buttons based on authentication status */}
           {isAuthenticated && user ? (

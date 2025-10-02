@@ -7,10 +7,14 @@ import Link from 'next/link';
 
 
 const pricingFeatures = [
-    "Access to all Math Exercises",
-    "Reward System",
-    "Access to all Challenges",
-    "Monthly Cancellation"
+    // "Access to all Math Exercises",
+    // "Reward System",
+    // "Access to all Challenges",
+    // "Monthly Cancellation"
+    "Full Access to All Math Exercises",
+    "To experience All the challenges",
+    "Enjoyable Rewards and Achievements",
+    "Flexible Monthly Cancellation"
 ];
 
 const PricingSection = async () => {
@@ -44,7 +48,7 @@ const PricingSection = async () => {
                                 <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">
                                     {/* {plan?.plan_name} */}
                                     Math Star Plan
-                                    </h3>
+                                </h3>
                                 <div className="w-9 h-9  rounded-full flex items-center justify-center">
                                     <IoStar size={38} className="fill-yellow-500" />
                                 </div>
