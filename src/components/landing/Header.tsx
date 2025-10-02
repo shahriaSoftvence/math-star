@@ -81,13 +81,13 @@ const Header = () => {
             <Image src={Logo} alt="Math Star Logo" className="w-24 sm:w-30 md:w-40 h-auto" />
           </Link>
           <nav className="hidden md:flex md:items-center md:gap-8 lg:gap-16">
-            <Link href={{ pathname: "/", hash: "features" }} className="text-black text-lg font-medium font-Poppins leading-relaxed">
+            <Link href={{ pathname: "/", hash: "features" }} className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed">
               What is Math Star?
             </Link>
-            <Link href={{ pathname: "/", hash: "pricing" }} className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
+            <Link href={{ pathname: "/", hash: "pricing" }} className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed">
               Pricing
             </Link>
-            <Link href={{ pathname: "/", hash: "faq" }} className="text-black/80 text-lg font-medium font-Poppins leading-relaxed">
+            <Link href={{ pathname: "/", hash: "faq" }} className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed">
               FAQ
             </Link>
           </nav>
@@ -119,21 +119,21 @@ const Header = () => {
         >
           <Link
             href={{ pathname: "/", hash: "features" }}
-            className="text-black text-lg font-medium font-Poppins leading-relaxed"
+            className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
             What is Math Star?
           </Link>
           <Link
             href={{ pathname: "/", hash: "pricing" }}
-            className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
+            className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
             Pricing
           </Link>
           <Link
             href={{ pathname: "/", hash: "faq" }}
-            className="text-black/80 text-lg font-medium font-Poppins leading-relaxed"
+            className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
             FAQ
