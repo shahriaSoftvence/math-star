@@ -324,7 +324,7 @@ export default function SpeedModePage() {
               </div>
               <div className="self-stretch p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-black flex justify-center items-center gap-2">
                 <span className="text-center text-gray-800 text-4xl md:text-5xl font-bold font-Nunito leading-[60px]">
-                  {question.num1} + {question.num2} =
+                  {question.num1} x {question.num2} =
                 </span>
                 <div className="w-24 h-14 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
                   <span className="text-center text-black text-3xl md:text-4xl font-normal font-Nunito">

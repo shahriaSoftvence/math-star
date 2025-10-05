@@ -87,36 +87,63 @@ function PracticePageContent() {
 
 
   // Generate questions
+  // const generateQuestions = useCallback(() => {
+  //   const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+  //     let num2: number;
+
+  //     if (divisor === null) {
+  //       num2 = Math.floor(Math.random() * questionCount) + 1;
+  //     } else if (divisor.length === 1) {
+  //       num2 = divisor[0];
+  //     } else {
+  //       const randomIndex = Math.floor(Math.random() * divisor.length);
+  //       num2 = divisor[randomIndex];
+  //     }
+
+  //     const multiplier = Math.floor(Math.random() * questionCount) + 1;
+  //     const num1 = num2 * multiplier;
+  //     const answer = multiplier;
+
+  //     return { num1, num2, answer };
+  //   });
+
+  //   setQuestions(newQuestions);
+  //   setProgress(Array(questionCount).fill("pending"));
+  //   setCurrentQuestionIndex(0);
+  //   setUserAnswer("");
+  //   setFeedback({ type: null, message: "" });
+  //   setIsComplete(false);
+  // }, [questionCount, divisor]);
   const generateQuestions = useCallback(() => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      let num2: number;
+  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+    let num2: number;
 
-      if (divisor === null) {
-        // No divisor specified, random
-        num2 = Math.floor(Math.random() * questionCount) + 1;
-      } else if (divisor.length === 1) {
-        // Only one divisor
-        num2 = divisor[0];
-      } else {
-        // Multiple divisors, pick randomly
-        const randomIndex = Math.floor(Math.random() * divisor.length);
-        num2 = divisor[randomIndex];
-      }
+    if (divisor === null) {
+      num2 = Math.floor(Math.random() * questionCount) + 1;
+    } else if (divisor.length === 1) {
+      num2 = divisor[0];
+    } else {
+      const randomIndex = Math.floor(Math.random() * divisor.length);
+      num2 = divisor[randomIndex];
+    }
 
-      const multiplier = Math.floor(Math.random() * questionCount) + 1;
-      const num1 = num2 * multiplier;
-      const answer = multiplier;
+    // ✅ Limit multiplier so the answer (multiplier) is max 10
+    const multiplier = Math.floor(Math.random() * 10) + 1;
 
-      return { num1, num2, answer };
-    });
+    const num1 = num2 * multiplier;
+    const answer = multiplier;
 
-    setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill("pending"));
-    setCurrentQuestionIndex(0);
-    setUserAnswer("");
-    setFeedback({ type: null, message: "" });
-    setIsComplete(false);
-  }, [questionCount, divisor]);
+    return { num1, num2, answer };
+  });
+
+  setQuestions(newQuestions);
+  setProgress(Array(questionCount).fill("pending"));
+  setCurrentQuestionIndex(0);
+  setUserAnswer("");
+  setFeedback({ type: null, message: "" });
+  setIsComplete(false);
+}, [questionCount, divisor]);
+
 
   useEffect(() => {
     generateQuestions();

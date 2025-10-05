@@ -88,23 +88,43 @@ function PracticePageContent() {
     return match ? parseInt(match[1], 10) : null;
   }, [ranges]);
 
+  // const generateQuestions = useCallback(() => {
+  //   const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+  //     const num1 = Math.floor(Math.random() * questionCount) + 1
+  //     const num2Value = fixedNum2();
+  //     const num2 =
+  //       num2Value ?? Math.floor(Math.random() * questionCount) + 1;
+
+  //     return { num1, num2, answer: num1 * num2 };
+  //   });
+
+  //   setQuestions(newQuestions);
+  //   setProgress(Array(questionCount).fill("pending"));
+  //   setCurrentQuestionIndex(0);
+  //   setUserAnswer("");
+  //   setFeedback({ type: null, message: "" });
+  //   setIsComplete(false);
+  // }, [questionCount, fixedNum2]);
   const generateQuestions = useCallback(() => {
-    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-      const num1 = Math.floor(Math.random() * questionCount) + 1
-      const num2Value = fixedNum2();
-      const num2 =
-        num2Value ?? Math.floor(Math.random() * questionCount) + 1;
+  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+    // ✅ Limit num1 to max 10
+    const num1 = Math.floor(Math.random() * 10) + 1;
 
-      return { num1, num2, answer: num1 * num2 };
-    });
+    const num2Value = fixedNum2();
+    // ✅ Limit num2 to max 10 if not fixed
+    const num2 = num2Value ?? Math.floor(Math.random() * 10) + 1;
 
-    setQuestions(newQuestions);
-    setProgress(Array(questionCount).fill("pending"));
-    setCurrentQuestionIndex(0);
-    setUserAnswer("");
-    setFeedback({ type: null, message: "" });
-    setIsComplete(false);
-  }, [questionCount, fixedNum2]);
+    return { num1, num2, answer: num1 * num2 };
+  });
+
+  setQuestions(newQuestions);
+  setProgress(Array(questionCount).fill("pending"));
+  setCurrentQuestionIndex(0);
+  setUserAnswer("");
+  setFeedback({ type: null, message: "" });
+  setIsComplete(false);
+}, [questionCount, fixedNum2]);
+
 
 
   // Generate questions on component mount

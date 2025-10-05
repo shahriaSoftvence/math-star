@@ -1,25 +1,43 @@
 import { baseApi } from "@/Redux/api/baseApi";
-import { AchievementsResponse } from "../../../../type/practise";
+import { AchievementsResponse, ProgressResponse } from "../../../../type/progress";
 
 const rewardApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getRewards: builder.query({
-        query: () => ({
-            url: "/rewards/",
-            method: "GET",
+            query: () => ({
+                url: "/rewards/",
+                method: "GET",
+            }),
+            providesTags: ["rewards"],
         }),
-        providesTags: ["rewards"],
+        getProgress: builder.query<ProgressResponse, void>({
+            query: () => ({
+                url: "/progress-today/",
+                method: "GET",
+            }),
+            providesTags: [
+                "rewards",
+                "Division",
+                "Additions",
+                "Multiplication",
+                "Subtraction",
+            ],
         }),
-
-        getMyAchievements: builder.query<AchievementsResponse, void>({
-        query: () => ({
-            url: "/my-achievements/",
-            method: "GET",
+        getAchievement: builder.query<AchievementsResponse, void>({
+            query: () => ({
+                url: "/my-achievements/",
+                method: "GET",
+            }),
+            providesTags: [
+                "rewards",
+                "Division",
+                "Additions",
+                "Multiplication",
+                "Subtraction",
+            ],
         }),
-        providesTags: ["rewards"],
-        }),
-    }), 
+    }),
 });
 
 
-export const { useGetRewardsQuery, useGetMyAchievementsQuery } = rewardApi;
+export const { useGetRewardsQuery, useGetProgressQuery, useGetAchievementQuery } = rewardApi;

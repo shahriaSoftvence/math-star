@@ -24,7 +24,7 @@ export default function ChallengeCard({ icon, title, description, bgColor, iconC
   <div className="flex-grow"></div>
 
   <p className="text-xs bg-white/20 rounded-md px-4 w-full py-0.5 mt-2 font-medium">
-    {display_top_score}
+    {display_top_score ? `${display_top_score}` : "No High Score"}
   </p>
 </div>
 

@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { ArrowLeft, ShieldAlert } from 'lucide-react';
 import { IoStarSharp } from 'react-icons/io5';
 import RewardCard from '@/components/RewardCard';
-import { useGetRewardsQuery } from '@/Redux/reward/rewardApi';
 import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 import LoadingFile from '@/asset/loader.svg'
+import { useGetRewardsQuery } from '@/Redux/features/reward/rewardApi';
 
 interface Reward {
   name: string;

@@ -6,10 +6,10 @@ import { IoStarSharp } from "react-icons/io5";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useIsPremium } from '@/Redux/hooks';
-import { useGetProgressQuery } from '@/Redux/reward/rewardApi';
 import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 import rewardsBadge from '../../../public/rewards.png';
 import LoadingFile from '@/asset/loader.svg'
+import { useGetProgressQuery } from '@/Redux/features/reward/rewardApi';
 
 const practiceItems = [
   { link: "/dashboard/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },

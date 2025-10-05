@@ -19,8 +19,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import SubscriptionCard from "@/components/SubscriptionCard";
-import { useGetMyAchievementsQuery } from "@/Redux/features/reward/rewardApi";
-import { Achievement } from "../../../../type/practise";
+import { useGetAchievementQuery } from "@/Redux/features/reward/rewardApi";
+import { Achievement } from "../../../../type/progress";
 
 // const achievements = [
 //   {
@@ -53,7 +53,7 @@ export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
   const [updateProfile] = useUpdateProfileMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data: achievementData } = useGetMyAchievementsQuery();
+  const { data: achievementData } = useGetAchievementQuery();
   // console.log("form my test", profileData);
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
@@ -62,7 +62,8 @@ export default function ProfilePage() {
   const [showAll, setShowAll] = useState(false);
 
   const achievements = achievementData?.data || [];
-  const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
+const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
+
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -176,7 +177,7 @@ export default function ProfilePage() {
             </h3>
           </div>
           <div className="space-y-4">
-            {visibleAchievements.map((ach: Achievement) => (
+            {visibleAchievements?.map((ach: Achievement) => (
               <div
                 key={ach.id}
                 className="p-4 rounded-xl border flex items-center gap-4 bg-green-50 border-green-200"
