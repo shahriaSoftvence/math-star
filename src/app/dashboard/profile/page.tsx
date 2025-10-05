@@ -22,33 +22,6 @@ import SubscriptionCard from "@/components/SubscriptionCard";
 import { useGetAchievementQuery } from "@/Redux/features/reward/rewardApi";
 import { Achievement } from "../../../../type/progress";
 
-// const achievements = [
-//   {
-//     icon: "⭐",
-//     title: "First Star!",
-//     description: "Earned your first star",
-//     unlocked: true,
-//   },
-//   {
-//     icon: "⚡",
-//     title: "Speed Demon",
-//     description: "Completed Speed Mode 10 times",
-//     unlocked: true,
-//   },
-//   {
-//     icon: "🏆",
-//     title: "Perfect Score",
-//     description: "Got 100% in a challenge",
-//     unlocked: true,
-//   },
-//   {
-//     icon: "🧮",
-//     title: "Math Master",
-//     description: "Practice all 4 operations",
-//     unlocked: false,
-//   },
-// ];
-
 export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
   const [updateProfile] = useUpdateProfileMutation();

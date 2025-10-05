@@ -1,0 +1,540 @@
+{
+  "project": "mathstar",
+  "translations": {
+    "en": {
+      "homepage": {
+        "hero": {
+          "title_line1": "Turn Screen Time Into Real Study Time",
+          "title_line2": "Elementary School Math Made Fun",
+          "description": "Become a math star! Study with interactive exercises and master exciting challenges.",
+          "sign_up": "Sign Up",
+          "sign_in": "Sign In",
+          "image_alt": "Children learning on a computer"
+        },
+        "features": {
+          "title": "What is Math Star?",
+          "description": "Our special features that make your child's learning more effective and enjoyable",
+          "items": [
+            {
+              "title": "Created By Teachers",
+              "description": "Math Star is an e-learning platform created by experienced elementary school teachers. We all share a common goal of helping children learn.",
+              "highlight": "It's our passion!"
+            },
+            {
+              "title": "Basic Math Operations",
+              "description": "We are committed to helping children improve their skills in the four basic math operations:",
+              "operations": [
+                "Addition",
+                "Subtraction",
+                "Multiplication",
+                "Division"
+              ]
+            },
+            {
+              "title": "Personalized Learning",
+              "description": "Children can create exercises tailored to their needs at their personal learning pace - quick and easy.",
+              "highlight": "Never repetitive, thanks to adaptive exercise generation."
+            },
+            {
+              "title": "Safe Learning Environment",
+              "description": "Math Star is free from ads, games and other distractions. We don't provide tools to communicate or connect with other users.",
+              "highlight": "Your child's safety is our top priority."
+            }
+          ]
+        },
+        "pricing": {
+          "title": "Our Pricing Policy",
+          "description": "Money is not our motivation! Therefore, we want to make Math Star accessible to everybody at the lowest price possible.",
+          "plan_name": "Math Star Plan",
+          "features": [
+            "Full Access to All Math Exercises",
+            "To experience All the challenges",
+            "Enjoyable Rewards and Achievements",
+            "Flexible Monthly Cancellation"
+          ],
+          "trial_button": "Start 3 Days Trial",
+          "subscribed_button": "Subscribed",
+          "no_card_required": "No credit card required to start.",
+          "contact_text": "Have questions?",
+          "contact_link": "Contact Our Team"
+        },
+        "faq": {
+          "title": "Frequently Asked Questions",
+          "description": "Find answers to common questions about MathStar.",
+          "questions": [
+            {
+              "question": "Are there any age regulations for Math Star?",
+              "answer": "Yes, Math Star is safe for children of any age. However, for legal reasons, you must be older than 16 years to sign up for Math Star. Children under the age of 16 must use an account created by their parents."
+            },
+            {
+              "question": "Is Math Star for free?",
+              "answer": "Yes and no. You can create an account for free and use the addition area without any payments. However, to unlock the subtraction, multiplication and division areas you must have a subscription."
+            },
+            {
+              "question": "How does a Math Star subscription work?",
+              "answer": "By subscribing you get access to all Math Star features for one month. You can renew your subscription manually or choose our automatic renewal service. Subscription can only be made by users of legal age and in accordance with the guidelines of our financial provider Stripe."
+            },
+            {
+              "question": "How do I cancel a subscription?",
+              "answer": "Subscriptions end automatically after one month. You do not have to cancel! If you have activated our automatic renewal service, simply turn it off with one click and your subscription runs out at the end of your current one-month plan."
+            },
+            {
+              "question": "Can I track my child's progress?",
+              "answer": "Yes, the dashboard provides a progress overview and insights into your child's learning journey. Our star rewards show you how many stars your child has collected. Each star represents one correct answer."
+            },
+            {
+              "question": "What devices are supported?",
+              "answer": "Math Star works on any device with a web browser, including desktops, laptops, tablets, and smartphones. For the best experience, however, we recommend devices with a larger screen."
+            }
+          ],
+          "support_text": "Still have questions? We are here to help!",
+          "support_button": "Contact Support"
+        }
+      },
+      "navbar": {
+        "greeting": "Hi, {grade}! Ready to become a Math Star today?",
+        "loading": "Loading...",
+        "stars_text": "{count} Stars",
+        "reward_text": "{name}",
+        "profile": "Profile",
+        "logout": "Logout",
+        "toggle_sidebar": "Toggle sidebar",
+        "profile_menu": "Profile menu",
+        "country_flag_alt": "Country flag",
+        "user_avatar_alt": "User Avatar",
+        "reward_icon_alt": "Reward icon"
+      },
+      "header": {
+        "logo_alt": "Math Star Logo",
+        "what_is_math_star": "What is Math Star?",
+        "pricing": "Pricing",
+        "faq": "FAQ",
+        "german_flag_alt": "German Language Flag",
+        "usa_flag_alt": "USA Language Flag",
+        "dashboard": "Dashboard",
+        "logout": "Logout",
+        "sign_in": "Sign In"
+      },
+      "footer": {
+        "logo_alt": "Math Star Logo",
+        "description": "Turning math into an exciting adventure for children aged 5–10 with playful, adaptive learning.",
+        "quick_links_title": "Quick Links",
+        "home": "Home",
+        "how_it_works": "How It Works",
+        "pricing": "Pricing",
+        "support_title": "Support",
+        "privacy_policy": "Privacy Policy",
+        "terms_conditions": "Terms & Conditions",
+        "faqs": "FAQs",
+        "contact_us": "Contact Us",
+        "copyright": "© {year} Math Star. All rights reserved."
+      },
+      "dashboard": {
+        "loading": "Loading...",
+        "error_message": "Could not load your progress. Please try again later!",
+        "practice_section": {
+          "addition": {
+            "title": "Practice Addition",
+            "description": "Improve your basic sums"
+          },
+          "subtraction": {
+            "title": "Practice Subtraction",
+            "description": "Sharpen your subtraction skills"
+          },
+          "multiplication": {
+            "title": "Practice Multiplication",
+            "description": "Master your times tables"
+          },
+          "division": {
+            "title": "Practice Division",
+            "description": "Divide and conquer"
+          }
+        },
+        "progress_section": {
+          "title": "Your Progress Today",
+          "practice_time": "Practice Time:",
+          "minutes": "Minutes",
+          "stars_earned": "Stars Earned:",
+          "best_challenge_score": "Best Challenge Score:",
+          "daily_goal_progress": "Daily Goal Progress:"
+        },
+        "activity_section": {
+          "title": "Recent Activity",
+          "no_activity": "No recent activity to show."
+        },
+        "star_balance": {
+          "title": "Your Star Balance",
+          "top_up_message": "Top up to win Rewards",
+          "badge_alt": "Reward Badge"
+        }
+      },
+      "operations": {
+        "addition": {
+          "name": "Addition",
+          "symbol": "+",
+          "color": "blue",
+          "terms": {
+            "carry": "carrying over",
+            "no_carry": "no carrying over"
+          }
+        },
+        "subtraction": {
+          "name": "Subtraction",
+          "symbol": "-",
+          "color": "pink",
+          "terms": {
+            "borrow": "borrowing",
+            "no_borrow": "no borrowing"
+          }
+        },
+        "multiplication": {
+          "name": "Multiplication",
+          "symbol": "×",
+          "color": "green",
+          "terms": {
+            "basic": "basic facts",
+            "extended": "extended facts"
+          }
+        },
+        "division": {
+          "name": "Division",
+          "symbol": "÷",
+          "color": "purple",
+          "terms": {
+            "basic": "basic division",
+            "remainder": "division with remainder"
+          }
+        }
+      },
+      "shared": {
+        "navigation": {
+          "go_back": "Go Back",
+          "cancel": "Cancel"
+        },
+        "exercise_section": {
+          "title": "{operation} exercise.",
+          "number_range": "number range",
+          "continue_with": "Continue with",
+          "go": "Go",
+          "selected_ranges": "[ {ranges} ]"
+        },
+        "challenge_section": {
+          "title": "{operation} challenges.",
+          "challenges": {
+            "no_mistake": {
+              "title": "No Mistake",
+              "description": "One mistake ends session"
+            },
+            "speed_mode": {
+              "title": "Speed Mode",
+              "description": "Race against time!"
+            },
+            "hundred_questions": {
+              "title": "100 Questions",
+              "description": "Complete all 100 questions"
+            },
+            "whats_missing": {
+              "title": "What's Missing?",
+              "description": "Fill in the missing numbers"
+            }
+          }
+        },
+        "challenge_cards": {
+          "display_top_score": "Top Score: {score}",
+          "no_high_score": "No High Score"
+        },
+        "select_questions": {
+          "title": "Select Number of Questions",
+          "questions": "Questions",
+          "practice_tips": "Practice Tips:",
+          "tips": [
+            "Start with fewer questions and gradually increase",
+            "Focus on accuracy first, then speed",
+            "Use the help chart on the left side if you need assistance",
+            "Take breaks between practice sessions"
+          ]
+        },
+        "practice": {
+          "progress": "Progress",
+          "help_chart": "Help chart",
+          "reset": "Reset",
+          "feedback": {
+            "correct": {
+              "title": "Right Answer🎉 !",
+              "message": "Your answer is absolutely right!"
+            },
+            "incorrect": {
+              "title": "Wrong Answer😢 !",
+              "message": "Now enter the right answer to continue"
+            }
+          }
+        },
+        "challenge_screens": {
+          "ready_screen": {
+            "title": "Ready to Start?",
+            "descriptions": {
+              "hundred_questions": "Solve all 100 problems!",
+              "no_mistake": "The challenge ends on your first mistake, You have 10 seconds for each problem.",
+              "speed_mode": "Answer as many questions as you can in 5 minutes!",
+              "whats_missing": "Fill in the missing numbers in 5 minutes!"
+            },
+            "start_button": "Start Challenge"
+          },
+          "game_elements": {
+            "timer": {
+              "remaining": "Remaining",
+              "time_format": "{minutes}:{seconds}"
+            },
+            "question": "Question",
+            "score": "Score",
+            "status_indicators": {
+              "current": "Current",
+              "correct": "Correct",
+              "wrong": "Wrong"
+            }
+          },
+          "instructions": {
+            "no_mistake": "The challenge ends on your first mistake, You have 5 seconds for each problem.",
+            "speed_mode": "Solve as many problems as possible in 5 minutes",
+            "whats_missing": "You have 5 minutes to find as many missing numbers as possible.",
+            "hundred_questions": "Solve all 100 problems"
+          }
+        },
+        "numpad": {
+          "backspace": "⌫",
+          "submit": "✓"
+        },
+        "results": {
+          "questions_answered": "Questions Answered: {count}",
+          "save_success": "Challenge Score Saved!",
+          "save_error": "Failed to save Score.",
+          "practice_saved": "Practice data saved successfully!",
+          "practice_failed": "Failed to save practice"
+        },
+        "loading": {
+          "loading_practice": "Loading Practice...",
+          "loading": "Loading..."
+        }
+      },
+      "profile": {
+        "page_title": "My Profile",
+        "user_info": {
+          "math_star_level": "Math Star Level {level}",
+          "keep_practicing": "Keep practicing to reach Level {nextLevel} !",
+          "edit_profile": "Edit Profile"
+        },
+        "achievements": {
+          "title": "Achievements",
+          "see_more": "See More",
+          "see_less": "See Less",
+          "empty_state": "No achievements yet. Keep practicing to earn achievements!"
+        },
+        "subscription": {
+          "title": "Subscription",
+          "active": "Active",
+          "inactive": "Inactive",
+          "manage_subscription": "Manage Subscription"
+        },
+        "notifications": {
+          "image_upload_success": "Image uploaded successfully!",
+          "image_upload_error": "Failed to update profile picture.",
+          "profile_update_success": "Profile updated successfully!",
+          "profile_update_error": "Failed to update profile."
+        },
+        "buttons": {
+          "edit": "Edit",
+          "save": "Save",
+          "cancel": "Cancel",
+          "upload_photo": "Upload Photo"
+        },
+        "labels": {
+          "name": "Name",
+          "email": "Email",
+          "grade": "Grade",
+          "stars": "Stars",
+          "level": "Level",
+          "join_date": "Member since"
+        },
+        "navigation": {
+          "back": "Back",
+          "settings": "Settings",
+          "dashboard": "Dashboard"
+        }
+      },
+      "rewards": {
+        "page_title": "Star Rewards",
+        "star_balance": "Your Star Balance",
+        "loading": "Loading...",
+        "error_message": "Could not load rewards. Please try again later!",
+        "rewards_list": {
+          "empty_state": "No rewards available yet. Keep practicing to unlock rewards!"
+        },
+        "reward_card": {
+          "unlocked": "Unlocked",
+          "locked": "Locked",
+          "stars_required": "{count} stars required",
+          "unlock_message": "Earn {remaining} more stars to unlock",
+          "achieved_message": "You've achieved this reward!"
+        },
+        "navigation": {
+          "back": "Back to Dashboard"
+        }
+      },
+      "settings": {
+        "page_title": "Settings",
+        "sections": {
+          "personal_info": {
+            "title": "Personal Information",
+            "edit_button": "Edit",
+            "save_button": "Save",
+            "fields": {
+              "email": "Email",
+              "name": "Name",
+              "math_star_name": "Math Star Name"
+            }
+          },
+          "change_password": {
+            "title": "Change Password",
+            "current_password": "Current Password",
+            "new_password": "New Password",
+            "confirm_password": "Confirm New Password",
+            "placeholders": {
+              "current_password": "Enter current password",
+              "new_password": "Enter new password",
+              "confirm_password": "Confirm new password"
+            },
+            "submit_button": "Change Password",
+            "loading_button": "Changing Password..."
+          },
+          "about": {
+            "title": "About Math Star",
+            "version": "Version 1.0.0",
+            "description": "Made with ❤️ for learning"
+          }
+        },
+        "notifications": {
+          "profile_update_success": "Profile updated successfully!",
+          "profile_update_error": "Failed to update profile.",
+          "password_change_success": "Password changed successfully!",
+          "password_change_error": "Failed to change password.",
+          "validation_errors": {
+            "passwords_mismatch": "New passwords do not match.",
+            "password_too_short": "New password must be at least 8 characters long.",
+            "same_password": "New password must be different from current password."
+          }
+        },
+        "navigation": {
+          "back": "Back to Profile"
+        }
+      },
+      "subscription": {
+        "page_title": "Subscription",
+        "subtitle": "Manage your plan and payments",
+        "loading": "Loading...",
+        "auto_renewal": {
+          "title": "Auto Renewal",
+          "description": "Automatically renew subscription",
+          "next_charge": "Next charge on: {date}"
+        },
+        "quick_actions": {
+          "title": "Quick Actions",
+          "renew_now": "Renew Now",
+          "renewing": "Renewing your plan..."
+        },
+        "payment_methods": {
+          "title": "Payment Methods",
+          "add_card": "Add Card",
+          "no_methods": "No payment methods on file. Add a card to continue your subscription.",
+          "card_display": "{brand} •••• {last4}",
+          "expires": "Expires on {month} / {year}",
+          "default": "Default",
+          "remove_card": "Remove Card",
+          "remove_dialog": {
+            "title": "Remove this Card?",
+            "description": "Are you sure want to remove this card?",
+            "cancel": "No",
+            "confirm": "Continue"
+          }
+        },
+        "billing_history": {
+          "title": "Billing History",
+          "empty_state": "No Billing History Found",
+          "see_more": "See More",
+          "see_less": "See Less",
+          "status": {
+            "paid": "Paid",
+            "pending": "Pending",
+            "failed": "Failed"
+          },
+          "free_plan": "Free Plan"
+        },
+        "notifications": {
+          "subscription_renewed": "Subscription renewed successfully!",
+          "auto_renewal_updated": "Auto-renewal setting updated!",
+          "payment_method_added": "Payment method added successfully!",
+          "payment_method_removed": "Payment method removed successfully!",
+          "errors": {
+            "renew_failed": "Failed to renew subscription.",
+            "auto_renew_failed": "Failed to update auto-renewal setting.",
+            "add_payment_failed": "Failed to add payment method.",
+            "remove_payment_failed": "Failed to remove payment method."
+          }
+        },
+        "navigation": {
+          "back": "Back to Settings"
+        }
+      },
+      "congratulations_screen": {
+        "title": "🎉 Congratulations! 🎉",
+        "earned_message": "You have Earned",
+        "encouragement": "Keep up the amazing work! Your dedication to learning math is paying off!",
+        "buttons": {
+          "view_all_rewards": "View All Rewards",
+          "continue_learning": "Continue Learning"
+        },
+        "accessibility": {
+          "medal_icon": "Gold medal",
+          "star_icon": "Star"
+        }
+      },
+      "game_result_screen": {
+        "title": "Game Over!",
+        "final_score": "Final Score: {score}",
+        "questions_answered": "{count}",
+        "buttons": {
+          "try_again": "Try Again",
+          "continue": "Continue"
+        },
+        "accessibility": {
+          "close_button": "Close game results"
+        }
+      },
+      "password_changed_popup": {
+        "title": "Password Changed!",
+        "message": "Now you can login to your account",
+        "button": "Go To Login"
+      },
+      "subscription_card": {
+        "title": "Current Subscription",
+        "no_plan": "No Plan",
+        "free_trial": "/ Free Trial",
+        "renews_on": "Renews on: {date}",
+        "actions": {
+          "cancel_subscription": "Cancel Subscription",
+          "buy_subscription": "Buy Subscription",
+          "loading": "Loading..."
+        },
+        "cancel_dialog": {
+          "title": "Are you sure?",
+          "description": "Are you sure you want to cancel your subscription?",
+          "cancel": "No",
+          "confirm": "Continue"
+        },
+        "notifications": {
+          "subscription_cancelled": "Subscription cancelled successfully!",
+          "cancel_failed": "Failed to cancel subscription"
+        }
+      }
+    }
+  }
+}

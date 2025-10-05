@@ -43,7 +43,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm">
-          <p>© 2025 MathFun. All rights reserved.</p>
+          <p>@ {new Date().getFullYear()} Math Star. All rights reserved.</p>
           <div className="flex flex-col md:flex-row items-center gap-0.5 md:gap-3 mt-6 md:mt-0">
             <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
             <Dot />

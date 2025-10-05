@@ -35,7 +35,7 @@ export default function CongratulationsScreen({ onContinue, viewRewards, rewardN
         </div>
 
         {/* Heading */}
-        <h1 className="text-gray-800 text-[32px] font-bold">
+        <h1 className="text-gray-800 text-3xl font-bold">
           🎉 Congratulations! 🎉
         </h1>
         
