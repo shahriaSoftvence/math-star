@@ -533,6 +533,28 @@
         "notifications": {
           "subscription_cancelled": "Subscription cancelled successfully!",
           "cancel_failed": "Failed to cancel subscription"
+        },
+        "payment_pages": {
+          "cancel": {
+            "title": "Payment Canceled",
+            "message": "Your payment was not completed. No charges have been made to your account.",
+            "button": "Try Again"
+          },
+          "card_error": {
+            "title": "Card Addition Canceled",
+            "message": "The card addition process was not completed. Please try again.",
+            "button": "Subscription"
+          },
+          "card_success": {
+            "title": "Card Added",
+            "message": "Your new payment method has been added successfully.",
+            "button": "Subscription"
+          },
+          "success": {
+            "title": "Payment Successful",
+            "message": "Thank you for your payment. Your payment has been processed successfully.",
+            "button": "Dashboard"
+          }
         }
       }
     }
