@@ -14,6 +14,7 @@ import { useAuth, useAuthActions } from '../../Redux/hooks';
 import { LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
+import LanguageSwitcher from '../languageSwitcher';
 function useOnClickOutside(
   ref: React.RefObject<HTMLElement>,
   handler: (event: MouseEvent | TouchEvent) => void
@@ -42,15 +43,9 @@ const Header = () => {
   const { isAuthenticated, user } = useAuth();
   const { logout } = useAuthActions();
   const router = useRouter();
-  const [language, setLanguage] = useState<"en" | "de">('de');
   const {
     data: profileData
   } = useGetProfileQuery();
-  // const { setCurrentLanguage, isTranslating } = useLanguage();
-
-
-
-  // Prevent hydration mismatch by only rendering after client-side mount
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -66,12 +61,6 @@ const Header = () => {
     router.push('/dashboard');
     setIsProfileOpen(false);
   };
-
-  const handleSelectLanguage = (lang: "en" | "de") => {
-    setLanguage(lang);
-    // setCurrentLanguage(lang);
-  };
-
   // Don't render until client-side to prevent hydration mismatch
   if (!isClient) {
     return (
@@ -140,8 +129,7 @@ const Header = () => {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-
-          <button className='cursor-pointer' onClick={() => handleSelectLanguage(language === 'de' ? 'en' : 'de')}>{language === 'de' ? <Image src={Flag} alt="Language Flag" className="w-10 h-auto" /> : <Image src={usaFlag} alt="Language Flag" className="w-10 h-auto rounded" />}</button>
+          <LanguageSwitcher/>
 
           {/* Show different buttons based on authentication status */}
           {isAuthenticated && user ? (

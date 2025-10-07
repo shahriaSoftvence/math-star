@@ -12,7 +12,8 @@
           "image_alt": "Children learning on a computer"
         },
         "features": {
-          "title": "What is Math Star?",
+          "title1": "What is",
+          "title2": "Math Star?",
           "description": "Our special features that make your child's learning more effective and enjoyable",
           "items": [
             {
@@ -64,7 +65,7 @@
           "questions": [
             {
               "question": "Are there any age regulations for Math Star?",
-              "answer": "Yes, Math Star is safe for children of any age. However, for legal reasons, you must be older than 16 years to sign up for Math Star. Children under the age of 16 must use an account created by their parents."
+              "answer": "Yes. Math Star is safe for children of any age. However, for legal reasons, you must be older than 16 years to sign up for Math Star. Children under the age of 16 must use an account created by their parents."
             },
             {
               "question": "Is Math Star for free?",
@@ -76,14 +77,14 @@
             },
             {
               "question": "How do I cancel a subscription?",
-              "answer": "Subscriptions end automatically after one month. You do not have to cancel! If you have activated our automatic renewal service, simply turn it off with one click and your subscription runs out at the end of your current one-month plan."
+              "answer": "Subscriptions end automatically after one month. You do not have to cancel! If you have activated our automatic renewal service, simply turn it off with one click and your subscription runs out at the end of your current one-month plan. If you wish to cancel within the 3-day trial period, simply click the button \"Cancel Subscription\" on your dashboard."
             },
             {
               "question": "Can I track my child's progress?",
               "answer": "Yes, the dashboard provides a progress overview and insights into your child's learning journey. Our star rewards show you how many stars your child has collected. Each star represents one correct answer."
             },
             {
-              "question": "What devices are supported?",
+              "question": "On which devices does Math Star work?",
               "answer": "Math Star works on any device with a web browser, including desktops, laptops, tablets, and smartphones. For the best experience, however, we recommend devices with a larger screen."
             }
           ],
@@ -134,19 +135,19 @@
         "error_message": "Could not load your progress. Please try again later!",
         "practice_section": {
           "addition": {
-            "title": "Practice Addition",
+            "title": "Addition",
             "description": "Improve your basic sums"
           },
           "subtraction": {
-            "title": "Practice Subtraction",
+            "title": "Subtraction",
             "description": "Sharpen your subtraction skills"
           },
           "multiplication": {
-            "title": "Practice Multiplication",
+            "title": "Multiplication",
             "description": "Master your times tables"
           },
           "division": {
-            "title": "Practice Division",
+            "title": "Division",
             "description": "Divide and conquer"
           }
         },
@@ -570,7 +571,8 @@
           "image_alt": "Kinder lernen am Computer"
         },
         "features": {
-          "title": "Was ist Math Star?",
+          "title1": "Was ist",
+          "title2": "Math Star?",
           "description": "Unsere besonderen Funktionen, die das Lernen Ihres Kindes effektiver und angenehmer machen",
           "items": [
             {
@@ -622,7 +624,7 @@
           "questions": [
             {
               "question": "Gibt es Altersbeschränkungen für Math Star?",
-              "answer": "Ja, Math Star ist für Kinder jeden Alters sicher. Aus rechtlichen Gründen müssen Sie jedoch älter als 16 Jahre sein, um sich für Math Star zu registrieren. Kinder unter 16 Jahren müssen ein von ihren Eltern erstelltes Konto verwenden."
+              "answer": "Ja. Math Star ist für Kinder jeden Alters sicher. Aus rechtlichen Gründen müssen Sie jedoch älter als 16 Jahre sein, um sich für Math Star zu registrieren. Kinder unter 16 Jahren müssen ein von ihren Eltern erstelltes Konto verwenden."
             },
             {
               "question": "Ist Math Star kostenlos?",
@@ -634,14 +636,14 @@
             },
             {
               "question": "Wie kündige ich ein Abonnement?",
-              "answer": "Abonnements enden automatisch nach einem Monat. Sie müssen nicht kündigen! Wenn Sie unseren automatischen Verlängerungsservice aktiviert haben, schalten Sie ihn einfach mit einem Klick aus und Ihr Abonnement läuft am Ende Ihres aktuellen Monatsplans aus."
+              "answer": "Abonnements enden automatisch nach einem Monat. Sie müssen nicht kündigen! Wenn Sie unseren automatischen Verlängerungsservice aktiviert haben, schalten Sie ihn einfach mit einem Klick aus und Ihr Abonnement läuft am Ende Ihres aktuellen Monatsplans aus. Wenn Sie innerhalb der 3-tägigen Testphase kündigen möchten, klicken Sie einfach auf die Schaltfläche \"Abonnement kündigen\" in Ihrem Dashboard."
             },
             {
               "question": "Kann ich den Fortschritt meines Kindes verfolgen?",
               "answer": "Ja, das Dashboard bietet eine Fortschrittsübersicht und Einblicke in die Lernreise Ihres Kindes. Unsere Sternen-Belohnungen zeigen Ihnen, wie viele Sterne Ihr Kind gesammelt hat. Jeder Stern steht für eine richtige Antwort."
             },
             {
-              "question": "Welche Geräte werden unterstützt?",
+              "question": "Auf welchen Geräten funktioniert Math Star?",
               "answer": "Math Star funktioniert auf jedem Gerät mit einem Webbrowser, einschließlich Desktops, Laptops, Tablets und Smartphones. Für das beste Erlebnis empfehlen wir jedoch Geräte mit einem größeren Bildschirm."
             }
           ],
@@ -692,19 +694,19 @@
         "error_message": "Fortschritt konnte nicht geladen werden. Bitte versuchen Sie es später noch einmal!",
         "practice_section": {
           "addition": {
-            "title": "Addition üben",
+            "title": "Addition",
             "description": "Verbessere deine Grundrechenarten"
           },
           "subtraction": {
-            "title": "Subtraktion üben",
+            "title": "Subtraktion",
             "description": "Schärfe deine Subtraktionsfähigkeiten"
           },
           "multiplication": {
-            "title": "Multiplikation üben",
+            "title": "Multiplikation",
             "description": "Meistere dein Einmaleins"
           },
           "division": {
-            "title": "Division üben",
+            "title": "Division",
             "description": "Teile und herrsche"
           }
         },
