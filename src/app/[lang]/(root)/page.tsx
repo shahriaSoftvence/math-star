@@ -5,20 +5,19 @@ import FeaturesSection from './_component/FeaturesSection';
 import PricingSection from './_component/PricingSection';
 import FaqSection from './_component/FaqSection';
 
-interface LandingPageProps {
-  params: {
-    lang: string;
-  };
-}
-
-export default function LandingPage({ params }: LandingPageProps) {
-  return (
+export default async function LandingPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+return (
     <div className="bg-white overflow-hidden">
       <main>
-        <HeroSection lang={params.lang} />
-        <FeaturesSection lang={params.lang}  />
+        <HeroSection lang={lang} />
+        <FeaturesSection lang={lang}  />
         <PricingSection  />
-        <FaqSection lang={params.lang} />
+        <FaqSection lang={lang} />
       </main>
     </div>
   );

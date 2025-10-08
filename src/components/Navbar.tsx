@@ -11,7 +11,6 @@ import { useGetProfileQuery } from "../Redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import rewardsBadge from '@/asset/images/rewards.png';
-import { getTranslations } from "@/lib/translations";
 
 
 type NavbarProps = {

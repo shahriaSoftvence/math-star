@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Logo from '../../../public/assets/Logo.png';
 import Flag from '@/asset/Flag.png';
-import usaFlag from '@/asset/usa.png';
 import Profile from '../../../public/assets/Profile.png';
 import { HamburgerMenu } from './HamburgerMenu'; // <-- Import HamburgerMenu
 import { useAuth, useAuthActions } from '../../Redux/hooks';

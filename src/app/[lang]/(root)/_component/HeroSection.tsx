@@ -3,17 +3,14 @@ import Image from "next/image";
 import Lines from "@/asset/Lines.png";
 import Link from "next/link";
 import HeroMedia from "./HeroMedia";
-import { getTranslations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
+import { getDictionary } from "../../dictionaries";
 // import HeroMedia from "./HeroMedia";
 
-interface HeroSectionProps {
-  lang: string;
-}
 
-const HeroSection = async ({ lang }: HeroSectionProps) => {
-  const language = lang as 'en' | 'de';
-  const { t } = getTranslations(language, 'homepage');
+
+const HeroSection = async ({ lang }: { lang: string }) => {
+  const { homepage } = await getDictionary(lang);
 
   return (
     <div className="w-full pt-[200px] pb-[100px] min-h-[800px] bg-gray-50 flex items-center justify-center relative overflow-hidden">
@@ -25,41 +22,37 @@ const HeroSection = async ({ lang }: HeroSectionProps) => {
         >
           <h1 className="text-3xl md:text-4xl xl:text-5xl font-semibold font-Poppins leading-tight">
             <span className="text-blue-600">
-              {/* Turn Screen Time Into real study time */}
-              {t('hero.title_line1')}
+              {homepage.hero.title_line1}
             </span>
             <br />
             <span className="bg-gradient-to-r from-[#0D1216] to-[#008EFF] inline-block text-transparent bg-clip-text">
-              {/* Elementary school math made fun */}
-              {t('hero.title_line2')}
+              {homepage.hero.title_line2}
             </span>
           </h1>
           <p className="text-black text-lg xl:text-xl font-medium font-Quicksand leading-loose max-w-lg">
-            {/* Become a math star! Study with Interactive exercises and master
-            exciting challenges. */}
-             {t('hero.description')}
+            {homepage.hero.description}
           </p>
           <div className="flex items-center gap-3">
-  <Link href="/auth/signup">
-    <Button
-      className="w-full sm:w-auto h-10 bg-blue-500 hover:bg-blue-600 sm:h-12 lg:h-14 text-base sm:text-lg lg:text-xl font-bold"
-      variant="default"
-    >
-      {t("hero.sign_up")}
-    </Button>
-  </Link>
+            <Link href="/auth/signup">
+              <Button
+                className="w-full sm:w-auto h-10 bg-blue-500 hover:bg-blue-600 sm:h-12 lg:h-14 text-base sm:text-lg lg:text-xl font-bold"
+                variant="default"
+              >
+                {homepage.hero.sign_up}
+              </Button>
+            </Link>
 
-  <Link href="/auth/signin">
-    <Button
-      className="w-full sm:w-auto h-10 bg-gray-100 hover:bg-gray-200 sm:h-12 lg:h-14 text-base sm:text-lg lg:text-xl font-bold"
-      variant="outline"
-    >
-      {t("hero.sign_in")}
-    </Button>
-  </Link>
-</div>
+            <Link href="/auth/signin">
+              <Button
+                className="w-full sm:w-auto h-10 bg-gray-100 hover:bg-gray-200 sm:h-12 lg:h-14 text-base sm:text-lg lg:text-xl font-bold"
+                variant="outline"
+              >
+                {homepage.hero.sign_in}
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div  className="fade-up" style={{ animationDelay: "0.15s" }}>
+        <div className="fade-up" style={{ animationDelay: "0.15s" }}>
           <HeroMedia />
         </div>
       </div>

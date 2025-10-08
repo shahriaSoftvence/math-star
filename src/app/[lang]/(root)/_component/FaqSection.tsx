@@ -1,40 +1,35 @@
 import React from 'react';
 import Link from 'next/link';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { getTranslations } from '@/lib/translations';
+import { getDictionary } from '../../dictionaries';
 
-interface FaqSectionProps {
-  lang: string;
-}
-
-const FaqSection: React.FC<FaqSectionProps> = async ({ lang }) => {
-  const language = lang as 'en' | 'de';
-  const { t } = getTranslations(language, 'homepage');
+const FaqSection = async ({ lang }: { lang: string }) => {
+  const { homepage } = await getDictionary(lang);
 
   const faqData = [
     {
-      question: t('faq.questions.0.question'),
-      answer: t('faq.questions.0.answer')
+      question: homepage.faq.questions[0].question,
+      answer: homepage.faq.questions[0].answer
     },
     {
-      question: t('faq.questions.1.question'),
-      answer: t('faq.questions.1.answer')
+      question: homepage.faq.questions[1].question,
+      answer: homepage.faq.questions[1].answer
     },
     {
-      question: t('faq.questions.2.question'),
-      answer: t('faq.questions.2.answer')
+      question: homepage.faq.questions[2].question,
+      answer: homepage.faq.questions[2].answer
     },
     {
-      question: t('faq.questions.3.question'),
-      answer: t('faq.questions.3.answer')
+      question: homepage.faq.questions[3].question,
+      answer: homepage.faq.questions[3].answer
     },
     {
-      question: t('faq.questions.4.question'),
-      answer: t('faq.questions.4.answer')
+      question: homepage.faq.questions[4].question,
+      answer: homepage.faq.questions[4].answer
     },
     {
-      question: t('faq.questions.5.question'),
-      answer: t('faq.questions.5.answer')
+      question: homepage.faq.questions[5].question,
+      answer: homepage.faq.questions[5].answer
     }
   ];
 
@@ -43,10 +38,10 @@ const FaqSection: React.FC<FaqSectionProps> = async ({ lang }) => {
       <div className="max-w-3xl mx-auto flex flex-col items-center gap-4">
         <div className="text-center">
           <h2 className="text-gray-800 text-2xl md:text-4xl font-bold font-Quicksand leading-10">
-            {t('faq.title')}
+            {/* {t('faq.title')} */}
           </h2>
           <p className="text-gray-600 text-base md:text-xl font-normal font-Open_Sans leading-7 mt-4">
-            {t('faq.description')}
+            {/* {t('faq.description')} */}
           </p>
         </div>
 
@@ -68,11 +63,11 @@ const FaqSection: React.FC<FaqSectionProps> = async ({ lang }) => {
 
         <div className="text-center mt-8">
           <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">
-            {t('faq.support_text')}
+            {/* {t('faq.support_text')} */}
           </p>
           <Link href="/contact">
             <button className="mt-4 px-6 py-3 bg-blue-500 rounded-lg text-white text-base font-normal font-Open_Sans leading-normal hover:bg-blue-600 transition-colors">
-              {t('faq.support_button')}
+              {/* {t('faq.support_button')} */}
             </button>
           </Link>
         </div>
