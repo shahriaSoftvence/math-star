@@ -4,13 +4,12 @@ import Lines from "@/asset/Lines.png";
 import Link from "next/link";
 import HeroMedia from "./HeroMedia";
 import { Button } from "@/components/ui/button";
-import { getDictionary } from "../../dictionaries";
-// import HeroMedia from "./HeroMedia";
+import { getDictionary } from "../../actions/dictionaries";
 
 
 
-const HeroSection = async ({ lang }: { lang: string }) => {
-  const { homepage } = await getDictionary(lang);
+const HeroSection = async () => {
+  const {homepage} = await getDictionary();
 
   return (
     <div className="w-full pt-[200px] pb-[100px] min-h-[800px] bg-gray-50 flex items-center justify-center relative overflow-hidden">

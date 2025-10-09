@@ -11,6 +11,7 @@ type PracticeCardProps = {
   bgColor: string;
   textColor: string;
   iconColor: string;
+  name?: string;
 };
 
 const PracticeCard = ({
@@ -20,6 +21,7 @@ const PracticeCard = ({
   bgColor,
   textColor,
   iconColor,
+  name,
 }: PracticeCardProps) => {
   const [setAddition] = useSetAdditionMutation();
   const [setSubtraction] = useSetSubtractionMutation();
@@ -49,7 +51,7 @@ const PracticeCard = ({
       >
         {icon}
       </div>
-      <h3 className={`font-semibold text-lg ${textColor}`}>{title}</h3>
+      <h3 className={`font-semibold text-lg ${textColor}`}>{name}</h3>
       <p className={`text-[12px] ${textColor} opacity-80`}>{description}</p>
     </div>
   );

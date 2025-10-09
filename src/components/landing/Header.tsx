@@ -1,7 +1,6 @@
-// ste_br/src/components/landing/Header.tsx
-'use client'; // <-- Add this line
+'use client';
 
-import React, { useState, useEffect, useRef } from 'react'; // <-- Import useState, useEffect, and useRef
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,7 +12,8 @@ import { useAuth, useAuthActions } from '../../Redux/hooks';
 import { LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
-import LanguageSwitcher from '../languageSwitcher';
+import Switcher from '../switcher';
+import { useDictionary } from '@/hook/useDictionary';
 function useOnClickOutside(
   ref: React.RefObject<HTMLElement>,
   handler: (event: MouseEvent | TouchEvent) => void
@@ -35,7 +35,7 @@ function useOnClickOutside(
 }
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // <-- Add state for menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -48,13 +48,18 @@ const Header = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
-
   useOnClickOutside(profileRef as React.RefObject<HTMLElement>, () => setIsProfileOpen(false));
 
   const handleLogout = () => {
     logout();
     setIsProfileOpen(false);
   };
+
+  const { dictionary, loading } = useDictionary();
+  const header = dictionary?.header;
+  if (!header || loading) {
+    return null;
+  }
 
   const handleDashboardClick = () => {
     router.push('/dashboard');
@@ -70,13 +75,16 @@ const Header = () => {
           </Link>
           <nav className="hidden md:flex md:items-center md:gap-8 lg:gap-16">
             <Link href={{ pathname: "/", hash: "features" }} className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed">
-              What is Math Star?
+              {/* What is Math Star? */}
+              {header.what_is_math_star}
             </Link>
             <Link href={{ pathname: "/", hash: "pricing" }} className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed">
-              Pricing
+              {/* Pricing */}
+              {header.pricing}
             </Link>
             <Link href={{ pathname: "/", hash: "faq" }} className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed">
-              FAQ
+              {/* FAQ */}
+              {header.faq}
             </Link>
           </nav>
 
@@ -110,25 +118,26 @@ const Header = () => {
             className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
-            What is Math Star?
+            {header.what_is_math_star}
           </Link>
           <Link
             href={{ pathname: "/", hash: "pricing" }}
             className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
-            Pricing
+            {header.pricing}
           </Link>
           <Link
             href={{ pathname: "/", hash: "faq" }}
             className="text-gray-900 hover:text-[#0063F6] text-lg font-medium font-Poppins leading-relaxed"
             onClick={() => setIsMenuOpen(false)}
           >
-            FAQ
+             {header.faq}
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <LanguageSwitcher/>
+          {/* <LanguageSwitcher/> */}
+          <Switcher />
 
           {/* Show different buttons based on authentication status */}
           {isAuthenticated && user ? (
@@ -162,14 +171,14 @@ const Header = () => {
                         className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors duration-150 text-left"
                       >
                         <LayoutDashboard size={20} />
-                        <span className="text-sm font-medium">Dashboard</span>
+                        <span className="text-sm font-medium">{header.dashboard}</span>
                       </button>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-150 text-left"
                       >
                         <LogOut size={20} />
-                        <span className="text-sm font-medium">Logout</span>
+                        <span className="text-sm font-medium">{header.logout}</span>
                       </button>
                     </div>
                   </div>
@@ -178,15 +187,12 @@ const Header = () => {
             </div>
           ) : (
             <Link href="/auth/signin">
-              {/* <button className="h-12 px-6 bg-blue-500 rounded-[100px] text-white text-sm md:text-lg font-medium font-Poppins leading-relaxed hover:bg-blue-600 transition-colors">
-                Sign In
-              </button> */}
               <Button
                 className="bg-blue-500 hover:bg-blue-600 rounded-xl 
              text-base md:text-lg 
              px-4 py-3 md:px-5 md:py-[22px]"
               >
-                Sign In
+                {header.sign_in}
               </Button>
 
             </Link>

@@ -7,9 +7,11 @@ import React from 'react'
 
 interface PricingBtnProps {
     planId: number;
+    trial_button: string
+    subscribed_button: string
 }
 
-export default function PricingBtn({ planId }: PricingBtnProps) {
+export default function PricingBtn({ planId, subscribed_button, trial_button }: PricingBtnProps) {
     const { isAuthenticated, user } = useAuth();
     const [createSubscription] = useCreateSubscriptionMutation();
     const isPremium = useIsPremium();
@@ -41,10 +43,10 @@ export default function PricingBtn({ planId }: PricingBtnProps) {
     return (
         <div>
             {isPremium ? <button className="w-full py-3.5 bg-white rounded-lg border-2 border-yellow-500 text-yellow-500 text-base font-bold font-Open_Sans leading-normal">
-                Subscribed
+                {subscribed_button}
             </button> :
                 <button onClick={() => handleCreateSubscription(planId)} className="w-full py-3.5 bg-white rounded-lg border-2 border-blue-500 text-blue-500 text-base font-bold font-Open_Sans leading-normal hover:bg-blue-50 transition-colors">
-                    Start 3 Days Trial
+                    {trial_button}
                 </button>
 
             }

@@ -4,9 +4,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, Settings, CreditCard, ArrowLeft, ChevronFirst, PanelRightOpen } from 'lucide-react';
+import { LayoutDashboard, User, Settings, CreditCard, PanelRightOpen } from 'lucide-react';
 import Logo from '../../public/assets/Logo.png';
 import Image from 'next/image';
+import { useDictionary } from '@/hook/useDictionary';
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
@@ -15,13 +16,18 @@ interface SidebarProps {
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const pathname = usePathname();
 
-
+  const { dictionary, loading } = useDictionary();
+    const sidebar = dictionary?.sidebar;
+  
+    if (!sidebar || loading) {
+      return null;
+    }
 
   const menuItems = [
-    { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={24} /> },
-    { name: "Profile", href: "/dashboard/profile", icon: <User size={24} /> },
-    { name: "Settings", href: "/dashboard/settings", icon: <Settings size={24} /> },
-    { name: "Subscription", href: "/dashboard/subscription", icon: <CreditCard size={24} /> },
+    { name: sidebar.dashboard, href: "/dashboard", icon: <LayoutDashboard size={24} /> },
+    { name: sidebar.profile, href: "/dashboard/profile", icon: <User size={24} /> },
+    { name: sidebar.settings, href: "/dashboard/settings", icon: <Settings size={24} /> },
+    { name: sidebar.subscription, href: "/dashboard/subscription", icon: <CreditCard size={24} /> },
   ];
 
   return (
@@ -45,7 +51,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             {menuItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <li  onClick={() => setSidebarOpen(false)} key={item.name} className="mb-2">
+                <li onClick={() => setSidebarOpen(false)} key={item.name} className="mb-2">
                   <Link
                     href={item.href}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 ${isActive

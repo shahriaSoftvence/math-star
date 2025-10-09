@@ -10,13 +10,7 @@ import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 import rewardsBadge from '@/asset/images/rewards.png';
 import LoadingFile from '@/asset/loader.svg'
 import { useGetProgressQuery } from '@/Redux/features/reward/rewardApi';
-
-const practiceItems = [
-  { link: "/dashboard/addition", icon: <Plus />, title: "Practice Addition", description: "Improve your basic sums", bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400 ", textColor: "text-yellow-800", iconColor: "text-yellow-500" },
-  { link: "/dashboard/subtraction", icon: <Minus />, title: "Practice Subtraction", description: "Sharpen your subtraction skills", bgColor: "bg-gradient-to-br from-pink-300 to-pink-400", textColor: "text-pink-800", iconColor: "text-pink-500" },
-  { link: "/dashboard/multiplication", icon: <X />, title: "Practice Multiplication", description: "Master your times tables", bgColor: "bg-gradient-to-br from-green-300 to-green-400", textColor: "text-green-800", iconColor: "text-green-500" },
-  { link: "/dashboard/division", icon: <Divide />, title: "Practice Division", description: "Divide and conquer", bgColor: "bg-gradient-to-br from-purple-300 to-purple-400", textColor: "text-purple-800", iconColor: "text-purple-500" },
-];
+import { useDictionary } from '@/hook/useDictionary';
 
 export default function Home() {
 
@@ -26,19 +20,70 @@ export default function Home() {
   const activities = summary?.data?.recent_activities;
   const { data } = useGetProfileQuery();
 
-  // console.log(isPremium)
+  const { dictionary, loading } = useDictionary();
+  const dashboard = dictionary?.dashboard;
+  const practice_section = dashboard?.practice_section;
+  const star_balance = dashboard?.star_balance;
+
+  if (!dashboard || loading || !practice_section || !star_balance) {
+    return null;
+  }
+
+  const practiceItems = [
+    {
+      link: "/dashboard/addition",
+      icon: <Plus />,
+      name: practice_section.addition.title,
+      title: "Practice Addition",
+      description: practice_section.addition.description,
+      bgColor: "bg-gradient-to-br from-yellow-300 to-yellow-400",
+      textColor: "text-yellow-800",
+      iconColor: "text-yellow-500"
+    },
+    {
+      link: "/dashboard/subtraction",
+      icon: <Minus />,
+      name: practice_section.subtraction.title,
+      title: "Practice Subtraction",
+      description: practice_section.subtraction.description,
+      bgColor: "bg-gradient-to-br from-pink-300 to-pink-400",
+      textColor: "text-pink-800",
+      iconColor: "text-pink-500"
+    },
+    {
+      link: "/dashboard/multiplication",
+      icon: <X />,
+      name: practice_section.multiplication.title,
+      title: "Practice Multiplication",
+      description: practice_section.multiplication.description,
+      bgColor: "bg-gradient-to-br from-green-300 to-green-400",
+      textColor: "text-green-800",
+      iconColor: "text-green-500"
+    },
+    {
+      link: "/dashboard/division",
+      icon: <Divide />,
+      name: practice_section.division.title,
+      title: "Practice Division",
+      description: practice_section.division.description,
+      bgColor: "bg-gradient-to-br from-purple-300 to-purple-400",
+      textColor: "text-purple-800",
+      iconColor: "text-purple-500"
+    }
+  ];
+
 
   if (isLoading) {
     return (
       <div className='flex justify-center my-12' role="status">
         <LoadingFile className="inline w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" />
-        <span className="sr-only">Loading...</span>
+        <span className="sr-only">{dashboard.loading}</span>
       </div>
     );
   }
 
   if (isError || !summary) {
-    return <div className='text-red-500 flex justify-center my-12 text-lg font-medium'><ShieldAlert className='mr-2' />Could not load your process. Please try again later !</div>;
+    return <div className='text-red-500 flex justify-center my-12 text-lg font-medium'><ShieldAlert className='mr-2' />{dashboard.error_message}</div>;
   }
 
 
@@ -58,7 +103,7 @@ export default function Home() {
                 }`}
             >
               <PracticeCard {...item} />
-              
+
             </Link>
           );
         })}
@@ -121,9 +166,9 @@ export default function Home() {
       <Link href="/dashboard/rewards">
         <div className="bg-gradient-to-r from-yellow-400 to-orange-400 px-6 py-4 rounded-2xl text-white flex justify-between items-center shadow-lg">
           <div>
-            <h3 className="font-semibold text-xl">Your Star Balance</h3>
+            <h3 className="font-semibold text-xl">{star_balance.title}</h3>
             <p className="text-4xl md:text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {data?.data?.star.toLocaleString() || 0}</p>
-            <p className="text-sm font-medium opacity-90">Top up to win Rewards</p>
+            <p className="text-sm font-medium opacity-90">{star_balance.top_up_message}</p>
           </div>
           <div className="">
             <Image className='h-20 md:h-32 w-20 md:w-32' src={data?.data?.reward?.icon ? `${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}` : rewardsBadge} alt='Badge' width={120} height={120} />

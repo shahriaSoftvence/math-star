@@ -11,11 +11,11 @@ import { useGetProfileQuery } from "../Redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import rewardsBadge from '@/asset/images/rewards.png';
+import { useDictionary } from "@/hook/useDictionary";
 
 
 type NavbarProps = {
   toggleSidebar: () => void;
-   lang: string;
 };
 
 
@@ -39,7 +39,7 @@ function useOnClickOutside(
   }, [ref, handler]);
 }
 
-export default function Navbar({ toggleSidebar, lang }: NavbarProps) {
+export default function Navbar({ toggleSidebar }: NavbarProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -56,9 +56,6 @@ export default function Navbar({ toggleSidebar, lang }: NavbarProps) {
     setIsProfileOpen(false)
   );
 
-  const language = lang as 'en' | 'de';
-  const { t } = getTranslations(language, 'navbar');
-
   const handleLogout = () => {
     logout();
     setIsProfileOpen(false);
@@ -68,6 +65,12 @@ export default function Navbar({ toggleSidebar, lang }: NavbarProps) {
     router.push("/dashboard/profile");
     setIsProfileOpen(false);
   };
+
+  const { dictionary, loading } = useDictionary();
+  const navbar = dictionary?.navbar;
+  if (!navbar || loading) {
+    return null;
+  }
 
 
 
@@ -112,8 +115,8 @@ export default function Navbar({ toggleSidebar, lang }: NavbarProps) {
             <Menu className="text-[#000]" size={24} />
           </button>
           <div className="flex-col justify-center items-start gap-1.5 hidden md:flex">
-             <h1 className="text-black text-xl lg:text-2xl font-medium">
-              {t('greeting', { grade: profileData?.data?.grade || "Math Star" })}
+            <h1 className="text-black text-xl lg:text-2xl font-medium">
+              {(navbar.greeting ?? '').replace('{grade}', profileData?.data?.grade ?? '')}
             </h1>
             <div className="inline-flex justify-start items-start gap-3">
               <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">

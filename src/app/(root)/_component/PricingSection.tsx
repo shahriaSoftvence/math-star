@@ -2,22 +2,19 @@ import { Check } from 'lucide-react';
 import React from 'react';
 import { IoStar } from "react-icons/io5";
 import PricingBtn from './PricingBtn';
-import { Plan } from '../../../../type/subscription';
 import Link from 'next/link';
-
-
-const pricingFeatures = [
-    // "Access to all Math Exercises",
-    // "Reward System",
-    // "Access to all Challenges",
-    // "Monthly Cancellation"
-    "Full Access to All Math Exercises",
-    "To experience All the challenges",
-    "Enjoyable Rewards and Achievements",
-    "Flexible Monthly Cancellation"
-];
+import { getDictionary } from '../../actions/dictionaries';
+import { Plan } from '../../../../type/subscription';
 
 const PricingSection = async () => {
+    const { homepage } = await getDictionary();
+
+    const pricingFeatures = [
+        homepage.pricing.features[0],
+        homepage.pricing.features[1],
+        homepage.pricing.features[2],
+        homepage.pricing.features[3],
+    ];
 
     const url = `${process.env.NEXT_PUBLIC_BASE_API}plan-list/`;
     const res = await fetch(url);
@@ -34,9 +31,9 @@ const PricingSection = async () => {
         <section id="pricing" className="py-24 px-4 bg-gray-50">
             <div className="max-w-7xl mx-auto flex flex-col items-center gap-4">
                 <div className="text-center max-w-3xl">
-                    <h2 className="text-gray-800 text-2xl md:text-4xl font-bold font-Quicksand leading-10">Our pricing policy</h2>
+                    <h2 className="text-gray-800 text-2xl md:text-4xl font-bold font-Quicksand leading-10">{homepage.pricing.title}</h2>
                     <p className="text-gray-600 text-base md:text-xl font-normal font-Open_Sans leading-7 mt-4">
-                        Money is not our motivation! Therefore, we want to make Math Star accessible to everybody at the lowest price possible.
+                        {homepage.pricing.description}
                     </p>
                 </div>
                 <div
@@ -67,14 +64,14 @@ const PricingSection = async () => {
                                     </div>
                                 ))}
                             </div>
-                            <PricingBtn planId={plan?.id} />
+                            <PricingBtn trial_button={homepage.pricing.trial_button} subscribed_button={homepage.pricing.subscribed_button} planId={plan?.id} />
                         </div>)
                     }
 
                     <div className="text-center mt-8">
-                        <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">No credit card required to start.</p>
+                        <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">{homepage.pricing.no_card_required}</p>
                         <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">
-                            Have questions? <Link className="text-blue-500 hover:text-blue-600" href="/contact">Contact Our Team</Link>
+                            {homepage.pricing.contact_text} <Link className="text-blue-500 font-medium hover:text-blue-600" href="/contact">{homepage.pricing.contact_link}</Link>
                         </p>
                     </div>
                 </div>

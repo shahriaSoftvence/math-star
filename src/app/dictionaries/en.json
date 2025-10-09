@@ -113,6 +113,12 @@
     "logout": "Logout",
     "sign_in": "Sign In"
   },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "subscription": "Subscription"
+  },
   "footer": {
     "logo_alt": "Math Star Logo",
     "description": "Turning math into an exciting adventure for children aged 5–10 with playful, adaptive learning.",

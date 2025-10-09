@@ -113,6 +113,12 @@
     "logout": "Abmelden",
     "sign_in": "Anmelden"
   },
+  "sidebar": {
+      "dashboard": "Instrumententafel",
+      "profile": "Profil",
+      "settings": "Einstellungen",
+      "subscription": "Abonnement"
+    },
   "footer": {
     "logo_alt": "Math Star Logo",
     "description": "Mathe wird zu einem spannenden Abenteuer für Kinder im Alter von 5-10 Jahren mit spielerischem, adaptivem Lernen.",
@@ -120,7 +126,7 @@
     "home": "Startseite",
     "how_it_works": "Wie es funktioniert",
     "pricing": "Preise",
-    "support_title": "Support",
+    "support_title": "Unterstützung",
     "privacy_policy": "Datenschutzrichtlinie",
     "terms_conditions": "Nutzungsbedingungen",
     "faqs": "FAQs",

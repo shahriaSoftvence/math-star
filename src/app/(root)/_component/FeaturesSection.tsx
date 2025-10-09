@@ -1,9 +1,9 @@
 import React from "react";
-import { getDictionary } from "../../dictionaries";
+import { getDictionary } from "../../actions/dictionaries";
 import { IoStar } from "react-icons/io5";
 
-const FeaturesSection = async ({ lang }: { lang: string }) => {
-  const { homepage } = await getDictionary(lang);
+const FeaturesSection = async () => {
+  const { homepage } = await getDictionary();
 
 
   const featureData = [

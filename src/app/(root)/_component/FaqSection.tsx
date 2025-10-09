@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { getDictionary } from '../../dictionaries';
+import { getDictionary } from '../../actions/dictionaries';
 
-const FaqSection = async ({ lang }: { lang: string }) => {
-  const { homepage } = await getDictionary(lang);
+const FaqSection = async () => {
+  const { homepage } = await getDictionary();
 
   const faqData = [
     {
@@ -38,17 +38,17 @@ const FaqSection = async ({ lang }: { lang: string }) => {
       <div className="max-w-3xl mx-auto flex flex-col items-center gap-4">
         <div className="text-center">
           <h2 className="text-gray-800 text-2xl md:text-4xl font-bold font-Quicksand leading-10">
-            {/* {t('faq.title')} */}
+            {homepage.faq.title}
           </h2>
           <p className="text-gray-600 text-base md:text-xl font-normal font-Open_Sans leading-7 mt-4">
-            {/* {t('faq.description')} */}
+            {homepage.faq.description}
           </p>
         </div>
 
         <Accordion
           type="single"
           collapsible
-          className="w-full"
+          className="w-full my-8"
           defaultValue="item-1"
         >
           {faqData.map((faq, index) => (
@@ -61,13 +61,13 @@ const FaqSection = async ({ lang }: { lang: string }) => {
           ))}
         </Accordion>
 
-        <div className="text-center mt-8">
+        <div className="text-center">
           <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">
-            {/* {t('faq.support_text')} */}
+            {homepage.faq.support_text}
           </p>
           <Link href="/contact">
             <button className="mt-4 px-6 py-3 bg-blue-500 rounded-lg text-white text-base font-normal font-Open_Sans leading-normal hover:bg-blue-600 transition-colors">
-              {/* {t('faq.support_button')} */}
+              {homepage.faq.support_button}
             </button>
           </Link>
         </div>

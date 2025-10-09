@@ -26,6 +26,7 @@ export default function SignUpPage() {
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
   const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
   const [accepted, setAccepted] = useState(false);
+  const [age, setAges] = useState(false);
 
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get('redirect') || '/dashboard';
@@ -264,6 +265,24 @@ export default function SignUpPage() {
                   <input
                     className="w-4 h-4"
                     type="checkbox"
+                    id="age"
+                    checked={age}
+                    onChange={(e) => setAges(e.target.checked)}
+                  />
+                  <label
+                    htmlFor="age"
+                    className="text-zinc-900 text-sm font-Quicksand italic cursor-pointer"
+                  >
+                    I am 16 years or older.
+                  </label>
+                </div>
+
+              </div>
+              <div>
+                <div className="ml-2 mt-2 flex items-center gap-2">
+                  <input
+                    className="w-4 h-4"
+                    type="checkbox"
                     id="terms"
                     checked={accepted}
                     onChange={(e) => setAccepted(e.target.checked)}
@@ -282,15 +301,15 @@ export default function SignUpPage() {
                     .
                   </label>
                 </div>
+                <button
+                  type="submit"
+                  disabled={isRegistering || !accepted || !age}
+                  className="self-stretch h-12 px-4 py-3 w-full mt-1.5 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {isRegistering ? 'Creating Account...' : 'Next'}
+                </button>
               </div>
 
-              <button
-                type="submit"
-                disabled={isRegistering || !accepted}
-                className="self-stretch h-12 px-4 py-3 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {isRegistering ? 'Creating Account...' : 'Next'}
-              </button>
             </form>
 
             <div className="text-center mt-4">
