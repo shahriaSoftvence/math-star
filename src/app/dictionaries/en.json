@@ -139,19 +139,19 @@
     "practice_section": {
       "addition": {
         "title": "Addition",
-        "description": "Improve your basic sums"
+        "description": "Boost your adding skills"
       },
       "subtraction": {
         "title": "Subtraction",
-        "description": "Sharpen your subtraction skills"
+        "description": "Build your subtracting skills"
       },
       "multiplication": {
         "title": "Multiplication",
-        "description": "Master your times tables"
+        "description": "Strengthen your multiplication"
       },
       "division": {
         "title": "Division",
-        "description": "Divide and conquer"
+        "description": "Improve your dividing skills"
       }
     },
     "progress_section": {

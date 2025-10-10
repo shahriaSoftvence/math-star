@@ -19,7 +19,7 @@ const HeroSection = async () => {
         <div
           className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start"
         >
-          <h1 className="text-3xl md:text-4xl xl:text-5xl font-semibold font-Poppins leading-tight">
+          <h1 className="text-3xl md:text-4xl xl:text-[45px] font-semibold font-Poppins leading-tight">
             <span className="text-blue-600">
               {homepage.hero.title_line1}
             </span>

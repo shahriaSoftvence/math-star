@@ -114,11 +114,11 @@
     "sign_in": "Anmelden"
   },
   "sidebar": {
-      "dashboard": "Instrumententafel",
-      "profile": "Profil",
-      "settings": "Einstellungen",
-      "subscription": "Abonnement"
-    },
+    "dashboard": "Instrumententafel",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "subscription": "Abonnement"
+  },
   "footer": {
     "logo_alt": "Math Star Logo",
     "description": "Mathe wird zu einem spannenden Abenteuer für Kinder im Alter von 5-10 Jahren mit spielerischem, adaptivem Lernen.",
@@ -139,19 +139,19 @@
     "practice_section": {
       "addition": {
         "title": "Addition",
-        "description": "Verbessere deine Grundrechenarten"
+        "description": "Verbessere dein Addieren"
       },
       "subtraction": {
         "title": "Subtraktion",
-        "description": "Schärfe deine Subtraktionsfähigkeiten"
+        "description": "Übe dein Subtrahieren"
       },
       "multiplication": {
         "title": "Multiplikation",
-        "description": "Meistere dein Einmaleins"
+        "description": "Stärke dein Multiplizieren"
       },
       "division": {
         "title": "Division",
-        "description": "Teile und herrsche"
+        "description": "Trainiere dein Dividieren"
       }
     },
     "progress_section": {
