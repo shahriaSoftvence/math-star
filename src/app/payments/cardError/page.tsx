@@ -15,7 +15,7 @@ export default function CardError() {
     useEffect(() => {
         const timer = setTimeout(() => {
             router.push("/dashboard/subscription");
-        }, 10000);
+        }, 3000);
 
         return () => clearTimeout(timer);
     }, [router]);

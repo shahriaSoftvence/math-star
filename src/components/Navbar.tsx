@@ -116,7 +116,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           </button>
           <div className="flex-col justify-center items-start gap-1.5 hidden md:flex">
             <h1 className="text-black text-xl lg:text-2xl font-medium">
-              {(navbar.greeting ?? '').replace('{grade}', profileData?.data?.grade ?? '')}
+              {(navbar.greeting ?? '').replace('{grade}', profileData?.data?.grade || 'Smart Thinker')}
             </h1>
             <div className="inline-flex justify-start items-start gap-3">
               <div className="px-3 py-1 bg-yellow-100 rounded-full flex justify-start items-center gap-1.5">

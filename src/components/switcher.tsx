@@ -4,12 +4,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import { updateLanguage, getCurrentLanguage } from "@/app/actions/setLanguage";
 import flagDe from "@/asset/Flag.png";
 import flagEn from "@/asset/usa.png";
@@ -49,7 +43,7 @@ export default function Switcher() {
         // Fallback to server cookie
         const locale = await getCurrentLanguage();
         setCurrentLocale(locale);
-        
+
         // Sync to localStorage
         localStorage.setItem('mathstar-language', locale);
       } catch (error) {
@@ -71,24 +65,24 @@ export default function Switcher() {
     try {
       // 1. Update server cookie (for server components)
       await updateLanguage(newLocale);
-      
+
       // 2. Update client cookie immediately (for other client components)
       setCookieDirectly('mathstar-language', newLocale);
-      
+
       // 3. Update localStorage (for useDictionary hook)
       localStorage.setItem('mathstar-language', newLocale);
-      
+
       // 4. Dispatch event to notify all client components
-      window.dispatchEvent(new CustomEvent(LANGUAGE_CHANGED_EVENT, { 
-        detail: { locale: newLocale } 
+      window.dispatchEvent(new CustomEvent(LANGUAGE_CHANGED_EVENT, {
+        detail: { locale: newLocale }
       }));
-      
+
       // 5. Update local state
       setCurrentLocale(newLocale);
-      
+
       // 6. Refresh the page to apply language changes to all server components
       router.refresh();
-      
+
     } catch (error) {
       console.error('Failed to change language:', error);
     } finally {
@@ -99,48 +93,16 @@ export default function Switcher() {
   const currentLanguage = languages.find((lang) => lang.code === currentLocale) || languages[1];
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger 
-        disabled={isLoading}
-        className="w-11 h-9 flex items-center justify-center rounded-full cursor-pointer overflow-hidden border border-transparent hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+    <div className="flex items-center">
+      <button className="cursor-pointer hover:scale-102 duration-200" disabled={isLoading} onClick={() => changeLocale(currentLanguage.code === 'en' ? 'de' : 'en')}>
         <Image
           alt={currentLanguage.name}
           src={currentLanguage.flag}
           width={44}
           height={35}
-          className="w-full h-full object-cover rounded-full"
+          className="w-10 h-auto rounded"
         />
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent 
-        align="end"
-        className="relative top-2 space-y-2 border border-gray-200 bg-white text-gray-800 shadow-lg rounded-md min-w-[140px]"
-      >
-        {languages.map((language) => (
-          <DropdownMenuItem
-            key={language.code}
-            onClick={() => changeLocale(language.code)}
-            disabled={isLoading}
-            className={
-              `flex items-center px-3 py-2 cursor-pointer transition-colors rounded-sm ${
-                currentLocale === language.code
-                  ? "bg-blue-50 text-blue-600 border border-blue-200"
-                  : "hover:bg-gray-50"
-              } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`
-            }
-          >
-            <Image
-              alt={language.name}
-              src={language.flag}
-              width={24}
-              height={18}
-              className="w-6 h-4 object-cover rounded"
-            />
-            <span className="ml-2 text-sm font-medium">{language.name}</span>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </button>
+    </div>
   );
 }

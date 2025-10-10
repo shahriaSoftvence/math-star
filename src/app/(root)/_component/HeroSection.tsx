@@ -34,7 +34,7 @@ const HeroSection = async () => {
           <div className="flex items-center gap-3">
             <Link href="/auth/signup">
               <Button
-                className="w-full sm:w-auto h-10 bg-blue-500 hover:bg-blue-600 sm:h-12 lg:h-14 text-base sm:text-lg lg:text-xl font-bold"
+                className="w-full sm:w-auto h-10 bg-blue-500 hover:bg-blue-600 sm:h-12 lg:h-14 text-base md:text-lg font-medium md:font-semibold"
                 variant="default"
               >
                 {homepage.hero.sign_up}
@@ -43,7 +43,7 @@ const HeroSection = async () => {
 
             <Link href="/auth/signin">
               <Button
-                className="w-full sm:w-auto h-10 bg-gray-100 hover:bg-gray-200 sm:h-12 lg:h-14 text-base sm:text-lg lg:text-xl font-bold"
+                className="w-full sm:w-auto h-10 bg-gray-100 hover:bg-gray-200 sm:h-12 lg:h-14 text-base md:text-lg font-medium md:font-semibold"
                 variant="outline"
               >
                 {homepage.hero.sign_in}

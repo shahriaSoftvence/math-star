@@ -9,6 +9,7 @@ import { ArrowLeft, ChevronRight } from 'lucide-react';
 import DivisionCard from './divisionCard/page';
 import { useAddDivisionExerciseMutation, useGetTopScoreDivisionQuery } from '@/Redux/features/division/divisionApi';
 import ChallengeCard from '@/components/challengeCard';
+import { useDictionary } from '@/hook/useDictionary';
 
 const divisionExercises = [
   { range: '2' },
@@ -30,16 +31,25 @@ export default function DivisionPage() {
   const [addDivisionExercise] = useAddDivisionExerciseMutation();
   const {data} = useGetTopScoreDivisionQuery();
 
+  const { dictionary, loading } = useDictionary();
+    const divisionOperation = dictionary?.operations?.division;
+    const sharedSection = dictionary?.shared;
+    const challenges = sharedSection?.challenge_section?.challenges
+  
+    if (!divisionOperation || !challenges || loading) {
+      return null;
+    }
+
   const noMistakeTopScore = data?.data?.find(item => item.challenge_type === "NO_MISTAKE")?.display_top_score;
   const speedModeTopScore = data?.data?.find(item => item.challenge_type === "SPEED_MODE")?.display_top_score;
   const hundredQuestionTopScore = data?.data?.find(item => item.challenge_type === "100_QUESTIONS")?.display_top_score;
   const whatsMissingTopScore = data?.data?.find(item => item.challenge_type === "WHATS_MISSING")?.display_top_score;
 
   const divisionChallenges = [
-  { icon: <FiTarget />, title: 'No Mistake', description: 'One mistake ends the session', bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/division/challenges/no-mistake', display_top_score: noMistakeTopScore },
-  { icon: <PiTimerBold />, title: 'Speed Mode', description: 'Race against time!', bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/division/challenges/speed-mode', display_top_score: speedModeTopScore },
-  { icon: <BsGrid3X3 />, title: '100 Questions', description: 'Complete all 100 questions', bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/division/challenges/100-questions', display_top_score: hundredQuestionTopScore },
-  { icon: <FiHelpCircle />, title: "What's Missing?", description: 'Fill in the missing numbers', bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/division/challenges/whats-missing", display_top_score: whatsMissingTopScore },
+  { icon: <FiTarget />, title: challenges?.no_mistake?.title, description: challenges?.no_mistake?.description, bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/division/challenges/no-mistake', display_top_score: noMistakeTopScore },
+  { icon: <PiTimerBold />, title: challenges?.speed_mode?.title, description: challenges?.speed_mode?.description, bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/division/challenges/speed-mode', display_top_score: speedModeTopScore },
+  { icon: <BsGrid3X3 />, title: challenges?.hundred_questions?.title, description: challenges?.hundred_questions?.description, bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/division/challenges/100-questions', display_top_score: hundredQuestionTopScore },
+  { icon: <FiHelpCircle />, title: challenges?.whats_missing?.title, description: challenges?.whats_missing?.description, bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/division/challenges/whats-missing", display_top_score: whatsMissingTopScore },
 ];
 
   const toggleRange = (ranges: string[]) => {
@@ -75,14 +85,14 @@ export default function DivisionPage() {
       <div className="mb-4">
         
         <Link href="/dashboard" className="text-gray-800 text-[20px] font-bold inline-flex justify-center items-center gap-2">
-          <ArrowLeft /> Go Back
+          <ArrowLeft /> {sharedSection?.navigation?.go_back}
         </Link>
       </div>
 
       {/* Division Exercise Section */}
       <div className="rounded-lg">
         <div className="p-4 bg-gradient-to-br from-purple-400 to-purple-500 rounded-t-lg">
-          <h2 className="text-xl font-bold text-white">Division exercise.</h2>
+          <h2 className="text-xl font-bold text-white">{divisionOperation?.name} {sharedSection?.exercise_section?.title}</h2>
         </div>
         <div className="px-0 md:px-6 py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -99,10 +109,10 @@ export default function DivisionPage() {
             {selectedRanges.length > 0 && (
               <Link href={`/dashboard/division/select-questions?ranges=${selectedRanges.join(",")}`} >
                 <div onClick={handleAddRange} className="p-6 text-center border-2 rounded-lg cursor-pointer transition-all border-purple-400 bg-white">
-                  <h5 className='text-sm text-gray-600'>Continue with</h5>
-                  <div className='flex justify-center items-center gap-1.5 my-2'>
-                    <h3 className='text-lg font-bold text-gray-800'>Go</h3>
-                    <ChevronRight className='text-lg' />
+                  <h5 className='text-xs text-gray-600'>{sharedSection?.exercise_section?.continue_with}</h5>
+                  <div className='flex justify-center items-center gap-1.5 my-1'>
+                    <h3 className='text-lg font-bold text-gray-800'>{sharedSection?.exercise_section?.go}</h3>
+                    <ChevronRight className='' />
                   </div>
                   <p className='text-xs text-gray-800 font-medium overflow-hidden'>[ {selectedRanges.join(", ")} ]</p>
                 </div>
@@ -115,7 +125,7 @@ export default function DivisionPage() {
       {/* Division Challenges Section */}
       <div className="bg-white rounded-lg shadow">
         <div className="p-4 bg-gradient-to-br from-purple-400 to-purple-500 rounded-t-lg">
-          <h2 className="text-xl font-bold text-white">Division challenges.</h2>
+          <h2 className="text-xl font-bold text-white">{divisionOperation?.name} {sharedSection?.challenge_section?.title}</h2>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">

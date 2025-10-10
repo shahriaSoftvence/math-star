@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import { useGetAchievementQuery } from "@/Redux/features/reward/rewardApi";
 import { Achievement } from "../../../../type/progress";
+import { useDictionary } from "@/hook/useDictionary";
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { data: profileData } = useGetProfileQuery();
@@ -35,7 +37,17 @@ export default function ProfilePage() {
   const [showAll, setShowAll] = useState(false);
 
   const achievements = achievementData?.data || [];
-const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
+  const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
+
+  const { dictionary, loading } = useDictionary();
+  const profile = dictionary?.profile;
+  const user_info = profile?.user_info;
+  const achievement = profile?.achievements;
+  const notifications = profile?.notifications;
+
+  if (!profile || !user_info || !achievement || !notifications || loading) {
+    return null;
+  }
 
 
   const handleFileChange = async (
@@ -49,12 +61,13 @@ const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
       formData.append("profile_pic", file);
 
       await updateProfile(formData).unwrap();
-      toast.success("Image uploaded successfully!");
+      toast.success(notifications.image_upload_success);
     } catch (error: unknown) {
       if (error instanceof Error) console.error(error.message);
-      toast.error("Failed to update profile picture.");
+      toast.error(notifications.image_upload_error);
     }
   };
+
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b mt-4 from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
@@ -68,7 +81,7 @@ const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
             <ArrowLeft className="text-gray-600" />
           </Link>
           <h1 className="text-gray-800 text-3xl font-bold font-Nunito">
-            My Profile
+            {profile.page_title}
           </h1>
         </div>
 
@@ -126,17 +139,16 @@ const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
           <div className="flex items-center gap-2 mt-1">
             <Star size={20} className="text-yellow-500 fill-yellow-500" />
             <span className="text-gray-700 text-lg font-semibold font-Nunito">
-              Math Star Level {profileData?.data?.level}
+              {user_info?.math_star_level.replace("{level}", `${profileData?.data?.level}`)}
             </span>
           </div>
           <p className="text-gray-600 mt-2 font-Nunito">
-            Keep practicing to reach Level{" "}
-            {`${(profileData?.data?.level ?? 0) + 1}`} !
+            {user_info?.keep_practicing.replace("{nextLevel}", `${(profileData?.data?.level ?? 0) + 1}`)}
           </p>
           <Link href="/dashboard/settings">
-            <button className="flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-800 font-Nunito">
+            <button className="flex items-center gap-2 mt-4 cursor-pointer text-blue-600 hover:text-blue-700 font-Nunito">
               <Edit size={16} />
-              <span>Edit Profile</span>
+              <span>{user_info?.edit_profile}</span>
             </button>
           </Link>
         </div>
@@ -146,7 +158,7 @@ const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
           <div className="flex items-center gap-2 mb-4">
             <Award size={24} className="text-yellow-500" />
             <h3 className="text-gray-800 text-xl font-bold font-Nunito">
-              Achievements
+              {achievement?.title}
             </h3>
           </div>
           <div className="space-y-4">
@@ -169,20 +181,22 @@ const visibleAchievements = showAll ? achievements : achievements.slice(0, 4);
             ))}
 
             {achievements.length > 4 && (
-              <button
+              <div className="flex justify-end">
+                <Button variant={"link"}
                 onClick={() => setShowAll(!showAll)}
-                className="mt-4 ml-1.5 flex items-center gap-2 text-green-700 font-semibold hover:underline transition-all"
+                className="text-green-700 font-semibold"
               >
                 {showAll ? (
                   <>
-                    See Less <ChevronUp className="w-4 h-4" />
+                    {achievement?.see_less} <ChevronUp className="w-4 h-4" />
                   </>
                 ) : (
                   <>
-                    See More <ChevronDown className="w-4 h-4" />
+                    {achievement?.see_more} <ChevronDown className="w-4 h-4" />
                   </>
                 )}
-              </button>
+              </Button>
+              </div>
             )}
           </div>
         </div>

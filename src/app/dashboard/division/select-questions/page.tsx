@@ -4,6 +4,7 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { useDictionary } from "@/hook/useDictionary";
 
 const questionCounts = [10, 20, 30, 40, 50];
 
@@ -17,9 +18,11 @@ const practiceTips = [
 const QuestionCountCard = ({
   count,
   divisor,
+  questions
 }: {
   count: number;
   divisor: string[] | null;
+  questions: string
 }) => {
 
   return (
@@ -30,7 +33,7 @@ const QuestionCountCard = ({
         <div className="text-center text-gray-800 text-4xl font-bold">
           {count}
         </div>
-        <div className="text-center text-gray-600 text-sm">Questions</div>
+        <div className="text-center text-gray-600 text-sm">{questions}</div>
       </div>
     </Link>
   );
@@ -42,6 +45,13 @@ function SelectQuestionsContent() {
   const rangesParam = searchParams?.get("ranges");
   const divisor = rangesParam ? rangesParam.split(",") : [];
 
+  const { dictionary, loading } = useDictionary();
+    const sharedSection = dictionary?.shared;
+  
+    if (!sharedSection || loading) {
+      return null;
+    }
+
   return (
     <div className="max-w-4xl mx-auto p-4">
       <div className="w-full flex justify-start">
@@ -49,24 +59,24 @@ function SelectQuestionsContent() {
           href="/dashboard/division"
           className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4 gap-2"
         >
-          <ArrowLeft /> Go Back
+          <ArrowLeft /> {sharedSection?.navigation?.go_back}
         </Link>
       </div>
       <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
         <h2 className="text-gray-800 text-2xl font-bold">
-          Select Number of Questions for dividing by [ {divisor.join(",")} ]
+          {sharedSection?.select_questions?.title} : ÷ [ {divisor.join(",")} ]
         </h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} divisor={divisor} />
+            <QuestionCountCard questions={sharedSection?.select_questions?.questions} key={count} count={count} divisor={divisor} />
           ))}
         </div>
         <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
           <h3 className="text-gray-800 text-lg font-semibold mb-4">
-            Practice Tips:
+            {sharedSection?.select_questions?.practice_tips}
           </h3>
           <ul className="space-y-2">
-            {practiceTips.map((tip, index) => (
+            {sharedSection?.select_questions?.tips.map((tip, index) => (
               <li
                 key={index}
                 className="text-gray-600 text-sm list-disc list-inside"

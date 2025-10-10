@@ -14,17 +14,18 @@ import CongratulationsScreen from "@/components/CongratulationsScreen";
 import Numpad from "@/components/Numpad";
 import { useAddDivisionPracticeMutation } from "@/Redux/features/division/divisionApi";
 import { toast } from "sonner";
+import { useDictionary } from "@/hook/useDictionary";
 
 type Question = {
-  num1: number; // Dividend
-  num2: number; // Divisor
+  num1: number;
+  num2: number;
   answer: number;
 };
 
 type ProgressStatus = "correct" | "incorrect" | "pending";
 
 // --- Reusable UI Components ---
-const HelpChart = ({ divisor }: { divisor: number }) => (
+const HelpChart = ({ divisor, help_chart }: { divisor: number; help_chart: string }) => (
   <motion.div
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
@@ -33,7 +34,7 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
     <h3 className="mb-4 text-lg font-semibold text-gray-800 text-center">
-      Help chart (÷{divisor} Table)
+      {help_chart} : (÷ {divisor})
     </h3>
     <div className="grid grid-cols-2 gap-2">
       {Array.from({ length: 10 }, (_, i) => (i + 1) * divisor).map(
@@ -56,6 +57,10 @@ const HelpChart = ({ divisor }: { divisor: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const { dictionary, loading } = useDictionary();
+  const practice = dictionary?.shared?.practice;
+  const operationLang = dictionary?.operations?.division;
 
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -86,63 +91,40 @@ function PracticePageContent() {
   }, [searchParams]);
 
 
-  // Generate questions
-  // const generateQuestions = useCallback(() => {
-  //   const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-  //     let num2: number;
-
-  //     if (divisor === null) {
-  //       num2 = Math.floor(Math.random() * questionCount) + 1;
-  //     } else if (divisor.length === 1) {
-  //       num2 = divisor[0];
-  //     } else {
-  //       const randomIndex = Math.floor(Math.random() * divisor.length);
-  //       num2 = divisor[randomIndex];
-  //     }
-
-  //     const multiplier = Math.floor(Math.random() * questionCount) + 1;
-  //     const num1 = num2 * multiplier;
-  //     const answer = multiplier;
-
-  //     return { num1, num2, answer };
-  //   });
-
-  //   setQuestions(newQuestions);
-  //   setProgress(Array(questionCount).fill("pending"));
-  //   setCurrentQuestionIndex(0);
-  //   setUserAnswer("");
-  //   setFeedback({ type: null, message: "" });
-  //   setIsComplete(false);
-  // }, [questionCount, divisor]);
   const generateQuestions = useCallback(() => {
-  const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
-    let num2: number;
+    const newQuestions: Question[] = Array.from({ length: questionCount }, () => {
+      let num2: number;
 
-    if (divisor === null) {
-      num2 = Math.floor(Math.random() * questionCount) + 1;
-    } else if (divisor.length === 1) {
-      num2 = divisor[0];
-    } else {
-      const randomIndex = Math.floor(Math.random() * divisor.length);
-      num2 = divisor[randomIndex];
-    }
+      if (divisor === null) {
+        num2 = Math.floor(Math.random() * 10) + 1; // max 10
+      } else if (divisor.length === 1) {
+        num2 = divisor[0];
+      } else {
+        const randomIndex = Math.floor(Math.random() * divisor.length);
+        num2 = divisor[randomIndex];
+      }
 
-    // ✅ Limit multiplier so the answer (multiplier) is max 10
-    const multiplier = Math.floor(Math.random() * 10) + 1;
+      const multiplier = Math.floor(Math.random() * 10) + 1;
+      let num1 = num2 * multiplier;
 
-    const num1 = num2 * multiplier;
-    const answer = multiplier;
+      // Ensure num1 ≤ 100
+      while (num1 > 100) {
+        num2 = Math.floor(Math.random() * 10) + 1;
+        num1 = num2 * (Math.floor(Math.random() * 10) + 1);
+      }
 
-    return { num1, num2, answer };
-  });
+      const answer = num1 / num2;
 
-  setQuestions(newQuestions);
-  setProgress(Array(questionCount).fill("pending"));
-  setCurrentQuestionIndex(0);
-  setUserAnswer("");
-  setFeedback({ type: null, message: "" });
-  setIsComplete(false);
-}, [questionCount, divisor]);
+      return { num1, num2, answer };
+    });
+
+    setQuestions(newQuestions);
+    setProgress(Array(questionCount).fill("pending"));
+    setCurrentQuestionIndex(0);
+    setUserAnswer("");
+    setFeedback({ type: null, message: "" });
+    setIsComplete(false);
+  }, [questionCount, divisor]);
 
 
   useEffect(() => {
@@ -345,6 +327,10 @@ function PracticePageContent() {
     );
   }
 
+  if (!practice || !operationLang || loading) {
+    return null;
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
       {/* Header */}
@@ -357,7 +343,7 @@ function PracticePageContent() {
             <ArrowLeft className="text-gray-600" />
           </button>
           <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
-            Practice Division
+            {operationLang?.name} {practice?.title}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -373,9 +359,9 @@ function PracticePageContent() {
       {/* Progress Bar */}
       <div className="p-4 mb-8 bg-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Progress</span>
+          <span className="text-sm font-medium text-gray-700">{practice?.progress}</span>
           <span className="text-sm font-medium text-gray-700">
-            {currentQuestionIndex + 1} of {questionCount}
+            {currentQuestionIndex + 1} {practice?.of} {questionCount}
           </span>
         </div>
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
@@ -402,7 +388,7 @@ function PracticePageContent() {
         <div className="lg:col-span-4">
           <AnimatePresence>
             {showHelp && currentQuestion && (
-              <HelpChart divisor={currentQuestion.num2} />
+              <HelpChart help_chart={practice?.help_chart} divisor={currentQuestion.num2} />
             )}
           </AnimatePresence>
         </div>
@@ -431,7 +417,7 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
+            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-3xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
               }`}
 
           >
@@ -456,8 +442,9 @@ function PracticePageContent() {
                     }`}
                 >
                   {feedback.type === "correct"
-                    ? "Right Answer🎉 !"
-                    : "Wrong Answer😢 !"}
+                    ? practice?.feedback?.correct?.title
+                    : practice?.feedback?.incorrect?.title
+                  }
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"
@@ -465,6 +452,7 @@ function PracticePageContent() {
                     : "text-red-500"
                     }`}
                 >
+                  {/* {feedback.message} */}
                 </p>
               </div>
             </div>

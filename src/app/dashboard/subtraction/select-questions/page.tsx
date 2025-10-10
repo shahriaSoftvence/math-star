@@ -4,6 +4,7 @@ import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { useDictionary } from '@/hook/useDictionary';
 
 const questionCounts = [10, 20, 30, 40, 50];
 
@@ -14,11 +15,11 @@ const practiceTips = [
   'Take breaks between practice sessions.',
 ];
 
-const QuestionCountCard = ({ count, range, operation }: { count: number; range: string | null; operation: string | null }) => (
+const QuestionCountCard = ({ count, range, operation, questions }: { count: number; range: string | null; operation: string | null ; questions: string }) => (
   <Link href={`/dashboard/subtraction/practice?count=${count}&range=${range || '10'}&operation=${operation}`}>
     <div className="w-36 self-stretch p-8 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-pink-200 hover:to-pink-300 transition-all transform hover:scale-105">
       <div className="text-center text-gray-800 text-4xl font-bold">{count}</div>
-      <div className="text-center text-gray-600 text-sm">Questions</div>
+      <div className="text-center text-gray-600 text-sm">{questions}</div>
     </div>
   </Link>
 );
@@ -29,24 +30,31 @@ function SelectQuestionsContent() {
   const range = searchParams?.get('range') ?? null;
   const operation = searchParams?.get('operation') ?? null;
 
+  const { dictionary, loading } = useDictionary();
+  const sharedSection = dictionary?.shared;
+
+  if (!sharedSection || loading) {
+    return null;
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-4">
        <div className="w-full flex justify-start">
           <Link href="/dashboard/subtraction" className="text-gray-800 text-[20px] font-bold flex justify-center items-center mb-4 gap-2">
-            <ArrowLeft /> Go Back
+            <ArrowLeft /> {sharedSection?.navigation?.go_back}
           </Link>
         </div>
       <div className="w-full p-8 bg-white rounded-lg shadow-md inline-flex flex-col justify-start items-center gap-8">
-        <h2 className="text-gray-800 text-2xl font-bold">Select Number of Questions</h2>
+        <h2 className="text-gray-800 text-2xl font-bold">{sharedSection?.select_questions?.title}</h2>
         <div className="flex flex-wrap justify-center items-start gap-4">
           {questionCounts.map((count) => (
-            <QuestionCountCard key={count} count={count} range={range} operation={operation} />
+            <QuestionCountCard questions={sharedSection?.select_questions?.questions} key={count} count={count} range={range} operation={operation} />
           ))}
         </div>
         <div className="self-stretch px-6 py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
-          <h3 className="text-gray-800 text-lg font-semibold mb-4">Practice Tips:</h3>
+          <h3 className="text-gray-800 text-lg font-semibold mb-4">{sharedSection?.select_questions?.practice_tips}</h3>
           <ul className="space-y-2">
-            {practiceTips.map((tip, index) => (
+            {sharedSection?.select_questions?.tips.map((tip, index) => (
               <li key={index} className="text-gray-600 text-sm list-disc list-inside">
                 {tip}
               </li>

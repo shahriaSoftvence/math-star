@@ -12,9 +12,7 @@ import {
   ArrowLeft,
   Check,
   X,
-  RefreshCcw,
-  ArrowRight,
-  ArrowLeftCircle
+  RefreshCcw
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
@@ -24,6 +22,7 @@ import {
   useAddNoBorrowPracticeMutation,
 } from "@/Redux/features/subtraction/subtractionApi";
 import { toast } from "sonner";
+import { useDictionary } from "@/hook/useDictionary";
 
 // --- Type Definitions ---
 type Question = {
@@ -66,6 +65,10 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
 function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const { dictionary, loading } = useDictionary();
+  const practice = dictionary?.shared?.practice;
+  const operationLang = dictionary?.operations?.subtraction;
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -314,9 +317,6 @@ function PracticePageContent() {
       toast.error("Failed to save score.");
       router.push("/dashboard/subtraction");
     }
-
-
-
   };
 
   const viewRewards = async () => {
@@ -377,6 +377,10 @@ function PracticePageContent() {
     );
   }
 
+  if (!practice || !operationLang || loading) {
+    return null;
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
       {/* Header */}
@@ -389,7 +393,7 @@ function PracticePageContent() {
             <ArrowLeft className="text-gray-600" />
           </button>
           <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
-            Practice Subtraction
+           {operationLang?.name} {practice?.title}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -464,7 +468,7 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
+            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-3xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
               }`}
 
           >
@@ -489,8 +493,9 @@ function PracticePageContent() {
                     }`}
                 >
                   {feedback.type === "correct"
-                    ? "Right Answer🎉 !"
-                    : "Wrong Answer😢 !"}
+                    ? practice?.feedback?.correct?.title
+                    : practice?.feedback?.incorrect?.title
+                  }
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"

@@ -90,7 +90,7 @@
     }
   },
   "navbar": {
-    "greeting": "Hallo, {grade}! Bereit, heute ein Mathe-Star zu werden?",
+    "greeting": "Hallo, {grade}! Bereit, heute ein Math Star zu werden?",
     "loading": "Lädt...",
     "stars_text": "{count} Sterne",
     "reward_text": "{name}",
@@ -156,11 +156,11 @@
     },
     "progress_section": {
       "title": "Dein Fortschritt heute",
-      "practice_time": "Übungszeit:",
+      "practice_time": "Übungszeit :",
       "minutes": "Minuten",
-      "stars_earned": "Verdiente Sterne:",
-      "best_challenge_score": "Beste Herausforderungspunktzahl:",
-      "daily_goal_progress": "Täglicher Zielfortschritt:"
+      "stars_earned": "Verdiente Sterne :",
+      "best_challenge_score": "Beste Herausforderungspunktzahl :",
+      "daily_goal_progress": "Täglicher Zielfortschritt :"
     },
     "activity_section": {
       "title": "Letzte Aktivitäten",
@@ -178,8 +178,8 @@
       "symbol": "+",
       "color": "blue",
       "terms": {
-        "carry": "mit Übertrag",
-        "no_carry": "ohne Übertrag"
+        "carry": "mit Zehnerübergang",
+        "no_carry": "ohne Zehnerübergang"
       }
     },
     "subtraction": {
@@ -187,8 +187,8 @@
       "symbol": "-",
       "color": "pink",
       "terms": {
-        "borrow": "mit Borgen",
-        "no_borrow": "ohne Borgen"
+        "borrow": "mit Zehnerübergang",
+        "no_borrow": "ohne Zehnerübergang"
       }
     },
     "multiplication": {
@@ -216,14 +216,14 @@
       "cancel": "Abbrechen"
     },
     "exercise_section": {
-      "title": "{operation} Übung.",
+      "title": " Übung.",
       "number_range": "Zahlenbereich",
       "continue_with": "Weiter mit",
       "go": "Los",
       "selected_ranges": "[ {ranges} ]"
     },
     "challenge_section": {
-      "title": "{operation} Herausforderungen.",
+      "title": " Herausforderungen.",
       "challenges": {
         "no_mistake": {
           "title": "Kein Fehler",
@@ -259,16 +259,18 @@
       ]
     },
     "practice": {
+      "title": "Übung",
       "progress": "Fortschritt",
       "help_chart": "Hilfstabelle",
       "reset": "Zurücksetzen",
+      "of": "von",
       "feedback": {
         "correct": {
-          "title": "Richtige Antwort🎉 !",
+          "title": "Richtige !",
           "message": "Deine Antwort ist absolut richtig!"
         },
         "incorrect": {
-          "title": "Falsche Antwort😢 !",
+          "title": "Falsche !",
           "message": "Gib jetzt die richtige Antwort ein, um fortzufahren"
         }
       }
@@ -323,8 +325,8 @@
   "profile": {
     "page_title": "Mein Profil",
     "user_info": {
-      "math_star_level": "Mathe-Star Level {level}",
-      "keep_practicing": "Übe weiter, um Level {nextLevel} zu erreichen!",
+      "math_star_level": "Math Star Level {level}",
+      "keep_practicing": "Übe weiter, um Level {nextLevel} zu erreichen !",
       "edit_profile": "Profil bearbeiten"
     },
     "achievements": {
@@ -354,7 +356,7 @@
     "labels": {
       "name": "Name",
       "email": "E-Mail",
-      "grade": "Klasse",
+      "grade": "Math Star Name",
       "stars": "Sterne",
       "level": "Level",
       "join_date": "Mitglied seit"
@@ -438,7 +440,7 @@
     "auto_renewal": {
       "title": "Automatische Verlängerung",
       "description": "Abonnement automatisch verlängern",
-      "next_charge": "Nächste Abbuchung am: {date}"
+      "next_charge": "Nächste Abbuchung am :"
     },
     "quick_actions": {
       "title": "Schnellaktionen",
@@ -450,7 +452,7 @@
       "add_card": "Karte hinzufügen",
       "no_methods": "Keine Zahlungsmethoden hinterlegt. Fügen Sie eine Karte hinzu, um Ihr Abonnement fortzusetzen.",
       "card_display": "{brand} •••• {last4}",
-      "expires": "Läuft ab am {month} / {year}",
+      "expires": "Läuft ab am ",
       "default": "Standard",
       "remove_card": "Karte entfernen",
       "remove_dialog": {
@@ -489,7 +491,7 @@
     }
   },
   "congratulations_screen": {
-    "title": "🎉 Herzlichen Glückwunsch! 🎉",
+    "title": "🎉 Glückwunsch! 🎉",
     "earned_message": "Du hast verdient",
     "encouragement": "Mach weiter so! Deine Hingabe zum Mathe-Lernen zahlt sich aus!",
     "buttons": {
@@ -522,7 +524,7 @@
     "title": "Aktuelles Abonnement",
     "no_plan": "Kein Plan",
     "free_trial": "/ Kostenlose Testversion",
-    "renews_on": "Verlängert sich am: {date}",
+    "renews_on": "Verlängert sich am :",
     "actions": {
       "cancel_subscription": "Abonnement kündigen",
       "buy_subscription": "Abonnement kaufen",

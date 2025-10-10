@@ -1,3 +1,4 @@
+import { useDictionary } from '@/hook/useDictionary';
 import Image from 'next/image';
 import React from 'react';
 import { IoStarSharp } from 'react-icons/io5';
@@ -13,6 +14,13 @@ type RewardCardProps = {
 export default function RewardCard({ icon, title, star_range, isUnlocked }: RewardCardProps) {
   const cardBorder = isUnlocked ? 'border-green-300' : 'border-gray-200';
   const cardOpacity = isUnlocked ? '' : 'opacity-75';
+
+  const { dictionary, loading } = useDictionary();
+    const rewards = dictionary?.rewards;
+  
+    if (!rewards || loading) {
+      return null;
+    }
 
   return (
     <div
@@ -35,11 +43,11 @@ export default function RewardCard({ icon, title, star_range, isUnlocked }: Rewa
     </div>
   {isUnlocked ? (
     <div className="w-full px-6 py-2 bg-green-100 text-green-800 rounded-full font-bold mt-auto">
-      Unlocked
+      {rewards?.reward_card.unlocked}
     </div>
   ) : (
     <div className="w-full px-6 py-2 bg-blue-500 text-white rounded-full font-bold mt-auto">
-      Locked
+      {rewards?.reward_card.locked}
     </div>
   )}
 </div>

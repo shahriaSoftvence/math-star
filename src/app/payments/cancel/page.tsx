@@ -14,7 +14,7 @@ export default function Cancel() {
     useEffect(() => {
         const timer = setTimeout(() => {
             router.push("/#pricing");
-        }, 10000);
+        }, 3000);
 
         return () => clearTimeout(timer);
     }, [router]);

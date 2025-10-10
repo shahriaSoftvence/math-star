@@ -35,17 +35,16 @@ export default function AdditionCard({
             href={`/dashboard/addition/select-questions?range=${rangeParam}&operation=${operation}`}
             onClick={() => handleAddExercise(parseInt(rangeParam))}
         >
-            <div className="p-6 text-center bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:border-blue-400">
-                <p className="text-gray-600 text-sm">number range</p>
-                <p className="text-lg font-bold my-2 text-gray-800">{range}</p>
-                {/* <p className="text-xs text-gray-600">{percentage}%</p> */}
-                <p className="text-[#EAB308] flex justify-center items-center gap-2 mt-1">
+            <div className="p-8 text-center bg-white border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:border-blue-400">
+                {/* <p className="text-gray-600 text-sm">number range</p> */}
+                <p className="text-lg font-bold text-gray-800">{range}</p>
+                <p className="text-[#EAB308] flex justify-center items-center gap-2 mt-2.5">
                     {Array.from({ length: star }).map((_, index) => (
-            <Image key={index} src={pointStar} alt="point star" width={20} height={20} />
-          ))}
+                        <Image key={index} src={pointStar} alt="point star" width={20} height={20} />
+                    ))}
                 </p>
             </div>
-            
+
         </Link>
     );
 }

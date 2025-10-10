@@ -172,9 +172,11 @@ export interface LanguageType {
             tips: string[];
         };
         practice: {
+            title: string;
             progress: string;
             help_chart: string;
             reset: string;
+            of: string;
             feedback: {
                 correct: { title: string; message: string };
                 incorrect: { title: string; message: string };

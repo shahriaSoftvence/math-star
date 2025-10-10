@@ -24,8 +24,10 @@ export default function Home() {
   const dashboard = dictionary?.dashboard;
   const practice_section = dashboard?.practice_section;
   const star_balance = dashboard?.star_balance;
+  const progress_section = dashboard?.progress_section;
+  const activity_section = dashboard?.activity_section;
 
-  if (!dashboard || loading || !practice_section || !star_balance) {
+  if (!dashboard || loading || !practice_section || !progress_section || !star_balance || !activity_section) {
     return null;
   }
 
@@ -113,26 +115,26 @@ export default function Home() {
       {/* Progress and Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-2xl">
-          <h3 className="font-semibold mb-6 text-gray-800">Your Progress Today</h3>
+          <h3 className="font-semibold mb-6 text-gray-800">{progress_section?.title}</h3>
           <div className="space-y-7">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Practice Time:</span>
-              <span className="font-medium text-[#2563EB]">{progress?.practice_time_minutes} Minutes</span>
+              <span className="text-gray-500">{progress_section?.practice_time}</span>
+              <span className="font-medium text-[#2563EB]">{progress?.practice_time_minutes} {progress_section?.minutes}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Stars Earned:</span>
+              <span className="text-gray-500">{progress_section?.stars_earned}</span>
               <div className="font-medium text-yellow-500 flex items-center">
                 <span className='text-[#2563EB]'>{progress?.stars_earned}</span>
                 <Star size={16} className="ml-1 fill-[#EAB308]" />
               </div>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Best Challenge Score:</span>
+              <span className="text-gray-500">{progress_section?.best_challenge_score}</span>
               <span className="font-medium text-green-500">🏆 {progress?.best_challenge_score}</span>
             </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">Daily Goal Progress:</span>
+                <span className="text-gray-500">{progress_section?.daily_goal_progress}</span>
                 <span className="font-medium text-gray-800">{progress?.daily_goal_progress}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -142,7 +144,7 @@ export default function Home() {
           </div>
         </div>
         <div className="bg-white p-6 rounded-2xl">
-          <h3 className="font-semibold mb-6 text-gray-800">Recent Activity</h3>
+          <h3 className="font-semibold mb-6 text-gray-800">{activity_section?.title}</h3>
           <div className="space-y-2">
             {summary?.data?.recent_activities_count > 0 ? (
               activities?.map((activity, idx) => (
@@ -155,7 +157,7 @@ export default function Home() {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-sm">No recent activity to show.</p>
+              <p className="text-gray-500 text-sm">{activity_section?.no_activity}</p>
             )}
 
           </div>

@@ -17,6 +17,7 @@ import {
   useAddNoCarryPracticeMutation,
 } from "@/Redux/features/addition/additionApi";
 import { toast } from "sonner";
+import { useDictionary } from "@/hook/useDictionary";
 
 // --- Type Definitions ---
 type Question = {
@@ -29,7 +30,7 @@ type ProgressStatus = "correct" | "incorrect" | "pending";
 
 // --- Reusable UI Components ---
 
-const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
+const HelpChart = ({ num1, num2, help_chart }: { num1: number; num2: number, help_chart: string }) => (
   <motion.div
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
@@ -37,7 +38,7 @@ const HelpChart = ({ num1, num2 }: { num1: number; num2: number }) => (
     transition={{ duration: 0.3 }}
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
-    <h3 className="mb-4 text-lg font-semibold text-gray-800">Help chart</h3>
+    <h3 className="mb-4 text-lg font-semibold text-gray-800">{help_chart}</h3>
     <div className="grid grid-cols-10 gap-2 md:gap-3 lg:gap-2 mb-4">
       {Array.from({ length: num1 }).map((_, i) => (
         <div
@@ -61,6 +62,12 @@ function PracticePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const { dictionary, loading } = useDictionary();
+  const practice = dictionary?.shared?.practice;
+  const operationLang = dictionary?.operations?.addition;
+
+
+
   // State management
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -78,6 +85,7 @@ function PracticePageContent() {
 
   const [addNoCarryPractice] = useAddNoCarryPracticeMutation();
   const [addCarryPractice] = useAddCarryPracticeMutation();
+
 
   const questionCount = useMemo(
     () => parseInt(searchParams?.get("count") || "10", 10),
@@ -370,6 +378,10 @@ function PracticePageContent() {
     );
   }
 
+  if (!practice || !operationLang || loading) {
+    return null;
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
       {/* Header */}
@@ -382,7 +394,7 @@ function PracticePageContent() {
             <ArrowLeft className="text-gray-600" />
           </button>
           <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
-            Practice Addition
+            {operationLang?.name} {practice?.title}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -398,9 +410,9 @@ function PracticePageContent() {
       {/* Progress Bar */}
       <div className="p-4 mb-8 bg-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Progress</span>
+          <span className="text-sm font-medium text-gray-700">{practice?.progress}</span>
           <span className="text-sm font-medium text-gray-700">
-            {currentQuestionIndex + 1} of {questionCount}
+            {currentQuestionIndex + 1} {practice?.of} {questionCount}
           </span>
         </div>
         <div className="flex w-full h-2 overflow-hidden bg-gray-200 rounded-full">
@@ -430,6 +442,7 @@ function PracticePageContent() {
               <HelpChart
                 num1={currentQuestion.num1}
                 num2={currentQuestion.num2}
+                help_chart={practice?.help_chart}
               />
             )}
           </AnimatePresence>
@@ -459,7 +472,7 @@ function PracticePageContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
+            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-3xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
               }`}
 
           >
@@ -484,8 +497,9 @@ function PracticePageContent() {
                     }`}
                 >
                   {feedback.type === "correct"
-                    ? "Right Answer🎉 !"
-                    : "Wrong Answer😢 !"}
+                    ? practice?.feedback?.correct?.title
+                    : practice?.feedback?.incorrect?.title
+                  }
                 </p>
                 <p
                   className={`text-sm ${feedback.type === "correct"

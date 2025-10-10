@@ -156,11 +156,11 @@
     },
     "progress_section": {
       "title": "Your Progress Today",
-      "practice_time": "Practice Time:",
+      "practice_time": "Practice Time :",
       "minutes": "Minutes",
-      "stars_earned": "Stars Earned:",
-      "best_challenge_score": "Best Challenge Score:",
-      "daily_goal_progress": "Daily Goal Progress:"
+      "stars_earned": "Stars Earned :",
+      "best_challenge_score": "Best Challenge Score :",
+      "daily_goal_progress": "Daily Goal Progress :"
     },
     "activity_section": {
       "title": "Recent Activity",
@@ -178,8 +178,8 @@
       "symbol": "+",
       "color": "blue",
       "terms": {
-        "carry": "carrying over",
-        "no_carry": "no carrying over"
+        "carry": "with tens transition",
+        "no_carry": "without tens transition"
       }
     },
     "subtraction": {
@@ -187,8 +187,8 @@
       "symbol": "-",
       "color": "pink",
       "terms": {
-        "borrow": "borrowing",
-        "no_borrow": "no borrowing"
+        "borrow": "with tens transition",
+        "no_borrow": "without tens transition"
       }
     },
     "multiplication": {
@@ -216,14 +216,14 @@
       "cancel": "Cancel"
     },
     "exercise_section": {
-      "title": "{operation} exercise.",
+      "title": " exercise.",
       "number_range": "number range",
       "continue_with": "Continue with",
       "go": "Go",
       "selected_ranges": "[ {ranges} ]"
     },
     "challenge_section": {
-      "title": "{operation} challenges.",
+      "title": " challenges.",
       "challenges": {
         "no_mistake": {
           "title": "No Mistake",
@@ -259,16 +259,18 @@
       ]
     },
     "practice": {
+      "title": "Practice",
       "progress": "Progress",
       "help_chart": "Help chart",
       "reset": "Reset",
+      "of": "of",
       "feedback": {
         "correct": {
-          "title": "Right Answer🎉 !",
+          "title": "Right !",
           "message": "Your answer is absolutely right!"
         },
         "incorrect": {
-          "title": "Wrong Answer😢 !",
+          "title": "Wrong !",
           "message": "Now enter the right answer to continue"
         }
       }
@@ -354,7 +356,7 @@
     "labels": {
       "name": "Name",
       "email": "Email",
-      "grade": "Grade",
+      "grade": "Math Star Name",
       "stars": "Stars",
       "level": "Level",
       "join_date": "Member since"
@@ -438,7 +440,7 @@
     "auto_renewal": {
       "title": "Auto Renewal",
       "description": "Automatically renew subscription",
-      "next_charge": "Next charge on: {date}"
+      "next_charge": "Next charge on :"
     },
     "quick_actions": {
       "title": "Quick Actions",
@@ -450,7 +452,7 @@
       "add_card": "Add Card",
       "no_methods": "No payment methods on file. Add a card to continue your subscription.",
       "card_display": "{brand} •••• {last4}",
-      "expires": "Expires on {month} / {year}",
+      "expires": "Expires on ",
       "default": "Default",
       "remove_card": "Remove Card",
       "remove_dialog": {
@@ -522,7 +524,7 @@
     "title": "Current Subscription",
     "no_plan": "No Plan",
     "free_trial": "/ Free Trial",
-    "renews_on": "Renews on: {date}",
+    "renews_on": "Renews on :",
     "actions": {
       "cancel_subscription": "Cancel Subscription",
       "buy_subscription": "Buy Subscription",

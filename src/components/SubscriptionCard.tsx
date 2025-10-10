@@ -7,14 +7,20 @@ import { useCancelSubscriptionMutation, useGetUserActivePlanQuery } from '@/Redu
 import { toast } from 'sonner'
 import moment from 'moment'
 import { useIsPremium } from '@/Redux/hooks'
+import { useDictionary } from '@/hook/useDictionary'
 
 export default function SubscriptionCard() {
     const [cancelSubscription, { isLoading: cancelLoading }] = useCancelSubscriptionMutation();
     const { data: activePlan } = useGetUserActivePlanQuery();
     const isPremium = useIsPremium();
-
     const userActivePlan = activePlan?.data?.[0];
 
+    const { dictionary, loading } = useDictionary();
+    const subscription_card = dictionary?.subscription_card;
+
+    if (!subscription_card || loading) {
+        return null;
+    }
     const handleCancelSubscription = async () => {
         try {
             const res = await cancelSubscription({}).unwrap();
@@ -32,14 +38,14 @@ export default function SubscriptionCard() {
                     <Crown size={32} className="text-yellow-300" />
                     <div>
                         <h2 className="text-xl font-bold font-Nunito">
-                            Current Subscription
+                            {subscription_card?.title}
                         </h2>
                         <p className="text-purple-100 font-Nunito capitalize font-medium">{isPremium ? (
                             <>
                                 {userActivePlan?.plan_name} {userActivePlan?.is_trial && "/ Free Trial"}
                             </>
                         ) : (
-                            "No Plan"
+                            subscription_card?.no_plan
                         )}
                         </p>
                     </div>
@@ -48,33 +54,32 @@ export default function SubscriptionCard() {
                     {
                         isPremium && <div className="flex items-center gap-2 text-sm text-purple-100 font-Nunito">
                             <Calendar size={16} />
-                            <span>Renews on : {userActivePlan?.end_date
+                            <span>{subscription_card?.renews_on} {userActivePlan?.end_date
                                 ? moment(userActivePlan.end_date).format("Do MMM, YYYY")
                                 : "N/A"}</span>
                         </div>
                     }
-
-
                     {
                         isPremium ? <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button variant={"outline"} className="text-red-500 hover:text-red-600">Cancel Subscription</Button>
+                                <Button variant={"outline"} className="text-red-500 hover:text-red-600">{subscription_card?.actions?.cancel_subscription}</Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>{subscription_card?.cancel_dialog?.title}</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        Are you sure you want to cancel your subscription?
+                                        {subscription_card?.cancel_dialog?.description}
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>No</AlertDialogCancel>
-                                    <AlertDialogAction className="bg-red-700 hover:bg-red-600" onClick={handleCancelSubscription}>{cancelLoading ? "Loading..." : "Continue"}</AlertDialogAction>
+                                    <AlertDialogCancel>{subscription_card?.cancel_dialog?.cancel}</AlertDialogCancel>
+                                    <AlertDialogAction className="bg-red-700 hover:bg-red-600"
+                                        onClick={handleCancelSubscription}>{cancelLoading ? subscription_card?.actions?.loading : subscription_card?.cancel_dialog?.confirm}</AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog> : <Link href="/#pricing"><button
                             className="px-3 py-2 bg-white text-red-500 text-sm font-medium font-Nunito rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50">
-                            Buy Subscription
+                            {subscription_card?.actions?.cancel_subscription}
                         </button></Link>
                     }
                 </div>

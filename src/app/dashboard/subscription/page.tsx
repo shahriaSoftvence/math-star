@@ -30,6 +30,7 @@ import SubscriptionCard from "@/components/SubscriptionCard";
 import { useIsPremium } from "@/Redux/hooks";
 import LoadingFile from '@/asset/loader.svg'
 import { useGetProfileQuery } from "@/Redux/features/auth/authApi";
+import { useDictionary } from "@/hook/useDictionary";
 
 // Reusable Toggle Switch Component (Now purely presentational)
 const ToggleSwitch = ({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) => {
@@ -56,13 +57,19 @@ export default function SubscriptionPage() {
   const [autoRenewSubscription] = useAutoRenewSubscriptionMutation();
   const { data: billingHistory } = useGetBillingHistoryQuery();
   const [showAll, setShowAll] = useState(false);
-
   const billingData = billingHistory?.data || [];
   const visibleData = showAll ? billingData : billingData.slice(0, 6);
   const isPremium = useIsPremium();
   const { refetch } = useGetProfileQuery();
-
   const userActivePlan = activePlan?.data?.[0];
+
+  const { dictionary, loading } = useDictionary();
+    const subscription = dictionary?.subscription;
+  
+    if ( !subscription || loading) {
+      return null;
+    }
+
   const handleManageSubscription = async () => {
     try {
       const res = await renewSubscription({}).unwrap();
@@ -122,7 +129,7 @@ export default function SubscriptionPage() {
         <div className="text-center">
           <div role="status">
             <LoadingFile className="inline w-24 h-24 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" />
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only">{subscription?.loading}</span>
           </div>
         </div>
       </div>
@@ -141,10 +148,10 @@ export default function SubscriptionPage() {
           </Link>
           <div>
             <h1 className="text-gray-800 text-3xl font-bold font-Nunito">
-              Subscription
+              {subscription?.page_title}
             </h1>
             <p className="text-gray-600 font-Nunito">
-              Manage your plan and payments
+              {subscription?.subtitle}
             </p>
           </div>
         </div>
@@ -156,16 +163,16 @@ export default function SubscriptionPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 bg-white rounded-3xl shadow-lg">
             <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4 ">
-              Auto Renewal
+              {subscription?.auto_renewal?.title}
             </h3>
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-600 font-Nunito">
-                  Automatically renew subscription
+                  {subscription?.auto_renewal?.description}
                 </p>
                 {isPremium && userActivePlan?.is_auto_renew &&
                   <p className="text-gray-500 text-sm font-Nunito">
-                    Next charge on : {userActivePlan?.end_date
+                    {subscription?.auto_renewal?.next_charge} {userActivePlan?.end_date
                       ? moment(userActivePlan.end_date).add(1, "day").format("Do MMM, YYYY")
                       : "N/A"}
 
@@ -177,7 +184,7 @@ export default function SubscriptionPage() {
           </div>
           <div className="p-6 bg-white rounded-3xl shadow-lg">
             <h3 className="text-gray-800 text-xl font-bold font-Nunito mb-4">
-              Quick Actions
+              {subscription?.quick_actions?.title}
             </h3>
             <div className="flex flex-col gap-3">
               <button
@@ -186,7 +193,7 @@ export default function SubscriptionPage() {
                 className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 disabled:opacity-50">
                 <RefreshCw size={16} className="text-slate-950" />
                 <span className="text-slate-950 text-sm font-medium font-Nunito">
-                  {renewLoading ? "Renewing your plan…" : "Renew Now"}
+                  {renewLoading ? subscription?.quick_actions?.renewing : subscription?.quick_actions?.renew_now }
                 </span>
               </button>
             </div>
@@ -197,14 +204,14 @@ export default function SubscriptionPage() {
         <div className="p-6 bg-white rounded-3xl shadow-lg">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-gray-800 text-xl font-bold font-Nunito">
-              Payment Methods
+              {subscription?.payment_methods?.title}
             </h3>
             <button
               onClick={handleAddPaymentMethod}
               disabled={addLoading}
               className="flex items-center gap-2 px-3 py-2 bg-slate-50 border text-[#000] border-slate-200 rounded-md text-sm font-medium hover:bg-slate-100 disabled:opacity-50">
               <Plus size={16} />
-              Add Card
+              {subscription?.payment_methods?.add_card}
             </button>
           </div>
           <div className="space-y-4">
@@ -224,12 +231,12 @@ export default function SubscriptionPage() {
                           {method.card_brand} •••• {method.card_last4}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Expires on {method.exp_month} / {method.exp_year}
+                          {subscription?.payment_methods?.expires} {method.exp_month} / {method.exp_year}
                         </p>
                       </span>
                       {method.is_default && (
                         <p className="text-xs text-center bg-green-100 text-green-700 px-3 py-1 rounded-full mt-2 sm:mt-0">
-                          Default
+                          {subscription?.payment_methods?.default}
                         </p>
                       )}
                     </div>
@@ -247,18 +254,18 @@ export default function SubscriptionPage() {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Remove this Card?</AlertDialogTitle>
+                          <AlertDialogTitle>{subscription?.payment_methods?.remove_dialog?.title}</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Are you sure want to remove this card?
+                            {subscription?.payment_methods?.remove_dialog?.description}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>No</AlertDialogCancel>
+                          <AlertDialogCancel>{subscription?.payment_methods?.remove_dialog?.cancel}</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => handleRemovePaymentMethod(method?.stripe_payment_method_id)}
                             className="bg-red-700 hover:bg-red-600"
                           >
-                            Continue
+                            {subscription?.payment_methods?.remove_dialog?.confirm}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
@@ -269,7 +276,7 @@ export default function SubscriptionPage() {
               ))
             ) : (
               <p className="text-gray-600 text-center font-Nunito">
-                No payment methods on file. Add a card to continue your subscription.
+                {subscription?.payment_methods?.no_methods}
               </p>
             )}
           </div>
@@ -277,7 +284,7 @@ export default function SubscriptionPage() {
 
         <div>
           <div className="p-6 bg-white rounded-3xl shadow-lg">
-            <h3 className="text-gray-800 text-xl font-bold mb-6">Billing History</h3>
+            <h3 className="text-gray-800 text-xl font-bold mb-6">{subscription?.billing_history?.title}</h3>
             <div className="space-y-4">
               {billingData.length > 0 ? (
                 <>
@@ -315,19 +322,19 @@ export default function SubscriptionPage() {
 
                   {/* See More / See Less button */}
                   {billingData.length > 6 && (
-                    <div className="flex justify-center">
+                    <div className="flex justify-end mt-2">
                       <Button variant={"link"}
                         onClick={() => setShowAll(!showAll)}
-                        className="text-[#8354FF] font-semibold hover:underline mt-2"
+                        className="text-[#8354FF] font-semibold"
                       >
-                        {showAll ? "See Less" : "See More"} {showAll ? <ChevronUp /> : <ChevronDown />}
+                        {showAll ? subscription?.billing_history?.see_less : subscription?.billing_history?.see_more } {showAll ? <ChevronUp /> : <ChevronDown />}
                       </Button>
                     </div>
                   )}
                 </>
               ) : (
                 <p className="text-center text-gray-500 mt-4">
-                  No Billing History Found
+                  {subscription?.billing_history?.empty_state}
                 </p>
               )}
             </div>

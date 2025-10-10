@@ -15,7 +15,7 @@ export default function Success() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push("/dashboard");
-    }, 10000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [router]);
