@@ -115,7 +115,7 @@ const QuestionsGrid = ({
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
+    <div className="p-5 md:p-6 bg-white rounded-lg shadow-md">
       <h3 className="text-center text-gray-800 text-xl font-bold font-Nunito leading-7 mb-2">
         {des}
       </h3>
@@ -133,7 +133,7 @@ const QuestionsGrid = ({
           <span className="text-sm text-[#000] font-Nunito">{wrong}</span>
         </div>
       </div>
-      <div className="grid grid-cols-6 md:grid-cols-10 gap-2">
+      <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
         {questions.map((q, index) => (
           <div
             key={index}
@@ -346,7 +346,7 @@ export default function HundredQuestionsPage() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-purple-50 py-4">
+    <div className="bg-gradient-to-b from-blue-50 to-purple-50 p-4">
       <div className="max-w-[1440px] mx-auto min-h-screen">
         <div className="flex items-center mb-6">
           <button
@@ -383,7 +383,7 @@ export default function HundredQuestionsPage() {
           </div>
 
           {/* Right Side: Numpad & Current Question */}
-          <div className="w-[360px] p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
+          <div className="w-[275px] md:w-[360px] p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
             <div className="self-stretch p-6 bg-green-100 rounded-lg outline-2 outline-offset-[-2px] outline-green-300 flex flex-col justify-start items-start gap-2">
               {currentQuestion && (
                 <div className="self-stretch text-center justify-center text-gray-800 text-2xl font-bold font-Nunito leading-loose">

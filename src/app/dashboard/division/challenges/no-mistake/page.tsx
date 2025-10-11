@@ -48,15 +48,15 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num:
 
     const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
     return (
-        <div className="grid grid-cols-3 gap-4 w-80 md:w-96">
+        <div className="grid grid-cols-3 gap-4 w-72">
             {buttons.map((btn) => (
-                <button key={btn} onClick={() => handleNumberClick(btn)} className="h-24 text-3xl font-bold text-purple-800 bg-purple-100 rounded-2xl transition-colors hover:bg-purple-200">
+                <button key={btn} onClick={() => handleNumberClick(btn)} className="h-16 text-3xl font-bold text-purple-800 bg-purple-100 rounded-2xl transition-colors hover:bg-purple-200">
                     {btn}
                 </button>
             ))}
-            <button onClick={handleBackspace} className="flex items-center justify-center h-24 text-2xl font-bold text-red-800 bg-red-100 rounded-2xl transition-colors hover:bg-red-200"><Delete size={32} /></button>
-            <button onClick={() => handleNumberClick('0')} className="h-24 text-3xl font-bold text-purple-800 bg-purple-100 rounded-2xl transition-colors hover:bg-purple-200">0</button>
-            <button onClick={handleSubmit} className="flex items-center justify-center h-24 text-3xl font-bold text-green-800 bg-green-100 rounded-2xl transition-colors hover:bg-green-200"><Check size={32} /></button>
+            <button onClick={handleBackspace} className="flex items-center justify-center h-16 text-2xl font-bold text-red-800 bg-red-100 rounded-2xl transition-colors hover:bg-red-200"><Delete size={32} /></button>
+            <button onClick={() => handleNumberClick('0')} className="h-16 text-3xl font-bold text-purple-800 bg-purple-100 rounded-2xl transition-colors hover:bg-purple-200">0</button>
+            <button onClick={handleSubmit} className="flex items-center justify-center h-16 text-3xl font-bold text-green-800 bg-green-100 rounded-2xl transition-colors hover:bg-green-200"><Check size={32} /></button>
         </div>
     );
 };
@@ -67,6 +67,7 @@ export default function NoMistakePage() {
 
     const { dictionary, loading } = useDictionary();
     const challenge_screens = dictionary?.shared?.challenge_screens
+    const api_results = dictionary?.shared?.results
 
     const [gameState, setGameState] = useState<GameState>('ready');
     const [question, setQuestion] = useState<Question>({ num1: 0, num2: 0, answer: 0 });
@@ -83,11 +84,11 @@ export default function NoMistakePage() {
                 questions_answered: score,
                 time_taken_seconds: score * 7,
             }).unwrap();
-            toast.success("Challenge Score Saved!");
+            toast.success(api_results?.practice_saved);
             router.push("/dashboard/division");
         } catch (err: unknown) {
             if (err instanceof Error) console.error(err.message);
-            toast.error("Failed to save Score.");
+            toast.error(api_results?.practice_failed);
             router.push("/dashboard/division");
         }
     };
@@ -183,10 +184,10 @@ export default function NoMistakePage() {
         );
     }
 
-    if (loading || !challenge_screens) {
+    if (loading || !challenge_screens || !api_results) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
-                <p className="text-lg font-semibold text-gray-600">Loading...</p>
+                <p className="text-lg font-semibold text-gray-600">{dictionary?.shared?.loading?.loading}</p>
             </div>
         );
     }
@@ -217,7 +218,7 @@ export default function NoMistakePage() {
                             href="/dashboard/division"
                             className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4 gap-2"
                         >
-                            <ArrowLeft /> Go Back
+                            <ArrowLeft /> {dictionary?.shared?.navigation?.go_back}
                         </Link>
                     </div>
                     <div className="flex items-start gap-4 md:gap-6">
@@ -225,12 +226,11 @@ export default function NoMistakePage() {
                             <Target className="w-7 md:w-10 h-7 md:h-10 text-purple-600" />
                         </div>
                         <div className="flex flex-col gap-2 md:gap-3">
-                            <h1 className="text-black text-3xl md:text-6xl font-bold font-Nunito leading-10">
-                                No Mistakes
+                            <h1 className="text-black text-3xl md:text-5xl font-bold font-Nunito leading-10">
+                                {challenge_screens?.instructions?.title1}
                             </h1>
-                            <p className="text-black text-lg md:text-2xl font-medium font-Nunito leading-snug">
-                                The challenge ends on your first mistake, You have 5 seconds for
-                                each problem.
+                            <p className="text-black text-base md:text-xl font-medium font-Nunito leading-snug">
+                                {challenge_screens?.instructions?.no_mistake}
                             </p>
                         </div>
                     </div>
@@ -243,27 +243,27 @@ export default function NoMistakePage() {
                                 <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-500 rounded-full" />
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
                                     <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{`0:${timeLeft.toString().padStart(2, "0")}`}</div>
-                                    <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">Remaining</div>
+                                    <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">{challenge_screens?.game_elements?.timer?.remaining}</div>
                                 </div>
                             </div>
                         </div>
-                        <div className="w-[330px] md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
+                        <div className="w-[275px] md:w-[375px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
                             <div className="self-stretch flex justify-between items-center">
                                 <div className="h-16 flex flex-col">
-                                    <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">Question</span>
+                                    <span className="text-gray-600 text-xl md:text-3xl font-normal font-Nunito leading-snug">{challenge_screens?.game_elements?.question}</span>
                                     <span className="text-purple-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">{score + 1}</span>
                                 </div>
                                 <div className="h-16 flex flex-col">
-                                    <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">Score</span>
+                                    <span className="text-gray-600 text-xl md:text-3xl font-normal font-Nunito leading-snug">{challenge_screens?.game_elements?.score}</span>
                                     <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">{score}</span>
                                 </div>
                             </div>
-                            <div className="self-stretch p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-black flex justify-center items-center gap-2">
-                                <span className="text-center text-gray-800 text-4xl md:text-5xl font-bold font-Nunito leading-[60px]">
+                            <div className="self-stretch p-5 md:p-6 lg:p-8 rounded-3xl lg:rounded-[40px] border border-black flex justify-center items-center gap-2">
+                                <span className="text-center text-gray-800 text-[27px] md:text-4xl lg:text-5xl font-bold font-Nunito leading-[60px]">
                                     {question.num1} ÷ {question.num2} =
                                 </span>
-                                <div className="w-24 h-14 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
-                                    <span className="text-center text-black text-3xl md:text-4xl font-normal font-Nunito">{userAnswer || '?'}</span>
+                                <div className="w-20 h-12 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
+                                    <span className="text-center text-black text-[25px] md:text-3xl lg:text-4xl font-normal font-Nunito">{userAnswer || '?'}</span>
                                 </div>
                             </div>
                         </div>

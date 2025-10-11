@@ -219,10 +219,10 @@ export default function SpeedModePage() {
     );
   }
 
-   if (loading || !challenge_screens || !api_results) {
+  if (loading || !challenge_screens || !api_results) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
-        <p className="text-lg font-semibold text-gray-600">Loading...</p>
+        <p className="text-lg font-semibold text-gray-600">{dictionary?.shared?.loading?.loading}</p>
       </div>
     );
   }
@@ -252,19 +252,19 @@ export default function SpeedModePage() {
               href="/dashboard/addition"
               className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4 gap-2"
             >
-              <ArrowLeft /> Go Back
+              <ArrowLeft /> {dictionary?.shared?.navigation?.go_back}
             </Link>
           </div>
           <div className="flex gap-4 items-start md:gap-6">
             <div className="p-3 bg-blue-100 rounded-full flex justify-center items-center">
-              <PiTimerBold className="w-14 h-14 text-blue-600" />
+              <PiTimerBold className="w-7 md:w-10 h-7 md:h-10 text-blue-600" />
             </div>
             <div className="flex flex-col gap-2 md:gap-3">
-              <h1 className="text-black text-3xl md:text-6xl font-bold font-Nunito leading-10">
-                Speedrun
+              <h1 className="text-black text-3xl md:text-5xl font-bold font-Nunito leading-10">
+                {challenge_screens?.instructions?.title2}
               </h1>
-              <p className="text-black text-lg md:text-2xl font-medium font-Nunito leading-snug">
-                Solve as many problems as possible in 5 minutes
+              <p className="text-black text-base md:text-xl font-medium font-Nunito leading-snug">
+                {challenge_screens?.instructions?.speed_mode}
               </p>
             </div>
           </div>
@@ -272,46 +272,37 @@ export default function SpeedModePage() {
 
         <div className="flex flex-col xl:flex-row justify-start items-center gap-10">
 
-
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="relative w-72 h-72">
-              <div className="w-56 h-56 md:w-64 md:h-64 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
-                <div className="text-center text-white text-4xl md:text-5xl font-bold font-Nunito leading-loose">
-                  {formatTime(timeLeft)}
-                </div>
-                <div className="text-center text-white text-2xl md:text-3xl font-normal font-Nunito leading-tight">
-                  Remaining
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-500 rounded-full" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                  <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{formatTime(timeLeft)}
+                  </div>
+                  <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">
+                    {challenge_screens?.game_elements?.timer?.remaining}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="w-[300px] md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
+            <div className="w-[275px] md:w-[375px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
               <div className="self-stretch flex justify-between items-center">
                 <div className="h-16 flex flex-col">
-                  <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">
-                    Question
-                  </span>
-                  <span className="text-blue-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
-                    {score + 1}
-                  </span>
+                  <span className="text-gray-600 text-xl md:text-3xl font-normal font-Nunito leading-snug">{challenge_screens?.game_elements?.question}</span>
+                  <span className="text-blue-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">{score + 1}</span>
                 </div>
                 <div className="h-16 flex flex-col">
-                  <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">
-                    Score
-                  </span>
-                  <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
-                    {score}
-                  </span>
+                  <span className="text-gray-600 text-xl md:text-3xl font-normal font-Nunito leading-snug">{challenge_screens?.game_elements?.score}</span>
+                  <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">{score}</span>
                 </div>
               </div>
-              <div className="self-stretch p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-black flex justify-center items-center gap-2">
-                <span className="text-center text-gray-800 text-4xl md:text-5xl font-bold font-Nunito leading-[60px]">
+              <div className="self-stretch p-5 md:p-6 lg:p-8 rounded-3xl lg:rounded-[40px] border border-black flex justify-center items-center gap-2">
+                <span className="text-center text-gray-800 text-[27px] md:text-4xl lg:text-5xl font-bold font-Nunito leading-[60px]">
                   {question.num1} + {question.num2} =
                 </span>
-                <div className="w-24 h-14 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
-                  <span className="text-center text-black text-3xl md:text-4xl font-normal font-Nunito">
-                    {userAnswer || "?"}
-                  </span>
+                <div className="w-20 h-12 md:w-28 md:h-16 px-0.5 py-2 rounded-lg border-2 border-black flex justify-center items-center overflow-hidden">
+                  <span className="text-center text-black text-[25px] md:text-3xl lg:text-4xl font-normal font-Nunito">{userAnswer || '?'}</span>
                 </div>
               </div>
             </div>

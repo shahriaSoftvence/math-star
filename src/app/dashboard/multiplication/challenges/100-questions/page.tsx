@@ -96,14 +96,14 @@ const QuestionsGrid = ({
     };
 
     return (
-        <div className="p-6 bg-white rounded-lg shadow-md">
+        <div className="p-5 md:p-6 bg-white rounded-lg shadow-md">
             <h3 className="text-center text-gray-800 text-xl font-bold font-Nunito leading-7 mb-2">{des}</h3>
             <div className="flex justify-center items-center gap-4 mb-4">
                 <div className="flex items-center"><div className="w-4 h-4 bg-yellow-300 rounded mr-2"></div><span className="text-sm font-Nunito text-[#000]">{current}</span></div>
                 <div className="flex items-center"><div className="w-4 h-4 bg-green-400 rounded mr-2"></div><span className="text-sm font-Nunito text-[#000]">{correct}</span></div>
                 <div className="flex items-center"><div className="w-4 h-4 bg-red-400 rounded mr-2"></div><span className="text-sm font-Nunito text-[#000]">{wrong}</span></div>
             </div>
-            <div className="grid grid-cols-6 md:grid-cols-10 gap-2">
+            <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
                 {questions.map((q, index) => (
                     <div
                         key={index}
@@ -297,8 +297,8 @@ export default function HundredQuestionsPage() {
     }
 
     return (
-        <div className="bg-gradient-to-b from-green-50 to-purple-50">
-            <div className="max-w-[1440px] mx-auto min-h-screen p-4 md:p-6">
+        <div className="bg-gradient-to-b from-green-50 to-purple-50 p-4">
+            <div className="max-w-[1440px] mx-auto min-h-screen">
                 <div className="flex items-center mb-6">
                     <button onClick={() => router.back()} className="p-2 transition-colors rounded-full hover:bg-gray-200">
                         <ArrowLeft className="text-gray-600" />
@@ -308,15 +308,17 @@ export default function HundredQuestionsPage() {
 
                 <div className="flex flex-col xl:flex-row justify-center items-center gap-6">
                     {/* Left Side: Timer */}
-                    <div className="w-72 h-72 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex flex-col justify-center items-center flex-shrink-0">
-                        <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">{formatTime(timeLeft)}</div>
-                        <div className="text-center text-white text-3xl font-normal font-Nunito leading-tight">
+                    <div className="w-56 h-56 md:w-64 md:h-64 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex flex-col justify-center items-center flex-shrink-0">
+                        <div className="text-center text-white text-4xl md:text-5xl font-bold font-Nunito leading-loose">
+                            {formatTime(timeLeft)}
+                        </div>
+                        <div className="text-center text-white text-2xl md:text-3xl font-normal font-Nunito leading-tight">
                             {challenge_screens?.game_elements?.timer?.remaining}
                         </div>
                     </div>
 
                     {/* Middle: Questions Grid */}
-                    <div className="flex-grow max-w-4xl">
+                    <div className="max-w-6xl">
                         {questions.length > 0 && <QuestionsGrid questions={questions} questionStatuses={questionStatuses} des={challenge_screens?.instructions?.hundred_questions}
                             current={challenge_screens?.game_elements?.status_indicators?.current}
                             correct={challenge_screens?.game_elements?.status_indicators?.correct}
@@ -324,7 +326,7 @@ export default function HundredQuestionsPage() {
                     </div>
 
                     {/* Right Side: Numpad & Current Question */}
-                    <div className="w-96 p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
+                    <div className="w-[275px] md:w-[360px] p-6 bg-white rounded-lg shadow-md flex flex-col justify-start items-start gap-6 flex-shrink-0">
                         <div className="self-stretch p-6 bg-green-100 rounded-lg outline-2 outline-offset-[-2px] outline-green-300 flex flex-col justify-start items-start gap-2">
                             {currentQuestion && (
                                 <div className="self-stretch text-center justify-center text-gray-800 text-2xl font-bold font-Nunito leading-loose">

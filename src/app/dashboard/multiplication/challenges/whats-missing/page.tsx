@@ -87,6 +87,7 @@ export default function WhatsMissingPage() {
 
   const { dictionary, loading } = useDictionary();
   const challenge_screens = dictionary?.shared?.challenge_screens
+  const api_results = dictionary?.shared?.results
 
   const [gameState, setGameState] = useState<GameState>("ready");
   const [question, setQuestion] = useState<Question>({
@@ -137,11 +138,11 @@ export default function WhatsMissingPage() {
         time_taken_seconds: 300,
         whats_missing_pattern: "number_sequence"
       }).unwrap();
-      toast.success("Challenge Score Saved!");
+      toast.success(api_results?.practice_saved);
       router.push("/dashboard/multiplication");
     } catch (error: unknown) {
       if (error instanceof Error) console.error(error.message);
-      toast.error("Failed to save score.");
+      toast.error(api_results?.practice_failed);
       router.push("/dashboard/multiplication");
     }
   };
@@ -215,10 +216,22 @@ export default function WhatsMissingPage() {
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  if (loading || !challenge_screens) {
+  if (gameState === "gameOver") {
+    return (
+      <GameResultScreen
+        score={score}
+        questionsAnswered={`Questions Answered: ${totalSubmissions}`}
+        onRetry={handleStart}
+        onHome={handleContinue}
+        onCancel={() => router.back()}
+      />
+    );
+  }
+
+  if (loading || !challenge_screens || !api_results) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
-        <p className="text-lg font-semibold text-gray-600">Loading...</p>
+        <p className="text-lg font-semibold text-gray-600">{dictionary?.shared?.loading?.loading}</p>
       </div>
     );
   }
@@ -240,18 +253,6 @@ export default function WhatsMissingPage() {
     )
   }
 
-  if (gameState === "gameOver") {
-    return (
-      <GameResultScreen
-        score={score}
-        questionsAnswered={`Questions Answered: ${totalSubmissions}`}
-        onRetry={handleStart}
-        onHome={handleContinue}
-        onCancel={() => router.back()}
-      />
-    );
-  }
-
   return (
     <div className="bg-gradient-to-b from-green-50 to-purple-50 p-4">
       <div className="max-w-7xl mx-auto min-h-screen">
@@ -262,7 +263,7 @@ export default function WhatsMissingPage() {
               href="/dashboard/multiplication"
               className="text-gray-800 text-lg font-semibold flex justify-center items-center mb-4 gap-2"
             >
-              <ArrowLeft /> Go Back
+              <ArrowLeft /> {dictionary?.shared?.navigation?.go_back}
             </Link>
           </div>
           <div className="flex gap-4 items-start md:gap-6">
@@ -270,57 +271,57 @@ export default function WhatsMissingPage() {
               <HelpCircle className="w-7 md:w-10 h-7 md:h-10 text-green-600" />
             </div>
             <div className="flex flex-col gap-2 md:gap-3">
-              <h1 className="text-black text-3xl md:text-6xl font-bold font-Nunito leading-10">
-                What is missing?
+              <h1 className="text-black text-3xl md:text-5xl font-bold font-Nunito leading-10">
+                {challenge_screens?.instructions?.title4}
               </h1>
-              <p className="text-black text-lg md:text-2xl font-medium font-Nunito leading-snug">
-                You have 5 minutes to find as many missing numbers as possible.
+              <p className="text-black text-base md:text-xl font-medium font-Nunito leading-snug">
+                {challenge_screens?.instructions?.whats_missing}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col  justify-around items-center lg:flex-row lg:items-end gap-8">
-          {/* Timer Circle */}
-          <div className="w-72 h-72 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex flex-col justify-center items-center">
-            <div className="text-white text-6xl font-bold font-Nunito leading-tight">
-              {formatTime(timeLeft)}
+        <div className="flex flex-col xl:flex-row justify-start items-center gap-10">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div className="w-56 h-56 md:w-64 md:h-64 left-[20px] md:left-[30px] top-[20px] md:top-[30px] absolute">
+                <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-500 rounded-full" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                  <div className="text-white text-4xl md:text-5xl font-bold font-Nunito leading-relaxed">{formatTime(timeLeft)}
+                  </div>
+                  <div className="text-white text-2xl md:text-3xl font-normal font-Nunito leading-snug">
+                    {challenge_screens?.game_elements?.timer?.remaining}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="text-white text-4xl font-normal font-Nunito leading-tight">
-              Remaining
+            <div className="w-[275px] md:w-[375px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
+              <div className="self-stretch flex justify-between items-center">
+                <div className="h-16 flex flex-col">
+                  <span className="text-gray-600 text-xl md:text-3xl font-normal font-Nunito leading-snug">
+                    {challenge_screens?.game_elements?.question}
+                  </span>
+                  <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
+                    {score + 1}
+                  </span>
+                </div>
+                <div className="h-16 flex flex-col">
+                  <span className="text-gray-600 text-xl md:text-3xl font-normal font-Nunito leading-snug">
+                    {challenge_screens?.game_elements?.score}
+                  </span>
+                  <span className="text-green-600 text-2xl md:text-3xl font-bold font-Nunito leading-relaxed">
+                    {score}
+                  </span>
+                </div>
+              </div>
+              <div className="self-stretch p-5 md:p-6 lg:p-8 rounded-3xl lg:rounded-[40px] border border-black flex justify-center items-center gap-2">
+                <span className="text-center text-gray-800 text-[27px] md:text-4xl lg:text-5xl font-bold font-Nunito leading-[60px]">
+                  {getQuestionString()}
+                </span>
+              </div>
             </div>
+
           </div>
-
-          {/* Question and Score */}
-          <div className="flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col">
-                <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
-                  Question
-                </span>
-                <span className="text-green-600 text-4xl font-bold font-Nunito leading-tight">
-                  {score + 1}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-gray-600 text-4xl font-normal font-Nunito leading-tight">
-                  Score
-                </span>
-                <span className="text-green-600 text-4xl font-bold font-Nunito leading-tight">
-                  {score}
-                </span>
-              </div>
-            </div>
-
-            {/* Question Display */}
-            <div className="p-8 rounded-3xl border border-black w-[330px] md:w-[400px] lg:w-[450px]">
-              <div className="text-center text-gray-800 text-4xl font-bold font-Nunito leading-tight">
-                {getQuestionString()}
-              </div>
-            </div>
-          </div>
-
-          {/* Numpad */}
           <Numpad
             onNumberClick={(num) =>
               setUserAnswer((prev) => (prev.length < 3 ? prev + num : prev))

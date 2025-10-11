@@ -69,17 +69,17 @@ export default function AdditionPage() {
         <div className="px-0 md:px-6 py-6">
           <div className="grid grid-cols-2 gap-3 md:gap-6">
             <div>
-              <div className="p-3 mb-4 text-center text-black bg-blue-200 rounded">
+              <div className="p-3 mb-4 text-center text-sm md:text-base text-black bg-blue-200 rounded">
                 <h3 className="font-semibold">{additionOperation?.terms?.no_carry}</h3>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1  sm:grid-cols-2 gap-4">
                 {additionExercises.noCarry.map((ex, index) => (
                   <AdditionCard key={index} operation="noCarry" {...ex} />
                 ))}
               </div>
             </div>
             <div>
-              <div className="p-3 mb-4 text-center text-black bg-blue-200 rounded">
+              <div className="p-3 mb-4 text-center text-sm md:text-base text-black bg-blue-200 rounded">
                 <h3 className="font-semibold">{additionOperation?.terms?.carry}</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -98,7 +98,7 @@ export default function AdditionPage() {
           <h2 className="text-xl font-bold text-white">{additionOperation?.name} {sharedSection?.challenge_section?.title}</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 xl:gap-5">
             {additionChallenges.map((challenge, index) => (
               <Link
                 href={challenge.link}
