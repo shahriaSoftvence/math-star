@@ -566,5 +566,28 @@
         "button": "Dashboard"
       }
     }
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "If you have any questions about this privacy policy or the processing of your personal data, please contact us:",
+    "provider": {
+      "title": "Provider",
+      "name": "Stefan Breitkreuz",
+      "street": "Bayernstraße 30",
+      "city": "63739 Aschaffenburg",
+      "country": "Germany"
+    },
+    "email": {
+      "title": "Email",
+      "address": "kontakt@math-star.de"
+    },
+    "legalForm": {
+      "title": "Legal Form",
+      "text": "Sole proprietorship under German law"
+    },
+    "note": {
+      "title": "Contact Us",
+      "text": "This privacy policy has been created in accordance with current GDPR requirements and takes into account the specific needs of educational platforms and the protection of minors. It should be reviewed regularly for accuracy and updated as needed."
+    }
   }
 }

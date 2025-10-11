@@ -1,72 +1,90 @@
 import React from 'react';
-import { Mail, MapPin, Building2} from 'lucide-react';
+import { Mail, MapPin, Building2 } from 'lucide-react';
+import { getDictionary } from '@/app/actions/dictionaries';
 
-const ContactPage = () => {
+const ContactPage = async () => {
+  const { contact } = await getDictionary();
+
   return (
-    <div className="min-h-screen mt-20 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 py-10 px-4">
-      <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl overflow-hidden transform transition-all duration-500 ease-out hover:scale-[1.02] animate-fadeIn">
+    <div className='max-w-4xl mx-auto mt-28 min-h-screen p-4'>
+      <div className=" from-blue-50 to-indigo-50">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6 animate-slideDown">
-          <h1 className="text-3xl font-bold text-white text-center">
-            Kontakt
+        <div className="text-center mb-10 animate-slideDown">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-blue-700 tracking-tight mb-2 capitalize">
+            {contact?.title}
           </h1>
-          
+          <p className="text-gray-700 max-w-xl mx-auto">
+            {contact?.description}
+          </p>
         </div>
 
-        
-
-        {/* Content */}
-        <div className="p-8 space-y-6">
-          <p className="p-4 text-blue-700 text-center border border-blue-200 rounded-lg">Bei Fragen zu dieser Datenschutzerklärung oder zur Verarbeitung Ihrer personenbezogenen Daten kontaktieren Sie uns:</p>
+        {/* Cards Container */}
+        <div className="grid grid-cols-1 gap-6 w-full max-w-5xl animate-fadeIn">
           {/* Provider Information */}
-          <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.02] animate-fadeIn delay-100">
-            <Building2 className="text-blue-600 mt-1 flex-shrink-0" size={20} />
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-2">Anbieter:</h3>
-              <div className="text-gray-700 leading-relaxed">
-                <div className="font-medium">Stefan Breitkreuz</div>
-                <div>Bayernstraße 30</div>
-                <div>63739 Aschaffenburg</div>
-                <div>Deutschland</div>
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 group">
+            <div className="flex items-start gap-5">
+              {/* Icon section */}
+              <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl group-hover:from-blue-200 group-hover:to-blue-300 transition-colors duration-300 shadow-inner">
+                <Building2 className="text-blue-600" size={24} />
+              </div>
+
+              {/* Content section */}
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-blue-700 transition-colors duration-300">
+                  {contact?.provider?.title}
+                </h3>
+                <div className="text-gray-700 leading-relaxed space-y-1.5">
+                  <p className="font-semibold text-gray-900">{contact?.provider?.name}</p>
+                  <p>{contact?.provider?.street} ,</p>
+                  <p>{contact?.provider?.city} ,</p>
+                  <p>{contact?.provider?.country} .</p>
+                </div>
               </div>
             </div>
           </div>
 
+
           {/* Email */}
-          <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.02] animate-fadeIn delay-200">
-            <Mail className="text-blue-600 flex-shrink-0" size={20} />
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-1">E-Mail:</h3>
-              <a
-                href="mailto:kontakt@math-star.de"
-                className="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
-              >
-                kontakt@math-star.de
-              </a>
+          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <Mail className="text-blue-600" size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">E-Mail</h3>
+                <a
+                  href="mailto:kontakt@math-star.de"
+                  className="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
+                >
+                  kontakt@math-star.de
+                </a>
+              </div>
             </div>
           </div>
 
           {/* Legal Form */}
-          <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.02] animate-fadeIn delay-400">
-            <MapPin className="text-blue-600 mt-1 flex-shrink-0" size={20} />
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Rechtsform:</h3>
-              <div className="text-gray-700">
-                Einzelunternehmen nach deutschem Recht
+          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <MapPin className="text-blue-600" size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">{contact?.legalForm?.title}</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {contact?.legalForm?.text}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Additional Contact Information */}
-          <div className="mt-8 pt-6 border-t border-gray-200 animate-fadeIn delay-500">
-            <div className="bg-blue-50 text-center  p-4 rounded-lg transition-transform duration-300 hover:scale-[1.02]">
-              <h3 className="font-semibold text-blue-800 mb-2">
-                Kontaktieren Sie uns
-              </h3>
-              <p className="text-blue-700 text-sm text-justify">
-                Diese Datenschutzerklärung wurde auf Grundlage der aktuellen DSGVO-Anforderungen erstellt und berücksichtigt die besonderen Bedürfnisse von Bildungsplattformen sowie den Schutz von Minderjährigen. Sie sollte regelmäßig auf Aktualität geprüft und bei Bedarf angepasst werden.
-              </p>
-            </div>
+          {/* Additional Info */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 shadow-inner border border-blue-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <h3 className="text-lg font-semibold text-blue-800 mb-2 text-center">
+              {contact?.note?.title}
+            </h3>
+            <p className="text-blue-700 text-sm leading-relaxed text-justify">
+              {contact?.note?.text}
+            </p>
           </div>
         </div>
       </div>

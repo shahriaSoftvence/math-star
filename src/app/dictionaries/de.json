@@ -566,5 +566,29 @@
         "button": "Dashboard"
       }
     }
+  },
+
+  "contact": {
+    "title": "Kontakt",
+    "description": "Bei Fragen zu dieser Datenschutzerklärung oder zur Verarbeitung Ihrer personenbezogenen Daten kontaktieren Sie uns:",
+    "provider": {
+      "title": "Anbieter",
+      "name": "Stefan Breitkreuz",
+      "street": "Bayernstraße 30",
+      "city": "63739 Aschaffenburg",
+      "country": "Deutschland"
+    },
+    "email": {
+      "title": "E-Mail",
+      "address": "kontakt@math-star.de"
+    },
+    "legalForm": {
+      "title": "Rechtsform",
+      "text": "Einzelunternehmen nach deutschem Recht"
+    },
+    "note": {
+      "title": "Kontaktieren Sie uns",
+      "text": "Diese Datenschutzerklärung wurde auf Grundlage der aktuellen DSGVO-Anforderungen erstellt und berücksichtigt die besonderen Bedürfnisse von Bildungsplattformen sowie den Schutz von Minderjährigen. Sie sollte regelmäßig auf Aktualität geprüft und bei Bedarf angepasst werden."
+    }
   }
 }
