@@ -300,10 +300,14 @@
         }
       },
       "instructions": {
-        "no_mistake": "Die Herausforderung endet bei deinem ersten Fehler. Du hast 5 Sekunden für jede Aufgabe.",
-        "speed_mode": "Löse so viele Aufgaben wie möglich in 5 Minuten",
-        "whats_missing": "Du hast 5 Minuten, um so viele fehlende Zahlen wie möglich zu finden.",
-        "hundred_questions": "Löse alle 100 Aufgaben"
+        "title1": "Keine Fehler",
+        "no_mistake": "Die Herausforderung endet bei deinem ersten Fehler. Du hast 10 Sekunden für jede Aufgabe.",
+        "title2": "Schnelllauf",
+        "speed_mode": "Löse so viele Aufgaben wie möglich in 5 Minuten.",
+        "title3": "100 Fragen Herausforderung",
+        "hundred_questions": "Löse alle 100 Aufgaben.",
+        "title4": "Was fehlt?",
+        "whats_missing": "Du hast 5 Minuten, um so viele fehlende Zahlen wie möglich zu finden."
       }
     },
     "numpad": {
@@ -311,7 +315,7 @@
       "submit": "✓"
     },
     "results": {
-      "questions_answered": "Beantwortete Fragen: {count}",
+      "questions_answered": "Beantwortete Fragen: ",
       "save_success": "Herausforderungspunktzahl gespeichert!",
       "save_error": "Punktzahl konnte nicht gespeichert werden.",
       "practice_saved": "Übungsdaten erfolgreich gespeichert!",
@@ -505,7 +509,7 @@
   },
   "game_result_screen": {
     "title": "Spiel vorbei!",
-    "final_score": "Endpunktzahl: {score}",
+    "final_score": "Endpunktzahl: ",
     "questions_answered": "{count}",
     "buttons": {
       "try_again": "Nochmal versuchen",

@@ -68,11 +68,11 @@ export interface LanguageType {
     };
     header?: Header;
     sidebar?: {
-    dashboard: string;
-    profile: string;
-    settings: string;
-    subscription: string;
-  },
+        dashboard: string;
+        profile: string;
+        settings: string;
+        subscription: string;
+    },
     footer: {
         logo_alt: string;
         description: string;
@@ -182,46 +182,53 @@ export interface LanguageType {
                 incorrect: { title: string; message: string };
             };
         };
-    };
-    challenge_screens: {
-        ready_screen: {
-            title: string;
-            descriptions: {
-                hundred_questions: string;
+        challenge_screens: {
+            ready_screen: {
+                title: string;
+                descriptions: {
+                    hundred_questions: string;
+                    no_mistake: string;
+                    speed_mode: string;
+                    whats_missing: string;
+                };
+                start_button: string;
+            };
+            game_elements: {
+                timer: { remaining: string; time_format: string };
+                question: string;
+                score: string;
+                status_indicators: { current: string; correct: string; wrong: string };
+            };
+            instructions: {
+                title1: string;
                 no_mistake: string;
+                title2: string;
                 speed_mode: string;
+                title3: string;
+                hundred_questions: string;
+                title4: string;
                 whats_missing: string;
             };
-            start_button: string;
         };
-        game_elements: {
-            timer: { remaining: string; time_format: string };
-            question: string;
-            score: string;
-            status_indicators: { current: string; correct: string; wrong: string };
+        results: {
+            questions_answered: string;
+            save_success: string;
+            save_error: string;
+            practice_saved: string;
+            practice_failed: string;
         };
-        instructions: {
-            no_mistake: string;
-            speed_mode: string;
-            whats_missing: string;
-            hundred_questions: string;
-        };
+        loading: {
+        loading_practice: string;
+        loading: string;
     };
+    };
+
     numpad: {
         backspace: string;
         submit: string;
     };
-    results: {
-        questions_answered: string;
-        save_success: string;
-        save_error: string;
-        practice_saved: string;
-        practice_failed: string;
-    };
-    loading: {
-        loading_practice: string;
-        loading: string;
-    };
+
+    
     profile: {
         page_title: string;
         user_info: {

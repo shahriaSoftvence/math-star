@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import GameResultScreen from '@/components/GameResultScreen';
 import { Button } from '@/components/ui/button';
+import { useDictionary } from '@/hook/useDictionary';
+import ChallengeStartScreens from '@/components/challengeStartScreens';
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number; };
@@ -24,48 +26,6 @@ const playSound = (sound: string) => {
         // Silently handle audio creation failures
     }
 };
-
-// --- Reusable UI Components (specific to this page for simplicity) ---
-
-const ChallengeStartScreen = ({ title, description, onStart, onCancel }: { title: string, description: string, onStart: () => void, onCancel: () => void }) => (
-    <div className="w-full min-h-screen bg-gradient-to-b from-green-50 to-purple-50 flex flex-col justify-center items-center p-4">
-        <div className="w-full max-w-[90%] sm:max-w-md md:max-w-xl p-6 sm:p-8 md:p-10 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 sm:gap-6">
-
-            {/* Icon */}
-            <div className="bg-blue-100 rounded-full flex justify-center items-center p-2 sm:p-3">
-                <Target className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
-            </div>
-
-            {/* Title and Description */}
-            <div>
-                <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-snug sm:leading-loose">
-                    {title}
-                </h2>
-                <p className="text-gray-600 mt-1 text-sm md:text-base">
-                    {description}
-                </p>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full">
-                <Button
-                    className="bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 w-full sm:w-auto flex-1"
-                    onClick={onCancel}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    className="bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 w-full sm:w-auto flex-1"
-                    onClick={onStart}
-                >
-                    Start Challenge
-                </Button>
-            </div>
-
-        </div>
-    </div>
-);
-
 
 const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num: string) => void; onBackspace: () => void; onSubmit: () => void; }) => {
     const handleNumberClick = (num: string) => {
@@ -101,6 +61,10 @@ const Numpad = ({ onNumberClick, onBackspace, onSubmit }: { onNumberClick: (num:
 // --- Main Challenge Page Component ---
 export default function NoMistakePage() {
     const router = useRouter();
+
+    const { dictionary, loading } = useDictionary();
+    const challenge_screens = dictionary?.shared?.challenge_screens
+
     const [gameState, setGameState] = useState<GameState>('ready');
     const [question, setQuestion] = useState<Question>({ num1: 0, num2: 0, answer: 0 });
     const [userAnswer, setUserAnswer] = useState('');
@@ -203,10 +167,23 @@ export default function NoMistakePage() {
         };
     }, [gameState, handleSubmit]);
 
+    if (loading || !challenge_screens) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
+                <p className="text-lg font-semibold text-gray-600">Loading...</p>
+            </div>
+        );
+    }
+
     if (gameState === 'ready') {
-        return <ChallengeStartScreen
-            title="Ready to Start?"
-            description="The challenge ends on your first mistake, You have 10 seconds for each problem."
+        return <ChallengeStartScreens
+            title={challenge_screens?.ready_screen?.title}
+            btnTxt={challenge_screens?.ready_screen?.start_button}
+            des={challenge_screens?.ready_screen?.descriptions?.no_mistake}
+            bgColor="bg-gradient-to-b from-green-50 to-purple-50"
+            iconColor="text-green-600"
+            startBtnColor="bg-green-500 hover:bg-green-600"
+            icon={Target}
             onStart={handleStart}
             onCancel={() => router.back()}
         />;

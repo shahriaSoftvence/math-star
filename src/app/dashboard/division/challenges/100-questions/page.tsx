@@ -7,7 +7,8 @@ import { BsGrid3X3 } from "react-icons/bs";
 import { useAddDivision100QuestionsMutation } from "@/Redux/features/division/divisionApi";
 import { toast } from "sonner";
 import GameResultScreen from "@/components/GameResultScreen";
-import { Button } from "@/components/ui/button";
+import ChallengeStartScreens from "@/components/challengeStartScreens";
+import { useDictionary } from "@/hook/useDictionary";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -25,53 +26,6 @@ const playSound = (sound: string) => {
     // Silently handle audio creation failures
   }
 };
-
-// --- Reusable UI Components ---
-
-const ChallengeStartScreen = ({
-  onStart,
-  onCancel,
-}: {
-  onStart: () => void;
-  onCancel: () => void;
-}) => (
-  <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[90%] sm:max-w-md md:max-w-xl p-6 sm:p-8 md:p-10 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 sm:gap-6">
-
-      {/* Icon */}
-      <div className="bg-blue-100 rounded-full flex justify-center items-center p-2 sm:p-3">
-        <BsGrid3X3 className="w-10 h-10 text-purple-600" />
-      </div>
-
-      {/* Title and Description */}
-      <div>
-        <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-snug sm:leading-loose">
-          Ready to Start?
-        </h2>
-        <p className="text-gray-600 mt-1 text-sm md:text-base">
-          Solve all 100 division problems!
-        </p>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full">
-        <Button
-          className="bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 w-full sm:w-auto flex-1"
-          onClick={onCancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          className="bg-purple-500 text-white rounded-full font-semibold hover:bg-purple-600 w-full sm:w-auto flex-1"
-          onClick={onStart}
-        >
-          Start Challenge
-        </Button>
-      </div>
-
-    </div>
-  </div>
-);
 
 const Numpad = ({
   onNumberClick,
@@ -146,9 +100,14 @@ const Numpad = ({
 const QuestionsGrid = ({
   questions,
   questionStatuses,
+  wrong, correct, current, des
 }: {
   questions: Question[];
   questionStatuses: ProgressStatus[];
+  wrong: string;
+  correct: string;
+  current: string;
+  des: string;
 }) => {
   const getStatusColor = (status: ProgressStatus) => {
     switch (status) {
@@ -166,20 +125,20 @@ const QuestionsGrid = ({
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h3 className="text-center text-gray-800 text-xl font-bold font-Nunito leading-7 mb-2">
-        Solve all 100 problems
+        {des}
       </h3>
       <div className="flex justify-center items-center gap-4 mb-4">
         <div className="flex items-center">
           <div className="w-4 h-4 bg-yellow-300 rounded mr-2"></div>
-          <span className="text-sm font-Nunito text-[#000]">Current</span>
+          <span className="text-sm font-Nunito text-[#000]">{current}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-green-400 rounded mr-2"></div>
-          <span className="text-sm font-Nunito text-[#000]">Correct</span>
+          <span className="text-sm font-Nunito text-[#000]">{correct}</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-red-400 rounded mr-2"></div>
-          <span className="text-sm font-Nunito text-[#000]">Wrong</span>
+          <span className="text-sm font-Nunito text-[#000]">{wrong}</span>
         </div>
       </div>
       <div className="grid grid-cols-6 md:grid-cols-10 gap-2">
@@ -201,6 +160,11 @@ const QuestionsGrid = ({
 // --- Main Challenge Page Component ---
 export default function HundredQuestionsPage() {
   const router = useRouter();
+
+   const { dictionary, loading } = useDictionary();
+    const challenge_screens = dictionary?.shared?.challenge_screens;
+    const api_results = dictionary?.shared?.results
+
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionStatuses, setQuestionStatuses] = useState<ProgressStatus[]>(
@@ -299,11 +263,11 @@ export default function HundredQuestionsPage() {
         time_taken_seconds: 300 - timeLeft,
       }).unwrap();
 
-      toast.success("Score saved successfully!");
+      toast.success(api_results?.practice_saved);
       router.push("/dashboard/division");
     } catch (error: unknown) {
       if (error instanceof Error) console.error(error.message);
-      toast.error("Failed to save score.");
+      toast.error(api_results?.practice_failed);
       router.push("/dashboard/division");
     }
   };
@@ -359,13 +323,28 @@ export default function HundredQuestionsPage() {
     );
   }
 
-  if (gameState === "ready") {
+  if (loading || !challenge_screens || !api_results) {
     return (
-      <ChallengeStartScreen
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
+         <p className="text-lg font-semibold text-gray-600">{dictionary?.shared?.loading?.loading}</p>
+      </div>
+    );
+  }
+
+  if (gameState === 'ready') {
+    return (
+      <ChallengeStartScreens
+        title={challenge_screens?.ready_screen?.title}
+        btnTxt={challenge_screens?.ready_screen?.start_button}
+        des={challenge_screens?.ready_screen?.descriptions?.hundred_questions}
         onStart={handleStart}
         onCancel={() => router.back()}
+        bgColor="bg-gradient-to-b from-blue-50 to-purple-50"
+        icon={BsGrid3X3}
+        iconColor="text-purple-600"
+        startBtnColor="bg-purple-500 hover:bg-purple-600"
       />
-    );
+    )
   }
 
   return (
@@ -378,7 +357,7 @@ export default function HundredQuestionsPage() {
           >
             <ArrowLeft className="text-gray-600" />
           </button>
-          <h1 className="ml-4 text-2xl md:text-3xl font-bold font-Nunito text-gray-800">100 Questions Challenge</h1>
+          <h1 className="ml-4 text-2xl md:text-3xl font-bold font-Nunito text-gray-800">{challenge_screens?.instructions?.title3}</h1>
         </div>
 
         <div className="flex flex-col xl:flex-row justify-center items-center gap-6">
@@ -387,8 +366,8 @@ export default function HundredQuestionsPage() {
             <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">
               {formatTime(timeLeft)}
             </div>
-            <div className="text-center text-white text-4xl font-normal font-Nunito leading-tight">
-              Remaining
+            <div className="text-center text-white text-3xl font-normal font-Nunito leading-tight">
+              {challenge_screens?.game_elements?.timer?.remaining}
             </div>
           </div>
 
@@ -398,6 +377,10 @@ export default function HundredQuestionsPage() {
               <QuestionsGrid
                 questions={questions}
                 questionStatuses={questionStatuses}
+                des={challenge_screens?.instructions?.hundred_questions}
+                current={challenge_screens?.game_elements?.status_indicators?.current}
+                correct={challenge_screens?.game_elements?.status_indicators?.correct}
+                wrong={challenge_screens?.game_elements?.status_indicators?.wrong}
               />
             )}
           </div>

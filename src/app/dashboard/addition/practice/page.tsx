@@ -18,6 +18,7 @@ import {
 } from "@/Redux/features/addition/additionApi";
 import { toast } from "sonner";
 import { useDictionary } from "@/hook/useDictionary";
+import PracticeAnswerPopup from "@/components/practiceAnswerPopup";
 
 // --- Type Definitions ---
 type Question = {
@@ -466,7 +467,7 @@ function PracticePageContent() {
       </div>
 
       {/* Feedback Toast Animation */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {feedback.type && (
           <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -507,13 +508,14 @@ function PracticePageContent() {
                     : "text-red-500"
                     }`}
                 >
-                  {/* {feedback.message} */}
+            
                 </p>
               </div>
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
+      <PracticeAnswerPopup feedback={feedback} />
     </div>
   );
 }

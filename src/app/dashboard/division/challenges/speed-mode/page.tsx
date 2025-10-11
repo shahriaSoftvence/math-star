@@ -8,7 +8,8 @@ import { useAddDivisionSpeedModeMutation } from "@/Redux/features/division/divis
 import { toast } from "sonner";
 import Link from "next/link";
 import GameResultScreen from "@/components/GameResultScreen";
-import { Button } from "@/components/ui/button";
+import ChallengeStartScreens from "@/components/challengeStartScreens";
+import { useDictionary } from "@/hook/useDictionary";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -26,52 +27,7 @@ const playSound = (sound: string) => {
   }
 };
 
-// --- Reusable UI Components ---
 
-const ChallengeStartScreen = ({
-  onStart,
-  onCancel,
-}: {
-  onStart: () => void;
-  onCancel: () => void;
-}) => (
-  <div className="w-full min-h-screen bg-gradient-to-b from-purple-50 to-indigo-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[90%] sm:max-w-md md:max-w-xl p-6 sm:p-8 md:p-10 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 sm:gap-6">
-
-      {/* Icon */}
-      <div className="bg-purple-100 rounded-full flex justify-center items-center p-2 sm:p-3">
-        <PiTimerBold className="w-10 h-10 text-purple-600" />
-      </div>
-
-      {/* Title and Description */}
-      <div>
-        <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-snug sm:leading-loose">
-          Ready to Start?
-        </h2>
-        <p className="text-gray-600 mt-1 text-sm md:text-base">
-          Answer as many questions as you can in 5 minutes!
-        </p>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full">
-        <Button
-          className="bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 w-full sm:w-auto flex-1"
-          onClick={onCancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          className="bg-purple-500 text-white rounded-full font-semibold hover:bg-purple-600 w-full sm:w-auto flex-1"
-          onClick={onStart}
-        >
-          Start Challenge
-        </Button>
-      </div>
-
-    </div>
-  </div>
-);
 
 const Numpad = ({
   onNumberClick,
@@ -100,7 +56,7 @@ const Numpad = ({
   const buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return (
     <div className="grid grid-cols-3 gap-4 w-80 md:w-96">
-      
+
       {buttons.map((btn) => (
         <button
           key={btn}
@@ -135,6 +91,10 @@ const Numpad = ({
 // --- Main Challenge Page Component ---
 export default function SpeedModePage() {
   const router = useRouter();
+
+  const { dictionary, loading } = useDictionary();
+  const challenge_screens = dictionary?.shared?.challenge_screens
+
   const [gameState, setGameState] = useState<GameState>("ready");
   const [question, setQuestion] = useState<Question>({
     num1: 0,
@@ -237,14 +197,13 @@ export default function SpeedModePage() {
     };
   }, [gameState, handleSubmit]);
 
-  if (gameState === "ready") {
-    return (
-      <ChallengeStartScreen
-        onStart={handleStart}
-        onCancel={() => router.back()}
-      />
-    );
-  }
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
 
   if (gameState === "gameOver") {
     return (
@@ -258,11 +217,30 @@ export default function SpeedModePage() {
     );
   }
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
+
+  if (loading || !challenge_screens) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
+        <p className="text-lg font-semibold text-gray-600">Loading...</p>
+      </div>
+    );
+  }
+
+  if (gameState === 'ready') {
+    return (
+      <ChallengeStartScreens
+        title={challenge_screens?.ready_screen?.title}
+        btnTxt={challenge_screens?.ready_screen?.start_button}
+        des={challenge_screens?.ready_screen?.descriptions?.speed_mode}
+        onStart={handleStart}
+        onCancel={() => router.back()}
+        bgColor="bg-gradient-to-b from-blue-50 to-purple-50"
+        icon={PiTimerBold}
+        iconColor="text-purple-600"
+        startBtnColor="bg-purple-500 hover:bg-purple-600"
+      />
+    )
+  }
 
   return (
     <div className="bg-gradient-to-b from-purple-50 to-indigo-50 p-4">

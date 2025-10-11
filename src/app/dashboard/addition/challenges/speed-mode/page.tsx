@@ -8,7 +8,8 @@ import { toast } from "sonner";
 import { useAddAdditionSpeedModeMutation } from "@/Redux/features/addition/additionApi";
 import Link from "next/link";
 import GameResultScreen from "@/components/GameResultScreen";
-import { Button } from "@/components/ui/button";
+import ChallengeStartScreens from "@/components/challengeStartScreens";
+import { useDictionary } from "@/hook/useDictionary";
 
 // --- Type Definitions ---
 type Question = { num1: number; num2: number; answer: number };
@@ -26,52 +27,6 @@ const playSound = (sound: string) => {
   }
 };
 
-// --- Reusable UI Components ---
-
-const ChallengeStartScreen = ({
-  onStart,
-  onCancel,
-}: {
-  onStart: () => void;
-  onCancel: () => void;
-}) => (
-  <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col justify-center items-center p-4">
-    <div className="w-full max-w-[90%] sm:max-w-md md:max-w-xl p-6 sm:p-8 md:p-10 bg-white rounded-3xl shadow-lg flex flex-col items-center text-center gap-4 sm:gap-6">
-
-      {/* Icon */}
-      <div className="bg-blue-100 rounded-full flex justify-center items-center p-2 sm:p-3">
-        <PiTimerBold className="w-10 h-10 text-blue-600" />
-      </div>
-
-      {/* Title and Description */}
-      <div>
-        <h2 className="text-gray-800 text-2xl font-bold font-Poppins leading-snug sm:leading-loose">
-          Ready to Start?
-        </h2>
-        <p className="text-gray-600 mt-1 text-sm md:text-base">
-          Answer as many questions as you can in 5 minutes!
-        </p>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full">
-        <Button
-          className="bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 w-full sm:w-auto flex-1"
-          onClick={onCancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          className="bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600 w-full sm:w-auto flex-1"
-          onClick={onStart}
-        >
-          Start Challenge
-        </Button>
-      </div>
-
-    </div>
-  </div>
-);
 
 const Numpad = ({
   onNumberClick,
@@ -99,31 +54,31 @@ const Numpad = ({
 
   const buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return (
-    <div className="grid grid-cols-3 gap-4 w-80 md:w-96">
+    <div className="grid grid-cols-3 gap-4 w-72">
       {buttons.map((btn) => (
         <button
           key={btn}
           onClick={() => handleNumberClick(btn)}
-          className="h-24 text-3xl font-bold text-blue-800 bg-blue-100 rounded-2xl transition-colors hover:bg-blue-200"
+          className="h-16 text-3xl font-bold text-blue-800 bg-blue-100 rounded-2xl transition-colors hover:bg-blue-200"
         >
           {btn}
         </button>
       ))}
       <button
         onClick={handleBackspace}
-        className="flex items-center justify-center h-24 text-2xl font-bold text-red-800 bg-red-100 rounded-2xl transition-colors hover:bg-red-200"
+        className="flex items-center justify-center h-16 text-2xl font-bold text-red-800 bg-red-100 rounded-2xl transition-colors hover:bg-red-200"
       >
         <Delete size={32} />
       </button>
       <button
         onClick={() => handleNumberClick("0")}
-        className="h-24 text-3xl font-bold text-blue-800 bg-blue-100 rounded-2xl transition-colors hover:bg-blue-200"
+        className="h-16 text-3xl font-bold text-blue-800 bg-blue-100 rounded-2xl transition-colors hover:bg-blue-200"
       >
         0
       </button>
       <button
         onClick={handleSubmit}
-        className="flex items-center justify-center h-24 text-3xl font-bold text-green-800 bg-green-100 rounded-2xl transition-colors hover:bg-green-200"
+        className="flex items-center justify-center h-16 text-3xl font-bold text-green-800 bg-green-100 rounded-2xl transition-colors hover:bg-green-200"
       >
         <Check size={32} />
       </button>
@@ -134,6 +89,11 @@ const Numpad = ({
 // --- Main Challenge Page Component ---
 export default function SpeedModePage() {
   const router = useRouter();
+
+  const { dictionary, loading } = useDictionary();
+  const challenge_screens = dictionary?.shared?.challenge_screens
+  const api_results = dictionary?.shared?.results
+
   const [gameState, setGameState] = useState<GameState>("ready");
   const [question, setQuestion] = useState<Question>({
     num1: 0,
@@ -196,13 +156,13 @@ export default function SpeedModePage() {
         speed_mode_time: 300
       }).unwrap();
 
-      toast.success("Challenge Score Saved!");
+      toast.success(api_results?.practice_saved);
       router.push("/dashboard/addition");
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
       }
-      toast.error("Failed to save Score.");
+      toast.error(api_results?.practice_failed);
       router.push("/dashboard/addition");
     }
   };
@@ -240,20 +200,18 @@ export default function SpeedModePage() {
     };
   }, [gameState, handleSubmit]);
 
-  if (gameState === "ready") {
-    return (
-      <ChallengeStartScreen
-        onStart={handleStart}
-        onCancel={() => router.back()}
-      />
-    );
-  }
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
 
   if (gameState === "gameOver") {
     return (
       <GameResultScreen
         score={score}
-        questionsAnswered={`Questions Answered: ${totalClicks}`}
+        questionsAnswered={`${api_results?.questions_answered} ${totalClicks}`}
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
@@ -261,11 +219,29 @@ export default function SpeedModePage() {
     );
   }
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
+   if (loading || !challenge_screens || !api_results) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
+        <p className="text-lg font-semibold text-gray-600">Loading...</p>
+      </div>
+    );
+  }
+
+  if (gameState === 'ready') {
+    return (
+      <ChallengeStartScreens
+        title={challenge_screens?.ready_screen?.title}
+        btnTxt={challenge_screens?.ready_screen?.start_button}
+        des={challenge_screens?.ready_screen?.descriptions?.speed_mode}
+        onStart={handleStart}
+        onCancel={() => router.back()}
+        bgColor="bg-gradient-to-b from-blue-50 to-purple-50"
+        icon={PiTimerBold}
+        iconColor="text-blue-600"
+        startBtnColor="bg-blue-500 hover:bg-blue-600"
+      />
+    )
+  }
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-purple-50 p-4">
@@ -299,17 +275,17 @@ export default function SpeedModePage() {
 
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="relative w-72 h-72">
-              <div className="w-72 h-72 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
-                <div className="text-center text-white text-6xl font-bold font-Nunito leading-loose">
+              <div className="w-56 h-56 md:w-64 md:h-64 bg-gradient-to-br from-blue-400 to-blue-500 rounded-full flex flex-col justify-center items-center">
+                <div className="text-center text-white text-4xl md:text-5xl font-bold font-Nunito leading-loose">
                   {formatTime(timeLeft)}
                 </div>
-                <div className="text-center text-white text-4xl font-normal font-Nunito leading-tight">
+                <div className="text-center text-white text-2xl md:text-3xl font-normal font-Nunito leading-tight">
                   Remaining
                 </div>
               </div>
             </div>
 
-            <div className="w-[330px] md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
+            <div className="w-[300px] md:w-[400px] lg:w-[450px] flex flex-col gap-4 md:gap-5">
               <div className="self-stretch flex justify-between items-center">
                 <div className="h-16 flex flex-col">
                   <span className="text-gray-600 text-2xl md:text-3xl font-normal font-Nunito leading-snug">

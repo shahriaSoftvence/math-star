@@ -19,7 +19,7 @@ const HeroSection = async () => {
         <div
           className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start"
         >
-          <h1 className="text-3xl md:text-4xl xl:text-[45px] font-semibold font-Poppins leading-tight">
+          <h1 className="text-3xl md:text-4xl xl:text-[45px] font-semibold font-Poppins leading-tight text-justify">
             <span className="text-blue-600">
               {homepage.hero.title_line1}
             </span>
@@ -28,7 +28,7 @@ const HeroSection = async () => {
               {homepage.hero.title_line2}
             </span>
           </h1>
-          <p className="text-black text-lg xl:text-xl font-medium font-Quicksand leading-loose max-w-lg">
+          <p className="text-black text-base xl:text-lg font-medium font-Quicksand leading-loose max-w-lg text-justify">
             {homepage.hero.description}
           </p>
           <div className="flex items-center gap-3">
