@@ -2,9 +2,11 @@ import React from "react";
 
 export const metadata = {
   title: "Datenschutzerklärung — Math Star",
-  description: "Datenschutzerklärung für Math Star. Erfahren Sie, wie wir Ihre Daten sammeln, verwenden und schützen.",
+  description: "Datenschutzerklärung für Math Star. Erfahren Sie, wie wir Ihre Daten sammeln, verwenden und schützen. Informationen zu Datenverarbeitung, Cookies und Ihren Rechten gemäß DSGVO.",
+  keywords: "Datenschutz, Datenschutzerklärung, DSGVO, Math Star, Datenverarbeitung, Cookies, Datensicherheit",
+  authors: [{ name: "Math Star" }],
+  robots: "index, follow",
 };
-
 export default function PrivacyPage() {
   return (
     <div>
@@ -224,11 +226,11 @@ export default function PrivacyPage() {
             <p className="text-sm leading-relaxed"><strong>Speicherdauer: </strong>Bis zu 24 Monate</p>
           </div>
 
-           <p className="text-sm leading-relaxed"><strong>Cookie-Verwaltung: </strong>Sie können Ihre Cookie-Einstellungen jederzeit über unser Cookie-Banner oder in den Browsereinstellungen ändern.</p>
+          <p className="text-sm leading-relaxed"><strong>Cookie-Verwaltung: </strong>Sie können Ihre Cookie-Einstellungen jederzeit über unser Cookie-Banner oder in den Browsereinstellungen ändern.</p>
         </section>
 
 
-{/* section 8 */}
+        {/* section 8 */}
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">8. Ihre Rechte als betroffene Person</h2>
 
@@ -257,17 +259,17 @@ export default function PrivacyPage() {
 
           <div>
             <h3 className="text-sm font-bold">Kontakt für Rechteausübung:</h3>
-          <p>
+            <p>
               <span className="text-sm">E-Mail: </span>
               <a href="mailto:kontakt@math-star.de" className="hover:underline">
                 kontakt@math-star.de
               </a>
             </p>
-          <p className="text-sm">Postadresse: Stefan Breitkreuz, Bayernstraße 30, 63739 Aschaffenburg</p>
+            <p className="text-sm">Postadresse: Stefan Breitkreuz, Bayernstraße 30, 63739 Aschaffenburg</p>
           </div>
         </section>
 
-{/* section 9 */}
+        {/* section 9 */}
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">9. Beschwerderecht</h2>
 
@@ -276,9 +278,9 @@ export default function PrivacyPage() {
           <p className="text-sm leading-relaxed">
             <strong>Bayerisches Landesamt für Datenschutzaufsicht (BayLDA)</strong> <br />
             Promenade 18 <br />
-             91522 Ansbach <br />
-             Telefon: +49 (0)981 531-1300 <br />
-             <p>
+            91522 Ansbach <br />
+            Telefon: +49 (0)981 531-1300 <br />
+            <p>
               <span className="text-sm">E-Mail: </span>
               <a href="poststelle@lda.bayern.de" className="hover:underline">
                 poststelle@lda.bayern.de
@@ -289,7 +291,7 @@ export default function PrivacyPage() {
           <p className="text-sm leading-relaxed">Alternativ können Sie sich an den Bundesbeauftragten für den Datenschutz und die Informationsfreiheit wenden.</p>
         </section>
 
-{/* section 10 */}
+        {/* section 10 */}
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">10. Datensicherheit und technisch-organisatorische Maßnahmen</h2>
 
@@ -305,7 +307,7 @@ export default function PrivacyPage() {
           </ul>
         </section>
 
-{/* section 11 */}
+        {/* section 11 */}
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">11. Automatisierte Entscheidungsfindung und Profiling</h2>
 
@@ -333,13 +335,13 @@ export default function PrivacyPage() {
           <p className="text-sm leading-relaxed">Bei Fragen zu dieser Datenschutzerklärung oder zur Verarbeitung Ihrer personenbezogenen Daten kontaktieren Sie uns:</p>
 
           <p className="text-sm leading-relaxed"><strong>Stefan Breitkreuz</strong> <br />
-          Bayernstraße 30 <br />
-          63739 Aschaffenburg <br />
-          Deutschland <br />
-          <span className="font-semibold">E-Mail: </span>
-              <a href="mailto:kontakt@math-star.de" className="hover:underline">
-                kontakt@math-star.de
-              </a>
+            Bayernstraße 30 <br />
+            63739 Aschaffenburg <br />
+            Deutschland <br />
+            <span className="font-semibold">E-Mail: </span>
+            <a href="mailto:kontakt@math-star.de" className="hover:underline">
+              kontakt@math-star.de
+            </a>
           </p>
 
           <p className="text-sm leading-relaxed">Diese Datenschutzerklärung wurde auf Grundlage der aktuellen DSGVO-Anforderungen erstellt und berücksichtigt die besonderen Bedürfnisse von Bildungsplattformen sowie den Schutz von Minderjährigen. Sie sollte regelmäßig auf Aktualität geprüft und bei Bedarf angepasst werden.</p>

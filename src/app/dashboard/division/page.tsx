@@ -128,7 +128,7 @@ export default function DivisionPage() {
           <h2 className="text-xl font-bold text-white">{divisionOperation?.name} {sharedSection?.challenge_section?.title}</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 xl:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
             {divisionChallenges.map((challenge, index) => (
               <Link href={challenge.link} key={index}>
                 <ChallengeCard iconColor="text-white" {...challenge} />

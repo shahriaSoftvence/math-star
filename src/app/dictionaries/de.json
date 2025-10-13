@@ -58,7 +58,7 @@
     },
     "faq": {
       "title": "Häufig gestellte Fragen",
-      "description": "Finden Sie Antworten auf häufige Fragen zu MathStar.",
+      "description": "Finden Sie Antworten auf häufige Fragen zu Math Star.",
       "questions": [
         {
           "question": "Gibt es Altersbeschränkungen für Math Star?",
@@ -89,6 +89,117 @@
       "support_button": "Support kontaktieren"
     }
   },
+  "signin": {
+    "title": "Willkommen",
+    "subtitle": "Schön, dass Sie wieder bei uns sind",
+    "email_placeholder": "E-Mail",
+    "password_placeholder": "Passwort",
+    "forgot_password": "Passwort vergessen?",
+    "sign_in": "Anmelden",
+    "signing_in": "Anmeldung läuft...",
+    "no_account": "Sie haben noch kein Konto?",
+    "signup": "Registrieren",
+    "login_success": "Anmeldung erfolgreich!",
+    "login_failed": "Anmeldung fehlgeschlagen",
+    "fill_all_fields": "Bitte füllen Sie alle Felder aus"
+  },
+  "signup": {
+    "title": "Registrieren",
+    "full_name_placeholder": "Vollständiger Name",
+    "email_placeholder": "E-Mail",
+    "password_placeholder": "Passwort",
+    "confirm_password_placeholder": "Passwort bestätigen",
+    "password_mismatch": "Passwörter stimmen nicht überein",
+    "password_short": "Das Passwort muss mindestens 6 Zeichen lang sein",
+    "terms_text": "Ich stimme den",
+    "terms_link": "Allgemeinen Geschäftsbedingungen",
+    "age_checkbox": "Ich bin 16 Jahre oder älter.",
+    "next": "Weiter",
+    "creating_account": "Konto wird erstellt...",
+    "have_account": "Sie haben bereits ein Konto?",
+    "signin": "Anmelden",
+    "registration_success": "Registrierung erfolgreich! Bitte prüfen Sie Ihre E-Mail auf den OTP-Code.",
+    "registration_failed": "Registrierung fehlgeschlagen",
+
+    "otp_title": "OTP verifizieren",
+    "otp_sent": "Wir haben einen 6-stelligen Code gesendet an",
+    "otp_placeholder": "6-stelligen OTP eingeben",
+    "verifying": "Wird überprüft...",
+    "verify_otp": "OTP verifizieren",
+    "otp_success": "OTP erfolgreich verifiziert! Sie können sich jetzt anmelden.",
+    "otp_failed": "OTP-Verifizierung fehlgeschlagen",
+    "resend_text": "Code nicht erhalten?",
+    "resend": "OTP erneut senden",
+    "resending": "Wird erneut gesendet...",
+    "resend_success": "OTP erfolgreich erneut gesendet! Bitte überprüfen Sie Ihre E-Mail.",
+    "resend_failed": "OTP konnte nicht erneut gesendet werden",
+    "back_to_registration": "Zurück zur Registrierung"
+  },
+  "forgot_password": {
+    "title": "Passwort vergessen",
+    "subtitle": "Geben Sie Ihre E-Mail-Adresse ein, um einen Reset-Code zu erhalten",
+    "email_placeholder": "E-Mail",
+    "send_reset_code": "Reset-Code senden",
+    "sending": "Wird gesendet...",
+    "reset_code_sent": "Reset-Code erfolgreich gesendet!",
+    "reset_code_description": "Wir haben einen 6-stelligen Code an {email} gesendet",
+    "reset_failed": "Reset-Code konnte nicht gesendet werden",
+
+    "enter_code_title": "Reset-Code eingeben",
+    "enter_code_subtitle": "Wir haben einen 6-stelligen Code an {email} gesendet",
+    "code_placeholder": "6-stelligen Code eingeben",
+    "verify_code": "Code überprüfen",
+    "verifying": "Wird überprüft...",
+    "code_verified": "Code erfolgreich überprüft!",
+    "code_verified_description": "Sie können jetzt Ihr neues Passwort festlegen",
+    "verification_failed": "Überprüfung fehlgeschlagen",
+    "invalid_code": "Ungültiger Reset-Code. Bitte versuchen Sie es erneut.",
+
+    "set_password_title": "Neues Passwort festlegen",
+    "set_password_subtitle": "Erstellen Sie ein starkes Passwort für Ihr Konto",
+    "new_password_placeholder": "Neues Passwort",
+    "confirm_password_placeholder": "Neues Passwort bestätigen",
+    "change_password": "Passwort ändern",
+    "changing": "Wird geändert...",
+    "password_changed": "Passwort erfolgreich geändert!",
+    "password_changed_description": "Sie können sich jetzt mit Ihrem neuen Passwort anmelden",
+    "password_change_failed": "Passwortänderung fehlgeschlagen",
+
+    "success_title": "Passwort geändert!",
+    "success_subtitle": "Ihr Passwort wurde erfolgreich zurückgesetzt",
+    "sign_in": "Anmelden",
+
+    "back": "Zurück",
+    "returned_to_email": "Zur E-Mail-Eingabe zurückgekehrt",
+    "returned_to_email_description": "Sie können Ihre E-Mail ändern oder den Reset-Code erneut senden",
+    "returned_to_code": "Zur Code-Überprüfung zurückgekehrt",
+    "returned_to_code_description": "Sie können den Reset-Code erneut eingeben",
+
+    "validation": {
+      "email_required": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+      "code_required": "Bitte geben Sie den Reset-Code ein",
+      "password_required": "Bitte füllen Sie alle Felder aus",
+      "password_mismatch": "Passwörter stimmen nicht überein",
+      "password_mismatch_description": "Bitte stellen Sie sicher, dass beide Passwörter identisch sind",
+      "password_short": "Passwort zu kurz",
+      "password_short_description": "Passwort muss mindestens 6 Zeichen lang sein"
+    },
+
+    "check_email": {
+      "title": "Überprüfen Sie Ihre E-Mail-Adresse",
+      "description": "Wir haben einen Passwort-Reset-Link an Ihre E-Mail gesendet. Bitte überprüfen Sie Ihren Posteingang.",
+      "open_email": "E-Mail öffnen",
+      "resend_text": "Haben Sie die E-Mail noch nicht erhalten?",
+      "resend_link": "Erneut senden"
+    },
+
+    "confirm_password": {
+      "title": "Passwort zurücksetzen",
+      "password_placeholder": "Passwort",
+      "confirm_password_placeholder": "Passwort bestätigen",
+      "reset_button": "Zurücksetzen"
+    }
+  },
   "navbar": {
     "greeting": "Hallo, {grade}! Bereit, heute ein Math Star zu werden?",
     "loading": "Lädt...",
@@ -109,15 +220,16 @@
     "faq": "FAQ",
     "german_flag_alt": "Deutsche Sprachflagge",
     "usa_flag_alt": "USA Sprachflagge",
-    "dashboard": "Dashboard",
+    "dashboard": "Armaturenbrett",
     "logout": "Abmelden",
     "sign_in": "Anmelden"
   },
   "sidebar": {
-    "dashboard": "Instrumententafel",
+    "dashboard": "Armaturenbrett",
     "profile": "Profil",
     "settings": "Einstellungen",
-    "subscription": "Abonnement"
+    "subscription": "Abonnement",
+    "sign_in": "Anmeldeaktivität"
   },
   "footer": {
     "logo_alt": "Math Star Logo",
@@ -167,7 +279,7 @@
       "no_activity": "Keine aktuellen Aktivitäten anzuzeigen."
     },
     "star_balance": {
-      "title": "Dein Sternen-Guthaben",
+      "title": "Ihr Star-Guthaben",
       "top_up_message": "Aufstocken, um Belohnungen zu gewinnen",
       "badge_alt": "Belohnungsabzeichen"
     }
@@ -230,7 +342,7 @@
           "description": "Ein Fehler beendet die Sitzung"
         },
         "speed_mode": {
-          "title": "Geschwindigkeitsmodus",
+          "title": "Schnellmodus",
           "description": "Wettrennen gegen die Zeit!"
         },
         "hundred_questions": {

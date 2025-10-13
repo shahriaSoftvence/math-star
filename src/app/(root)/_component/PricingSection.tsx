@@ -51,7 +51,7 @@ const PricingSection = async () => {
                                 </div>
                             </div>
                             <div className="flex items-end gap-1">
-                                <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">$ {plan?.price}</p>
+                                <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">€ {plan?.price}</p>
                                 <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
                             </div>
                             <div className="space-y-4 my-1.5">

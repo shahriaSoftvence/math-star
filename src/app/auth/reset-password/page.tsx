@@ -6,6 +6,7 @@ import { Mail, Lock, Eye, EyeOff, CheckCircle, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import ResetPasswordImage from '@/asset/images/resetpassword.png';
 import { useChangePasswordWithResetTokenMutation, useRequestPasswordResetMutation, useVerifyOtpForResetMutation } from '@/Redux/features/auth/authApi';
+import { useDictionary } from '@/hook/useDictionary';
 
 export default function ResetPasswordPage() {
   const [step, setStep] = useState<'email' | 'otp' | 'password' | 'success'>('email');
@@ -23,10 +24,17 @@ export default function ResetPasswordPage() {
   const [verifyOtp] = useVerifyOtpForResetMutation();
   const [changePassword] = useChangePasswordWithResetTokenMutation();
 
+  const { dictionary, loading } = useDictionary();
+  const forgot_password = dictionary?.forgot_password;
+
+  if (!forgot_password || loading) {
+    return null;
+  }
+
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      toast.error('Please enter your email address');
+      toast.error(forgot_password.validation.email_required);
       return;
     }
     
@@ -36,8 +44,8 @@ export default function ResetPasswordPage() {
     try {
       const result = await requestPasswordReset({ email }).unwrap();
       if (result.success) {
-        toast.success('Reset code sent successfully!', {
-          description: `We've sent a 6-digit code to ${email}`,
+        toast.success(forgot_password.reset_code_sent, {
+          description: forgot_password.reset_code_description.replace('{email}', email),
           duration: 4000,
         });
         setStep('otp');
@@ -45,8 +53,8 @@ export default function ResetPasswordPage() {
     } catch (err: unknown) {
       const errorMessage = err && typeof err === 'object' && 'data' in err && 
         typeof err.data === 'object' && err.data && 'message' in err.data && 
-        typeof err.data.message === 'string' ? err.data.message : 'Failed to send reset email. Please try again.';
-      toast.error('Reset code not sent', {
+        typeof err.data.message === 'string' ? err.data.message : forgot_password.reset_failed;
+      toast.error(forgot_password.reset_failed, {
         description: errorMessage,
         duration: 5000,
       });
@@ -59,7 +67,7 @@ export default function ResetPasswordPage() {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp) {
-      toast.error('Please enter the reset code');
+      toast.error(forgot_password.validation.code_required);
       return;
     }
     
@@ -69,8 +77,8 @@ export default function ResetPasswordPage() {
     try {
       const result = await verifyOtp({ email, otp }).unwrap();
       if (result.success) {
-        toast.success('Code verified successfully!', {
-          description: 'You can now set your new password',
+        toast.success(forgot_password.code_verified, {
+          description: forgot_password.code_verified_description,
           duration: 4000,
         });
         setResetToken(result.data.reset_token);
@@ -79,8 +87,8 @@ export default function ResetPasswordPage() {
     } catch (err: unknown) {
       const errorMessage = err && typeof err === 'object' && 'data' in err && 
         typeof err.data === 'object' && err.data && 'message' in err.data && 
-        typeof err.data.message === 'string' ? err.data.message : 'Invalid reset code. Please try again.';
-      toast.error('Verification failed', {
+        typeof err.data.message === 'string' ? err.data.message : forgot_password.invalid_code;
+      toast.error(forgot_password.verification_failed, {
         description: errorMessage,
         duration: 5000,
       });
@@ -93,21 +101,21 @@ export default function ResetPasswordPage() {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPassword || !confirmPassword) {
-      toast.error('Please fill in all fields');
+      toast.error(forgot_password.validation.password_required);
       return;
     }
     
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match', {
-        description: 'Please make sure both passwords are identical',
+      toast.error(forgot_password.validation.password_mismatch, {
+        description: forgot_password.validation.password_mismatch_description,
         duration: 4000,
       });
       return;
     }
     
     if (newPassword.length < 6) {
-      toast.error('Password too short', {
-        description: 'Password must be at least 6 characters long',
+      toast.error(forgot_password.validation.password_short, {
+        description: forgot_password.validation.password_short_description,
         duration: 4000,
       });
       return;
@@ -125,8 +133,8 @@ export default function ResetPasswordPage() {
       }).unwrap();
       
       if (result.success) {
-        toast.success('Password changed successfully!', {
-          description: 'You can now sign in with your new password',
+        toast.success(forgot_password.password_changed, {
+          description: forgot_password.password_changed_description,
           duration: 5000,
         });
         setStep('success');
@@ -134,8 +142,8 @@ export default function ResetPasswordPage() {
     } catch (err: unknown) {
       const errorMessage = err && typeof err === 'object' && 'data' in err && 
         typeof err.data === 'object' && err.data && 'message' in err.data && 
-        typeof err.data.message === 'string' ? err.data.message : 'Failed to change password. Please try again.';
-      toast.error('Password change failed', {
+        typeof err.data.message === 'string' ? err.data.message : forgot_password.password_change_failed;
+      toast.error(forgot_password.password_change_failed, {
         description: errorMessage,
         duration: 5000,
       });
@@ -149,16 +157,16 @@ export default function ResetPasswordPage() {
     if (step === 'otp') {
       setStep('email');
       setOtp('');
-      toast.info('Returned to email step', {
-        description: 'You can modify your email or resend the reset code',
+      toast.info(forgot_password.returned_to_email, {
+        description: forgot_password.returned_to_email_description,
         duration: 3000,
       });
     } else if (step === 'password') {
       setStep('otp');
       setNewPassword('');
       setConfirmPassword('');
-      toast.info('Returned to code verification', {
-        description: 'You can re-enter the reset code',
+      toast.info(forgot_password.returned_to_code, {
+        description: forgot_password.returned_to_code_description,
         duration: 3000,
       });
     }
@@ -170,9 +178,9 @@ export default function ResetPasswordPage() {
       case 'email':
         return (
           <form onSubmit={handleRequestReset} className="w-full max-w-md flex flex-col gap-6">
-            <div className="text-center lg:text-left">
-              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">Forgot Password</h1>
-              <p className="text-gray-600 mt-2">Enter your email to receive a reset code</p>
+            <div className="text-center md:text-left">
+              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">{forgot_password.title}</h1>
+              <p className="text-gray-600 mt-2">{forgot_password.subtitle}</p>
             </div>
             
             {error && (
@@ -185,7 +193,7 @@ export default function ResetPasswordPage() {
               <Mail size={20} className="text-zinc-600" />
               <input 
                 type="email" 
-                placeholder="Email" 
+                placeholder={forgot_password.email_placeholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand" 
@@ -197,7 +205,7 @@ export default function ResetPasswordPage() {
               disabled={isLoading}
               className="w-full h-12 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Sending...' : 'Send Reset Code'}
+              {isLoading ? forgot_password.sending : forgot_password.send_reset_code}
             </button>
           </form>
         );
@@ -206,8 +214,8 @@ export default function ResetPasswordPage() {
         return (
           <form onSubmit={handleVerifyOtp} className="w-full max-w-md flex flex-col gap-6">
             <div className="text-center lg:text-left">
-              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">Enter Reset Code</h1>
-              <p className="text-gray-600 mt-2">We&apos;ve sent a 6-digit code to {email}</p>
+              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">{forgot_password.enter_code_title}</h1>
+              <p className="text-gray-600 mt-2">{forgot_password.enter_code_subtitle.replace('{email}', email)}</p>
             </div>
             
             {error && (
@@ -220,11 +228,11 @@ export default function ResetPasswordPage() {
               <Lock size={20} className="text-zinc-600" />
               <input 
                 type="text" 
-                placeholder="Enter 6-digit code" 
+                placeholder={forgot_password.code_placeholder}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 maxLength={6}
-                className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand text-center text-lg tracking-widest" 
+                className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand text-center tracking-widest" 
               />
             </div>
             
@@ -235,14 +243,14 @@ export default function ResetPasswordPage() {
                 className="flex-1 h-12 border border-gray-300 rounded-xl text-gray-700 text-sm font-bold font-Quicksand hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
               >
                 <ArrowLeft size={16} />
-                Back
+                {forgot_password.back}
               </button>
               <button 
                 type="submit"
                 disabled={isLoading}
                 className="flex-1 h-12 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Verifying...' : 'Verify Code'}
+                {isLoading ? forgot_password.verifying : forgot_password.verify_code}
               </button>
             </div>
           </form>
@@ -252,8 +260,8 @@ export default function ResetPasswordPage() {
         return (
           <form onSubmit={handleChangePassword} className="w-full max-w-md flex flex-col gap-6">
             <div className="text-center lg:text-left">
-              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">Set New Password</h1>
-              <p className="text-gray-600 mt-2">Create a strong password for your account</p>
+              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">{forgot_password.set_password_title}</h1>
+              <p className="text-gray-600 mt-2">{forgot_password.set_password_subtitle}</p>
             </div>
             
             {error && (
@@ -266,7 +274,7 @@ export default function ResetPasswordPage() {
               <Lock size={20} className="text-zinc-600" />
               <input 
                 type={showPassword ? "text" : "password"}
-                placeholder="New Password" 
+                placeholder={forgot_password.new_password_placeholder}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand" 
@@ -284,7 +292,7 @@ export default function ResetPasswordPage() {
               <Lock size={20} className="text-zinc-600" />
               <input 
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm New Password" 
+                placeholder={forgot_password.confirm_password_placeholder}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full bg-transparent outline-none text-zinc-900 text-sm font-Quicksand" 
@@ -305,14 +313,14 @@ export default function ResetPasswordPage() {
                 className="flex-1 h-12 border border-gray-300 rounded-xl text-gray-700 text-sm font-bold font-Quicksand hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
               >
                 <ArrowLeft size={16} />
-                Back
+                {forgot_password.back}
               </button>
               <button 
                 type="submit"
                 disabled={isLoading}
                 className="flex-1 h-12 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Changing...' : 'Change Password'}
+                {isLoading ? forgot_password.changing : forgot_password.change_password}
               </button>
             </div>
           </form>
@@ -325,15 +333,15 @@ export default function ResetPasswordPage() {
               <CheckCircle size={64} className="text-green-500" />
             </div>
             <div>
-              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">Password Changed!</h1>
-              <p className="text-gray-600 mt-2">Your password has been successfully reset</p>
+              <h1 className="text-black text-3xl font-bold font-Quicksand leading-10">{forgot_password.success_title}</h1>
+              <p className="text-gray-600 mt-2">{forgot_password.success_subtitle}</p>
             </div>
             
             <button 
-              onClick={() => window.location.href = '/signin'}
+              onClick={() => window.location.href = '/auth/signin'}
               className="w-full h-12 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors"
             >
-              Sign In
+              {forgot_password.sign_in}
             </button>
           </div>
         );
@@ -344,17 +352,17 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white flex justify-center items-center p-4">
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+    <div className="w-full min-h-screen bg-white flex justify-center items-center p-4 lg:p-6">
+      <div className="w-full max-w-6xl mx-auto flex flex-col-reverse md:flex-row gap-8 md:gap-4 lg:gap-8 items-center">
         {/* Left Side: Form */}
-        <div className="flex flex-col justify-center items-center lg:items-start">
+        <div className="flex flex-col justify-center items-center lg:items-start w-full lg:w-1/2">
           {renderStep()}
         </div>
 
         {/* Right Side: Image */}
-        <div className="hidden lg:flex justify-center items-center">
+        <div className="flex justify-center items-center w-full lg:w-1/2">
           <Image 
-            className="rounded-[40px]" 
+            className="rounded-md lg:rounded-[40px]" 
             src={ResetPasswordImage} 
             alt="A child learning on a computer" 
             style={{ objectFit: 'cover' }} 

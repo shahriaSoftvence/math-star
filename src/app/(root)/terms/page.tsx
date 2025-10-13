@@ -2,8 +2,10 @@ import React from "react";
 
 export const metadata = {
   title: "Allgemeine Geschäftsbedingungen (AGB) — Math Star",
-  description:
-    "Allgemeine Geschäftsbedingungen (AGB) für Math-Star.de. Hier finden Sie alle Informationen zu Vertragsbedingungen, Laufzeiten, Preisen, Widerrufsrecht, Nutzungsrechten und Haftung.",
+  description: "Allgemeine Geschäftsbedingungen (AGB) für Math-Star.de. Hier finden Sie alle Informationen zu Vertragsbedingungen, Laufzeiten, Preisen, Widerrufsrecht, Nutzungsrechten und Haftung.",
+  keywords: "AGB, Geschäftsbedingungen, Nutzungsbedingungen, Math Star, Vertrag, Widerrufsrecht, Haftung",
+  authors: [{ name: "Math Star" }],
+  robots: "index, follow",
 };
 
 export default function TermsPage() {

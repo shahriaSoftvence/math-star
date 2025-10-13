@@ -53,6 +53,118 @@ export interface LanguageType {
             support_button: string;
         };
     };
+    signin: {
+        title: string;
+        subtitle: string;
+        email_placeholder: string;
+        password_placeholder: string;
+        forgot_password: string;
+        sign_in: string;
+        signing_in: string;
+        no_account: string;
+        signup: string;
+        login_success: string;
+        login_failed: string;
+        fill_all_fields: string;
+    };
+    signup: {
+        title: string;
+        full_name_placeholder: string;
+        email_placeholder: string;
+        password_placeholder: string;
+        confirm_password_placeholder: string;
+        password_mismatch: string;
+        password_short: string;
+        terms_text: string;
+        terms_link: string;
+        age_checkbox: string;
+        next: string;
+        creating_account: string;
+        have_account: string;
+        signin: string;
+        registration_success: string;
+        registration_failed: string;
+
+        otp_title: string;
+        otp_sent: string;
+        otp_placeholder: string;
+        verifying: string;
+        verify_otp: string;
+        otp_success: string;
+        otp_failed: string;
+        resend_text: string;
+        resend: string;
+        resending: string;
+        resend_success: string;
+        resend_failed: string;
+        back_to_registration: string;
+    };
+    forgot_password: {
+        title: string;
+        subtitle: string;
+        email_placeholder: string;
+        send_reset_code: string;
+        sending: string;
+        reset_code_sent: string;
+        reset_code_description: string;
+        reset_failed: string;
+
+        enter_code_title: string;
+        enter_code_subtitle: string;
+        code_placeholder: string;
+        verify_code: string;
+        verifying: string;
+        code_verified: string;
+        code_verified_description: string;
+        verification_failed: string;
+        invalid_code: string;
+
+        set_password_title: string;
+        set_password_subtitle: string;
+        new_password_placeholder: string;
+        confirm_password_placeholder: string;
+        change_password: string;
+        changing: string;
+        password_changed: string;
+        password_changed_description: string;
+        password_change_failed: string;
+
+        success_title: string;
+        success_subtitle: string;
+        sign_in: string;
+
+        back: string;
+        returned_to_email: string;
+        returned_to_email_description: string;
+        returned_to_code: string;
+        returned_to_code_description: string;
+
+        validation: {
+            email_required: string;
+            code_required: string;
+            password_required: string;
+            password_mismatch: string;
+            password_mismatch_description: string;
+            password_short: string;
+            password_short_description: string;
+        };
+
+        check_email: {
+            title: string;
+            description: string;
+            open_email: string;
+            resend_text: string;
+            resend_link: string;
+        };
+
+        confirm_password: {
+            title: string;
+            password_placeholder: string;
+            confirm_password_placeholder: string;
+            reset_button: string;
+        };
+    }
+
     navbar: {
         greeting: string;
         loading: string;
@@ -72,6 +184,7 @@ export interface LanguageType {
         profile: string;
         settings: string;
         subscription: string;
+        sign_in: string;
     },
     footer: {
         logo_alt: string;
@@ -218,9 +331,9 @@ export interface LanguageType {
             practice_failed: string;
         };
         loading: {
-        loading_practice: string;
-        loading: string;
-    };
+            loading_practice: string;
+            loading: string;
+        };
     };
 
     numpad: {
@@ -228,7 +341,7 @@ export interface LanguageType {
         submit: string;
     };
 
-    
+
     profile: {
         page_title: string;
         user_info: {

@@ -5,30 +5,6 @@ import { IoStar } from "react-icons/io5";
 const FeaturesSection = async () => {
   const { homepage } = await getDictionary();
 
-
-  const featureData = [
-    {
-      title: homepage.features.items[0].title,
-      content: homepage.features.items[0].description,
-      footer: homepage.features.items[0].highlight,
-    },
-    {
-      title: homepage.features.items[1].title,
-      content: homepage.features.items[1].description,
-      list: homepage.features.items[1].operations,
-    },
-    {
-      title: homepage.features.items[2].title,
-      content: homepage.features.items[2].description,
-      footer: homepage.features.items[2].highlight,
-    },
-    {
-      title: homepage.features.items[3].title,
-      content: homepage.features.items[3].description,
-      footer: homepage.features.items[3].highlight,
-    },
-  ];
-
   return (
     <section id="features" className="py-24 px-4">
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-16">
@@ -44,34 +20,34 @@ const FeaturesSection = async () => {
         </div>
         <div className="self-stretch grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 px-1 md:px-5 lg:px-12 xl:px-0"
         >
-          {featureData.map((feature) => (
-            <div key={feature.title}
+          {homepage?.features?.items?.map((item) => (
+            <div key={item.title}
               className="flex-1 h-96 relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg p-8 text-white flex flex-col hover:scale-105 transition-transform"
             >
               <div className="absolute -top-6 -right-6 flex items-center justify-center">
                 <IoStar size={62} className="fill-yellow-400" />
               </div>
               <h3 className="text-2xl font-semibold font-Quicksand leading-loose">
-                {feature?.title}
+                {item.title}
               </h3>
               <p className="text-base font-normal font-sans leading-relaxed mt-2">
-                {feature?.content}
+                {item.description}
               </p>
-              {feature?.list && (
+              {item.operations && (
                 <ul className="mt-2 space-y-2">
-                  {feature?.list.map((item) => (
+                  {item.operations.map((operation) => (
                     <li
-                      key={item}
+                      key={operation}
                       className="text-blue-100 text-base font-normal font-sans leading-normal"
                     >
-                      • {item}
+                      • {operation}
                     </li>
                   ))}
                 </ul>
               )}
-              {feature?.footer && (
+              {item.highlight && (
                 <p className="mt-auto text-base font-normal font-sans leading-normal">
-                  {feature?.footer}
+                  {item.highlight}
                 </p>
               )}
             </div>

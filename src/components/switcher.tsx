@@ -94,15 +94,28 @@ export default function Switcher() {
 
   return (
     <div className="flex items-center">
-      <button className="cursor-pointer hover:scale-102 duration-200" disabled={isLoading} onClick={() => changeLocale(currentLanguage.code === 'en' ? 'de' : 'en')}>
-        <Image
-          alt={currentLanguage.name}
-          src={currentLanguage.flag}
-          width={44}
-          height={35}
-          className="w-10 h-auto rounded"
-        />
-      </button>
+      {
+        currentLanguage.name === 'German' ?
+          <button className="cursor-pointer hover:scale-102 duration-200" disabled={isLoading} onClick={() => changeLocale('en')}>
+            <Image
+              alt="Deutsch"
+              src={flagDe}
+              width={44}
+              height={35}
+              className="w-10 h-auto rounded"
+              title="Switch to English"
+            /> </button> :
+          <button className="cursor-pointer hover:scale-102 duration-200" disabled={isLoading} onClick={() => changeLocale('de')}>
+            <Image
+              alt="English"
+              src={flagEn}
+              width={44}
+              height={35}
+              className="w-10 h-auto rounded"
+              title="Switch to Deutsch"
+            />
+          </button>
+      }
     </div>
   );
 }

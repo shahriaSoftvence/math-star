@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthActions } from '@/Redux/hooks';
 import { useLoginMutation } from '@/Redux/features/auth/authApi';
+import { useDictionary } from '@/hook/useDictionary';
 
 export default function SignInPage() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,13 @@ export default function SignInPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+
+   const { dictionary, loading } = useDictionary();
+    const signinText = dictionary?.signin;
+  
+    if (!signinText || loading ) {
+      return null;
+    }
 
   // Get redirect URL from search params (set by middleware)
   const redirectTo = searchParams.get('redirect') || '/dashboard';
@@ -37,7 +45,7 @@ export default function SignInPage() {
     e.preventDefault();
     
     if (!formData.email || !formData.password) {
-      toast.error('Please fill in all fields');
+      toast.error(signinText?.fill_all_fields);
       return;
     }
 
@@ -69,7 +77,7 @@ export default function SignInPage() {
           }
         }
 
-        toast.success('Login successful!');
+        toast.success(signinText?.login_success);
         
         // Redirect to the intended page or dashboard
         router.push(redirectTo);
@@ -77,20 +85,20 @@ export default function SignInPage() {
     } catch (error: unknown) {
       const errorMessage = error && typeof error === 'object' && 'data' in error && 
         typeof error.data === 'object' && error.data && 'message' in error.data && 
-        typeof error.data.message === 'string' ? error.data.message : 'Login failed';
+        typeof error.data.message === 'string' ? error.data.message : signinText?.login_failed;
       toast.error(errorMessage);
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-white flex justify-center items-center p-4">
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+    <div className="w-full min-h-screen bg-white flex justify-center items-center p-4 lg:p-6">
+      <div className="w-full max-w-6xl mx-auto flex flex-col-reverse md:flex-row gap-8 md:gap-4 lg:gap-8 items-center">
         {/* Left Side: Form */}
-        <div className="flex flex-col justify-center items-center lg:items-start">
+        <div className="flex flex-col justify-center items-center lg:items-start w-full lg:w-1/2">
           <div className="w-full max-w-md flex flex-col gap-6">
-            <div className="text-center lg:text-left">
-              <h1 className="text-zinc-900 text-6xl md:text-7xl font-bold font-Quicksand">Welcome</h1>
-              <p className="text-zinc-900 text-sm font-normal font-Quicksand mt-2">We are glad to see you back with us</p>
+            <div className="text-center md:text-left">
+              <h1 className="text-zinc-900 text-4xl lg:text-6xl font-bold font-Quicksand">{signinText?.title}</h1>
+              <p className="text-zinc-900 text-sm font-normal font-Quicksand mt-2">{signinText?.subtitle}</p>
             </div>
 
             <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
@@ -99,7 +107,7 @@ export default function SignInPage() {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder={signinText?.email_placeholder}
                   value={formData.email}
                   onChange={handleInputChange}
                   required
@@ -111,7 +119,7 @@ export default function SignInPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Password"
+                  placeholder={signinText?.password_placeholder}
                   value={formData.password}
                   onChange={handleInputChange}
                   required
@@ -127,7 +135,7 @@ export default function SignInPage() {
               </div>
               <div className="self-stretch text-right">
                 <Link href="/auth/reset-password" className="text-zinc-900 text-xs font-normal font-Quicksand hover:underline">
-                  Forgot Password?
+                  {signinText?.forgot_password}
                 </Link>
               </div>
 
@@ -136,14 +144,14 @@ export default function SignInPage() {
                 disabled={isLoggingIn}
                 className="self-stretch h-12 px-4 py-3 bg-blue-500 rounded-xl text-white text-sm font-bold font-Quicksand hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                {isLoggingIn ? 'Signing In...' : 'Sign In'}
+                {isLoggingIn ? signinText?.signing_in : signinText?.sign_in}
               </button>
             </form>
 
              <div className="text-center mt-4">
-              <span className="text-zinc-900 text-sm font-Quicksand">Don&apos;t have an account? </span>
+              <span className="text-zinc-900 text-sm font-Quicksand">{signinText?.no_account} </span>
               <Link href="/auth/signup" className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
-                Sign Up
+                {signinText?.signup}
               </Link>
             </div>
             
@@ -152,8 +160,8 @@ export default function SignInPage() {
         </div>
 
         {/* Right Side: Image */}
-        <div className="hidden lg:flex justify-center items-center">
-          <Image className="rounded-[40px]" src={SignInImage} alt="A child learning on a computer" style={{ objectFit: 'cover' }} />
+        <div className="flex justify-center items-center w-full lg:w-1/2">
+          <Image className="rounded-md lg:rounded-[40px]" src={SignInImage} alt="A child learning on a computer" style={{ objectFit: 'cover' }} />
         </div>
       </div>
     </div>

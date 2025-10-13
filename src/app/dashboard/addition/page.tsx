@@ -98,7 +98,7 @@ export default function AdditionPage() {
           <h2 className="text-xl font-bold text-white">{additionOperation?.name} {sharedSection?.challenge_section?.title}</h2>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 xl:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
             {additionChallenges.map((challenge, index) => (
               <Link
                 href={challenge.link}

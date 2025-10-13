@@ -6,33 +6,6 @@ import { getDictionary } from '../../actions/dictionaries';
 const FaqSection = async () => {
   const { homepage } = await getDictionary();
 
-  const faqData = [
-    {
-      question: homepage.faq.questions[0].question,
-      answer: homepage.faq.questions[0].answer
-    },
-    {
-      question: homepage.faq.questions[1].question,
-      answer: homepage.faq.questions[1].answer
-    },
-    {
-      question: homepage.faq.questions[2].question,
-      answer: homepage.faq.questions[2].answer
-    },
-    {
-      question: homepage.faq.questions[3].question,
-      answer: homepage.faq.questions[3].answer
-    },
-    {
-      question: homepage.faq.questions[4].question,
-      answer: homepage.faq.questions[4].answer
-    },
-    {
-      question: homepage.faq.questions[5].question,
-      answer: homepage.faq.questions[5].answer
-    }
-  ];
-
   return (
     <section id="faq" className="py-24 px-4 bg-[#fbfbfd] text-black">
       <div className="max-w-3xl mx-auto flex flex-col items-center gap-4">
@@ -51,7 +24,7 @@ const FaqSection = async () => {
           className="w-full my-8"
           defaultValue="item-1"
         >
-          {faqData.map((faq, index) => (
+          {homepage?.faq?.questions?.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index + 1}`}>
               <AccordionTrigger>{faq.question}</AccordionTrigger>
               <AccordionContent className="flex flex-col gap-4 text-balance">

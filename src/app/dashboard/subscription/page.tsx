@@ -307,7 +307,7 @@ export default function SubscriptionPage() {
                         </div>
                       </div>
                       <div className="flex flex-col items-end md:items-center self-end md:self-auto">
-                        <p className="font-bold text-gray-800">{item?.amount} USD</p>
+                        <p className="font-bold text-gray-800">{item?.amount} EUR</p>
                         <p
                           className={`${item?.status === "Paid"
                             ? "bg-green-100 text-green-800 font-semibold"

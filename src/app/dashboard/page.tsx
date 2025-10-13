@@ -90,7 +90,7 @@ export default function Home() {
 
 
   return (
-    <div className="space-y-8 mt-8 max-w-[1104px] mx-auto px-4">
+    <div className="space-y-8 my-8 max-w-[1104px] mx-auto px-4">
       {/* Choose Your Practice */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-4">
         {practiceItems.map((item, index) => {
@@ -99,7 +99,7 @@ export default function Home() {
 
           return (
             <Link
-              href={isActive ? item.link : ""}
+              href={isActive ? item.link : "/dashboard/subscription"}
               key={index}
               className={`relative block rounded-2xl overflow-hidden ${isActive ? "cursor-pointer hover:scale-105 transition-transform" : "opacity-25 cursor-not-allowed"
                 }`}
@@ -166,16 +166,38 @@ export default function Home() {
 
       {/* Your Star Balance */}
       <Link href="/dashboard/rewards">
-        <div className="bg-gradient-to-r from-yellow-400 to-orange-400 px-6 py-4 rounded-2xl text-white flex justify-between items-center shadow-lg">
-          <div>
-            <h3 className="font-semibold text-xl">{star_balance.title}</h3>
-            <p className="text-4xl md:text-5xl font-bold my-1 flex gap-2"><IoStarSharp /> {data?.data?.star.toLocaleString() || 0}</p>
-            <p className="text-sm font-medium opacity-90">{star_balance.top_up_message}</p>
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 sm:p-6 rounded-2xl text-white flex justify-between items-center gap-4 shadow-lg flex-wrap">
+          {/* Left Section */}
+          <div className="flex-1 min-w-[200px]">
+            <h3 className="font-semibold text-lg sm:text-xl md:text-3xl">
+              {star_balance.title}
+            </h3>
+
+            <p className="text-3xl sm:text-4xl md:text-5xl font-bold my-2 flex items-center gap-2">
+              <IoStarSharp className="shrink-0" /> {data?.data?.star?.toLocaleString() || 0}
+            </p>
+
+            <p className="text-xs sm:text-sm md:text-base font-normal sm:font-medium opacity-90">
+              {star_balance.top_up_message}
+            </p>
           </div>
-          <div className="">
-            <Image className='h-20 md:h-32 w-20 md:w-32' src={data?.data?.reward?.icon ? `${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}` : rewardsBadge} alt='Badge' width={120} height={120} />
+
+          {/* Right Section */}
+          <div className="flex justify-end flex-shrink-0">
+            <Image
+              className="h-16 w-16 sm:h-24 sm:w-24 md:h-32 md:w-32 object-contain"
+              src={
+                data?.data?.reward?.icon
+                  ? `${process.env.NEXT_PUBLIC_BASE_URL}${data?.data?.reward?.icon}`
+                  : rewardsBadge
+              }
+              alt="Badge"
+              width={120}
+              height={120}
+            />
           </div>
         </div>
+
       </Link>
     </div>
   );

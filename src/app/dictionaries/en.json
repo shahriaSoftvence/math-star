@@ -58,7 +58,7 @@
     },
     "faq": {
       "title": "Frequently Asked Questions",
-      "description": "Find answers to common questions about MathStar.",
+      "description": "Find answers to common questions about Math Star.",
       "questions": [
         {
           "question": "Are there any age regulations for Math Star?",
@@ -89,6 +89,117 @@
       "support_button": "Contact Support"
     }
   },
+  "signin": {
+    "title": "Welcome",
+    "subtitle": "We are glad to see you back with us",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "forgot_password": "Forgot Password?",
+    "sign_in": "Sign In",
+    "signing_in": "Signing In...",
+    "no_account": "Don't have an account?",
+    "signup": "Sign Up",
+    "login_success": "Login successful!",
+    "login_failed": "Login failed",
+    "fill_all_fields": "Please fill in all fields"
+  },
+  "signup": {
+    "title": "Sign up",
+    "full_name_placeholder": "Full Name",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "confirm_password_placeholder": "Confirm Password",
+    "password_mismatch": "Passwords do not match",
+    "password_short": "Password must be at least 6 characters long",
+    "terms_text": "I agree to the",
+    "terms_link": "Terms and Conditions",
+    "age_checkbox": "I am 16 years or older.",
+    "next": "Next",
+    "creating_account": "Creating Account...",
+    "have_account": "Already have an account?",
+    "signin": "Sign In",
+    "registration_success": "Registration successful! Please check your email for OTP.",
+    "registration_failed": "Registration failed",
+
+    "otp_title": "Verify OTP",
+    "otp_sent": "We've sent a 6-digit code to",
+    "otp_placeholder": "Enter 6-digit OTP",
+    "verifying": "Verifying...",
+    "verify_otp": "Verify OTP",
+    "otp_success": "OTP verified successfully! You can now sign in.",
+    "otp_failed": "OTP verification failed",
+    "resend_text": "Didn't receive the code?",
+    "resend": "Resend OTP",
+    "resending": "Resending...",
+    "resend_success": "OTP resent successfully! Please check your email.",
+    "resend_failed": "Failed to resend OTP",
+    "back_to_registration": "Back to registration"
+  },
+  "forgot_password": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email to receive a reset code",
+    "email_placeholder": "Email",
+    "send_reset_code": "Send Reset Code",
+    "sending": "Sending...",
+    "reset_code_sent": "Reset code sent successfully!",
+    "reset_code_description": "We've sent a 6-digit code to {email}",
+    "reset_failed": "Reset code not sent",
+
+    "enter_code_title": "Enter Reset Code",
+    "enter_code_subtitle": "We've sent a 6-digit code to {email}",
+    "code_placeholder": "Enter 6-digit code",
+    "verify_code": "Verify Code",
+    "verifying": "Verifying...",
+    "code_verified": "Code verified successfully!",
+    "code_verified_description": "You can now set your new password",
+    "verification_failed": "Verification failed",
+    "invalid_code": "Invalid reset code. Please try again.",
+
+    "set_password_title": "Set New Password",
+    "set_password_subtitle": "Create a strong password for your account",
+    "new_password_placeholder": "New Password",
+    "confirm_password_placeholder": "Confirm New Password",
+    "change_password": "Change Password",
+    "changing": "Changing...",
+    "password_changed": "Password changed successfully!",
+    "password_changed_description": "You can now sign in with your new password",
+    "password_change_failed": "Password change failed",
+
+    "success_title": "Password Changed!",
+    "success_subtitle": "Your password has been successfully reset",
+    "sign_in": "Sign In",
+
+    "back": "Back",
+    "returned_to_email": "Returned to email step",
+    "returned_to_email_description": "You can modify your email or resend the reset code",
+    "returned_to_code": "Returned to code verification",
+    "returned_to_code_description": "You can re-enter the reset code",
+
+    "validation": {
+      "email_required": "Please enter your email address",
+      "code_required": "Please enter the reset code",
+      "password_required": "Please fill in all fields",
+      "password_mismatch": "Passwords do not match",
+      "password_mismatch_description": "Please make sure both passwords are identical",
+      "password_short": "Password too short",
+      "password_short_description": "Password must be at least 6 characters long"
+    },
+
+    "check_email": {
+      "title": "Check Your Email Address",
+      "description": "We have sent a password reset link to your email. Please check your inbox.",
+      "open_email": "Open Email",
+      "resend_text": "Didn't receive the email yet?",
+      "resend_link": "Resend"
+    },
+
+    "confirm_password": {
+      "title": "Reset Password",
+      "password_placeholder": "Password",
+      "confirm_password_placeholder": "Confirm Password",
+      "reset_button": "Reset"
+    }
+  },
   "navbar": {
     "greeting": "Hi, {grade}! Ready to become a Math Star today?",
     "loading": "Loading...",
@@ -117,7 +228,8 @@
     "dashboard": "Dashboard",
     "profile": "Profile",
     "settings": "Settings",
-    "subscription": "Subscription"
+    "subscription": "Subscription",
+    "sign_in": "Sign-in Activity"
   },
   "footer": {
     "logo_alt": "Math Star Logo",

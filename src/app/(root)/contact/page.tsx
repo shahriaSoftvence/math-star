@@ -2,9 +2,16 @@ import React from 'react';
 import { Mail, MapPin, Building2 } from 'lucide-react';
 import { getDictionary } from '@/app/actions/dictionaries';
 
+export const metadata = {
+  title: "Kontakt — Math Star",
+  description: "Kontaktieren Sie Math Star. Haben Sie Fragen, Anregungen oder benötigen Sie Unterstützung? Unser Team hilft Ihnen gerne weiter.",
+  keywords: "Kontakt, Support, Math Star, Hilfe, Kontaktformular, Kundenservice",
+  authors: [{ name: "Math Star" }],
+  robots: "index, follow",
+};
+
 const ContactPage = async () => {
   const { contact } = await getDictionary();
-
   return (
     <div className='max-w-4xl mx-auto mt-28 min-h-screen p-4'>
       <div className=" from-blue-50 to-indigo-50">
