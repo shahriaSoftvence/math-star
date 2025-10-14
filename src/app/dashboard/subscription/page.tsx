@@ -125,7 +125,7 @@ export default function SubscriptionPage() {
 
   if (planLoading) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 mt-4 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center items-center">
+      <div className="w-full min-h-screen bg-gradient-to-b p-4 sm:p-6 md:p-8 flex justify-center items-center">
         <div className="text-center">
           <div role="status">
             <LoadingFile className="inline w-24 h-24 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" />
@@ -136,7 +136,7 @@ export default function SubscriptionPage() {
     );
   }
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 mt-4 p-4 sm:p-6 md:p-8 flex justify-center">
+    <div className="w-full min-h-screen bg-gradient-to-b mt-4 p-4 sm:p-6 md:p-8 flex justify-center">
       <div className="w-full max-w-4xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-center gap-4">

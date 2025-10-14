@@ -84,8 +84,8 @@ function PracticePageContent() {
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const [addNoCarryPractice] = useAddNoCarryPracticeMutation();
-  const [addCarryPractice] = useAddCarryPracticeMutation();
+  const [addNoCarryPractice, { isLoading: isNoCarryLoading }] = useAddNoCarryPracticeMutation();
+  const [addCarryPractice, { isLoading: isCarryLoading }] = useAddCarryPracticeMutation();
 
 
   const questionCount = useMemo(
@@ -303,22 +303,18 @@ function PracticePageContent() {
 
       if (operation === "noCarry") {
         await addNoCarryPractice(payload).unwrap();
+        router.push("/dashboard/addition");
       } else {
         await addCarryPractice(payload).unwrap();
+        router.push("/dashboard/addition");
       }
-
       toast.success(dictionary?.shared?.results?.practice_saved);
-      router.push("/dashboard/addition");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        toast.error(error.message);
-      } else {
-        toast.error(dictionary?.shared?.results?.practice_failed);
-      }
-      router.push("/dashboard/addition");
-    }
 
+    } catch (err: unknown) {
+      router.push("/dashboard/addition");
+      const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
+      toast.error(message);
+    }
   };
 
   const viewRewards = async () => {
@@ -339,15 +335,16 @@ function PracticePageContent() {
 
       if (operation === "noCarry") {
         await addNoCarryPractice(payload).unwrap();
+        router.push("/dashboard/rewards");
       } else {
         await addCarryPractice(payload).unwrap();
+        router.push("/dashboard/rewards");
       }
-      toast.success(dictionary?.shared?.results?.practice_failed);
-      router.push("/dashboard/rewards");
+      toast.success(dictionary?.shared?.results?.practice_saved);
     } catch (err: unknown) {
+      router.push("/dashboard/rewards");
       const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
-      router.push("/dashboard/rewards");
     }
 
   };
@@ -368,7 +365,7 @@ function PracticePageContent() {
 
 
   if (isComplete) {
-    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
+    return <CongratulationsScreen practiceLoading={isCarryLoading || isNoCarryLoading} viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {
@@ -469,56 +466,6 @@ function PracticePageContent() {
           />
         </div>
       </div>
-
-      {/* Feedback Toast Animation */}
-      {/* <AnimatePresence>
-        {feedback.type && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed top-4 md:bottom-10 md:top-auto left-1/2 transform -translate-x-1/2 py-4 px-5 w-[calc(100%-2rem)] max-w-3xs rounded-xl bg-white md:bg-transparent shadow-lg border ${feedback.type === "correct" ? "border-emerald-500" : "border-red-500"
-              }`}
-
-          >
-            <div className="flex items-center gap-1.5">
-              <div
-                className={`p-1.5 mr-3 text-xl  rounded-full ${feedback.type === "correct"
-                  ? "bg-emerald-100 text-emerald-500"
-                  : "bg-red-100 text-red-500"
-                  }`}
-              >
-                {feedback.type === "correct" ? (
-                  <Check size={24} />
-                ) : (
-                  <X size={24} />
-                )}
-              </div>
-              <div>
-                <p
-                  className={`font-semibold text-lg ${feedback.type === "correct"
-                    ? "text-emerald-600"
-                    : "text-red-600"
-                    }`}
-                >
-                  {feedback.type === "correct"
-                    ? practice?.feedback?.correct?.title
-                    : practice?.feedback?.incorrect?.title
-                  }
-                </p>
-                <p
-                  className={`text-sm ${feedback.type === "correct"
-                    ? "text-emerald-500"
-                    : "text-red-500"
-                    }`}
-                >
-            
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
       <PracticeAnswerPopup feedback={feedback} />
     </div>
   );

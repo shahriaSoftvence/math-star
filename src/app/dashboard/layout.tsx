@@ -24,7 +24,7 @@ export default function AppLayout({
 
   return (
     <ProtectedRoute>
-      <div className="flex">
+      <div className="flex bg-gradient-to-b from-[#F8F7FA] to-blue-50 min-h-screen">
         {!isPracticePage && (
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         )}

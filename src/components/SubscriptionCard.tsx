@@ -32,7 +32,7 @@ export default function SubscriptionCard() {
     };
 
     return (
-        <div className="p-6 bg-gradient-to-r from-purple-500 to-blue-600 rounded-3xl shadow-lg text-white">
+        <div className="p-6 bg-gradient-to-r from-purple-500 to-blue-600 rounded-3xl shadow-xl text-white">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="flex items-center gap-4">
                     <Crown size={32} className="text-yellow-300" />

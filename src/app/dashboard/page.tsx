@@ -101,7 +101,7 @@ export default function Home() {
             <Link
               href={isActive ? item.link : "/dashboard/subscription"}
               key={index}
-              className={`relative block rounded-2xl overflow-hidden ${isActive ? "cursor-pointer hover:scale-105 transition-transform" : "opacity-25 cursor-not-allowed"
+              className={`relative block rounded-2xl overflow-hidden shadow-md ${isActive ? "cursor-pointer hover:scale-105 transition-transform" : "opacity-25 cursor-not-allowed"
                 }`}
             >
               <PracticeCard {...item} />
@@ -114,7 +114,7 @@ export default function Home() {
 
       {/* Progress and Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl">
+        <div className="bg-white p-6 rounded-2xl shadow-lg">
           <h3 className="font-semibold mb-6 text-gray-800">{progress_section?.title}</h3>
           <div className="space-y-7">
             <div className="flex justify-between text-sm">
@@ -143,7 +143,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl">
+        <div className="bg-white p-6 rounded-2xl shadow-lg">
           <h3 className="font-semibold mb-6 text-gray-800">{activity_section?.title}</h3>
           <div className="space-y-2">
             {summary?.data?.recent_activities_count > 0 ? (
@@ -166,7 +166,7 @@ export default function Home() {
 
       {/* Your Star Balance */}
       <Link href="/dashboard/rewards">
-        <div className="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 sm:p-6 rounded-2xl text-white flex justify-between items-center gap-4 shadow-lg flex-wrap">
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 sm:p-6 rounded-2xl text-white flex justify-between items-center gap-4 shadow-xl flex-wrap">
           {/* Left Section */}
           <div className="flex-1 min-w-[200px]">
             <h3 className="font-semibold text-lg sm:text-xl md:text-3xl">

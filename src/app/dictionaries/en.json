@@ -44,6 +44,8 @@
       "title": "Our Pricing Policy",
       "description": "Money is not our motivation! Therefore, we want to make Math Star accessible to everybody at the lowest price possible.",
       "plan_name": "Math Star Plan",
+      "month" : "month",
+      "math_star_millionaire" : "Math Star Millionaire! Keep practicing to stay sharp and unstoppable!",
       "features": [
         "Full Access to All Math Exercises",
         "To experience All the challenges",
@@ -229,7 +231,7 @@
     "profile": "Profile",
     "settings": "Settings",
     "subscription": "Subscription",
-    "sign_in": "Sign-in Activity"
+    "sign_in": "Sign-ins"
   },
   "footer": {
     "logo_alt": "Math Star Logo",
@@ -267,7 +269,7 @@
       }
     },
     "progress_section": {
-      "title": "Your Progress Today",
+      "title": "Progress Today",
       "practice_time": "Practice Time :",
       "minutes": "Minutes",
       "stars_earned": "Stars Earned :",
@@ -447,7 +449,8 @@
     "user_info": {
       "math_star_level": "Math Star Level {level}",
       "keep_practicing": "Keep practicing to reach Level {nextLevel} !",
-      "edit_profile": "Edit Profile"
+      "edit_profile": "Edit Profile",
+      "math_star_millionaire" : "Keep practicing to stay sharp and unstoppable !"
     },
     "achievements": {
       "title": "Achievements",

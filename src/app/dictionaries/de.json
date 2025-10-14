@@ -44,6 +44,7 @@
       "title": "Unsere Preispolitik",
       "description": "Geld ist nicht unsere Motivation! Daher möchten wir Math Star für alle zum niedrigstmöglichen Preis zugänglich machen.",
       "plan_name": "Math Star Plan",
+      "month" : "monat",
       "features": [
         "Vollzugriff auf alle Mathe-Übungen",
         "Alle Herausforderungen erleben",
@@ -229,7 +230,7 @@
     "profile": "Profil",
     "settings": "Einstellungen",
     "subscription": "Abonnement",
-    "sign_in": "Anmeldeaktivität"
+    "sign_in": "Anmeldungen"
   },
   "footer": {
     "logo_alt": "Math Star Logo",
@@ -267,7 +268,7 @@
       }
     },
     "progress_section": {
-      "title": "Dein Fortschritt heute",
+      "title": "Fortschritt heute",
       "practice_time": "Übungszeit :",
       "minutes": "Minuten",
       "stars_earned": "Verdiente Sterne :",
@@ -447,7 +448,8 @@
     "user_info": {
       "math_star_level": "Math Star Level {level}",
       "keep_practicing": "Übe weiter, um Level {nextLevel} zu erreichen !",
-      "edit_profile": "Profil bearbeiten"
+      "edit_profile": "Profil bearbeiten",
+      "math_star_millionaire" : "Üben Sie weiter, um fit und unaufhaltsam zu bleiben!"
     },
     "achievements": {
       "title": "Erfolge",

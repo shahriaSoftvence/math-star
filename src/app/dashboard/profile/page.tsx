@@ -70,7 +70,7 @@ export default function ProfilePage() {
 
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b mt-4 from-blue-50 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
+    <div className="w-full min-h-screen mt-4  p-4 sm:p-6 md:p-8 flex justify-center">
       <div className="w-full max-w-3xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-center gap-4">
@@ -136,15 +136,33 @@ export default function ProfilePage() {
           <h2 className="text-gray-800 text-2xl font-bold font-Nunito">
             {profileData?.data?.name}
           </h2>
-          <div className="flex items-center gap-2 mt-1">
-            <Star size={20} className="text-yellow-500 fill-yellow-500" />
-            <span className="text-gray-700 text-lg font-semibold font-Nunito">
-              {user_info?.math_star_level.replace("{level}", `${profileData?.data?.level}`)}
-            </span>
-          </div>
-          <p className="text-gray-600 mt-2 font-Nunito">
-            {user_info?.keep_practicing.replace("{nextLevel}", `${(profileData?.data?.level ?? 0) + 1}`)}
-          </p>
+
+          {profileData?.data?.level && profileData?.data?.level < 26 ?
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-2 mt-1">
+                <Star size={20} className="text-yellow-500 fill-yellow-500" />
+                <span className="text-gray-700 text-lg font-semibold font-Nunito">
+                  {user_info?.math_star_level.replace("{level}", `${profileData?.data?.level}`)}
+                </span>
+              </div>
+              <p className="text-gray-600 mt-2 font-Nunito">
+                {user_info?.keep_practicing.replace("{nextLevel}", `${(profileData?.data?.level ?? 0) + 1}`)}
+              </p>
+            </div>
+            :
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-2 mt-1">
+                <Star size={20} className="text-yellow-500 fill-yellow-500" />
+                <span className="text-gray-700 text-lg font-semibold font-Nunito">
+                  Math Star Millionaire
+                </span>
+              </div>
+              <p className="text-gray-600 mt-2 font-Nunito">
+                {profile?.user_info?.math_star_millionaire}
+              </p>
+            </div>
+          }
+
           <Link href="/dashboard/settings">
             <button className="flex items-center gap-2 mt-4 cursor-pointer text-blue-600 hover:text-blue-700 font-Nunito">
               <Edit size={16} />
@@ -183,19 +201,19 @@ export default function ProfilePage() {
             {achievements.length > 4 && (
               <div className="flex justify-end">
                 <Button variant={"link"}
-                onClick={() => setShowAll(!showAll)}
-                className="text-green-700 font-semibold"
-              >
-                {showAll ? (
-                  <>
-                    {achievement?.see_less} <ChevronUp className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    {achievement?.see_more} <ChevronDown className="w-4 h-4" />
-                  </>
-                )}
-              </Button>
+                  onClick={() => setShowAll(!showAll)}
+                  className="text-green-700 font-semibold"
+                >
+                  {showAll ? (
+                    <>
+                      {achievement?.see_less} <ChevronUp className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      {achievement?.see_more} <ChevronDown className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
               </div>
             )}
           </div>

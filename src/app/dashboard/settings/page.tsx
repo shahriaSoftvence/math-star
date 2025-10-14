@@ -125,7 +125,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50 mt-4 to-purple-50 p-4 sm:p-6 md:p-8 flex justify-center">
+    <div className="w-full min-h-screen mt-4 bg-gradient-to-b p-4 sm:p-6 md:p-8 flex justify-center">
       <div className="w-full max-w-3xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-center gap-4">

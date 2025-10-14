@@ -74,7 +74,7 @@ function PracticePageContent() {
   }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [addDivisionPractice] = useAddDivisionPracticeMutation();
+  const [addDivisionPractice, { isLoading }] = useAddDivisionPracticeMutation();
   const [totalClicks, setTotalClicks] = useState(0);
   const [rewardName, setRewardName] = useState("");
   // Get question count from URL
@@ -257,13 +257,12 @@ function PracticePageContent() {
       };
 
       await addDivisionPractice(payload).unwrap();
-
-      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/division");
+      toast.success(dictionary?.shared?.results?.practice_saved);
     } catch (err: unknown) {
+      router.push("/dashboard/division");
       const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
-      router.push("/dashboard/division");
     }
   };
 
@@ -296,13 +295,13 @@ function PracticePageContent() {
       };
 
       await addDivisionPractice(payload).unwrap();
-
-      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/rewards");
+      toast.success(dictionary?.shared?.results?.practice_saved);
+
     } catch (err: unknown) {
+      router.push("/dashboard/rewards");
       const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
-      router.push("/dashboard/rewards");
     }
   };
 
@@ -317,7 +316,7 @@ function PracticePageContent() {
   }, [isComplete, totalClicks, questionCount]);
 
   if (isComplete) {
-    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
+    return <CongratulationsScreen practiceLoading={isLoading} viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {

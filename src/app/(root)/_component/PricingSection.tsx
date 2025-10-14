@@ -40,11 +40,11 @@ const PricingSection = async () => {
                     className="w-full max-w-md mt-12">
 
                     {
-                        planLists?.data?.map((plan: Plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6 hover:scale-103 transition-transform">
+                        planLists?.data?.map((plan: Plan) => <div key={plan?.id} className="p-8 bg-white rounded-3xl shadow-lg border border-gray-100 flex flex-col gap-6
+                         hover:scale-103 duration-105 transition-transform">
                             <div className="flex justify-between items-start">
                                 <h3 className="text-gray-800 text-2xl font-bold font-Quicksand leading-loose capitalize">
-                                    {/* {plan?.plan_name} */}
-                                    Math Star Plan
+                                    {plan?.plan_name}
                                 </h3>
                                 <div className="w-9 h-9  rounded-full flex items-center justify-center">
                                     <IoStar size={38} className="fill-yellow-500" />
@@ -52,7 +52,7 @@ const PricingSection = async () => {
                             </div>
                             <div className="flex items-end gap-1">
                                 <p className="text-gray-800 text-4xl font-bold font-Open_Sans leading-10">€ {plan?.price}</p>
-                                <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/month</p>
+                                <p className="text-gray-600 text-base font-normal font-Open_Sans leading-normal">/{homepage.pricing.month}</p>
                             </div>
                             <div className="space-y-4 my-1.5">
                                 {pricingFeatures.map(feature => (

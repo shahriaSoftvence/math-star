@@ -11,11 +11,13 @@ type Props = {
   onContinue: () => void;
   viewRewards?: () => void;
   rewardName?: string;
+  practiceLoading?: boolean;
 };
 
 export default function CongratulationsScreen({
   onContinue,
   viewRewards,
+  practiceLoading = false,
   rewardName = '0 Star',
 }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -41,11 +43,11 @@ export default function CongratulationsScreen({
   };
 
   const { dictionary, loading } = useDictionary();
-      const congratulations_screen = dictionary?.congratulations_screen;
-    
-      if (!congratulations_screen || loading) {
-        return null;
-      }
+  const congratulations_screen = dictionary?.congratulations_screen;
+
+  if (!congratulations_screen || loading) {
+    return null;
+  }
 
   return (
     <div className="w-full h-screen px-4 bg-gradient-to-b from-purple-400 via-pink-400 to-yellow-400 flex justify-center items-center fixed top-0 left-0 z-99">
@@ -86,20 +88,37 @@ export default function CongratulationsScreen({
         </p>
 
         {/* Action Buttons */}
-        <div className="w-full mt-4 flex flex-col items-center gap-3">
-          <button
-            onClick={() => handleStopSound(viewRewards!)}
-            className="w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg transition-transform transform hover:scale-105"
-          >
-            {congratulations_screen.buttons.view_all_rewards}
-          </button>
-          <button
-            onClick={() => handleStopSound(onContinue)}
-            className="w-full py-3 text-lg font-bold text-slate-950 bg-slate-50 rounded-full border-2 border-gray-300 transition-transform transform hover:scale-105"
-          >
-             {congratulations_screen.buttons.continue_learning}
-          </button>
-        </div>
+        {
+          practiceLoading ? (
+            <div className="w-full mt-4 flex flex-col items-center gap-3">
+              <button
+                className="w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg transition-transform transform"
+              >
+                {congratulations_screen.buttons.view_all_rewards}
+              </button>
+              <button
+                className="w-full py-3 text-lg font-bold text-slate-950 bg-slate-50 rounded-full border-2 border-gray-300 transition-transform transform"
+              >
+                {congratulations_screen.buttons.continue_learning}
+              </button>
+            </div>
+          ) : (
+            <div className="w-full mt-4 flex flex-col items-center gap-3">
+              <button
+                onClick={() => handleStopSound(viewRewards!)}
+                className="w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-lg transition-transform transform hover:scale-105"
+              >
+                {congratulations_screen.buttons.view_all_rewards}
+              </button>
+              <button
+                onClick={() => handleStopSound(onContinue)}
+                className="w-full py-3 text-lg font-bold text-slate-950 bg-slate-50 rounded-full border-2 border-gray-300 transition-transform transform hover:scale-105"
+              >
+                {congratulations_screen.buttons.continue_learning}
+              </button>
+            </div>
+          )
+        }
       </motion.div>
     </div>
   );

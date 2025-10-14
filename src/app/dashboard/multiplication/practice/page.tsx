@@ -27,7 +27,7 @@ type Question = {
 type ProgressStatus = "correct" | "incorrect" | "pending";
 
 // --- Reusable UI Components ---
-const HelpChart = ({ num2, help_chart }: { num2: number ; help_chart: string}) => (
+const HelpChart = ({ num2, help_chart }: { num2: number; help_chart: string }) => (
   <motion.div
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
@@ -36,12 +36,12 @@ const HelpChart = ({ num2, help_chart }: { num2: number ; help_chart: string}) =
     className="w-full p-6 bg-white rounded-lg shadow-md"
   >
     <h3 className="mb-4 text-lg font-semibold text-gray-800">
-      {help_chart} : ( x{num2} )
+      {help_chart} : ( X{num2} )
     </h3>
     <div className="grid grid-cols-2 gap-2">
       {Array.from({ length: 10 }).map((_, i) => (
         <div key={i} className="text-sm text-gray-600">
-          {num2} x {i + 1} = {num2 * (i + 1)}
+          {i + 1} x {num2} = {num2 * (i + 1)}
         </div>
       ))}
     </div>
@@ -67,7 +67,7 @@ function PracticePageContent() {
   }>({ type: null, message: "" });
   const [showHelp, setShowHelp] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [addMultiplicationPractice] =
+  const [addMultiplicationPractice, { isLoading }] =
     useAddMultiplicationPracticeMutation();
   const [rewardName, setRewardName] = useState("");
 
@@ -251,12 +251,12 @@ function PracticePageContent() {
       // console.log(payload)
 
       await addMultiplicationPractice(payload).unwrap();
-      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/multiplication");
+      toast.success(dictionary?.shared?.results?.practice_saved);
     } catch (err: unknown) {
+      router.push("/dashboard/multiplication");
       const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
-      router.push("/dashboard/multiplication");
     }
   };
 
@@ -286,12 +286,12 @@ function PracticePageContent() {
       };
 
       await addMultiplicationPractice(payload).unwrap();
-      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/rewards");
+      toast.success(dictionary?.shared?.results?.practice_saved);
     } catch (err: unknown) {
+      router.push("/dashboard/rewards");
       const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
-      router.push("/dashboard/rewards");
     }
   };
 
@@ -304,7 +304,7 @@ function PracticePageContent() {
   }, [isComplete, totalClicks, questionCount]);
 
   if (isComplete) {
-    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
+    return <CongratulationsScreen practiceLoading={isLoading} viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {

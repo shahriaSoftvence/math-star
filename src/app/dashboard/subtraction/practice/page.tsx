@@ -82,9 +82,8 @@ function PracticePageContent() {
   const [isComplete, setIsComplete] = useState(false);
   const [totalClicks, setTotalClicks] = useState(0);
 
-  const [addNoBorrowPractice] = useAddNoBorrowPracticeMutation();
-  // console.log(data, "the no borrow practice data");
-  const [addBorrowPractice] = useAddBorrowPracticeMutation();
+  const [addNoBorrowPractice, { isLoading: isLoadingNoBorrow }] = useAddNoBorrowPracticeMutation();
+  const [addBorrowPractice , { isLoading: isLoadingBorrow }] = useAddBorrowPracticeMutation();
   const [rewardName, setRewardName] = useState("");
 
   // Memoize parameters from URL
@@ -306,16 +305,16 @@ function PracticePageContent() {
 
       if (operation === "noBorrowing") {
         await addNoBorrowPractice(payload).unwrap();
+      router.push("/dashboard/subtraction");
       } else {
         await addBorrowPractice(payload).unwrap();
-      }
-
-      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/subtraction");
+      }
+      toast.success(dictionary?.shared?.results?.practice_saved);
     } catch (error: unknown) {
+      router.push("/dashboard/subtraction");
       if (error instanceof Error) console.error(error.message);
       toast.error(dictionary?.shared?.results?.practice_failed);
-      router.push("/dashboard/subtraction");
     }
   };
 
@@ -337,17 +336,17 @@ function PracticePageContent() {
 
       if (operation === "noBorrowing") {
         await addNoBorrowPractice(payload).unwrap();
+      router.push("/dashboard/rewards");
       } else {
         await addBorrowPractice(payload).unwrap();
-      }
-
-      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/rewards");
+      }
+      toast.success(dictionary?.shared?.results?.practice_saved);
     }
     catch (error: unknown) {
+      router.push("/dashboard/rewards");
       if (error instanceof Error) console.error(error.message);
       toast.error(dictionary?.shared?.results?.practice_failed);
-      router.push("/dashboard/rewards");
     }
 
   };
@@ -366,7 +365,7 @@ function PracticePageContent() {
   }, [isComplete, totalClicks, questionCount]);
 
   if (isComplete) {
-    return <CongratulationsScreen viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
+    return <CongratulationsScreen practiceLoading={ isLoadingBorrow || isLoadingNoBorrow } viewRewards={viewRewards} rewardName={rewardName} onContinue={handleContinue} />;
   }
 
   if (!currentQuestion) {

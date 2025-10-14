@@ -44,7 +44,7 @@ const PracticeCard = ({
   return (
     <div
       onClick={() => handleSetMethod(title)}
-      className={`${bgColor} p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm`}
+      className={`${bgColor} p-6 rounded-2xl flex flex-col items-center justify-center text-center`}
     >
       <div
         className={`w-16 h-16 bg-white/30 rounded-full inline-flex justify-center items-center text-5xl font-bold mb-2 ${iconColor}`}

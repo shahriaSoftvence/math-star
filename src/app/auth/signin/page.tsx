@@ -17,18 +17,18 @@ export default function SignInPage() {
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const { setUser, setAuthenticated } = useAuthActions();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 
-   const { dictionary, loading } = useDictionary();
-    const signinText = dictionary?.signin;
-  
-    if (!signinText || loading ) {
-      return null;
-    }
+  const { dictionary, loading } = useDictionary();
+  const signinText = dictionary?.signin;
+
+  if (!signinText || loading) {
+    return null;
+  }
 
   // Get redirect URL from search params (set by middleware)
   const redirectTo = searchParams.get('redirect') || '/dashboard';
@@ -43,7 +43,7 @@ export default function SignInPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.email || !formData.password) {
       toast.error(signinText?.fill_all_fields);
       return;
@@ -78,13 +78,16 @@ export default function SignInPage() {
         }
 
         toast.success(signinText?.login_success);
-        
+
         // Redirect to the intended page or dashboard
-        router.push(redirectTo);
+        // router.push(redirectTo);
+        setTimeout(() => {
+          router.push(redirectTo);
+        }, 100);
       }
     } catch (error: unknown) {
-      const errorMessage = error && typeof error === 'object' && 'data' in error && 
-        typeof error.data === 'object' && error.data && 'message' in error.data && 
+      const errorMessage = error && typeof error === 'object' && 'data' in error &&
+        typeof error.data === 'object' && error.data && 'message' in error.data &&
         typeof error.data.message === 'string' ? error.data.message : signinText?.login_failed;
       toast.error(errorMessage);
     }
@@ -148,13 +151,13 @@ export default function SignInPage() {
               </button>
             </form>
 
-             <div className="text-center mt-4">
+            <div className="text-center mt-4">
               <span className="text-zinc-900 text-sm font-Quicksand">{signinText?.no_account} </span>
               <Link href="/auth/signup" className="text-blue-500 text-sm font-bold font-Quicksand hover:underline">
                 {signinText?.signup}
               </Link>
             </div>
-            
+
 
           </div>
         </div>

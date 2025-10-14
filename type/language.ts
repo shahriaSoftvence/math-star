@@ -352,6 +352,7 @@ export interface LanguageType {
             math_star_level: string;
             keep_practicing: string;
             edit_profile: string;
+            math_star_millionaire: string
         };
         achievements: {
             title: string;
