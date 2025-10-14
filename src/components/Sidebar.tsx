@@ -36,7 +36,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 w-[256px] bg-white rounded-r-[30px] border-r flex flex-col justify-between p-6 transform 
+      className={`fixed inset-y-0 left-0 z-50 w-[256px] bg-white rounded-r-[30px] border-r flex flex-col justify-between p-5 transform 
     ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
     xl:translate-x-0 transition-transform duration-300 ease-in-out`}
     >
@@ -75,7 +75,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       </div>
 
       {/* Bottom: Activity */}
-      <p className="flex items-center gap-[6px] px-4 py-3 justify-center rounded-xl mb-5 bg-[#4A80F0]/20">
+      <p className="flex items-center gap-[6px] px-4 py-3 justify-center rounded-xl bg-[#4A80F0]/20">
         <span className="text-[#4A80F0] flex items-center gap-[3px] font-semibold"> <Signin size={18} className="" />
           {ordinal(profileData?.data?.login_attempts || 1)}</span> <span className='text-[#4A80F0]/50'>|</span> <span className='text-zinc-900 font-medium'>{sidebar?.sign_in}</span>
       </p>
