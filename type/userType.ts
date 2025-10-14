@@ -7,17 +7,19 @@ export interface Reward {
 export interface UserData {
   name: string | null;
   email: string;
-  profile_pic: string | null; 
+  profile_pic: string | null;
   grade: string | null;
   star: number;
   level: number;
+  login_attempts: number;
+  last_login: string
   is_premium: boolean;
-  reward?: Reward; 
+  reward?: Reward;
 }
 
 export interface UserResponse {
-  status: string;      
-  status_code: number;  
+  status: string;
+  status_code: number;
   message: string;
   data: UserData;
 }

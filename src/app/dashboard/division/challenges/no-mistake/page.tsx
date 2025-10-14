@@ -74,7 +74,7 @@ export default function NoMistakePage() {
     const [userAnswer, setUserAnswer] = useState('');
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10); // Increased time for division
-    const [addDivisionNoMistake] = useAddDivisionNoMistakeMutation();
+    const [addDivisionNoMistake , { isLoading: isSaving }] = useAddDivisionNoMistakeMutation();
     // console.log(data, "form live")
 
     const handleContinue = async () => {
@@ -180,6 +180,7 @@ export default function NoMistakePage() {
                 onRetry={handleStart}
                 onHome={handleContinue}
                 onCancel={() => router.back()}
+                challengeLoading={isSaving}
             />
         );
     }

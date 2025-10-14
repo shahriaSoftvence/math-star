@@ -336,6 +336,10 @@
     },
     "challenge_section": {
       "title": " Herausforderungen.",
+      "no_high_score": "Kein Highscore",
+      "high_score": "Highscore",
+      "problems": "Aufgaben",
+      "minutes": "Minuten",
       "challenges": {
         "no_mistake": {
           "title": "Kein Fehler",

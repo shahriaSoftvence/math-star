@@ -275,7 +275,7 @@ export default function PrivacyPage() {
 
           <p className="text-sm leading-relaxed">Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren:</p>
 
-          <p className="text-sm leading-relaxed">
+          <div className="text-sm leading-relaxed">
             <strong>Bayerisches Landesamt für Datenschutzaufsicht (BayLDA)</strong> <br />
             Promenade 18 <br />
             91522 Ansbach <br />
@@ -286,7 +286,7 @@ export default function PrivacyPage() {
                 poststelle@lda.bayern.de
               </a>
             </p>
-          </p>
+          </div>
 
           <p className="text-sm leading-relaxed">Alternativ können Sie sich an den Bundesbeauftragten für den Datenschutz und die Informationsfreiheit wenden.</p>
         </section>

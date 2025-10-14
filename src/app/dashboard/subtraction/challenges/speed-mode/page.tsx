@@ -104,7 +104,7 @@ export default function SpeedModePage() {
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
-  const [addSubtractionSpeedMode] = useAddSubtractionSpeedModeMutation();
+  const [addSubtractionSpeedMode, { isLoading: isSaving }] = useAddSubtractionSpeedModeMutation();
   const [totalClicks, setTotalClicks] = useState(0);
 
   const generateQuestion = useCallback(() => {
@@ -209,6 +209,7 @@ export default function SpeedModePage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

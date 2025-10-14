@@ -258,10 +258,10 @@ function PracticePageContent() {
 
       await addDivisionPractice(payload).unwrap();
 
-      toast.success("Practice data saved successfully!");
+      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/division");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to save practice";
+      const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
       router.push("/dashboard/division");
     }
@@ -297,10 +297,10 @@ function PracticePageContent() {
 
       await addDivisionPractice(payload).unwrap();
 
-      toast.success("Practice data saved successfully!");
+      toast.success(dictionary?.shared?.results?.practice_saved);
       router.push("/dashboard/rewards");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to save practice";
+      const message = err instanceof Error ? err.message : dictionary?.shared?.results?.practice_failed;
       toast.error(message);
       router.push("/dashboard/rewards");
     }
@@ -323,13 +323,17 @@ function PracticePageContent() {
   if (!currentQuestion) {
     return (
       <div className="flex items-center justify-center h-screen">
-        Loading Practice...
+        {dictionary?.shared?.loading?.loading_practice}
       </div>
     );
   }
 
   if (!practice || !operationLang || loading) {
-    return null;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
+        <p className="text-lg font-semibold text-gray-600">{dictionary?.shared?.loading?.loading}</p>
+      </div>
+    );
   }
 
   return (
@@ -344,7 +348,7 @@ function PracticePageContent() {
             <ArrowLeft className="text-gray-600" />
           </button>
           <h1 className="ml-4 text-xl md:text-3xl font-bold text-gray-800">
-            {operationLang?.name} {practice?.title}
+            {practice?.title} {operationLang?.name}
           </h1>
         </div>
         <div className="flex items-center gap-2">

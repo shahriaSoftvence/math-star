@@ -100,7 +100,7 @@ export default function WhatsMissingPage() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(300);
   const [totalSubmissions, setTotalSubmissions] = useState(0);
-  const [addMultiplicationWhatsMissing] = useAddMultiplicationWhatsMissingMutation();
+  const [addMultiplicationWhatsMissing, { isLoading: isSaving }] = useAddMultiplicationWhatsMissingMutation();
 
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;
@@ -224,6 +224,7 @@ export default function WhatsMissingPage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

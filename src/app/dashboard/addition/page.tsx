@@ -37,7 +37,11 @@ export default function AdditionPage() {
   const challenges = sharedSection?.challenge_section?.challenges
 
   if (!additionOperation || !challenges || loading) {
-    return null;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-purple-50">
+        <p className="text-lg font-semibold text-gray-600">{dictionary?.shared?.loading?.loading}</p>
+      </div>
+    );
   }
 
   const noMistakeTopScore = data?.data?.find(item => item.challenge_type === "NO_MISTAKE")?.display_top_score;
@@ -50,7 +54,9 @@ export default function AdditionPage() {
   const additionChallenges = [
     { icon: <FiTarget />, title: challenges?.no_mistake?.title, description: challenges?.no_mistake?.description, bgColor: 'bg-gradient-to-b from-red-300 to-red-400', link: '/dashboard/addition/challenges/no-mistake', display_top_score: noMistakeTopScore },
     { icon: <PiTimerBold />, title: challenges?.speed_mode?.title, description: challenges?.speed_mode?.description, bgColor: 'bg-gradient-to-b from-blue-300 to-blue-400', link: '/dashboard/addition/challenges/speed-mode', display_top_score: speedModeTopScore },
+
     { icon: <BsGrid3X3 />, title: challenges?.hundred_questions?.title, description: challenges?.hundred_questions?.description, bgColor: 'bg-gradient-to-b from-orange-300 to-orange-400', link: '/dashboard/addition/challenges/100-questions', display_top_score: hundredQuestionTopScore },
+
     { icon: <FiHelpCircle />, title: challenges?.whats_missing?.title, description: challenges?.whats_missing?.description, bgColor: 'bg-gradient-to-b from-indigo-300 to-indigo-400', link: "/dashboard/addition/challenges/whats-missing", display_top_score: whatsMissingTopScore },
   ];
 

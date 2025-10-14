@@ -267,6 +267,10 @@ export interface LanguageType {
         };
         challenge_section: {
             title: string;
+            no_high_score: string;
+            high_score: string;
+            problems: string;
+            minutes: string;
             challenges: {
                 no_mistake: { title: string; description: string };
                 speed_mode: { title: string; description: string };

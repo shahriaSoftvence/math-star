@@ -103,7 +103,7 @@ export default function NoMistakePage() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
 
-  const [addAdditionNoMistake] = useAddAdditionNoMistakeMutation();
+  const [addAdditionNoMistake , { isLoading: isSaving }] = useAddAdditionNoMistakeMutation();
   // console.log(data)
   const handleContinue = async () => {
     try {
@@ -210,6 +210,7 @@ export default function NoMistakePage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

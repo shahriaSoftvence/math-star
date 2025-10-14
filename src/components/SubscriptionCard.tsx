@@ -79,7 +79,7 @@ export default function SubscriptionCard() {
                             </AlertDialogContent>
                         </AlertDialog> : <Link href="/#pricing"><button
                             className="px-3 py-2 bg-white text-red-500 text-sm font-medium font-Nunito rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50">
-                            {subscription_card?.actions?.cancel_subscription}
+                            {subscription_card?.actions?.buy_subscription}
                         </button></Link>
                     }
                 </div>

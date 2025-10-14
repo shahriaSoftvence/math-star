@@ -104,7 +104,7 @@ export default function SpeedModePage() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
   const [totalClicks, setTotalClicks] = useState(0);
-  const [addMultiplicationSpeedMode] = useAddMultiplicationSpeedModeMutation();
+  const [addMultiplicationSpeedMode , { isLoading: isSaving }] = useAddMultiplicationSpeedModeMutation();
 
   const generateQuestion = useCallback(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;
@@ -225,6 +225,7 @@ export default function SpeedModePage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

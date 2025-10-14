@@ -177,7 +177,7 @@ export default function HundredQuestionsPage() {
   const [score, setScore] = useState(0);
   const [totalClicks, setTotalClicks] = useState(0);
 
-  const [addDivision100Questions] = useAddDivision100QuestionsMutation();
+  const [addDivision100Questions , { isLoading: isSaving }] = useAddDivision100QuestionsMutation();
   // console.log(data, "from live")
 
   const currentQuestion = useMemo(
@@ -319,6 +319,7 @@ export default function HundredQuestionsPage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

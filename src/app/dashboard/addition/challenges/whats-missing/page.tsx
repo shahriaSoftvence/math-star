@@ -100,7 +100,7 @@ export default function WhatsMissingPage() {
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
-  const [addWhatsMissing] = useAddAdditionWhatsMissingMutation();
+  const [addWhatsMissing , { isLoading: isSaving }] = useAddAdditionWhatsMissingMutation();
   const [totalSubmissions, setTotalSubmissions] = useState(0);
 
   const generateQuestion = useCallback(() => {
@@ -225,6 +225,7 @@ export default function WhatsMissingPage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

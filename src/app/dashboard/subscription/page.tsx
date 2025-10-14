@@ -54,7 +54,7 @@ export default function SubscriptionPage() {
   const [addPaymentMethod, { isLoading: addLoading }] = useAddPaymentMethodMutation();
   const [renewSubscription, { isLoading: renewLoading }] = useRenewSubscriptionMutation();
   const [removeCard] = useRemoveCardMutation();
-  const [autoRenewSubscription] = useAutoRenewSubscriptionMutation();
+  const [autoRenewSubscription, { isLoading: autoRenewLoading }] = useAutoRenewSubscriptionMutation();
   const { data: billingHistory } = useGetBillingHistoryQuery();
   const [showAll, setShowAll] = useState(false);
   const billingData = billingHistory?.data || [];
@@ -64,11 +64,11 @@ export default function SubscriptionPage() {
   const userActivePlan = activePlan?.data?.[0];
 
   const { dictionary, loading } = useDictionary();
-    const subscription = dictionary?.subscription;
-  
-    if ( !subscription || loading) {
-      return null;
-    }
+  const subscription = dictionary?.subscription;
+
+  if (!subscription || loading) {
+    return null;
+  }
 
   const handleManageSubscription = async () => {
     try {
@@ -179,7 +179,12 @@ export default function SubscriptionPage() {
                   </p>
                 }
               </div>
-              <ToggleSwitch isEnabled={isPremium && userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
+              <div>
+                {
+                autoRenewLoading ?
+                  <LoadingFile className="inline w-7 h-7 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" /> : <ToggleSwitch isEnabled={isPremium && userActivePlan?.is_auto_renew || false} onToggle={handleToggleSubscription} />
+              }
+              </div>
             </div>
           </div>
           <div className="p-6 bg-white rounded-3xl shadow-lg">
@@ -193,7 +198,7 @@ export default function SubscriptionPage() {
                 className="w-full flex items-center justify-start gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 disabled:opacity-50">
                 <RefreshCw size={16} className="text-slate-950" />
                 <span className="text-slate-950 text-sm font-medium font-Nunito">
-                  {renewLoading ? subscription?.quick_actions?.renewing : subscription?.quick_actions?.renew_now }
+                  {renewLoading ? subscription?.quick_actions?.renewing : subscription?.quick_actions?.renew_now}
                 </span>
               </button>
             </div>
@@ -327,7 +332,7 @@ export default function SubscriptionPage() {
                         onClick={() => setShowAll(!showAll)}
                         className="text-[#8354FF] font-semibold"
                       >
-                        {showAll ? subscription?.billing_history?.see_less : subscription?.billing_history?.see_more } {showAll ? <ChevronUp /> : <ChevronDown />}
+                        {showAll ? subscription?.billing_history?.see_less : subscription?.billing_history?.see_more} {showAll ? <ChevronUp /> : <ChevronDown />}
                       </Button>
                     </div>
                   )}

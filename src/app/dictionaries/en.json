@@ -335,7 +335,11 @@
       "selected_ranges": "[ {ranges} ]"
     },
     "challenge_section": {
-      "title": " challenges.",
+      "title": "Challenges",
+      "no_high_score": "No High Score",
+      "high_score": "High Score",
+      "problems": "Problems",
+      "minutes": "Minutes",
       "challenges": {
         "no_mistake": {
           "title": "No Mistake",

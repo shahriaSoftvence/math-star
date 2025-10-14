@@ -167,7 +167,7 @@ export default function HundredQuestionsPage() {
   const [timeLeft, setTimeLeft] = useState(300);
   const [isComplete, setIsComplete] = useState(false);
   const [score, setScore] = useState(0);
-  const [addAddition100questions] = useAddAddition100questionsMutation();
+  const [addAddition100questions , { isLoading: isSaving }] = useAddAddition100questionsMutation();
 
 
   const [totalClicks, setTotalClicks] = useState(0);
@@ -316,6 +316,7 @@ export default function HundredQuestionsPage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

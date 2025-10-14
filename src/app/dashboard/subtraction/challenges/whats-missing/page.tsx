@@ -7,7 +7,6 @@ import { useAddSubtractionWhatsMissingMutation } from "@/Redux/features/subtract
 import Link from "next/link";
 import GameResultScreen from "@/components/GameResultScreen";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import ChallengeStartScreens from "@/components/challengeStartScreens";
 import { useDictionary } from "@/hook/useDictionary";
 
@@ -103,7 +102,7 @@ export default function WhatsMissingPage() {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [totalSubmissions, setTotalSubmissions] = useState(0);
 
-  const [addSubtractionWhatsMissing] = useAddSubtractionWhatsMissingMutation();
+  const [addSubtractionWhatsMissing, { isLoading: isSaving }] = useAddSubtractionWhatsMissingMutation();
 
   // console.log("Mutation data:", data);
 
@@ -228,6 +227,7 @@ export default function WhatsMissingPage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

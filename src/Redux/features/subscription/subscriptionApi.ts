@@ -10,7 +10,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/plan-list/",
         method: "GET",
       }),
-      providesTags: ["Subscription"],
+      providesTags: ["Subscription", "auth"],
     }),
 
     // Get user's active plan
@@ -19,7 +19,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/user-active-plan/",
         method: "GET",
       }),
-      providesTags: ["Subscription"],
+      providesTags: ["Subscription", "auth"],
     }),
 
     // Create a subscription
@@ -54,7 +54,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/billing-history/",
         method: "GET",
       }),
-      providesTags: ["Subscription"],
+      providesTags: ["Subscription", "auth"],
     }),
 
 
@@ -64,7 +64,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         method: "POST",
         body: paymentMethodData,
       }),
-      invalidatesTags: ["Subscription"],
+      invalidatesTags: ["Subscription", "auth"],
     }),
 
     removeCard: builder.mutation({
@@ -73,7 +73,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         method: "POST",
         body: { payment_method_id },
       }),
-      invalidatesTags: ["Subscription"],
+      invalidatesTags: ["Subscription", "auth"],
     }),
 
 
@@ -90,7 +90,7 @@ const subscriptionApi = baseApi.injectEndpoints({
         url: "/toggle-auto-renewal/",
         method: "POST",
       }),
-      invalidatesTags: ["Subscription"],
+      invalidatesTags: ["Subscription", "auth"],
     }),
 
     // Webhook endpoint

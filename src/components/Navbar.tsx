@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import rewardsBadge from '@/asset/images/rewards.png';
 import { useDictionary } from "@/hook/useDictionary";
+import Switcher from "./switcher";
 
 
 type NavbarProps = {
@@ -134,7 +135,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-5">
+
+          <Switcher />
 
           {/* Profile Dropdown */}
           <div className="relative" ref={profileRef}>

@@ -6,13 +6,15 @@ const GameResultScreen = ({
     questionsAnswered,
     onRetry,
     onHome,
-    onCancel
+    onCancel,
+    challengeLoading = false
 }: {
     score: number;
     questionsAnswered: string;
     onRetry: () => void;
     onHome: () => void;
     onCancel: () => void;
+    challengeLoading?: boolean
 }) => {
 
     const { dictionary, loading } = useDictionary();
@@ -45,16 +47,18 @@ const GameResultScreen = ({
 
                 <div className="w-full mt-4 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
                     <button
+                        disabled={challengeLoading}
                         onClick={onRetry}
                         className="w-full sm:flex-1 py-2.5 bg-blue-500 text-slate-50 rounded-md font-medium text-sm leading-tight hover:bg-blue-600 transition-colors"
                     >
                         {game_result_screen?.buttons?.try_again}
                     </button>
                     <button
+                        disabled={challengeLoading}
                         onClick={onHome}
                         className="w-full sm:flex-1 py-2.5 bg-slate-50 rounded-md border border-slate-200 text-slate-950 font-medium text-sm leading-tight hover:bg-slate-100 transition-colors"
                     >
-                        {game_result_screen?.buttons?.continue}
+                        {challengeLoading ? game_result_screen?.buttons?.continue + "..." : game_result_screen?.buttons?.continue}
                     </button>
                 </div>
 

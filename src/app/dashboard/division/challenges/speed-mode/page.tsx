@@ -105,7 +105,7 @@ export default function SpeedModePage() {
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30); // 15 seconds in seconds
-  const [addDivisionSpeedMode] = useAddDivisionSpeedModeMutation();
+  const [addDivisionSpeedMode , { isLoading: isSaving }] = useAddDivisionSpeedModeMutation();
   const [totalClicks, setTotalClicks] = useState(0);
 
   // console.log(data, "form here")
@@ -214,6 +214,7 @@ export default function SpeedModePage() {
         onRetry={handleStart}
         onHome={handleContinue}
         onCancel={() => router.back()}
+        challengeLoading={isSaving}
       />
     );
   }

@@ -9,6 +9,7 @@ import Logo from '../../public/assets/Logo.png';
 import Image from 'next/image';
 import { useDictionary } from '@/hook/useDictionary';
 import ordinal from "ordinal";
+import { useGetProfileQuery } from '@/Redux/features/auth/authApi';
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
@@ -16,7 +17,7 @@ interface SidebarProps {
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const pathname = usePathname();
-
+  const { data: profileData } = useGetProfileQuery();
   const { dictionary, loading } = useDictionary();
   const sidebar = dictionary?.sidebar;
 
@@ -74,7 +75,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   {/* Bottom: Activity */}
   <p className="font-semibold text-[#4A80F0] flex items-center gap-2 my-6">
     <Activity size={18} className="text-green-600" />
-    <span className="text-gray-500">{ordinal(4)}</span>{sidebar?.sign_in}
+    <span className="text-gray-500">{ordinal(profileData?.data?.login_attempts || 1)}</span>{sidebar?.sign_in}
   </p>
 </aside>
 
