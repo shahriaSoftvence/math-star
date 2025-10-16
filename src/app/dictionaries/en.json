@@ -330,14 +330,14 @@
       "cancel": "Cancel"
     },
     "exercise_section": {
-      "title": " exercise.",
+      "title": ": Exercises",
       "number_range": "number range",
       "continue_with": "Continue with",
       "go": "Go",
       "selected_ranges": "[ {ranges} ]"
     },
     "challenge_section": {
-      "title": "Challenges",
+      "title": ": Challenges",
       "no_high_score": "No High Score",
       "high_score": "High Score",
       "problems": "Problems",

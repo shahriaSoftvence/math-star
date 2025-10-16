@@ -265,7 +265,7 @@ export default function SignUpPage() {
                     {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
-                <div className="ml-2 mt-2 flex items-center gap-2">
+                <div className="ml-2 mt-3 flex items-center gap-2">
                   <input
                     className="w-4 h-4"
                     type="checkbox"
@@ -283,7 +283,7 @@ export default function SignUpPage() {
 
               </div>
               <div>
-                <div className="ml-2 mt-2 flex items-center gap-2">
+                <div className="ml-2 my-2 flex items-center gap-2">
                   <input
                     className="w-4 h-4"
                     type="checkbox"

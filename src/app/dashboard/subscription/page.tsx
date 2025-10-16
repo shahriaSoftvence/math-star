@@ -116,7 +116,7 @@ export default function SubscriptionPage() {
       const res = await removeCard(payment_method_id).unwrap();
       toast.success(res?.message || "Payment method removed successfully");
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to remove payment method.";
+      const message = error instanceof Error ? error?.message : "Failed to remove payment method.";
       toast.error(message);
     }
 

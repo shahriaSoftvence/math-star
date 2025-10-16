@@ -329,14 +329,14 @@
       "cancel": "Abbrechen"
     },
     "exercise_section": {
-      "title": " Übung.",
+      "title": ": Übungen",
       "number_range": "Zahlenbereich",
       "continue_with": "Weiter mit",
       "go": "Los",
       "selected_ranges": "[ {ranges} ]"
     },
     "challenge_section": {
-      "title": " Herausforderungen.",
+      "title": ": Herausforderungen",
       "no_high_score": "Kein Highscore",
       "high_score": "Highscore",
       "problems": "Aufgaben",
