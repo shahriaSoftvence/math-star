@@ -42,16 +42,5 @@ export const getDictionary = async () => {
     }
   } catch (error) {
     console.error(`Failed to fetch dictionary for locale '${normalizedLocale}':`, error);
-    // Fallback: try to load from local files if API fails
-    try {
-      console.warn('Falling back to local dictionary files');
-      const fallbackModule = await import(`../dictionaries/${normalizedLocale}.json`);
-      const fallbackData = fallbackModule.default;
-      dictionaryCache.set(cacheKey, fallbackData);
-      return fallbackData;
-    } catch (fallbackError) {
-      console.error('Fallback also failed, using empty dictionary');
-      return {};
-    }
   }
 };
