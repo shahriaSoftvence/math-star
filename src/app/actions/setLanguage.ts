@@ -7,9 +7,7 @@ import { cookies } from 'next/headers';
 export async function setDefaultLanguage() {
   try {
     const cookieStore = await cookies();
-    
     const existingLanguage = cookieStore.get('mathstar-language')?.value;
-    
     // Always set to 'de' if no cookie exists
     if (!existingLanguage) {
       cookieStore.set({
@@ -23,7 +21,6 @@ export async function setDefaultLanguage() {
       });
       return { success: true, language: 'de', wasSet: true };
     }
-    
     return { success: true, language: existingLanguage, wasSet: false };
   } catch (error) {
     console.error('Error setting default language:', error);
@@ -35,11 +32,9 @@ export async function setDefaultLanguage() {
 export async function updateLanguage(locale: string) {
   try {
     const cookieStore = await cookies();
-    
     if (locale !== 'en' && locale !== 'de') {
       throw new Error('Invalid locale');
     }
-    
     cookieStore.set({
       name: 'mathstar-language',
       value: locale,
@@ -49,7 +44,6 @@ export async function updateLanguage(locale: string) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
-    
     return { success: true, language: locale };
   } catch (error) {
     console.error('Error updating language:', error);
@@ -61,9 +55,9 @@ export async function updateLanguage(locale: string) {
 export async function getCurrentLanguage() {
   try {
     const cookieStore = await cookies();
-    return cookieStore.get('mathstar-language')?.value || 'de'; // Default to German
+    return cookieStore.get('mathstar-language')?.value || 'de';
   } catch (error) {
     console.error('Error getting current language:', error);
-    return 'de'; // Fallback to German
+    return 'de';
   }
 }

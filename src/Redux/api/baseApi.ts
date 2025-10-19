@@ -14,7 +14,6 @@ const baseQuery = fetchBaseQuery({
     if (typeof window !== 'undefined') {
       token = localStorage.getItem('accessToken');
     }
-    
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -36,36 +35,29 @@ const baseQueryWithRefreshToken: BaseQueryFn = async (args, api, extraOptions) =
   if (result?.error?.status === 401) {
     // Check if we're in the middle of a logout process
     const isLoggingOut = localStorage.getItem('isLoggingOut') === 'true';
-    
     if (isLoggingOut) {
       // If we're logging out, don't try to refresh the token
       api.dispatch(logout());
       return result;
     }
-    
     // Check if we're already trying to refresh a token
     const isRefreshing = localStorage.getItem('isRefreshing') === 'true';
-    
     if (isRefreshing) {
       // If we're already refreshing, just return the original result
       return result;
     }
-    
     // Check if we have a refreshToken in localStorage (client-side check)
     const hasRefreshToken = localStorage.getItem('refreshToken');
-    
     if (!hasRefreshToken) {
       // No refresh token available, logout immediately
       api.dispatch(logout());
       return result;
     }
-    
     try {
       // Set flag to prevent multiple simultaneous refresh attempts
       if (typeof window !== 'undefined') {
         localStorage.setItem('isRefreshing', 'true');
       }
-      
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_API || 'http://172.16.100.58:1111'}/api/auth/refresh-token/`,
         {
