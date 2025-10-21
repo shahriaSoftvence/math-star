@@ -8,13 +8,6 @@ import { useDictionary } from '@/hook/useDictionary';
 
 const questionCounts = [10, 20, 30, 40, 50];
 
-const practiceTips = [
-  'Start with fewer questions and gradually increase.',
-  'Focus on accuracy first, then speed.',
-  'Double-check your answers before submitting.',
-  'Take breaks between practice sessions.',
-];
-
 const QuestionCountCard = ({ count, range, operation, questions }: { count: number; range: string | null; operation: string | null ; questions: string }) => (
   <Link href={`/dashboard/subtraction/practice?count=${count}&range=${range || '10'}&operation=${operation}`}>
     <div className="w-36 self-stretch p-8 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl shadow-md inline-flex flex-col justify-center items-center gap-2 cursor-pointer hover:from-pink-200 hover:to-pink-300 transition-all transform hover:scale-105">

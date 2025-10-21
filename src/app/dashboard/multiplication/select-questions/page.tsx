@@ -8,13 +8,6 @@ import { useDictionary } from "@/hook/useDictionary";
 
 const questionCounts = [10, 20, 30, 40, 50];
 
-const practiceTips = [
-  "Start with tables you know well.",
-  "Try to memorize the answers.",
-  "Use the help chart if you get stuck.",
-  "Practice a little bit every day!",
-];
-
 const QuestionCountCard = ({
   count,
   ranges,

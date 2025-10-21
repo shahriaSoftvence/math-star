@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getDictionary } from '../../actions/dictionaries';
+import { FaqSectionType } from '../../../../type/language';
 
 const FaqSection = async () => {
   const { homepage } = await getDictionary();
@@ -24,11 +25,11 @@ const FaqSection = async () => {
           className="w-full my-8"
           defaultValue="item-1"
         >
-          {homepage?.faq?.questions?.map((faq, index) => (
+          {homepage?.faq?.questions?.map((faq : FaqSectionType, index : number) => (
             <AccordionItem key={index} value={`item-${index + 1}`}>
-              <AccordionTrigger>{faq.question}</AccordionTrigger>
+              <AccordionTrigger>{faq?.question}</AccordionTrigger>
               <AccordionContent className="flex flex-col gap-4 text-balance">
-                <p>{faq.answer}</p>
+                <p>{faq?.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

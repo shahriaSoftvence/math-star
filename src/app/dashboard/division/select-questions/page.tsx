@@ -8,13 +8,6 @@ import { useDictionary } from "@/hook/useDictionary";
 
 const questionCounts = [10, 20, 30, 40, 50];
 
-const practiceTips = [
-  "Division is the reverse of multiplication.",
-  'Think "how many times does the smaller number fit into the bigger one?".',
-  "The help chart shows related multiplications.",
-  "Don't worry about remainders for now!",
-];
-
 const QuestionCountCard = ({
   count,
   divisor,
@@ -47,7 +40,6 @@ function SelectQuestionsContent() {
 
   const { dictionary, loading } = useDictionary();
     const sharedSection = dictionary?.shared;
-  
     if (!sharedSection || loading) {
       return null;
     }

@@ -1,6 +1,7 @@
 import React from "react";
 import { getDictionary } from "../../actions/dictionaries";
 import { IoStar } from "react-icons/io5";
+import { FeatureItemType } from "../../../../type/language";
 
 const FeaturesSection = async () => {
   const { homepage } = await getDictionary();
@@ -20,7 +21,7 @@ const FeaturesSection = async () => {
         </div>
         <div className="self-stretch grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 px-1 md:px-5 lg:px-12 xl:px-0"
         >
-          {homepage?.features?.items?.map((item) => (
+          {homepage?.features?.items?.map((item : FeatureItemType) => (
             <div key={item.title}
               className="flex-1 h-96 relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg p-8 text-white flex flex-col hover:scale-105 transition-transform"
             >

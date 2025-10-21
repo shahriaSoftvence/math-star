@@ -1,3 +1,5 @@
+import { Feature } from "next/dist/build/webpack/plugins/telemetry-plugin/telemetry-plugin";
+
 export interface Header {
     logo_alt: string;
     what_is_math_star: string;
@@ -10,6 +12,34 @@ export interface Header {
     sign_in: string;
 };
 
+export interface FaqSectionType {
+    title: string;
+    description: string;
+    question: string;
+    answer: string;
+    questions: {
+        question: string;
+        answer: string;
+    }[];
+    support_text: string;
+    support_button: string;
+};
+
+export interface FeatureItemType {
+        title: string;
+        description: string;
+        highlight?: string;
+        operations?: string[];
+    };
+
+export interface FeatureSectionType {
+    title1: string;
+    title2: string;
+    description: string;
+    items: FeatureItemType[];
+};
+
+
 export interface LanguageType {
     homepage?: {
         hero: {
@@ -20,17 +50,7 @@ export interface LanguageType {
             sign_in: string;
             image_alt: string;
         };
-        features: {
-            title1: string;
-            title2: string;
-            description: string;
-            items: {
-                title: string;
-                description: string;
-                highlight?: string;
-                operations?: string[];
-            }[];
-        };
+        features: FeatureSectionType;
         pricing: {
             title: string;
             description: string;
@@ -42,16 +62,7 @@ export interface LanguageType {
             contact_text: string;
             contact_link: string;
         };
-        faq: {
-            title: string;
-            description: string;
-            questions: {
-                question: string;
-                answer: string;
-            }[];
-            support_text: string;
-            support_button: string;
-        };
+        faq: FaqSectionType;
     };
     signin: {
         title: string;

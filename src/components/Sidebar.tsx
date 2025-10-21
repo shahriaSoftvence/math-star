@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, Settings, CreditCard, PanelRightOpen, Activity } from 'lucide-react';
+import { LayoutDashboard, User, Settings, CreditCard, PanelRightOpen } from 'lucide-react';
 import Logo from '../../public/assets/Logo.png';
 import Signin from '@/asset/icons/signin.svg';
 import Image from 'next/image';
@@ -37,7 +37,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-50 w-[256px] bg-white rounded-r-[30px] border-r flex flex-col justify-between p-5 transform 
-    ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+    ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
     xl:translate-x-0 transition-transform duration-300 ease-in-out`}
     >
       {/* Top part: Logo + Menu */}

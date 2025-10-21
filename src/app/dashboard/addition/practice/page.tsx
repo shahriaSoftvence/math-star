@@ -8,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, Check, X, RefreshCcw } from "lucide-react";
+import { ArrowLeft, RefreshCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CongratulationsScreen from "@/components/CongratulationsScreen";
 import Numpad from "@/components/Numpad";

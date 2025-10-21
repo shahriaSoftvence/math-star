@@ -7,7 +7,6 @@ import { useAddDivisionWhatsMissingMutation } from "@/Redux/features/division/di
 import Link from "next/link";
 import { toast } from "sonner";
 import GameResultScreen from "@/components/GameResultScreen";
-import { Button } from "@/components/ui/button";
 import ChallengeStartScreens from "@/components/challengeStartScreens";
 import { useDictionary } from "@/hook/useDictionary";
 
