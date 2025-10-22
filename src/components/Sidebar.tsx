@@ -43,9 +43,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       {/* Top part: Logo + Menu */}
       <div>
         <div className="mb-16 flex justify-between items-center">
-          <Link href="/">
             <Image className='w-36 xl:w-40 h-auto' src={Logo} alt='Logo' />
-          </Link>
           <button onClick={() => setSidebarOpen(false)} className="xl:hidden cursor-pointer">
             <PanelRightOpen className='text-gray-700 hover:text-gray-500' size={24} />
           </button>

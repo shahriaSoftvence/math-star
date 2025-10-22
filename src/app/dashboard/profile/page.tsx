@@ -75,7 +75,7 @@ export default function ProfilePage() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link
-            href="/"
+            href="/dashboard"
             className="p-2 rounded-full hover:bg-gray-200 transition-colors"
           >
             <ArrowLeft className="text-gray-600" />
