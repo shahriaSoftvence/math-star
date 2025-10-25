@@ -17,6 +17,11 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
+
+    headers.delete("X-Content-Type-Options");
+    headers.delete("X-Frame-Options");
+    headers.delete("X-Xss-Protection");
+
     return headers;
   },
 });
