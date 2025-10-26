@@ -13,7 +13,7 @@ const multiplicationApi = baseApi.injectEndpoints({
 
     addMultiplicationExercise: builder.mutation({
       query: (range_value: number[]) => ({
-        url: "/practice/subtraction/no-carry/",
+        url: "/practice/multiplication/no-carry/",
         method: "POST",
         body: { range_value },
       }),
@@ -22,7 +22,7 @@ const multiplicationApi = baseApi.injectEndpoints({
 
     addMultiplicationPractice: builder.mutation<void, AdditionMultiplicationDivisionPayload>({
       query: (data) => ({
-        url: "/practice/subtraction/no-carry/questionset/",
+        url: "/practice/multiplication/no-carry/questionset/",
         method: "POST",
         body: data,
       }),

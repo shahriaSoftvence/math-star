@@ -16,6 +16,7 @@ export default function Home() {
   const isPremium = useIsPremium();
   const lang = localStorage.getItem("mathstar-language") || "en";
   const { data: summary, isLoading, isError } = useGetProgressQuery(lang);
+  
   const progress = summary?.data?.progress_today;
   const activities = summary?.data?.recent_activities;
   const { data } = useGetProfileQuery();
